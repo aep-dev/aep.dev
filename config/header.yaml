@@ -1,0 +1,6 @@
+type: static
+links:
+  - title: Browse AIPs
+    relative_url: /general
+  - title: Contributing
+    relative_url: /contributing

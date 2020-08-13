@@ -1,0 +1,7 @@
+# pytest
+site/.coverage
+site/.pytest_cache
+site/htmlcov
+
+# mypy
+.mypy_cache
