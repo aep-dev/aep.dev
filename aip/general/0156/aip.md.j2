@@ -1,0 +1,40 @@
+# Singleton resources
+
+APIs sometimes need to represent a resource where exactly one instance of the
+resource always exists within any given parent. A common use case for this is
+for a configuration object, with distinct permissions from the parent resource.
+
+## Guidance
+
+An API **may** define _singleton resources_. A singleton resource **must**
+always exist by virtue of the existence of its parent, with one and exactly one
+per parent.
+
+```http
+GET /v1/publishers/{publisher}/config HTTP/2
+Host: library.googleapis.com
+Accept: application/json
+```
+
+- Singleton resources **must not** have a user-provided or system-generated ID;
+  their canonical URI includes the name of their parent followed by one
+  static-segment.
+  - Example: `publishers/lacroix/config`
+- Singleton resources **should** define a `GET` operation, which **must**
+  correspond to `GET` for individual resources (AIP-131), and **not** `GET` for
+  collections (AIP-132).
+- Singleton resources **should** define a `PATCH` operation, which **must**
+  correspond to a standard update (AIP-134).
+- Singleton resources **must not** define operations to create (AIP-133) or
+  delete (AIP-135) the resource.
+  - The service **should** reply with an HTTP 405 (Method Not Allowed) error if
+    the user sends a `POST` or `DELETE` request.
+- Singleton resources **may** define custom methods as appropriate.
+
+## Interface Definitions
+
+{% tab proto %}
+
+{% sample 'singleton.proto', 'rpc GetConfig', 'rpc UpdateConfig' %}
+
+{% endtabs %}
