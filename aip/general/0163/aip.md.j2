@@ -1,0 +1,46 @@
+# Change validation
+
+Occasionally, a user wants to validate an intended change to see what the
+result will be before actually making the change. For example, a request to
+provision new servers in a fleet will have an impact on the overall fleet size
+and cost, and could potentially have unexpected downstream effects.
+
+## Guidance
+
+APIs **may** provide an option to validate, but not actually execute, a
+request, and provide the same response (status code, headers, and response
+body) that it would have provided if the request was actually executed.
+
+To provide this option, the method **should** include a `validate_only` boolean
+field:
+
+```http
+POST /v1/publishers/{publisher}/books?validate_only=true HTTP/2
+Host: library.googleapis.com
+Accept: application/json
+```
+
+- Standard operations **must** expose the `validate_only` field on the query
+  string.
+- Custom operations **may** expose the `validate_only` field in the request
+  body, on the query string, or accept either one.
+
+The API **must** perform permission checks and any other validation that would
+be performed on a "live" request; a request using `validate_only` **must** fail
+if it determines that the actual request would fail.
+
+**Note:** It may occasionally be infeasible to provide the full output. For
+example, if creating a resource would create an auto-generated ID, it does not
+make sense to do this on validation. APIs **should** omit such fields on
+validation requests in this situation.
+
+## Interface Definitions
+
+{% tab proto %}
+
+{% sample 'standard_operation.proto', 'message CreateBookRequest' %}
+
+- The `validate_only` field **must** use the `bool` type.
+- The `validate_only` field **must not** be annotated as `REQUIRED`.
+
+{% endtabs %}
