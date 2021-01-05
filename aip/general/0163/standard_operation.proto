@@ -46,7 +46,7 @@ message CreateBookRequest {
 
   // If set, validate the request and preview the review, but do not actually
   // post it.
-  bool validate_only = 3;
+  bool dry_run = 3;
 }
 
 // A representation of a single book.

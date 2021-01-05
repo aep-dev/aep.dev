@@ -7,32 +7,54 @@ and cost, and could potentially have unexpected downstream effects.
 
 ## Guidance
 
-APIs **may** provide an option to validate, but not actually execute, a
-request, and provide the same response (status code, headers, and response
-body) that it would have provided if the request was actually executed.
-
-To provide this option, the method **should** include a `validate_only` boolean
-field:
+Operations **may** provide an field to validate, but not actually execute, the
+request. To provide this option, the operation **should** include a `dry_run`
+boolean field:
 
 ```http
-POST /v1/publishers/{publisher}/books?validate_only=true HTTP/2
+PATCH /v1/publishers/{publisher}/books/{book}?dryRun=true HTTP/2
 Host: library.googleapis.com
 Accept: application/json
 ```
 
-- Standard operations **must** expose the `validate_only` field on the query
-  string.
-- Custom operations **may** expose the `validate_only` field in the request
-  body, on the query string, or accept either one.
+- Standard operations **must** expose the `dry_run` field on the query string.
+- Custom operations **may** expose the `dry_run` field in the request body, on
+  the query string, or accept either one.
 
-The API **must** perform permission checks and any other validation that would
-be performed on a "live" request; a request using `validate_only` **must** fail
-if it determines that the actual request would fail.
+### Responses
 
-**Note:** It may occasionally be infeasible to provide the full output. For
+An operation **may** return a `204 No Content` response when asked to perform a
+dry run, which **must** be an empty response.
+
+Alternatively, an operation **may** provide the same response (status code,
+headers, and response body) that it would have provided if the request was
+actually executed.
+
+Under this approach, it may be infeasible to provide the full output. For
 example, if creating a resource would create an auto-generated ID, it does not
-make sense to do this on validation. APIs **should** omit such fields on
-validation requests in this situation.
+make sense to do this on validation. The operation **should** prefer to use
+`204 No Content` in this scenario, but if a populated response is needed, the
+operation **should** omit such fields on the response.
+
+**Note:** When representing fields that can not be populated, non-zero or
+non-empty sentinel values **must not** be used.
+
+### Validation scope
+
+When performing a dry run, the service **should** check all of the following:
+
+- The validity of the request according to the schema.
+- Referential integrity of values in the request, if applicable.
+- Whether the user has permission to make the request.
+- Whether the user has sufficient quota to make the request.
+
+A request using `dry_run` **must** fail if it can be determined that the actual
+request would fail.
+
+**Note:** An operation **may** elect not to exhaustively check certain
+implementation-specific details if validating them would be expensive or pose a
+security concern. Therefore, a successful dry run indicates that an equivalent
+live request is likely to succeed, but is not a full guarantee of success.
 
 ## Interface Definitions
 
@@ -40,7 +62,9 @@ validation requests in this situation.
 
 {% sample 'standard_operation.proto', 'message CreateBookRequest' %}
 
-- The `validate_only` field **must** use the `bool` type.
-- The `validate_only` field **must not** be annotated as `REQUIRED`.
+- The `dry_run` field **must** use the `bool` type.
+- The `dry_run` field **must not** be annotated as `REQUIRED`.
+- In protocol buffers, the same response type is always used for a single RPC.
+  The operation **may** return the response message with no fields populated.
 
 {% endtabs %}
