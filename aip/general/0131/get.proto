@@ -14,7 +14,9 @@
 
 syntax = "proto3";
 
-import "google/api/http.proto";
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
 
 service Library {
@@ -29,6 +31,7 @@ service Library {
 
 // Request message to get a single book.
 message GetBookRequest {
+  // The name of the book to retrieve.
   string name = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
