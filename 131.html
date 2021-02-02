@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/aip.dev/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=025eb8e8">
-    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=025eb8e8">
+    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=c38395a9">
+    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=c38395a9">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=025eb8e8"></script>
+    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=c38395a9"></script>
     
 <script type="text/javascript" src="/aip.dev/assets/js/syntax.js"></script>
 
@@ -323,6 +323,7 @@ exist, the service <strong>must</strong> reply with an HTTP 404 error.</p>
 <p>Get operations also implement a common request message pattern:</p>
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message to get a single book.</span>
 <span class="kd">message</span> <span class="nc">GetBookRequest</span> <span class="p">{</span>
+  <span class="c1">// The name of the book to retrieve.</span>
   <span class="kt">string</span> <span class="na">name</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[</span>
     <span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span> <span class="o">=</span> <span class="n">REQUIRED</span><span class="p">,</span>
     <span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
