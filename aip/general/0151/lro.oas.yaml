@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /v1/resources:
+    post:
+      operationId: write_book
+      description: Write a book.
+      responses:
+        202:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WriteBookStatus'
+
+components:
+  schemas:
+    StatusMonitor:
+      description: The status of a long running operation.
+      properties:
+        name:
+          type: string
+          description: The server-assigned name, which is only unique within the same service that originally returns it.
+        done:
+          type: boolean
+          description: >-
+            If the value is false, it means the operation is still in progress. If true, the operation is completed,
+            and either response or error is available.
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+        - name
+        - done
+
+    WriteBookStatus:
+      description: The status of a write_book operation.
+      allOf:
+        - $ref: '#/components/schemas/StatusMonitor'
+        - type: object
+          properties:
+            response:
+              type: string
+              description: The text that was written.
+            metadata:
+              type: object
+              properties:
+                start_time:
+                  type: string
+                  format: date-time
+                  description: The time the operation started.
+                progress_percent:
+                  type: integer
+                  format: int32
+                  description: The current progress, expressed as an integer.
+                state:
+                  type: string
+                  description: The current state of the operation.
+                  enum:
+                    - STATE_UNSPECIFIED
+                    - RUNNING
+                    - CANCELLING
+                    - CANCELLED
+                    - FAILED
