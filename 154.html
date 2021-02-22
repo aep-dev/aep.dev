@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AIP-145: Ranges</title>
+    <title>AIP-154: Resource freshness validation</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -169,7 +169,7 @@
         GET for individual resources
       </a>
     </li>
-    <li class="nav-item nav-item-active">
+    <li class="nav-item">
       <a href="/aip.dev/145">
         <span class="aip-number">145</span>
         Ranges
@@ -181,7 +181,7 @@
         Long-running requests
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/aip.dev/154">
         <span class="aip-number">154</span>
         Resource freshness validation
@@ -193,21 +193,24 @@
           
 <aside id="aip-sidebar" class="docs-component-sidebar">
   <table id="aip-summary">
-    <tr><th colspan="2">Ranges</th></tr>
-    <tr><td>Number</td><td>145</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/145">aip-dev.github.io/aip.dev/145</a></td></tr>
+    <tr><th colspan="2">Resource freshness validation</th></tr>
+    <tr><td>Number</td><td>154</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/154">aip-dev.github.io/aip.dev/154</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2020-05-28</td></tr>
-    <tr><td>Updated</td><td>2020-05-28</td></tr>
+    <tr><td>Created</td><td>2019-07-24</td></tr>
+    <tr><td>Updated</td><td>2019-07-24</td></tr>
   </table>
 
   <section id="aip-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#inclusive-or-exclusive-ranges">Inclusive or exclusive ranges</a></li>
-<li><a href="#exceptions">Exceptions</a></li>
+<li><a href="#condition-headers">Condition headers</a></li>
+<li><a href="#read-requests">Read requests</a></li>
+<li><a href="#strong-and-weak-etags">Strong and weak ETags</a></li>
 </ul>
 </li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#changelog">Changelog</a></li>
 </ul>
 </div>
 
@@ -216,8 +219,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aip-dev/aip.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0145">View source</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0145">Edit this page</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0154">View source</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0154">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -242,72 +245,94 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Ranges
+        Resource freshness validation
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aip-number">AIP-145</h4>
-  <h1>Ranges</h1>
-<p>Services often need to represent ranges of discrete or continuous values. These
-have wide differences in meaning, and come in many types: integers, floats, and
-timestamps, just to name a few, and the expected meaning of a range can vary in
-subtle ways depending on the type of range being discussed.</p>
+  <h4 class="aip-number">AIP-154</h4>
+  <h1>Resource freshness validation</h1>
+<p>APIs often need to validate that a client and server agree on the current state
+of a resource before taking some kind of action on that resource. For example,
+two processes updating the same resource in parallel could create a race
+condition, where the latter process "stomps over" the effort of the former one.</p>
+<p>ETags provide a way to deal with this, by allowing the server to send a
+checksum based on the current content of a resource; when the client sends that
+checksum back, the server can ensure that the checksums match before acting on
+the request.</p>
 <h2 id="guidance">Guidance</h2>
-<p>A resource or message representing a range <strong>should</strong> ordinarily use two
-separate fields of the same type, with prefixes <code>start_</code> and <code>end_</code>:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a chapter in a book.</span>
-<span class="kr">interface</span> <span class="nx">Chapter</span> <span class="p">{</span>
-  <span class="nx">title</span>: <span class="kt">string</span><span class="p">;</span>
-
-  <span class="c1">// The page where this chapter begins.</span>
-  <span class="nx">startPage</span>: <span class="kt">number</span><span class="p">;</span>
-
-  <span class="c1">// The page where the next chapter or section begins.</span>
-  <span class="nx">endPage</span>: <span class="kt">number</span><span class="p">;</span>
-<span class="p">}</span>
+<p>A resource <strong>may</strong> provide an <code>ETag</code> header when retrieving a single resource
+when it is important to ensure that the client has an up to date resource
+before acting on certain requests:</p>
+<div class="highlight language-None"><pre><span></span><code>200 OK
+Content-type: application/json
+ETag: &quot;55cc0347-66fc-46c3-a26f-98a9a7d61d0e&quot;
 </code></pre></div>
-<h3 id="inclusive-or-exclusive-ranges">Inclusive or exclusive ranges</h3>
-<p>Fields representing ranges <strong>should</strong> use inclusive start values and exclusive
-end values (half-closed intervals) in most situations; in interval notation:
-<code>[start_xxx, end_xxx)</code>.</p>
-<p>Exclusive end values are preferable for the following reasons:</p>
+<p>The ETag <strong>must</strong> be provided by the server on output, and values <strong>should</strong>
+conform to <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>. Resources <strong>must</strong> support the <code>If-Match</code> header (and
+<strong>may</strong> support the <code>If-None-Match</code> header) if and only if resources provide
+the ETag.</p>
+<p><strong>Note:</strong> ETag values <strong>must</strong> include quotes as described in <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>. For
+example, a valid ETag is <code>"foo"</code>, not <code>foo</code>.</p>
+<p>ETags <strong>must</strong> be based on an opaque checksum or hash of the resource that
+guarantees it will change if the resource changes.</p>
+<h3 id="condition-headers">Condition headers</h3>
+<p>If the service receives a request to modify a resource that includes an
+<code>If-Match</code> header, the service <strong>must</strong> validate that the value matches the
+current ETag. If the <code>If-Match</code> header value does not match the ETag, the
+service <strong>must</strong> reply with an HTTP 412 error.</p>
+<p>If the user omits the <code>If-Match</code> header, the service <strong>should</strong> permit the
+request. However, services with strong consistency or parallelism requirements
+<strong>may</strong> require users to send ETags all the time and reject the request with an
+HTTP 400 error if it does not contain an ETag.</p>
+<p>If any conditional headers are supported for any operation within a service,
+the same conditional headers <strong>must</strong> be supported for all mutation methods
+(<code>POST</code>, <code>PATCH</code>, <code>PUT</code>, and <code>DELETE</code>) of any path that supports them, and
+<strong>should</strong> be supported uniformly for all operations across the service.</p>
+<p>If any validator or conditional headers are supported for any operations in the
+service, the use of unsupported conditional headers <strong>must</strong> result in an
+error. (In other words, once a service gives the client reason to believe it
+understands conditional headers, it <strong>must not</strong> ever ignore them.)</p>
+<h3 id="read-requests">Read requests</h3>
+<p>If a service receives a <code>GET</code> or <code>HEAD</code> request with an <code>If-Match</code> header, the
+service <strong>must</strong> proceed with the request if the ETag matches, or send a
+<code>412 Precondition Failed</code> error if the ETag does not match.</p>
+<p>If a service receives a <code>GET</code> or <code>HEAD</code> request with an <code>If-None-Match</code> header,
+the service <strong>must</strong> proceed with the request if the ETag does not match, or
+return a <code>304 Not Modified</code> response if the ETag does match.</p>
+<h3 id="strong-and-weak-etags">Strong and weak ETags</h3>
+<p>ETags can be either "strongly validated" or "weakly validated":</p>
 <ul>
-<li>It conforms to user expectations, particularly for continuous values such as
-  timestamps, and avoids the need to express imprecise "limit values" (e.g.
-  <code>2012-04-20T23:59:59</code>).</li>
-<li>It is consistent with most common programming languages, including C++, Java,
-  Python, and Go.</li>
-<li>It is easier to reason about abutting ranges: <code>[0, x), [x, y), [y, z)</code>, where
-  values are chainable from one range to the next.</li>
+<li>A strongly validated ETag means that two resources bearing the same ETag are
+  byte-for-byte identical.</li>
+<li>A weakly validated ETag means that two resources bearing the same ETag are
+  equivalent, but may differ in ways that the service does not consider to be
+  important.</li>
 </ul>
-<h3 id="exceptions">Exceptions</h3>
-<p>In some cases, there is significant colloquial precedent for inclusive start
-and end values (closed intervals), to the point that using an exclusive end
-value would be confusing even for people accustomed to them.</p>
-<p>For example, when discussing dates (not to be confused with timestamps), most
-people use inclusive end: a conference with dates "April 21-23" is expected to
-run for three days: April 21, April 22, and April 23. This is also true for
-days of the week: a business that is open "Monday through Friday" is open, not
-closed, on Fridays.</p>
-<p>In this situation, the prefixes <code>first</code> and <code>last</code> <strong>should</strong> be used instead:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a chapter in a book.</span>
-<span class="kr">interface</span> <span class="nx">Chapter</span> <span class="p">{</span>
-  <span class="nx">title</span>: <span class="kt">string</span><span class="p">;</span>
-
-  <span class="c1">// The first page of the chapter.</span>
-  <span class="nx">firstPage</span>: <span class="kt">number</span><span class="p">;</span>
-
-  <span class="c1">// The last page of the chapter.</span>
-  <span class="nx">lastPage</span>: <span class="kt">number</span><span class="p">;</span>
-<span class="p">}</span>
+<p>Resources <strong>may</strong> use either strong or weak ETags, as it sees fit, but
+<strong>should</strong> document the behavior. Additionally, weak ETags <strong>must</strong> have a <code>W/</code>
+prefix as mandated by <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>:</p>
+<div class="highlight language-None"><pre><span></span><code>200 OK
+Content-type: application/json
+ETag: W/&quot;55cc0347-66fc-46c3-a26f-98a9a7d61d0e&quot;
 </code></pre></div>
-<p>Fields representing ranges with significant colloquial precedent for inclusive
-start and end values <strong>should</strong> use inclusive end values with <code>first_</code> and
-<code>last_</code> prefixes for those ranges only. The service <strong>should</strong> still use
-exclusive end values for other ranges where this does not apply, and <strong>must</strong>
-clearly document each range as inclusive or exclusive.</p>
+<p>Strong ETags <strong>must</strong> and weak ETags <strong>should</strong> be guaranteed to change if any
+properties on the resource change that are directly mutable by the client.
+Additionally, strong ETags <strong>should</strong> be guaranteed to change if the resource's
+representation changes in a meaningful way (meaning the new representation is
+not equivalent to the old one).</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>For how to retry on errors in client libraries, see <a href="/aip.dev/194">AIP-194</a>.</li>
+</ul>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2020-09-02</strong>: Clarified that other errors may take precedence over
+  <code>FAILED_PRECONDITION</code> for ETag mismatches.</li>
+<li><strong>2020-09-02</strong>: Add guidance for ETags on request messages.</li>
+<li><strong>2019-09-23</strong>: Changed the title to "resource freshness validation".</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
