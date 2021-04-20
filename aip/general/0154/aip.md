@@ -35,6 +35,16 @@ guarantees it will change if the resource changes.
 
 ### Condition headers
 
+Services that provide ETags **should** support the `If-Match` and
+`If-None-Match` headers on incoming requests:
+
+```http
+GET /v1/publishers/{publisher}/books/{book} HTTP/2
+Host: library.googleapis.com
+Accept: application/json
+If-Match: "55cc0347-66fc-46c3-a26f-98a9a7d61d0e"
+```
+
 If the service receives a request to modify a resource that includes an
 `If-Match` header, the service **must** validate that the value matches the
 current ETag. If the `If-Match` header value does not match the ETag, the
