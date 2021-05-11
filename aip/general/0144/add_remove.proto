@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+service Library {
+  // Add an author to a book.
+  rpc AddAuthor(AddAuthorRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/{book=publishers/*/books/*}:addAuthor"
+      body: "*"
+    };
+  }
+
+  // Remove an author from a book.
+  rpc RemoveAuthor(RemoveAuthorRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/{book=publishers/*/books/*}:removeAuthor"
+      body: "*"
+    };
+  }
+}
+
+// The request structure for the AddAuthor operation.
+message AddAuthorRequest {
+  // The name of the book to add an author to.
+  string book = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "library.googleapis.com/Book"
+  ];
+
+  // The author to be added.
+  string author = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// The request structure for the RemoveAuthor operation.
+message RemoveAuthorRequest {
+  // The name of the book to remove an author from.
+  string book = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference).type = "library.googleapis.com/Book"
+  ];
+
+  // The author to be removed.
+  string author = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+
+// A representation of a single book.
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  // The name of the book.
+  // Format: publishers/{publisher}/books/{book}
+  string name = 1;
+
+  // The ISBN (International Standard Book Number) for this book.
+  string isbn = 2;
+
+  // The title of the book.
+  string title = 3;
+
+  // The author or authors of the book.
+  repeated string authors = 4;
+
+  // The rating assigned to the book.
+  float rating = 5;
+}
