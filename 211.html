@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AIP-145: Ranges</title>
+    <title>AIP-211: Authorization checks</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -169,7 +169,7 @@
         GET for individual resources
       </a>
     </li>
-    <li class="nav-item nav-item-active">
+    <li class="nav-item">
       <a href="/aip.dev/145">
         <span class="aip-number">145</span>
         Ranges
@@ -193,7 +193,7 @@
         Pagination
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/aip.dev/211">
         <span class="aip-number">211</span>
         Authorization checks
@@ -205,21 +205,21 @@
           
 <aside id="aip-sidebar" class="docs-component-sidebar">
   <table id="aip-summary">
-    <tr><th colspan="2">Ranges</th></tr>
-    <tr><td>Number</td><td>145</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/145">aip-dev.github.io/aip.dev/145</a></td></tr>
+    <tr><th colspan="2">Authorization checks</th></tr>
+    <tr><td>Number</td><td>211</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/211">aip-dev.github.io/aip.dev/211</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2020-05-28</td></tr>
-    <tr><td>Updated</td><td>2020-05-28</td></tr>
+    <tr><td>Created</td><td>2021-02-24</td></tr>
+    <tr><td>Updated</td><td>2021-02-24</td></tr>
   </table>
 
   <section id="aip-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#inclusive-or-exclusive-ranges">Inclusive or exclusive ranges</a></li>
-<li><a href="#exceptions">Exceptions</a></li>
+<li><a href="#multiple-operations">Multiple operations</a></li>
 </ul>
 </li>
+<li><a href="#rationale">Rationale</a></li>
 </ul>
 </div>
 
@@ -228,8 +228,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aip-dev/aip.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0145">View source</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0145">Edit this page</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0211">View source</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0211">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -254,72 +254,75 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Ranges
+        Authorization checks
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aip-number">AIP-145</h4>
-  <h1>Ranges</h1>
-<p>Services often need to represent ranges of discrete or continuous values. These
-have wide differences in meaning, and come in many types: integers, floats, and
-timestamps, just to name a few, and the expected meaning of a range can vary in
-subtle ways depending on the type of range being discussed.</p>
+  <h4 class="aip-number">AIP-211</h4>
+  <h1>Authorization checks</h1>
+<p>The majority of operations, whether reads or writes, require authorization:
+permission to do the thing the user is asking to do. Additionally, it is
+important to be careful how much information is provided to <em>unauthorized</em>
+users, since leaking information can be a security concern.</p>
 <h2 id="guidance">Guidance</h2>
-<p>A resource or message representing a range <strong>should</strong> ordinarily use two
-separate fields of the same type, with prefixes <code>start_</code> and <code>end_</code>:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a chapter in a book.</span>
-<span class="kr">interface</span> <span class="nx">Chapter</span> <span class="p">{</span>
-  <span class="nx">title</span>: <span class="kt">string</span><span class="p">;</span>
-
-  <span class="c1">// The page where this chapter begins.</span>
-  <span class="nx">startPage</span>: <span class="kt">number</span><span class="p">;</span>
-
-  <span class="c1">// The page where the next chapter or section begins.</span>
-  <span class="nx">endPage</span>: <span class="kt">number</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<h3 id="inclusive-or-exclusive-ranges">Inclusive or exclusive ranges</h3>
-<p>Fields representing ranges <strong>should</strong> use inclusive start values and exclusive
-end values (half-closed intervals) in most situations; in interval notation:
-<code>[start_xxx, end_xxx)</code>.</p>
-<p>Exclusive end values are preferable for the following reasons:</p>
+<p>Services <strong>must</strong> check authorization before validating any request, to ensure
+both a secure API surface and a consistent user experience. An operation
+<strong>may</strong> require multiple permissions or preconditions in order to grant
+authorization.</p>
+<p>If a request can not pass the authorization check for any reason, the service
+<strong>should</strong> error with <code>403 Forbidden</code>, and the corresponding error message
+<strong>should</strong> look like: "Permission <code>{p}</code> denied on resource <code>{r}</code> (or it might
+not exist)." This avoids leaking resource existence.</p>
+<p>If it is not possible to determine authorization for a resource because the
+resource does not exist, the service <strong>should</strong> check authorization to read
+children on the parent resource, and return <code>404 Not Found</code> if the
+authorization check passes.</p>
+<h3 id="multiple-operations">Multiple operations</h3>
+<p>A service could encounter a situation where it has two different operations
+with two different permissions, either of which would reveal the existence of a
+resource if called, but a user only has permission to call one of them.</p>
+<p>In this situation, the service <strong>should</strong> still only check for authorization
+applicable to the operation being called, and <strong>should not</strong> try to "help out"
+by checking for related authorization that would provide permission to reveal
+existence, because such algorithms are complicated to implement correctly and
+prone to accidental leaks.</p>
+<p>For example, posit a scenario where:</p>
 <ul>
-<li>It conforms to user expectations, particularly for continuous values such as
-  timestamps, and avoids the need to express imprecise "limit values" (e.g.
-  <code>2012-04-20T23:59:59</code>).</li>
-<li>It is consistent with most common programming languages, including C++, Java,
-  Python, and Go.</li>
-<li>It is easier to reason about abutting ranges: <code>[0, x), [x, y), [y, z)</code>, where
-  values are chainable from one range to the next.</li>
+<li>A resource exists within a given collection that a user is unable to read.</li>
+<li>The user <em>does</em> have the ability to create other resources, and the
+  collection uses user-specified IDs (meaning that a failure because of a
+  duplicate ID would reveal existance).</li>
 </ul>
-<h3 id="exceptions">Exceptions</h3>
-<p>In some cases, there is significant colloquial precedent for inclusive start
-and end values (closed intervals), to the point that using an exclusive end
-value would be confusing even for people accustomed to them.</p>
-<p>For example, when discussing dates (not to be confused with timestamps), most
-people use inclusive end: a conference with dates "April 21-23" is expected to
-run for three days: April 21, April 22, and April 23. This is also true for
-days of the week: a business that is open "Monday through Friday" is open, not
-closed, on Fridays.</p>
-<p>In this situation, the prefixes <code>first</code> and <code>last</code> <strong>should</strong> be used instead:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a chapter in a book.</span>
-<span class="kr">interface</span> <span class="nx">Chapter</span> <span class="p">{</span>
-  <span class="nx">title</span>: <span class="kt">string</span><span class="p">;</span>
-
-  <span class="c1">// The first page of the chapter.</span>
-  <span class="nx">firstPage</span>: <span class="kt">number</span><span class="p">;</span>
-
-  <span class="c1">// The last page of the chapter.</span>
-  <span class="nx">lastPage</span>: <span class="kt">number</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>Fields representing ranges with significant colloquial precedent for inclusive
-start and end values <strong>should</strong> use inclusive end values with <code>first_</code> and
-<code>last_</code> prefixes for those ranges only. The service <strong>should</strong> still use
-exclusive end values for other ranges where this does not apply, and <strong>must</strong>
-clearly document each range as inclusive or exclusive.</p>
+<p>In this situation, the get or create methods <strong>should</strong> still only check
+<em>their</em> permissions when determining what error to return, and not one
+another's.</p>
+<h2 id="rationale">Rationale</h2>
+<p><a href="https://tools.ietf.org/html/rfc7231#section-6.5.3">RFC 7231 §6.5.3</a> states that services are permitted to use <code>404 Not Found</code>
+in lieu of <code>403 Forbidden</code> in situations where the service does not want to
+divulge existance, whereas this AIP argues for the use of <code>403 Forbidden</code>
+instead. We take this position for the following reasons:</p>
+<ul>
+<li>The practice of "getting <code>404 Not Found</code> until you have enough permission to
+  get <code>403 Forbidden</code>" is counter-intuitive and increases the difficulty of
+  troubleshooting.<ul>
+<li>A service <em>could</em> ameliorate this by sending information about missing
+  permissions while still using the <code>404 Not Found</code> status code, but this
+  constitutes a mixed message.</li>
+</ul>
+</li>
+<li>While <code>403 Forbidden</code> is essentially always an error requiring manual action,
+  <code>404 Not Found</code> is often a valid response that the application can handle
+  (e.g. "get or create"); overloading it for permission errors deprives
+  applications of this benefit.</li>
+<li>RFC 7231 §6.5.4 states that <code>404 Not Found</code> results are cacheable, but
+  permission errors are not generally cacheable. Sending explicit cache
+  controls on a conditional basis could ameliorate this, but would defeat the
+  purpose.</li>
+<li>The guidance here is more consistent with most other real-world authorization
+  systems.</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
