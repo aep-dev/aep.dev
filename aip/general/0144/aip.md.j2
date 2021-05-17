@@ -1,0 +1,157 @@
+# Array fields
+
+Representing lists of data in an API is trickier than it often appears. Users
+often need to modify lists in place, and longer data series within a single
+resource pose a challenge for pagination.
+
+## Guidance
+
+Resources **may** use array fields where appropriate.
+
+```typescript
+interface Book {
+  // The resource name for the book.
+  name: string;
+
+  // The authors of the book.
+  authors: string[];
+}
+```
+
+- Array fields **must** use a plural field name.
+  - If the English singular and plural words are identical ("moose", "info"),
+    the dictionary word **must** be used rather than attempting to coin a new
+    plural form.
+- Array fields **should** have an enforced upper bound that will not cause a
+  single resource payload to become too large. A good rule of thumb is 100
+  elements.
+  - If an array data can not be bounded (in other words, if there is a chance
+    that the array will be too large to be reasonably returned in a single
+    request), the API **should** use a sub-resource instead.
+- Array fields **must not** represent the body of another resource inline.
+  Instead, the field **should** be a array of strings providing the resource
+  names of the associated resources.
+
+**Note:** This document uses the term "array" to refer to a field on a resource
+that is a list of elements that have the same type. Some languages and IDLs use
+other terms, such as "list", "repeated", or "sequence", and these terms are all
+synonymous for the purposes of this document. The term "collection" is
+distinct, and refers to a group of resources under a single parent rather than
+a field on a resource.
+
+### Scalars and structs
+
+Array fields **should** use a scalar type (such as `string`) if they are
+certain that additional data will not be needed in the future, as using a
+struct type adds significant cognitive overhead and leads to more complicated
+code.
+
+However, if additional data is likely to be needed in the future, array fields
+**should** use a struct instead of a scalar proactively, to avoid parallel
+array fields.
+
+### Update strategies
+
+A resource **may** use one of two strategies to enable updating a array field:
+direct update using the [standard `Update`][aip-134] method, or custom `Add`
+and `Remove` methods.
+
+A standard `Update` method has one key limitation: the user is only able to
+update _the entire_ array. This means that the user is required to read the
+resource, make modifications to the array field value as needed, and send it
+back. This is fine for many situations, particularly when the array field is
+expected to have a small size (fewer than 10 or so) and race conditions are not
+an issue, or can be guarded against with [ETags][aip-154].
+
+**Note:** Declarative-friendly resources (AIP-128) **must** use the standard
+`Update` method, and not introduce `Add` and `Remove` methods. If declarative
+tools need to reason about particular relationships while ignoring others,
+consider using a subresource instead.
+
+If atomic modifications are required, and if the array is functionally a set
+(meaning that order does not matter, duplicate values are not meaningful, and
+non-comparable values such as `null` or `NaN` are not used), the API **should**
+define custom methods using the verbs `Add` and `Remove`:
+
+{% tab proto %}
+
+{% sample 'add_remove.proto', 'rpc AddAuthor', 'rpc RemoveAuthor' %}
+
+- The data being added or removed **should** be a primitive (usually a
+  `string`).
+  - For more complex data structures with a primary key, the API **should** use
+    a map with the `Update` method instead.
+- The RPC's name **must** begin with the word `Add` or `Remove`. The remainder
+  of the RPC name **should** be the singular form of the field being added.
+- The response **should** be the resource itself, and **should** fully-populate
+  the resource structure.
+- The HTTP method **must** be `POST`, as usual for [custom methods][aip-136].
+- The HTTP URI **must** end with `:add*` or `:remove*`, where `*` is the
+  camel-case singular name of the field being added or removed.
+- The request field receiving the resource name **should** map to the URI path.
+  - The HTTP variable **should** be the name of the resource (such as `book`)
+    rather than `name` or `parent`.
+  - That variable **should** be the only variable in the URI path.
+- The body clause in the `google.api.http` annotation **should** be `"*"`.
+- If the data being added in an `Add` operation is already present, the method
+  **should** accept the request and make no changes (no-op), but **may** error
+  with `ALREADY_EXISTS` if appropriate.
+- If the data being removed in a `Remove` operation is not present, the method
+  **should** accept the request and make no changes (no-op), but **may** error
+  with `NOT_FOUND` if appropriate.
+
+{% tab oas %}
+
+{% sample 'add_remove.oas.yaml', 'paths' %}
+
+- The data being added or removed **should** be a primitive (usually a
+  `string`).
+  - For more complex data structures with a primary key, the API **should** use
+    a map with the `Update` method instead.
+- The `operationId` **must** begin with the word `add` or `remove`. The
+  remainder of the `operationId` **should** be the singular form of the field
+  being added.
+- The response **should** be the resource itself, and **should** fully-populate
+  the resource structure.
+- The HTTP method **must** be `POST`, as usual for [custom methods][aip-136].
+- The HTTP URI **must** end with `:add*` or `:remove*`, where `*` is the
+  camel-case singular name of the field being added or removed.
+- If the data being added in an `Add` operation is already present, the method
+  **should** accept the request and make no changes (no-op), but **may** error
+  with `409 Conflict` if appropriate.
+- If the data being removed in a `Remove` operation is not present, the method
+  **should** accept the request and make no changes (no-op), but **may** error
+  with `404 Not Found` if appropriate.
+
+{% endtabs %}
+
+**Note:** If both of these strategies are too restrictive, consider using a
+subresource instead.
+
+#### Request Structure
+
+{% tab proto %}
+
+{% sample 'add_remove.proto', 'message AddAuthorRequest', 'message RemoveAuthorRequest' %}
+
+- A resource field **must** be included. It **should** be the name of the
+  resource (such as `book`) rather than `name` or `parent`.
+  - The field **should** be [annotated as required][aip-203].
+  - If the field represents the name of another resource, it **should**
+    identify the [resource type][aip-123] that it references.
+- A field for the value being added or removed **must** be included. It
+  **should** be the singular name of the field.
+  - The field **should** be [annotated as required][aip-203].
+- The request message **must not** contain any other required fields, and
+  **should not** contain other optional fields except those described in this
+  or another AIP.
+
+{% tab oas %}
+
+{% sample 'add_remove.oas.yaml', 'requestBody' %}
+
+- A field for the value being added or removed **must** be included. It
+  **should** be the singular name of the field.
+  - The field **should** be designated as required.
+
+{% endtabs %}

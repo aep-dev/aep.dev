@@ -1,0 +1,85 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/resource.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/timestamp.proto";
+
+service Library {
+  // Write a book.
+  rpc WriteBook(WriteBookRequest) returns (google.longrunning.Operation) {
+    option (google.api.http) = {
+      post: "/v1/{parent=publishers/*}/books:write"
+      body: "*"
+    };
+    option (google.longrunning.operation_info) = {
+      response_type: "WriteBookResponse"
+      metadata_type: "WriteBookMetadata"
+    };
+  }
+}
+
+// The request message for the WriteBook endpoint.
+// Unlike the response, this message is accepted directly.
+message WriteBookRequest {
+  // The publisher for which the book is to be written.
+  string parent = 1 [(google.api.resource_reference) = {
+    child_type: "library.googleapis.com/Book"
+  }];
+
+  // The title of the new book.
+  string title = 2;
+}
+
+// The response message for the WriteBook endpoint.
+// When WriteBook is called, it will not send this response directly; instead,
+// it sends a long-running operation; the operation will contain this in
+// the `response` field once it completes.
+message WriteBookResponse {
+  // The text that was written.
+  string text = 1;
+}
+
+// The metadata message for the WriteBook endpoint.
+// This is populated in the `metadata` field for all WriteBook LROs.
+message WriteBookMetadata {
+  // The time the operation started.
+  google.protobuf.Timestamp start_time = 1;
+
+  // The current progress, expressed as an integer: [0, 100].
+  int32 progress_percent = 2;
+
+  enum State {
+    STATE_UNSPECIFIED = 0;
+
+    // The operation is running.
+    RUNNING = 1;
+
+    // The operation is still running, but cancellation has been requested
+    // and accepted, and is in progress.
+    CANCELLING = 2;
+
+    // The operation was cancelled.
+    CANCELLED = 3;
+
+    // The operation failed.
+    FAILED = 4;
+  }
+
+  // The current state of the operation.
+  State state = 3;
+}
