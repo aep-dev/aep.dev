@@ -41,7 +41,8 @@ interface Book {
 
 **Note:** The string itself _is_ the immutable, canonical code, used on the
 wire format. Services **should not** create a separate enum with a different
-wire format, because doing so makes it difficult to use multiple APIs together.
+wire format, and **should not** use company-specific strings, because doing so
+makes it difficult to use multiple APIs together.
 
 ### Content types
 
