@@ -45,9 +45,9 @@ together.
 
 ### Array fields
 
-Repeated fields **must** use the proper plural form, such as `books` or
-`authors`. On the other hand, non-array fields **should** use the singular form
-such as `book` or `author`..
+Array fields **must** use the proper plural form, such as `books` or `authors`.
+On the other hand, non-array fields **should** use the singular form such as
+`book` or `author`.
 
 ### Prepositions
 
@@ -57,18 +57,31 @@ Field names **should not** include prepositions (such as "with", "for", "at",
 - `error_reason` (**not** `reason_for_error`)
 - `author` (**not** `written_by`)
 
-It is easier for field names to match more often when following this
-convention. Additionally, prepositions in field names may also indicate a
-design concern, such as an overly-restrictive field or a sub-optimal data type.
-This is particularly true regarding "with": a field named `book_with_publisher`
-likely indicates that the book resource may be improperly structured and worth
-redesigning.
+There are several reasons for this:
+
+- It is easier for field names to match more often when following this
+  convention.
+- Spoken languages vary widely in their conjugation rules, and avoiding
+  prepositions tends to lead to more natural translation for many speakers for
+  whom English is a secondary language (generally at no cost to Anglophones).
+- Additionally, prepositions in field names may also indicate a design concern,
+  such as an overly-restrictive field or a sub-optimal data type. This is
+  particularly true regarding "with": a field named `book_with_publisher`
+  likely indicates that the book resource may be improperly structured and
+  worth redesigning.
 
 **Note:** The word "per" is an exception to this rule, particularly in two
 cases. Often "per" is part of a unit (e.g. "miles per hour"), in which case the
 preposition must be present to accurately convey the unit. Additionally, "per"
 is often appropriate in reporting scenarios (e.g. "nodes per instance" or
 "failures per hour").
+
+### Mood
+
+Field names **should** use the imperative mood ("enable", "import") when the
+user is deciding what to do, and the declarative mood ("enabled", "imported")
+when reporting on the state of the system. If the same field is used for both
+purposes, the service **should** use the imperative mood.
 
 ### Adjectives
 
@@ -90,10 +103,14 @@ are an exception to this rule. For example, `is_new` (**not** `new`).
 
 ### String vs. bytes
 
-When using `bytes`, the contents of the field are base64-encoded when using
-JSON on the wire. Services **should** use `bytes` when there is a need to send
-binary contents over the wire, and **should not** ask the user to manually
-base64-encode a field into a `string` field.
+When there is a need to send binary contents over the wire, the contents
+**should** be base64-encoded and sent in a `string` field. Services **must**
+accept base64 encoding using the normal base64 alphabet, and **may** also
+accept URL-safe base64.
+
+**Note:** In IDLs that support `bytes` fields (such as protocol buffers),
+prefer the IDL's `bytes` implementation over asking the user to base64 encode
+and decode manually.
 
 ### URIs
 
@@ -110,9 +127,9 @@ API in that language.
 
 ### Conflicts
 
-Messages **should not** include a field with the same name as the enclosing
-message (ignoring case transformations). This causes conflicts when generating
-code in some languages.
+Structs **should not** include a field with the same name as the enclosing
+structs (ignoring case transformations). This tends to cause conflicts when
+generating code.
 
 ### Display names
 
