@@ -27,10 +27,6 @@ interface Book {
 
 - Fields representing standardized concepts **must** use the appropriate data
   type for the standard code (usually `string`).
-  - Fields representing standardized concepts **should not** use enums, even if
-    they only allow a small subset of possible values. Using enums in this
-    situation often leads to frustrating lookup tables when using multiple APIs
-    together.
   - Fields representing standardized concepts **must** indicate which standard
     they follow, preferably with a link (either to the standard itself, the
     Wikipedia description, or something similar).
@@ -40,6 +36,12 @@ interface Book {
   case-insensitive unless this would introduce ambiguity (for example, accept
   both `en-gb` and `en-GB`). When providing values to users, APIs **should**
   use the canonical case (in the example above, `en-GB`).
+- Standardized code fields **may** have a default; if they do, the sentinel
+  value **must** be the omission of the field.
+
+**Note:** The string itself _is_ the immutable, canonical code, used on the
+wire format. Services **should not** create a separate enum with a different
+wire format, because doing so makes it difficult to use multiple APIs together.
 
 ### Content types
 
