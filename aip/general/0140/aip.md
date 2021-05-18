@@ -26,14 +26,15 @@ example, a `proxy_settings` field might be as helpful as
 
 ### Case
 
-Field definitions in protobuf files **must** use `lower_snake_case` names.
-These names are mapped to an appropriate naming convention in JSON and in
-generated code.
+Field definitions **must** use the appropriate case for the IDL being used
+(`camelCase` for TypeScript, `lower_snake_case` for protocol buffers, and so
+on). These names **should** be mapped to an appropriate naming convention in
+JSON and in generated code.
 
 Additionally, each word in the field **must not** begin with a number, because
 it creates ambiguity when converting between snake case and camel case.
-Similarly, fields **must not** contain leading, trailing, or adjacent
-underscores.
+Similarly, snake case fields **must not** contain leading, trailing, or
+adjacent underscores.
 
 ### Consistency
 
