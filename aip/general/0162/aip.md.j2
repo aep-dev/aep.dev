@@ -82,6 +82,10 @@ revision ID in the standard `Get` operation (AIP-131):
 
 {% sample 'revisions.proto', 'message GetBookRequest' %}
 
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}' %}
+
 {% endtabs %}
 
 If the user passes a revision ID that does not exist, the API **must** fail
@@ -101,6 +105,10 @@ Revision" custom operation:
 {% tab proto %}
 
 {% sample 'revisions.proto', 'rpc TagBookRevision', 'message TagBookRevisionRequest' %}
+
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:tagRevision' %}
 
 {% endtabs %}
 

@@ -7,7 +7,7 @@ paths:
   /publishers/{publisherId}/books/{bookId}:
     get:
       operationId: getBook
-      description: Get a single book.
+      description: Retrieve a single book.
       responses:
         200:
           description: OK

@@ -1,0 +1,106 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:
+    get:
+      operationId: getBook
+      description: Retrieve a single book.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /publishers/{publisherId}/books/{bookId}:listRevisions:
+    get:
+      operationId: listBookRevisions
+      description: List all revisions of a single book.
+      parameters:
+        - name: maxPageSize
+          in: query
+          schema:
+            type: int32
+          description: The maximum number of revisions to return per page.
+        - name: pageToken
+          in: query
+          schema:
+            type: string
+          description: |
+            The page token, received from a previous ListBookRevisions call.
+            Provide this to retrieve the subsequent page.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              description: Response structure for listing book revisions.
+              properties:
+                books:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Book'
+                  description: The revisions of the book.
+                nextPageToken:
+                  type: string
+                  description: |
+                    A token that can be sent as `pageToken` to retrieve the
+                    next page.
+
+                    If this field is omitted, there are no subsequent pages.
+  /publishers/{publisherId}/books/{bookId}:tagRevision:
+    post:
+      operationId: tagBookRevision
+      description: |
+        Tag a single book revision with a user-specified tag.
+        The tag may then be used in place of the canonical revision ID.
+
+        If a tag is sent that already exists, the tag will be removed from its
+        original revision and assigned to the provided revision.
+      requestBody:
+        content:
+          application/json:
+            description: Request structure for tagging a book revision.
+            properties:
+              id:
+                type: string
+                description: |
+                  The ID of the book to be tagged, including the revision ID.
+                required: true
+              tag:
+                type: string
+                description: |
+                  The tag to apply. The tag should be at most 40 characters,
+                  and match `[a-z][a-z0-9-]{3,38}[a-z0-9]`.
+                required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schema:
+    Book:
+      description: A representation of a single book.
+      properties:
+        id:
+          type: string
+          description: |
+            The resource ID of the book.
+            Format: publishers/{publisher}/books/{book}
+        # Other fields...
+        revisionId:
+          type: string
+          description: |
+            The revision ID of the book.
+            A new revision is committed whenever the book is changed in any way.
+            The format is an 8-character hexadecimal string.
+        revisionCreateTime:
+          type: string
+          format: datetime
+          description: The timestamp when the revision was created.
