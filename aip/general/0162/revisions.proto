@@ -1,0 +1,202 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// A library with revision-controlled books.
+service Library {
+  // Retrieve a single book.
+  rpc GetBook(GetBookRequest) returns (Book) {
+    option (google.api.http) = {
+      get: "/v1/{id=publishers/*/books/*}"
+    };
+    option (google.api.method_signature) = "id";
+  }
+
+  // List all revisions of a single book.
+  rpc ListBookRevisions(ListBookRevisionsRequest)
+      returns (ListBookRevisionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{id=publishers/*/books/*}:listRevisions"
+    };
+    option (google.api.method_signature) = "id";
+  }
+
+  // Tag a single book revision with a user-specified tag.
+  // The tag may then be used in place of the canonical revision ID.
+  //
+  // If a tag is sent that already exists, the tag will be removed from its
+  // original revision and assigned to the provided revision.
+  rpc TagBookRevision(TagBookRevisionRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/{id=publishers/*/books/*}:tagRevision"
+      body: "*"
+    };
+    option (google.api.method_signature) = "id,tag";
+  }
+
+  // Delete a single revision of this book.
+  rpc DeleteBookRevision(DeleteBookRevisionRequest)
+      returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{id=publishers/*/books/*}:deleteRevision"
+    };
+  }
+
+  // Save a new, discrete revision snapshot of the given book.
+  rpc CommitBook(CommitBookRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/{id=publishers/*/books/*}:commit"
+      body: "*"
+    };
+    option (google.api.method_signature) = "id";
+  }
+
+  // Rollback the primary revision of a book to a previous revision.
+  //
+  // This creates a new revision, with a new revision ID, with the contents
+  // of the provided revision, as the most recent revision in the sequence.
+  rpc RollbackBook(RollbackBookRequest) returns (Book) {
+    option (google.api.http) = {
+      post: "/v1/{id=publishers/*/books/*}:rollback"
+      body: "*"
+    };
+    option (google.api.method_signature) = "id,revision_id";
+  }
+}
+
+// Request structure for book retreival.
+message GetBookRequest {
+  // The ID of the book.
+  //   Example: publishers/123/books/les-miserables
+  //
+  // In order to retrieve a previous revision of the book, also provide
+  // the revision ID.
+  //   Example: publishers/123/books/les-miserables@c7cfa2a8
+  string id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+}
+
+// Request structure for listing book revisions.
+message ListBookRevisionsRequest {
+  // The name of the book to list revisions for.
+  string id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+
+  // The maximum number of revisions to return per page.
+  int32 page_size = 2;
+
+  // The page token, received from a previous ListBookRevisions call.
+  // Provide this to retrieve the subsequent page.
+  string page_token = 3;
+}
+
+// Response structure for listing book revisions.
+message ListBookRevisionsResponse {
+  // The revisions of the book.
+  repeated Book books = 1;
+
+  // A token that can be sent as `page_token` to retrieve the next page.
+  // If this field is omitted, there are no subsequent pages.
+  string next_page_token = 2;
+}
+
+// Request structure for tagging a book revision.
+message TagBookRevisionRequest {
+  // The name of the book to be tagged, including the revision ID.
+  string id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+
+  // The tag to apply. The tag should be at most 40 characters, and match
+  // `[a-z][a-z0-9-]{3,38}[a-z0-9]`.
+  string tag = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// Request structure for deleting a single book revision.
+message DeleteBookRevisionRequest {
+  // The name of the book revision to be deleted, with a revision ID explicitly
+  // included.
+  //
+  // Example: publishers/123/books/les-miserables@c7cfa2a8
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+}
+
+// Request structure for committing a new book revision.
+message CommitBookRequest {
+  string id = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+}
+
+// Request structure for rolling back a book to a previous revision.
+message RollbackBookRequest {
+  // The book being rolled back.
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+
+  // The revision ID to roll back to.
+  // It must be a revision of the same book.
+  //
+  //   Example: c7cfa2a8
+  string revision_id = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+// A representation of a single book.
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  // The ID of the book.
+  string id = 1;
+
+  // Other fields...
+
+  // The revision ID of the book.
+  // A new revision is committed whenever the book is changed in any way.
+  // The format is an 8-character hexadecimal string.
+  string revision_id = 5 [
+    (google.api.field_behavior) = IMMUTABLE,
+    (google.api.field_behavior) = OUTPUT_ONLY];
+
+  // The timestamp that the revision was created.
+  google.protobuf.Timestamp revision_create_time = 6
+    [(google.api.field_behavior) = OUTPUT_ONLY];
+}
