@@ -108,7 +108,7 @@ Revision" custom operation:
 
 {% tab oas %}
 
-{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:tagRevision' %}
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}@{revisionId}:tagRevision' %}
 
 {% endtabs %}
 
@@ -138,6 +138,10 @@ standard `List` operations (AIP-132):
 {% tab proto %}
 
 {% sample 'revisions.proto', 'rpc ListBookRevisions', 'message ListBookRevisionsRequest' %}
+
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:listRevisions' %}
 
 {% endtabs %}
 
@@ -202,6 +206,10 @@ on user request **should** handle this with a `Commit` custom operation:
 
 {% sample 'revisions.proto', 'rpc CommitBook', 'message CommitBookRequest' %}
 
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:commit' %}
+
 {% endtabs %}
 
 - The operation **must** use the `POST` HTTP method.
@@ -221,6 +229,10 @@ operation:
 {% tab proto %}
 
 {% sample 'revisions.proto', 'rpc RollbackBook', 'message RollbackBookRequest' %}
+
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:rollback' %}
 
 {% endtabs %}
 
@@ -253,6 +265,10 @@ to `Delete` (AIP-135) operations:
 {% tab proto %}
 
 {% sample 'revisions.proto', 'rpc DeleteBookRevision', 'message DeleteBookRevisionRequest' %}
+
+{% tab oas %}
+
+{% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}@{revisionId}:deleteRevision' %}
 
 {% endtabs %}
 

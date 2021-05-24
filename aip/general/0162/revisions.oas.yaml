@@ -51,7 +51,7 @@ paths:
                     next page.
 
                     If this field is omitted, there are no subsequent pages.
-  /publishers/{publisherId}/books/{bookId}:tagRevision:
+  /publishers/{publisherId}/books/{bookId}@{revisionId}:tagRevision:
     post:
       operationId: tagBookRevision
       description: |
@@ -65,16 +65,58 @@ paths:
           application/json:
             description: Request structure for tagging a book revision.
             properties:
-              id:
-                type: string
-                description: |
-                  The ID of the book to be tagged, including the revision ID.
-                required: true
               tag:
                 type: string
                 description: |
                   The tag to apply. The tag should be at most 40 characters,
                   and match `[a-z][a-z0-9-]{3,38}[a-z0-9]`.
+                required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /publishers/{publisherId}/books/{bookId}@{revisionId}:deleteRevision:
+    delete:
+      operationId: deleteBookRevision
+      description: Delete a single revision of this book.
+      responses:
+        200:
+          description: OK
+  /publishers/{publisherId}/books/{bookId}:commit:
+    post:
+      operationId: commitBook
+      description: Save a new, discrete revision snapshot of the given book.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+  /publishers/{publisherId}/books/{bookId}:rollback:
+    post:
+      operationId: rollbackBook
+      description: |
+        Rollback the primary revision of a book to a previous revision.
+
+        This creates a new revision, with a new revision ID, with the contents
+        of the provided revision, as the most recent revision in the sequence.
+      requestBody:
+        content:
+          application/json:
+            description: |
+              Request structure for rolling back a book to a previous revision.
+            properties:
+              revisionId:
+                type: string
+                description: |
+                  The revision ID to roll back to.
+                  It must be a revision of the same book.
+
+                  Example: c7cfa2a8
                 required: true
       responses:
         200:
