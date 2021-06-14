@@ -1,0 +1,94 @@
+// Copyright 2021 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+service Library {
+  // Get a single book.
+  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = {
+      get: "/v1/{parent=publishers/*}/books"
+    };
+    option (google.api.method_signature) = "parent";
+  }
+}
+
+// Request message to list a collection of books.
+message ListBooksRequest {
+  // The name of the published to retrieve books for.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+
+  // The maximum number of books to return. The service may return fewer than
+  // this value.
+  // If unspecified, at most 50 books will be returned.
+  // The maximum value is 1000; values above 1000 will be coerced to 1000.
+  int32 max_page_size = 2;
+
+  // A page token, received from a previous `ListBooks` call.
+  // Provide this to retrieve the subsequent page.
+  //
+  // When paginating, all other parameters provided to `ListBooks` must match
+  // the call that provided the page token.
+  string page_token = 3;
+}
+
+// Response message for listing a collection of books.
+message ListBooksResponse {
+  // The books matching the request.
+  repeated Book books = 1;
+
+  // The next page token, if there are more books matching the
+  // request.
+  string next_page_token = 2;
+
+  // Unreachable resources.
+  //
+  // These resources were unreadable for some reason. The user may send a
+  // GET request to the resource for more information about the nature of
+  // the problem.
+  repeated string unreachable = 3;
+}
+
+// A representation of a single book.
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  // The name of the book.
+  // Format: publishers/{publisher}/books/{book}
+  string name = 1;
+
+  // The ISBN (International Standard Book Number) for this book.
+  string isbn = 2;
+
+  // The title of the book.
+  string title = 3;
+
+  // The author or authors of the book.
+  repeated string authors = 4;
+
+  // The rating assigned to the book.
+  float rating = 5;
+}
