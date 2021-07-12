@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/aip.dev/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=841c4b38">
-    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=841c4b38">
+    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=6502324c">
+    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=6502324c">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,12 +18,12 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=841c4b38"></script>
+    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=6502324c"></script>
     
 <script type="text/javascript" src="/aip.dev/assets/js/syntax.js"></script>
-<script type="text/javascript" src="/aip.dev/assets/js/graphviz/viz.js?v=841c4b38"></script>
-<script type="text/javascript" src="/aip.dev/assets/js/graphviz/lite.render.js?v=841c4b38"></script>
-<script type="text/javascript" src="/aip.dev/assets/js/aip/aip-graphviz.js?v=841c4b38"></script>
+<script type="text/javascript" src="/aip.dev/assets/js/graphviz/viz.js?v=6502324c"></script>
+<script type="text/javascript" src="/aip.dev/assets/js/graphviz/lite.render.js?v=6502324c"></script>
+<script type="text/javascript" src="/aip.dev/assets/js/aip/aip-graphviz.js?v=6502324c"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -303,7 +303,7 @@
   close to its current state.
 </p>
   <h4 class="aip-number">AIP-1</h4>
-  <h1>AIP Purpose and Guidelines</h1>
+  <h1 id="aip-purpose-and-guidelines">AIP Purpose and Guidelines</h1>
 <p>Service APIs on the Internet continue to proliferate; having a machine-readable
 API is an expectation and prerequisite to adoption for many services. By some
 estimates, there are now more than 20,000 public REST APIs available.</p>
@@ -409,23 +409,23 @@ indexes; they provide documentation and reference to inform future discussions.<
 <p>The following workflow describes the process for proposing an AIP, and moving
 an AIP from proposal to implementation to final acceptance.</p>
 <h3 id="overview">Overview</h3>
-<div class="highlight language-graphviz"><pre><span></span><code>digraph d_front_back {
-  rankdir=LR;
-  node [ style=&quot;filled,solid&quot; shape=box fontname=&quot;Roboto&quot; ];
-  github_pr [ shape=&quot;oval&quot; label=&quot;GitHub PR&quot; fillcolor=&quot;orange&quot; ];
-  reviewing [ label=&quot;Reviewing&quot; fillcolor=&quot;lightskyblue&quot; ];
-  approved [ label=&quot;Approved&quot; fillcolor=&quot;palegreen&quot; ];
-  final [ label=&quot;Final&quot; fillcolor=&quot;palegreen&quot; ];
-  withdrawn [ label=&quot;Withdrawn&quot; fillcolor=&quot;mistyrose&quot; ];
-  replaced [ label=&quot;Replaced&quot; fillcolor=&quot;lightsteelblue&quot; ];
+<div class="highlight language-graphviz"><pre><span></span><code><span class="k">digraph</span><span class="w"> </span><span class="nt">d_front_back</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="na">rankdir</span><span class="p">=</span><span class="s">LR</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">node</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">style</span><span class="p">=</span><span class="s2">&quot;filled,solid&quot;</span><span class="w"> </span><span class="na">shape</span><span class="p">=</span><span class="s">box</span><span class="w"> </span><span class="na">fontname</span><span class="p">=</span><span class="s2">&quot;Roboto&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">github_pr</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">shape</span><span class="p">=</span><span class="s2">&quot;oval&quot;</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;GitHub PR&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;orange&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">reviewing</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;Reviewing&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;lightskyblue&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">approved</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;Approved&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;palegreen&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">final</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;Final&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;palegreen&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">withdrawn</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;Withdrawn&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;mistyrose&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">replaced</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">label</span><span class="p">=</span><span class="s2">&quot;Replaced&quot;</span><span class="w"> </span><span class="na">fillcolor</span><span class="p">=</span><span class="s2">&quot;lightsteelblue&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
 
-  github_pr -&gt; reviewing;
-  reviewing -&gt; approved;
-  reviewing -&gt; withdrawn [ style=dashed, color=mistyrose3 ];
-  approved -&gt; final;
-  approved -&gt; replaced [ style=dashed, color=lightsteelblue3 ];
-  final -&gt; replaced [ style=dashed color=lightsteelblue3 ];
-}
+<span class="w">  </span><span class="nt">github_pr</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">reviewing</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">reviewing</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">approved</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">reviewing</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">withdrawn</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">style</span><span class="p">=</span><span class="s">dashed</span><span class="p">,</span><span class="w"> </span><span class="na">color</span><span class="p">=</span><span class="s">mistyrose3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">approved</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">final</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">approved</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">replaced</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">style</span><span class="p">=</span><span class="s">dashed</span><span class="p">,</span><span class="w"> </span><span class="na">color</span><span class="p">=</span><span class="s">lightsteelblue3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="nt">final</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">replaced</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">style</span><span class="p">=</span><span class="s">dashed</span><span class="w"> </span><span class="na">color</span><span class="p">=</span><span class="s">lightsteelblue3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="proposing-an-aip">Proposing an AIP</h3>
 <p>In order to propose an AIP, first open a pull request with a draft AIP; the AIP

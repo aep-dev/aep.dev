@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/aip.dev/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=841c4b38">
-    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=841c4b38">
+    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=6502324c">
+    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=6502324c">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=841c4b38"></script>
+    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=6502324c"></script>
     
 <script type="text/javascript" src="/aip.dev/assets/js/syntax.js"></script>
 
@@ -279,7 +279,7 @@
 </section>
   
   <h4 class="aip-number">AIP-141</h4>
-  <h1>Quantities</h1>
+  <h1 id="quantities">Quantities</h1>
 <p>Many services need to represent a discrete quantity of items (number of bytes,
 number of miles, number of nodes, etc.).</p>
 <h2 id="guidance">Guidance</h2>
@@ -288,7 +288,7 @@ number of miles, number of nodes, etc.).</p>
 unambiguous, units <strong>should</strong> use generally accepted abbreviations (for
 example, <code>distance_km</code> rather than <code>distance_kilometers</code>).</p>
 <div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a non-stop air route.</span>
-<span class="kr">interface</span> <span class="nx">Route</span> <span class="p">{</span>
+<span class="kd">interface</span> <span class="nx">Route</span> <span class="p">{</span>
   <span class="c1">// The airport where the route begins.</span>
   <span class="nx">origin</span>: <span class="kt">string</span><span class="p">;</span>
 
@@ -304,7 +304,7 @@ example, <code>distance_km</code> rather than <code>distance_kilometers</code>).
 cluster), then the field <strong>should</strong> use the suffix <code>_count</code> (<strong>not</strong> the prefix
 <code>num_</code>):</p>
 <div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A cluster of individual nodes.</span>
-<span class="kr">interface</span> <span class="nx">Cluster</span> <span class="p">{</span>
+<span class="kd">interface</span> <span class="nx">Cluster</span> <span class="p">{</span>
   <span class="c1">// The number of nodes in the cluster.</span>
   <span class="nx">node_count</span>: <span class="kt">number</span><span class="p">;</span>
 <span class="p">}</span>
@@ -320,7 +320,7 @@ quantity. This is particularly valuable in two situations.</p>
 </ul>
 <p>Consider the example of money, which could need to do both of these:</p>
 <div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of an amount of money, in an arbitrary currency.</span>
-<span class="kr">interface</span> <span class="nx">Money</span> <span class="p">{</span>
+<span class="kd">interface</span> <span class="nx">Money</span> <span class="p">{</span>
   <span class="c1">// The 3-letter currency code defined in ISO 4217.</span>
   <span class="nx">currency_code</span>: <span class="kt">string</span><span class="p">;</span>
 
