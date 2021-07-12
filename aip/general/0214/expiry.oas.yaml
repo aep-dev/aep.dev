@@ -1,0 +1,26 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+components:
+  schema:
+    Book:
+      description: This book will self-destruct.
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the book.
+            Format: publishers/{publisher}/books/{book}
+        expire_time:
+          type: string
+          format: date-time
+          description: |
+            Timestamp in UTC of when this resource is considered expired.
+            This is *always* provided on output, regardless of what was sent
+            on input.
+        ttl_seconds:
+          type: integer
+          description: The TTL for this resource.
+          writeOnly: true
