@@ -1,0 +1,39 @@
+# Resource expiration
+
+Customers often want to provide the time that a given resource or attribute of
+a resource is no longer useful or should be deleted. Currently we recommend
+that customers do this by specifying an exact "expiration time" into a
+`expire_time` field with a timestamp type; however, this adds additional strain
+on the user when they want to specify a relative time offset until expiration
+rather than a specific time until expiration.
+
+Furthermore, the world understands the concept of a "time-to-live", often
+abbreviated to TTL, but the typical format of this field (an integer, measured
+in seconds) results in a sub-par experience when using an auto-generated client
+library.
+
+## Guidance
+
+Services wishing to convey an expiration **must** rely on a timestamp field
+called `expire_time`. Services wishing to allow a relative expiration time
+**must** define a `oneof` called `expiration` (or `{something}_expiration`)
+containing both the `expire_time` field and a separate [duration][aip-142]
+field called `ttl`, the latter marked as input only:
+
+{% tab proto %}
+
+{% sample 'expiry.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample 'expiry.oas.yaml', 'schema' %}
+
+{% endtabs %}
+
+Services **must** always return the expiration time in the `expire_time` field
+and leave the `ttl` field blank when retrieving the resource.
+
+Services that rely on the specific semantics of a "time to live" (e.g., DNS
+which must represent the TTL as an integer) **may** use an `int64 ttl` field
+(and **should** provide an [aip.dev/not-precedent][aip-200] comment in this
+case).
