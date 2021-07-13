@@ -1,0 +1,46 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+
+service Library {
+  // Get a single book.
+  rpc DeletePublisher(DeletePublisherRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/{name=publishers/*}"
+    };
+    option (google.api.method_signature) = "name";
+  }
+}
+
+// Request message to delete a publisher.
+message DeletePublisherRequest {
+  // The name of the publisher to delete.
+  // Format: publishers/{publisher}
+  string name = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Publisher"
+    }];
+
+  // If set to true, any books from this publisher will also be deleted.
+  // (Otherwise, the request will only work if the publisher has no books.)
+  bool force = 2;
+}

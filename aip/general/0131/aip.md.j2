@@ -4,7 +4,7 @@ In REST APIs, it is customary to make a `GET` request to a resource's URI (for
 example, `/v1/publishers/{publisher}/books/{book}`) in order to retrieve that
 resource.
 
-Our APIs honor this pattern by allowing `GET` requests to be sent to the
+Services implement this pattern by allowing `GET` requests to be sent to the
 resource URI, which returns the resource itself.
 
 ## Guidance
@@ -53,9 +53,9 @@ any additional wrapping:
 ### Errors
 
 If the user does not have sufficient permission to know that the resource
-exists, the service **should** reply with an HTTP 404 error, regardless of
-whether or not the resource exists. Permission **must** be checked prior to
-checking if the resource exists.
+exists, the service **should** reply with an HTTP 403 error, regardless of
+whether or not the resource exists, as described in AIP-211. Permission
+**must** be checked prior to checking if the resource exists.
 
 If the user has sufficient permission to know that the resource exists, but is
 unable to access it, the service **should** reply with an HTTP 403 error.
