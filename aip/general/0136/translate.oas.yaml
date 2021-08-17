@@ -1,0 +1,50 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /projects/{projectId}:translateText:
+    post:
+      operationId: translateText
+      description: Translates the provided text from one language to another.
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              description: Request structure to translate text.
+              properties:
+                contents:
+                  type: array
+                  items:
+                    type: string
+                  description: The contents of the input, as a string.
+                source_language_code:
+                  type: string
+                  description: |
+                    The BCP-47 language code of the input text (e.g. "en-US").
+                    If the source language is not specified, the service will
+                    attempt to infer it.
+                target_language_code:
+                  type: string
+                  description: |
+                    The BCP-47 language code of the output text (e.g. "en-US").
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: |
+                  Response structure for the translateText operation.
+                properties:
+                  translated_text:
+                    type: string
+                    description: |
+                      Text translated into the target language.
+                  detected_language_code:
+                    type: string
+                    description: |
+                      The BCP-47 language code of source text in the initial
+                      request, if it was detected automatically.
