@@ -39,10 +39,8 @@ and resources may have any number of sub-resources (usually collections).
 **Note:** While there is some conceptual alignment between storage systems and
 APIs, a service with a resource-oriented API is not necessarily a database, and
 has enormous flexibility in how it interprets resources and operations. API
-designers **should not** expect that their API will be reflective of their
-database schema. In fact, having an API that is identical to the underlying
-database schema is actually an anti-pattern, as it tightly couples the surface
-to the underlying system.
+designers **should not** tightly couple their API surface to their underlying
+database system.
 
 ### Operations
 
@@ -57,12 +55,16 @@ defining a new or custom HTTP method. Custom operations use traditional HTTP
 methods (usually `POST`) and define the custom verb in the URI. See AIP-136 for
 more detail.
 
-Services **should** prefer standard operations over custom operations; the
-purpose of custom operations is to define functionality that does not cleanly
-map to any of the standard operations. Custom operations offer the same design
-freedom as traditional [RPC][] APIs, which can be used to implement common
-programming patterns, such as database transactions, import and export, or data
-analysis.
+Resources **should** include all of the standard operations; however, resources
+**may** exclude some standard operations if there is a justification for doing
+so (for example, a read-only resource would exclude all write operations).
+
+Similarly, services **should** prefer standard operations over custom
+operations; the purpose of custom operations is to define functionality that
+does not cleanly map to any of the standard operations. Custom operations offer
+the same design freedom as traditional [RPC][] APIs, which can be used to
+implement common programming patterns, such as database transactions, import
+and export, or data analysis.
 
 ### Stateless protocol
 
