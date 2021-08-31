@@ -46,8 +46,8 @@ database system.
 
 Resource-oriented APIs emphasize resources (data model) over the operations
 performed on those resources (functionality). A typical resource-oriented API
-exposes a large number of resources with a small number of operations on each
-resource. The operations can be either the standard operations or custom
+exposes a arbitrary number of resources with a small number of operations on
+each resource. The operations can be either the standard operations or custom
 operations.
 
 **Note:** A custom operation in resource-oriented design does _not_ entail
