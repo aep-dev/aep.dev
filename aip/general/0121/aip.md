@@ -29,7 +29,7 @@ When designing an API, consider the following (roughly in logical order):
 ### Resources
 
 A resource-oriented API **should** generally be modeled as a resource
-hierarchy, where each node is either a simple resource or a collection of
+hierarchy, where each node is either an individual resource or a collection of
 resources.
 
 A _collection_ contains resources of _the same type_. For example, a publisher
@@ -53,8 +53,8 @@ resource. The operations can be either the standard operations or custom
 operations.
 
 **Note:** A custom operation in resource-oriented design does _not_ entail
-defining a new or custom HTTP verb. Custom operations use traditional HTTP
-verbs (usually `POST`) and define the custom verb in the URI. See AIP-136 for
+defining a new or custom HTTP method. Custom operations use traditional HTTP
+methods (usually `POST`) and define the custom verb in the URI. See AIP-136 for
 more detail.
 
 Services **should** prefer standard operations over custom operations; the
