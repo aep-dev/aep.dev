@@ -1,0 +1,55 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+// A service for translating text.
+service Translate {
+  // Translates the provided text from one language to another.
+  rpc TranslateText(TranslateTextRequest) returns (TranslateTextResponse) {
+    option (google.api.http) = {
+      post: "/v1/{project=projects/*}:translateText"
+      body: "*"
+    };
+  }
+}
+
+// The request message for text translation.
+message TranslateTextRequest {
+  // The contents of the input, as a string.
+  repeated string contents = 1
+    [(google.api.field_behavior) = REQUIRED];
+
+  // The BCP-47 language code of the input text (e.g. "en-US").
+  // If the source language is not specified, the service will attempt
+  // to infer it.
+  string source_language_code = 2;
+
+  // The BCP-47 language code of the output text (e.g. "en-US").
+  string target_language_code = 3
+    [(google.api.field_behavior) = REQUIRED];
+}
+
+// The response message for text translation.
+message TranslateTextResponse {
+  // Text translated into the target language.
+  string translated_text = 1;
+
+  // The BCP-47 language code of source text in the initial request,
+  // if it was detected automatically.
+  string detected_language_code = 2;
+}

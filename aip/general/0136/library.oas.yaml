@@ -1,0 +1,79 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:archive:
+    post:
+      operationId: archiveBook
+      description: Archives the given book.
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              description: Request structure to archive a book.
+              properties:
+                mime_type:
+                  type: string
+                  description: |
+                    The target format for the archived book.
+                    Must be "application/pdf", "application/rtf", or
+                    "application/epub+zip"
+                  required: true
+                  enum:
+                    - application/pdf
+                    - application/rtf
+                    - application/epub+zip
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: Response structure for the archiveBook operation.
+                properties:
+                  uri:
+                    type: string
+                    description: The location of the archived book.
+  /publishers/{publisherId}/books:sort:
+    post:
+      operationId: sortBooks
+      description: Sorts the books from this publisher.
+      requestBody:
+        description: Request structure to sort a collection of books.
+        properties:
+          field:
+            type: string
+            description: |
+              The property of the book to sort by.
+              If not provided, "title" is used.
+      responses:
+        200:
+          description: OK
+components:
+  schema:
+    Book:
+      description: A representation of a single book.
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the book.
+            Format: publishers/{publisher}/books/{book}
+        isbn:
+          type: string
+          description: |
+            The ISBN (International Standard Book Number) for this book.
+        title:
+          type: string
+          description: The title of the book.
+        authors:
+          type: array
+          items:
+            type: string
+          description: The author or authors of the book.
+        rating:
+          type: float
+          description: The rating assigned to the book.
