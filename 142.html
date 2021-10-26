@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>General AIPs</title>
+    <title>AIP-142: Time and duration</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -20,6 +20,8 @@
     </script>
     <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=5a3f1446"></script>
     
+<script type="text/javascript" src="/aip.dev/assets/js/syntax.js"></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -58,7 +60,7 @@
           <ul id="list-1" class="glue-header__list">
             
               
-                <li class="glue-header__item glue-header--is-active">
+                <li class="glue-header__item">
                   <a class="glue-header__link" href="/aip.dev/general" aria-level="1">Browse AIPs</a>
                 </li>
               
@@ -145,7 +147,7 @@
 <nav id="aip-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AIPs by Scope</li>
-    <li class="nav-item nav-item-active">
+    <li class="nav-item">
       <a href="/aip.dev/general">General</a>
     </li>
     <li class="nav-item nav-item-header">AIPs</li>
@@ -179,7 +181,7 @@
         Quantities
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/aip.dev/142">
         <span class="aip-number">142</span>
         Time and duration
@@ -232,22 +234,39 @@
 <section id="jump-content">
           
 <aside id="aip-sidebar" class="docs-component-sidebar">
+  <table id="aip-summary">
+    <tr><th colspan="2">Time and duration</th></tr>
+    <tr><td>Number</td><td>142</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/142">aip-dev.github.io/aip.dev/142</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2019-07-16</td></tr>
+    <tr><td>Updated</td><td>2019-07-16</td></tr>
+  </table>
+
   <section id="aip-toc" class="docs-component-sidebar-toc">
-    <div class="toc">
-      <span class="toctitle">Categories</span>
-      <ul>
-        <li><a href="#general">General</a></li>
-        </ul>
-    </div>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#timestamps">Timestamps</a></li>
+<li><a href="#durations">Durations</a></li>
+<li><a href="#fractional-seconds">Fractional seconds</a></li>
+<li><a href="#civil-dates-and-times">Civil dates and times</a></li>
+<li><a href="#recurring-time">Recurring time</a></li>
+<li><a href="#compatibility">Compatibility</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
   </section>
 
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aip-dev/aip.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0142">View source</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0142">Edit this page</a></li>
     </ul>
   </section>
 </aside>
-
 <section id="aip-main" class="docs-component-main">
   <section class="section-breadcrumbs">
   <nav
@@ -261,108 +280,106 @@
         </a>
       </li>
       
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/aip.dev/general">
+          General AIPs
+        </a>
+      </li>
+      
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        General AIPs
+        Time and duration
       </li>
     </ol>
   </nav>
 </section>
-  <h3 id="general">General</h3>
-  <table class="aip-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">1</td>
-        <td>
-          <a href="/aip.dev/1">AIP Purpose and Guidelines</a>
-          <span class="aip-state aip-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">126</td>
-        <td>
-          <a href="/aip.dev/126">Enumerations</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">131</td>
-        <td>
-          <a href="/aip.dev/131">GET for individual resources</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">136</td>
-        <td>
-          <a href="/aip.dev/136">Custom operations</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">141</td>
-        <td>
-          <a href="/aip.dev/141">Quantities</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">142</td>
-        <td>
-          <a href="/aip.dev/142">Time and duration</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">144</td>
-        <td>
-          <a href="/aip.dev/144">Array fields</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">145</td>
-        <td>
-          <a href="/aip.dev/145">Ranges</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">151</td>
-        <td>
-          <a href="/aip.dev/151">Long-running requests</a>
-          <span class="aip-state aip-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">154</td>
-        <td>
-          <a href="/aip.dev/154">Resource freshness validation</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">158</td>
-        <td>
-          <a href="/aip.dev/158">Pagination</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">210</td>
-        <td>
-          <a href="/aip.dev/210">Unicode</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">211</td>
-        <td>
-          <a href="/aip.dev/211">Authorization checks</a>
-          </td>
-      </tr>
-      </tbody>
-  </table>
+  
+  <h4 class="aip-number">AIP-142</h4>
+  <h1 id="time-and-duration">Time and duration</h1>
+<p>Many services need to represent the concepts surrounding time. Representing
+time can be challenging due to the intricacies of calendars and time zones, as
+well as the fact that common exchange formats (such as JSON) lack a native
+concept of time.</p>
+<h2 id="guidance">Guidance</h2>
+<p>Fields representing time <strong>should</strong> use a <code>string</code> field with values conforming
+to <a href="https://datatracker.ietf.org/doc/html/rfc3339">RFC 3339</a>, such as <code>2012-04-21T15:00:00Z</code>.</p>
+<p>Services <strong>should</strong> use IDL-specific timestamps or format indicators where
+applicable (such as <a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto"><code>google.protobuf.Timestamp</code></a> in protocol
+buffers, or <code>format: date-time</code> in OpenAPI) provided that the service converts
+values to RFC 3339 timestamp strings in JSON.</p>
+<h3 id="timestamps">Timestamps</h3>
+<p>Fields that represent an absolute point in time (independent of any time zone
+or calendar) <strong>should</strong> use a <code>string</code> field with RFC 3339 values, and
+<strong>should</strong> send values in UTC, with the <code>Z</code> time zone explicitly included.</p>
+<p>These fields <strong>should</strong> have names ending in <code>_time</code>, such as <code>create_time</code> or
+<code>update_time</code>. For array fields, the names <strong>should</strong> end in <code>_times</code> instead.</p>
+<p>Many timestamp fields refer to an activity (for example, <code>create_time</code> refers
+to when the applicable resource was created). For these, the field <strong>should</strong>
+be named with the <code>{root_word}_time</code> form. For example, if a book is being
+published, the field storing the time when this happens would use the root form
+of the verb "to publish" ("publish"), resulting in a field called
+<code>publish_time</code>. Fields <strong>should not</strong> be named using the past tense (such as
+<code>published_time</code>, <code>created_time</code> or <code>last_updated_time</code>).</p>
+<p>When accepting timestamps as input, services <strong>should</strong> canonicalize the
+timestamp into UTC, and return values in UTC.</p>
+<h3 id="durations">Durations</h3>
+<p>Fields that represent a span between two points in time (independent of any
+time zone or calendar) <strong>should</strong> use an <code>int</code> field if there is a single
+canonical unit (for example, <code>ttl_seconds</code> for an expiring resource, or
+<code>offset_seconds</code> for position in a video).</p>
+<p><strong>Note:</strong> A <code>float</code> field <strong>may</strong> be used if fractional seconds are needed.
+However, only fractional seconds are permitted; other fractional units (such as
+hours or days) <strong>must not</strong> be used.</p>
+<p>If there is no canonical unit, the service <strong>should</strong> use a <code>string</code> field with
+<a href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO 8601</a> duration values, such as <code>P3Y6M4DT12H30M5S</code>. The field name
+<strong>should</strong> end with <code>_duration</code>. Designators for zero values <strong>may</strong> be omitted
+in accordance with ISO 8601 (for example: <code>PT12H</code> is sufficient to represent
+"12 hours"), but at least one designator <strong>must</strong> be present (therefore, a zero
+duration is <code>PT0S</code> or <code>P0D</code>).</p>
+<p>Services <strong>should</strong> use IDL-specific durations where applicable (such as
+<a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto"><code>google.protobuf.Duration</code></a> in protocol buffers) provided that the
+service converts values to ISO 8601 duration strings in JSON.</p>
+<h3 id="fractional-seconds">Fractional seconds</h3>
+<p>Services <strong>may</strong> support fractional seconds for both timestamps and durations,
+but <strong>should not</strong> support precision more granular than the nanosecond.
+Services <strong>may</strong> also limit the supported precision, and <strong>may</strong> <em>truncate</em>
+values received from the user to the supported precision.</p>
+<p><strong>Note:</strong> Truncation is recommended rather than rounding because rounding to
+the nearest second has the potential to change day, month, year, etc., which is
+surprisingly significant.</p>
+<h3 id="civil-dates-and-times">Civil dates and times</h3>
+<p>Fields that represent a calendar date or wall-clock time <strong>should</strong> use partial
+ISO 8601 strings.</p>
+<p>Fields representing civil dates <strong>should</strong> have names ending in <code>_date</code>, while
+fields representing civil times or datetimes <strong>should</strong> have names ending in
+<code>_time</code>.</p>
+<h3 id="recurring-time">Recurring time</h3>
+<p>A service that needs to document a recurring event <strong>should</strong> use cronspec if
+cronspec is able to support the service's use case.</p>
+<h3 id="compatibility">Compatibility</h3>
+<p>Occasionally, APIs are unable to use RFC 3339 strings for legacy or
+compatibility reasons. For example, an API may conform to a separate
+specification that mandates that timestamps be Unix timestamp integers.</p>
+<p>In these situations, fields <strong>may</strong> use other types. If possible, the following
+naming conventions apply:</p>
+<ul>
+<li>Unix timestamps <strong>should</strong> use a <code>unix_time</code> suffix.<ul>
+<li>Multipliers of Unix time (such as milliseconds) <strong>should not</strong> be used; if
+  they are unavoidable, the field name <strong>should</strong> use both <code>unix_time</code> and
+  the unit, such as <code>unix_time_millis</code>.</li>
+</ul>
+</li>
+<li>For other integers, include the meaning (examples: <code>time</code>, <code>duration</code>,
+  <code>delay</code>, <code>latency</code>) <strong>and</strong> the unit of measurement (valid values: <code>seconds</code>,
+  <code>millis</code>, <code>micros</code>, <code>nanos</code>) as a final suffix. For example,
+  <code>send_time_millis</code>.</li>
+<li>For strings, include the meaning (examples: <code>time</code>, <code>duration</code>, <code>delay</code>,
+  <code>latency</code>) but no unit suffix.</li>
+</ul>
+<p>In all cases, clearly document the expected format, and the rationale for its
+use.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
