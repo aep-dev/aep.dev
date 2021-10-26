@@ -10,35 +10,11 @@ There are two potential approaches for reading resources across multiple
 collections. Groups of related services **should**, as a unit, select a
 preferred approach and apply it consistently.
 
-### Promoting Resources
-
-One approach is to evade the problem entirely by promoting resources above
-their erstwhile parents in the event that reading across collections is likely
-to be a requirement.
-
-In this approach, the parent becomes a field on the resource:
-
-```typescript
-interface Book {
-  // The ID of the book's publisher
-  publisherId: string;
-
-  // Other fields...
-}
-```
-
-Similarly, the parent is removed from the URI:
-
-```
-GET /v1/books?filter...
-```
-
 ### Wildcards
 
-The other approach is to use a wildcard character. Services **may** support
-reading resources across multiple collections by allowing users to specify a
-`-` (the hyphen or dash character) as a wildcard character in a standard
-[`List`][aip-132] operation:
+Services **may** support reading resources across multiple collections by
+allowing users to specify a `-` (the hyphen or dash character) as a wildcard
+character in a standard [`List`][aip-132] operation:
 
 ```
 GET /v1/publishers/-/books?filter=...
@@ -94,6 +70,28 @@ GET https://example.googleapis.com/v1/publishers/-/books/{book}
   example, the request above returns a resource with a name like
   `publishers/123/books/456`, _not_ `publishers/-/books/456`.
 - The resource ID **must** be unique within parent collections.
+
+### Virtual Collections
+
+Services **may** create a _virtual collection_ (usually as an alternative to
+the use of the wildcard character), which exists alongside the erstwhile parent
+and provides child resources regardless of the parent they are under.
+
+The parent **must** be removed from the URI:
+
+```
+GET /v1/books?filter...
+```
+
+The service **must** still recognize the full path to the resource (e.g.
+`/publishers/123/books/les-mis`) as the canonical path. Services **should**
+send `308 Permanent Redirect` to the canonical path if a user attempts to
+access a resource directly within the virtual collection (for example,
+`/v1/books/les-mis`).
+
+**Note:** The child IDs **must** be unique across all parents for
+`308 Permanent Redirect` to be appropriate; if they are not, the service
+**must** send `404 Not Found` in this situation instead.
 
 ## Further reading
 
