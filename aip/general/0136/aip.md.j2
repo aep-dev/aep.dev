@@ -1,0 +1,126 @@
+# Custom operations
+
+Services use custom operations to provide a means to express arbitrary actions
+that are difficult to model using only the standard operations. Custom
+operations are important because they provide a means for an API's vocabulary
+to adhere to user intent.
+
+## Guidance
+
+Custom operations **should** only be used for functionality that can not be
+easily expressed via standard operations; prefer standard operations if
+possible, due to their consistent semantics. (Of course, this only applies if
+the functionality in question actually conforms to the normal semantics; it is
+_not_ a good idea to contort things to endeavor to make the standard operations
+"sort of work".)
+
+While custom operations vary widely in how they are designed, many principles
+apply consistently:
+
+{% tab proto %}
+
+{% sample 'library.proto', 'rpc ArchiveBook' %}
+
+- The name of the RPC **should** be a verb followed by a noun.
+  - The name **must not** contain prepositions ("for", "with", etc.).
+- The HTTP method for custom operations **should** usually be `POST`, unless
+  the custom method maps more strongly to another HTTP verb.
+  - Custom operations that serve as an alternative to get or list operations
+    (such as `Search`) **should** use `GET`. These operations **must** be
+    idempotent and have no state changes or side effects (they should be safe
+    as defined in [RFC 7231][]).
+  - Custom operations **should not** use `PATCH` or `DELETE`.
+- The HTTP URI **must** use a `:` character followed by the custom verb
+  (`:archive` in the above example), and the verb in the URI **must** match the
+  verb in the name of the RPC.
+  - If word separation is required, `camelCase` **must** be used.
+- The `body` clause in the `google.api.http` annotation **should** be `"*"`.
+  - However, if using `GET` or `DELETE`, the `body` clause **must** be absent.
+- Custom operations **should** usually take a request message matching the RPC
+  name, with a -`Request` suffix.
+- Custom operations **should** usually return a response message matching the
+  RPC name, with a -`Response` suffix.
+  - When operating on a specific resource, a custom method **may** return the
+    resource itself.
+
+{% tab oas %}
+
+{% sample 'library.oas.yaml', '/publishers/{publisherId}/books/{bookId}:archive' %}
+
+- The `operationId` **should** be a verb followed by a noun.
+  - The `operationId` **must not** contain prepositions ("for", "with", etc.).
+- The HTTP method for custom operations **should** usually be `POST`, unless
+  the custom method maps more strongly to another HTTP verb.
+  - Custom operations that serve as an alternative to get or list operations
+    (such as `Search`) **should** use `GET`, and require no request body. These
+    operations **must** be idempotent and have no state changes or side effects
+    (they should be safe as defined in [RFC 7231][]).
+  - Custom operations **should not** use `PATCH` or `DELETE`.
+- The HTTP URI **must** use a `:` character followed by the custom verb
+  (`:archive` in the above example), and the verb in the URI **must** match the
+  verb in the `operationId`.
+  - If word separation is required, `camelCase` **must** be used.
+
+{% endtabs %}
+
+**Note:** The pattern above shows a custom method that operates on a specific
+resource. Custom operations can be associated with resources, collections, or
+services.
+
+### Collection-based custom operations
+
+While most custom operations operate on a single resource, some custom
+operations **may** operate on a collection instead:
+
+{% tab proto %}
+
+{% sample 'library.proto', 'rpc SortBooks' %}
+
+{% tab oas %}
+
+{% sample 'library.oas.yaml', '/publishers/{publisherId}/books:sort' %}
+
+{% endtabs %}
+
+- If the collection has a parent, the field name in the request message
+  **should** be the target resource's singular noun (`publisher` in the above
+  example). If word separators are necessary, `snake_case` **must** be used.
+- The collection key (`books` in the above example) **must** be literal.
+
+### Stateless operations
+
+Some custom operations are not attached to resources at all. These operations
+are generally _stateless_: they accept a request and return a response, and
+have no permanent effect on data within the API.
+
+{% tab proto %}
+
+{% sample 'translate.proto', 'rpc TranslateText' %}
+
+{% tab oas %}
+
+{% sample 'translate.oas.yaml', '/projects/{projectId}:translateText' %}
+
+{% endtabs %}
+
+- If the method runs in a particular scope (such as a project, as in the above
+  example), the field name in the request message **should** be the name of the
+  scope resource. If word separators are necessary, `snake_case` **must** be
+  used.
+- The URI **should** place both the verb and noun after the `:` separator
+  (avoid a "faux collection key" in the URI in this case, as there is no
+  collection). For example, `:translateText` is preferable to `text:translate`.
+- Stateless operations **must** use `POST` if they involve billing.
+
+### Declarative-friendly resources
+
+Declarative-friendly resources usually **should not** employ custom operations
+(except specific declarative-friendly custom operations discussed in other
+AIPs), because declarative-friendly tools are unable to automatically determine
+what to do with them.
+
+An exception to this is for rarely-used, fundamentally imperative operations,
+such as a `Move`, `Rename`, or `Restart` operation, for which there would not
+be an expectation of declarative support.
+
+[rfc 7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1
