@@ -2,20 +2,22 @@
 
 Sometimes it is necessary for a resource to have a defined lifespan. At the end 
 of this lifespan, the resource expires but may still be accessible from the 
-server. This "expiration time" may be defined by a customer, or determined by 
-the server at the time of creation. Regardless of how the source of this time, 
-we recommend it is communicated via the `expire_time` property. 
+server. The duration or end of this lifespan may be controled by an API client, 
+or determined by the server at the time of creation. Lifespans can be defined 
+as an absolute time value or as a relative time offset. An absolute time value 
+stored in the `expire_time` field is preferred. 
 
-The `expire_time` of a resource is not meant to replace the `Cache-Control` 
-header to communicate client-side or CDN caching. The lifespan of a resource 
-refers to the time it spends in a valid or actionable state, such as a 
-certificate or an auction. 
+The `expire_time` of a resource is not intended to be a replacement for the `Cache-Control` header used to communicate client-side or CDN caching 
+recommendations. The lifespan of a resource refers to the time it spends in a 
+valid or actionable state, such as how long a certificate is valid, or how long 
+an auction is active.
 
-For some resources, a relative time offset may be more appropriate than a date. 
-Furthermore, the world understands the concept of a "time-to-live", often 
-abbreviated to TTL. However, the typical format of this field (an integer, 
-measured in seconds) results in a sub-par experience when using an 
-auto-generated client library.
+For some resources, a relative time offset may be more appropriate than an 
+absolute time value. Furthermore, the world understands the concept of a 
+"time-to-live", often abbreviated to TTL. However, the typical format of this 
+field (an integer, measured in seconds) results in a sub-par experience when 
+using an auto-generated client library. Nonetheless, a `ttl` field may be used 
+in conjunction with the `expire_time` field.
 
 ## Guidance
 
