@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AIP-126: Enumerations</title>
+    <title>AIP-164: Soft delete</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -157,7 +157,7 @@
         AIP Purpose and Guidelines
       </a>
     </li>
-    <li class="nav-item nav-item-active">
+    <li class="nav-item">
       <a href="/aip.dev/126">
         <span class="aip-number">126</span>
         Enumerations
@@ -217,7 +217,7 @@
         Pagination
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/aip.dev/164">
         <span class="aip-number">164</span>
         Soft delete
@@ -241,23 +241,24 @@
           
 <aside id="aip-sidebar" class="docs-component-sidebar">
   <table id="aip-summary">
-    <tr><th colspan="2">Enumerations</th></tr>
-    <tr><td>Number</td><td>126</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/126">aip-dev.github.io/aip.dev/126</a></td></tr>
+    <tr><th colspan="2">Soft delete</th></tr>
+    <tr><td>Number</td><td>164</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/164">aip-dev.github.io/aip.dev/164</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2019-07-24</td></tr>
-    <tr><td>Updated</td><td>2019-07-24</td></tr>
+    <tr><td>Created</td><td>2020-10-06</td></tr>
+    <tr><td>Updated</td><td>2020-10-06</td></tr>
   </table>
 
   <section id="aip-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#when-to-use-enums">When to use enums</a></li>
-<li><a href="#alternatives">Alternatives</a></li>
-<li><a href="#compatibility">Compatibility</a></li>
+<li><a href="#undelete">Undelete</a></li>
+<li><a href="#long-running-undelete">Long-running undelete</a></li>
+<li><a href="#list-and-get">List and Get</a></li>
+<li><a href="#declarative-friendly-resources">Declarative-friendly resources</a></li>
+<li><a href="#errors">Errors</a></li>
 </ul>
 </li>
-<li><a href="#interface-definitions">Interface Definitions</a></li>
 <li><a href="#further-reading">Further reading</a></li>
 </ul>
 </div>
@@ -267,8 +268,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aip-dev/aip.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0126">View source</a></li>
-      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0126">Edit this page</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0164">View source</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0164">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -293,153 +294,154 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Enumerations
+        Soft delete
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aip-number">AIP-126</h4>
-  <h1 id="enumerations">Enumerations</h1>
-<p>It is common for a field to only accept or provide a discrete and limited set
-of values. In these cases, it can be useful to use enumerations (generally
-abbreviated "enums") in order to clearly communicate what the set of allowed
-values are.</p>
+  <h4 class="aip-number">AIP-164</h4>
+  <h1 id="soft-delete">Soft delete</h1>
+<p>There are several reasons why a client could desire soft delete and undelete
+functionality, but one over-arching reason stands out: recovery from mistakes.
+A service that supports undelete makes it possible for users to recover
+resources that were deleted by accident.</p>
 <h2 id="guidance">Guidance</h2>
-<p>APIs <strong>may</strong> expose enum objects for sets of values that are expected to change
-infrequently:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// Possible formats in which a book may be published.</span>
-<span class="kd">enum</span> <span class="nx">Format</span> <span class="p">{</span>
-  <span class="c1">// The printed format, in hardback.</span>
-  <span class="nx">Hardback</span> <span class="o">=</span> <span class="s1">&#39;HARDBACK&#39;</span><span class="p">,</span>
-
-  <span class="c1">// The printed format, in paperback.</span>
-  <span class="nx">Paperback</span> <span class="o">=</span> <span class="s1">&#39;PAPERBACK&#39;</span><span class="p">,</span>
-
-  <span class="c1">// An electronic book format.</span>
-  <span class="nx">Ebook</span> <span class="o">=</span> <span class="s1">&#39;EBOOK&#39;</span><span class="p">,</span>
-
-  <span class="c1">// An audio recording.</span>
-  <span class="nx">Audiobook</span> <span class="o">=</span> <span class="s1">&#39;AUDIOBOOK&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-</code></pre></div>
-<ul>
-<li>All enum values <strong>should</strong> use a consistent case format across an
-  organization. In many cases, this is dictated by the IDL the organization
-  uses.</li>
-<li>Enums <strong>should</strong> document whether the enum is frozen or they expect to add
-  values in the future.</li>
-</ul>
-<h3 id="when-to-use-enums">When to use enums</h3>
-<p>Enums can be more accessible and readable than strings or booleans in many
-cases, but they do add overhead when they change. Therefore, enums <strong>should</strong>
-receive new values infrequently. While the definition of "infrequently" may
-change based on individual use cases, a good rule of thumb is no more than once
-a year. For enums that change frequently, the API <strong>should</strong> use a string and
-document the format.</p>
-<p><strong>Note:</strong> If an enumerated value needs to be shared across APIs, an enum
-<strong>may</strong> be used, but the assignment between enum values and their wire
-representation <strong>must</strong> match.</p>
-<h3 id="alternatives">Alternatives</h3>
-<p>Enums <strong>should not</strong> be used when there is a competing, widely-adopted standard
-representation (such as with <a href="https://en.wikipedia.org/wiki/IETF_language_tag">language codes</a> or <a href="https://en.wikipedia.org/wiki/Media_type">media types</a>).
-Instead, that standard representation <strong>should</strong> be used. This is true even if
-only a small subset of values are permitted, because using enums in this
-situation often leads to frustrating lookup tables when trying to use multiple
-APIs together.</p>
-<p>For enumerated values where the set of allowed values changes frequently, APIs
-<strong>should</strong> use a <code>string</code> field instead, and <strong>must</strong> document the allowed
-values. String fields with enumerated values <strong>should</strong> use a uniform case
-system (<code>snake_case</code>, <code>kebab-case</code>, etc.) throughout an organization.</p>
-<p>Boolean fields <strong>may</strong> be used in situations where it is clear that no further
-flexibility will be needed. The default value <strong>must</strong> be <code>false</code>.</p>
-<h3 id="compatibility">Compatibility</h3>
-<p>Adding values to an enum has the potential to be disruptive to existing
-clients. Consider code written against the <code>Format</code> enum in an earlier version
-where only the first two options were available:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="k">switch</span> <span class="p">(</span><span class="nx">book</span><span class="p">.</span><span class="nx">format</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">case</span> <span class="nx">Format</span><span class="p">.</span><span class="nx">Hardback</span><span class="o">:</span>
-    <span class="c1">// Do something...</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="nx">Format</span><span class="p">.</span><span class="nx">Paperback</span><span class="o">:</span>
-    <span class="c1">// Do something...</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="k">default</span><span class="o">:</span>
-    <span class="c1">// When new enum values are introduced, pre-existing client code may</span>
-    <span class="c1">// throw errors or act in unexpected ways.</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Unrecognized value.&#39;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>Services <strong>may</strong> add new values to existing enums; however, they <strong>should</strong> add
-enums carefully; think about what will happen if a client system does not know
-about a new value.</p>
-<p>Additionally, in IDLs where enum values are presented in a specific order,
-services <strong>should</strong> only add new values to the end. An exception to this rule
-is if the enum conforms to an external standard (for example, an enum
-representing HTTP status codes would add a new 3xx value alongside the others,
-not at the end).</p>
-<h2 id="interface-definitions">Interface Definitions</h2>
+<p>Services <strong>may</strong> support the ability to "undelete", to allow for situations
+where users mistakenly delete resources and need the ability to recover.</p>
+<p>If a resource needs to support undelete, the <code>Delete</code> method <strong>must</strong> simply
+mark the resource as having been deleted, but not completely remove it from the
+system. If the method behaves this way, it <strong>should</strong> return <code>200 OK</code> with the
+updated resource instead of <code>204 No Content</code>.</p>
+<p>Resources that support soft delete <strong>should</strong> have an <code>expire_time</code> field as
+described in <a href="/aip.dev/148">AIP-148</a>. Additionally, resources <strong>should</strong> include a <code>DELETED</code>
+state value if the resource includes a <code>state</code> field (<a href="/aip.dev/216">AIP-216</a>).</p>
+<h3 id="undelete">Undelete</h3>
+<p>A resource that supports soft delete <strong>should</strong> provide an <code>Undelete</code> method:</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
-<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Possible formats in which the book may be published.</span>
-<span class="kd">enum</span> <span class="n">Format</span> <span class="p">{</span>
-  <span class="c1">// Default value. This value is unused.</span>
-  <span class="na">FORMAT_UNSPECIFIED</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Undelete a single book.</span>
+<span class="k">rpc</span> <span class="n">UndeleteBook</span><span class="p">(</span><span class="n">UndeleteBookRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Book</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">option</span> <span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">post</span><span class="o">:</span> <span class="s">&quot;/v1/{name=publishers/*/books/*}:undelete&quot;</span>
+    <span class="n">body</span><span class="o">:</span> <span class="s">&quot;*&quot;</span>
+  <span class="p">};</span>
+  <span class="k">option</span> <span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span> <span class="o">=</span> <span class="s">&quot;name&quot;</span><span class="p">;</span>
+<span class="p">}</span>
 
-  <span class="c1">// The printed format, in hardback.</span>
-  <span class="na">HARDBACK</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-  <span class="c1">// The printed format, in paperback.</span>
-  <span class="na">PAPERBACK</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-  <span class="c1">// An electronic book format.</span>
-  <span class="na">EBOOK</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-
-  <span class="c1">// An audio recording.</span>
-  <span class="na">AUDIOBOOK</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="c1">// Request message to undelete a single book.</span>
+<span class="kd">message</span> <span class="nc">UndeleteBookRequest</span> <span class="p">{</span>
+  <span class="c1">// The name of the book to undelete.</span>
+  <span class="c1">// The book must exist and currently be deleted (but not expunged).</span>
+  <span class="kt">string</span> <span class="na">name</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span> <span class="o">=</span> <span class="n">REQUIRED</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">type</span><span class="o">:</span> <span class="s">&quot;library.googleapis.com/Book&quot;</span>
+    <span class="p">}];</span>
 <span class="p">}</span>
 </code></pre></div>
 <ul>
-<li>The zero value of the enum <strong>should</strong> be the name of the enum itself followed
-  by the suffix <code>_UNSPECIFIED</code>. The service <strong>may</strong> either allow or prohibit
-  use of this value.</li>
-<li>Enums which will only be used in a single message <strong>should</strong> be nested within
-  that message. In this case, the enum <strong>should</strong> be declared immediately
-  before it is used.</li>
-<li>If multiple enums are in the same namespace, they <strong>must not</strong> share any
-  values. (This is because enums do not provide their own namespace for their
-  values in some languages.)</li>
-<li>If an enumerated value needs to be shared across APIs, an enum <strong>may</strong> be
-  used, but the assignment between the value names and the tag numbers <strong>must</strong>
-  match.</li>
+<li>The HTTP method <strong>must</strong> be <code>POST</code>.</li>
+<li>The <code>body</code> clause <strong>must</strong> be <code>"*"</code>.</li>
+<li>The response message <strong>must</strong> be the resource itself. There is no
+  <code>UndeleteBookResponse</code>.<ul>
+<li>The response <strong>should</strong> include the fully-populated resource unless it is
+  infeasible to do so.</li>
+<li>If the undelete RPC is <a href="#long-running-undelete">long-running</a>, the response
+  message <strong>must</strong> be a <code>google.longrunning.Operation</code> which resolves to the
+  resource itself.</li>
 </ul>
-<p><strong>Note:</strong> When using protocol buffers, it is impossible to distinguish between
-<code>false</code> and unset. If this is a requirement, an enum <strong>may</strong> be a better design
-choice (although <code>google.protobuf.BoolValue</code> is also available).</p>
+</li>
+<li>A <code>name</code> field <strong>must</strong> be included in the request message; it <strong>should</strong> be
+  called <code>name</code>.<ul>
+<li>The field <strong>should</strong> be <a href="/aip.dev/203">annotated as required</a>.</li>
+<li>The field <strong>should</strong> identify the <a href="/aip.dev/123">resource type</a> that it
+  references.</li>
+<li>The comment for the field <strong>should</strong> document the resource pattern.</li>
+</ul>
+</li>
+<li>The request message <strong>must not</strong> contain any other required fields, and
+  <strong>should not</strong> contain other optional fields except those described in this
+  or another AIP.</li>
+</ul>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
-<div class="highlight language-yaml"><pre><span></span><code><span class="nt">format</span><span class="p">:</span>
-  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
-  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The format of the book.</span>
-  <span class="nt">nullable</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-  <span class="nt">enum</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">null</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">HARDCOVER</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">PAPERBACK</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">EBOOK</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">AUDIOBOOK</span>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books/{bookId}:undelete</span><span class="p p-Indicator">:</span>
+    <span class="nt">post</span><span class="p">:</span>
+      <span class="nt">operationId</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">undeleteBook</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Undelete a single book.</span>
+      <span class="nt">responses</span><span class="p">:</span>
+        <span class="nt">200</span><span class="p">:</span>
+          <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OK</span>
+          <span class="nt">content</span><span class="p">:</span>
+            <span class="nt">application/json</span><span class="p">:</span>
+              <span class="nt">schema</span><span class="p">:</span>
+                <span class="nt">$ref</span><span class="p">:</span> <span class="s">&#39;#/components/schemas/Book&#39;</span>
 </code></pre></div>
 <ul>
-<li>Enumerated fields <strong>should</strong> be strings.</li>
-<li>If the enum is optional, The <code>null</code> value <strong>should</strong> be used as the empty
-  value, and <strong>should</strong> be the first value specified.</li>
+<li>The HTTP method <strong>must</strong> be <code>POST</code>.</li>
+<li>The response message <strong>must</strong> be the resource itself.<ul>
+<li>The response <strong>should</strong> include the fully-populated resource unless it is
+  infeasible to do so.</li>
 </ul>
-<p><strong>Note:</strong> If <code>null</code> is a valid value, OpenAPI 3.0 also requires that
-<code>nullable: true</code> is specified for the field.</p>
+</li>
+<li>The operation <strong>must not</strong> require any other fields, and <strong>should not</strong>
+  contain other optional query parameters except those described in this or
+  another AIP.</li>
+</ul>
 </div>
 </div>
+<h3 id="long-running-undelete">Long-running undelete</h3>
+<p>Some resources take longer to undelete a resource than is reasonable for a
+regular API request. In this situation, the API <strong>should</strong> follow the
+long-running request pattern (<a href="/aip.dev/151">AIP-151</a>).</p>
+<h3 id="list-and-get">List and Get</h3>
+<p>Soft-deleted resources <strong>should not</strong> be returned in <code>List</code> (<a href="/aip.dev/132">AIP-132</a>) responses
+by default (unless <code>bool show_deleted</code> is true).</p>
+<p>A <code>Get</code> (<a href="/aip.dev/131">AIP-131</a>) request for a soft deleted resource <strong>should</strong> error with
+<code>410 Gone</code> unless <code>bool show_deleted</code> is true, in which case soft-deleted
+resources <strong>must</strong> return the resource.</p>
+<p>Services that soft delete resources <strong>may</strong> choose a reasonable strategy for
+purging those resources, including automatic purging after a reasonable time
+(such as 30 days), allowing users to set an expiry time (<a href="/aip.dev/214">AIP-214</a>), or retaining
+the resources indefinitely. Regardless of what strategy is selected, the
+service <strong>should</strong> document when soft deleted resources will be completely
+removed.</p>
+<h3 id="declarative-friendly-resources">Declarative-friendly resources</h3>
+<p>A resource that is declarative-friendly (<a href="/aip.dev/128">AIP-128</a>) <strong>should</strong> support soft
+delete and undelete.</p>
+<p><strong>Important:</strong> There is an ambiguity in declarative tooling between "create"
+and "undelete". When given an alias which was previously deleted and a
+directive to make it exist, tooling usually does not know if the intent is to
+restore the previously-deleted resource, or create a new one with the same
+alias. Declarative tools <strong>should</strong> resolve this ambiguity in favor of creating
+a new resource: the only way to undelete is to explicitly use the undelete RPC
+(an imperative operation), and declarative tools <strong>may</strong> elect not to map
+anything to undelete at all.</p>
+<p>Declarative-friendly resources <strong>must</strong> use long-running operations for both
+soft delete and undelete. The service <strong>may</strong> return an LRO that is already set
+to done if the request is effectively immediate.</p>
+<p>Declarative-friendly resources <strong>must</strong> include <code>validate_only</code> (<a href="/aip.dev/163">AIP-163</a>) and
+<code>etag</code> (<a href="/aip.dev/154">AIP-154</a>) in their <code>Undelete</code> methods.</p>
+<h3 id="errors">Errors</h3>
+<p>If the user does not have permission to access the resource, regardless of
+whether or not it exists, the service <strong>must</strong> error with <code>403 Forbidden</code>.
+Permission <strong>must</strong> be checked prior to checking if the resource exists.</p>
+<p>If the user does have proper permission, but the requested resource does not
+exist (either it was never created or already expunged), the service <strong>must</strong>
+error with <code>404 Not Found</code>.</p>
+<p>If the user calling a soft <code>Delete</code> has proper permission, but the requested
+resource is already deleted, the service <strong>must</strong> succeed if <code>allow_missing</code> is
+<code>true</code>, and <strong>should</strong> error with <code>404 Not Found</code> if <code>allow_missing</code> is
+<code>false</code>.</p>
+<p>If the user calling <code>Undelete</code> has proper permission, but the requested
+resource is not deleted, the service <strong>must</strong> error with <code>409 Conflict</code>.</p>
 <h2 id="further-reading">Further reading</h2>
 <ul>
-<li>For states, a special type of enum, see <a href="/aip.dev/216">AIP-216</a>.</li>
+<li>For the <code>Delete</code> standard method, see <a href="/aip.dev/135">AIP-135</a>.</li>
+<li>For long-running operations, see <a href="/aip.dev/151">AIP-151</a>.</li>
+<li>For resource freshness validation (<code>etag</code>), see <a href="/aip.dev/154">AIP-154</a>.</li>
+<li>For change validation (<code>validate_only</code>), see <a href="/aip.dev/163">AIP-163</a>.</li>
 </ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
