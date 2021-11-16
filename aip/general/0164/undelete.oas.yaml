@@ -1,0 +1,42 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:undelete:
+    post:
+      operationId: undeleteBook
+      description: Undelete a single book.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schema:
+    Book:
+      description: A representation of a single book.
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the book.
+            Format: publishers/{publisher}/books/{book}
+        isbn:
+          type: string
+          description: |
+            The ISBN (International Standard Book Number) for this book.
+        title:
+          type: string
+          description: The title of the book.
+        authors:
+          type: array
+          items:
+            type: string
+          description: The author or authors of the book.
+        rating:
+          type: float
+          description: The rating assigned to the book.
