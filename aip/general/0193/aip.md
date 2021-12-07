@@ -9,7 +9,7 @@ than being expected to constantly add verbose error handling everywhere.
 
 Services **must** clearly distinguish successful responses from error responses
 by using appropriate HTTP codes:
-
+- Informational responses **must** use HTTP status codes between 100 and 199.
 - Successful responses **must** use HTTP status codes between 200 and 399.
 - Errors indicating a problem with the user's request **must** use HTTP status
   codes between 400 and 499.
