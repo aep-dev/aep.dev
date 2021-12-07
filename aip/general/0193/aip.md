@@ -59,6 +59,17 @@ Error messages **should** be brief but actionable. Any extra information
 necessary, the service **should** provide a link where a reader can get more
 information or ask questions to help resolve the issue.
 
+Below are some examples of good errors and not so good errors:
+
+    ❌  Invalid Book Name.
+    ✅  Book name must be between 5 and 50 characters.
+
+    ❌  Access is denied
+    ✅  Only admin users have access to this resource.
+
+    ❌  Bad input
+    ✅  'ID' must be provided in the input
+    
 ### Localization
 
 Error messages **must** be in American English. If a localized error message is
