@@ -22,22 +22,24 @@ Error responses **should** conform to the following interface:
 
 ```typescript
 interface Error {
-  //A machine-readable code indicating the type of error (like `name_too_long`). This value is parseable for programmatic error handling.
+  // A machine-readable code indicating the type of error (like `name_too_long`). This value is parseable for programmatic error handling.
   code: string;
 
-  //A human readable description of the problem. Should not change from occurrence to occurrence (except for localization).
+  // A human readable description of the problem. Should not change from occurrence to occurrence (except for localization).
   title?: string
 
-  //The HTTP status code between 100 and 500
+  // The HTTP status code between 100 and 500
   status?: integer
 
-  //A human-readable explanation specific to this occurrence of the problem
+  // A human-readable explanation specific to this occurrence of the problem
   detail?: string
 
-  //A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
+  // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
   id?: string
+
+  // An array of additional error details.                                                                                                                           errors?: any[]
 }
-```
+
 
 - The `title` field is intended for consumption by humans, and therefore
   **may** change, even within a single version.
