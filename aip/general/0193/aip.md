@@ -9,8 +9,9 @@ than being expected to constantly add verbose error handling everywhere.
 
 Services **must** clearly distinguish successful responses from error responses
 by using appropriate HTTP codes:
-- Informational responses **must** use HTTP status codes between 100 and 199.
-- Successful responses **must** use HTTP status codes between 200 and 399.
+- Informational responses issued on a provisional basis while request processing continues **must** use HTTP status codes between 100 and 199.
+- Successful responses **must** use HTTP status codes between 200 and 299.
+- HTTP status codes between 300 and 399 **must** be used to indicate further action like URL redirection needs to be taken in order to complete the request.
 - Errors indicating a problem with the user's request **must** use HTTP status
   codes between 400 and 499.
 - Errors indicating a problem with the server's handling of an valid request
@@ -37,7 +38,8 @@ interface Error {
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
   id?: string
 
-  // An array of additional error details.                                                                                                                           errors?: any[]
+  // A map of metadata returning additional error details that can be used programmatically 
+  metadata?: dict<string, any>
 }
 
 
@@ -45,7 +47,8 @@ interface Error {
   **may** change, even within a single version.
 - The `code` field is intended to have code written against it, and therefore
   **must not** change. Values for this field should be 0-63 characters, and use
-  only lower-case letters, numbers, and the `-` character.
+  only lower-case letters, numbers, and the `-` character. These strings should 
+  be comparable using ordinal comparisons.
 
 
 
