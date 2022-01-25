@@ -24,7 +24,7 @@ Error responses **should** conform to the following interface:
 ```typescript
 interface Error {
   // A machine-readable code indicating the type of error (like `name_too_long`). This value is parseable for programmatic error handling.
-  code: string;
+  type: string;
 
   // A human readable description of the problem. Should not change from occurrence to occurrence (except for localization).
   title?: string
@@ -36,7 +36,7 @@ interface Error {
   detail?: string
 
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
-  id?: string
+  occurenceId?: string
 
   // A map of metadata returning additional error details that can be used programmatically 
   metadata?: dict<string, any>
@@ -45,7 +45,7 @@ interface Error {
 
 - The `title` field is intended for consumption by humans, and therefore
   **may** change, even within a single version.
-- The `code` field is intended to have code written against it, and therefore
+- The `type` field is intended to have code written against it, and therefore
   **must not** change. Values for this field should be 0-63 characters, and use
   only lower-case letters, numbers, and the `-` character. These strings should 
   be comparable using ordinal comparisons.
@@ -114,7 +114,7 @@ represented with an error object.
 - For which error codes to retry, see AIP-194.
 
 ## Changelog
-
+- **2022-01-24**: Adopting RFC 7807 with tweaks for the errors AIP.
 - **2020-09-02**: Refactored errors AIP to be more generic.
 - **2020-01-22**: Added a reference to the `ErrorInfo` message in gRPC.
 - **2019-10-14**: Added guidance restricting error message mutability to if
