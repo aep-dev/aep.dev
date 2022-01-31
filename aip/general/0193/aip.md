@@ -44,11 +44,11 @@ interface Error {
 
 
 - The `title` field is intended for consumption by humans, and therefore
-  **may** change, even within a single version.
-- The `type` field is intended to have code written against it, and therefore
-  **must not** change. Values for this field should be 0-63 characters, and use
-  only lower-case letters, numbers, and the `-` character. These strings should 
-  be comparable using ordinal comparisons.
+- The `code` field is intended to support comparison as an opaque sequence of
+  code points, and therefore **must not** change (even by case folding or
+  other normalization, e.g. "invalid_auth" and "Invalid_Auth" are distinct).
+  Values for this field should be 0-63 characters, and use only lower-case
+  letters, numbers, and the `-` character.
 
 
 
