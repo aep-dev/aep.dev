@@ -38,7 +38,7 @@ interface Error {
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
   occurenceId?: string
 
-  // A map of metadata returning additional error details that can be used programmatically 
+  // A map of metadata returning additional error details that can be used programmatically. The schema of metadata should be documented and a change in this schema could mean a breaking change. 
   metadata?: dict<string, any>
 }
 
