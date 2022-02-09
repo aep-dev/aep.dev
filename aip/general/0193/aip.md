@@ -36,15 +36,16 @@ interface Error {
   detail?: string
 
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
-  occurenceId?: string
+  incidentId?: string
 
   // A map of metadata returning additional error details that can be used programmatically. The schema of metadata should be documented and a change in this schema could mean a breaking change. 
   metadata?: dict<string, any>
 }
 
 
-- The `title` field is intended for consumption by humans, and therefore
-- The `code` field is intended to support comparison as an opaque sequence of
+- The `title` field is intended for consumption by humans, and therefore 
+  **may** change, even within a single version.
+- The `type` field is intended to support comparison as an opaque sequence of
   code points, and therefore **must not** change (even by case folding or
   other normalization, e.g. "invalid_auth" and "Invalid_Auth" are distinct).
   Values for this field should be 0-63 characters, and use only lower-case
@@ -60,7 +61,7 @@ particular API. Additionally, error messages **must not** assume that the user
 will know anything about its underlying implementation.
 
 Error messages **should** be brief but actionable. Any extra information
-**should** be provided in a `details` field. If even more information is
+**should** be provided in the `metadata` field. If even more information is
 necessary, the service **should** provide a link where a reader can get more
 information or ask questions to help resolve the issue.
 
@@ -79,7 +80,7 @@ Below are some examples of good errors and not so good errors:
 
 Error messages **must** be in American English. If a localized error message is
 also required, the service **should** provide the following structure within
-its `details`:
+its `metadata`:
 
 ```typescript
 interface LocalizedMessage {
@@ -89,7 +90,7 @@ interface LocalizedMessage {
   locale: string;
 
   // The localized error message in the above locale.
-  message: string;
+  title: string;
 }
 ```
 
