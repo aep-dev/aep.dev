@@ -48,7 +48,7 @@ interface Error {
 - The `type` field is intended to support comparison as an opaque sequence of
   code points, and therefore **must not** change (even by case folding or
   other normalization, e.g. "invalid_auth" and "Invalid_Auth" are distinct).
-  Values for this field should be 0-63 characters, and use only lower-case
+  Values for this field should be 0-63 characters, and use only lower-case or upper case
   letters, numbers, and the `-` character.
 
 
