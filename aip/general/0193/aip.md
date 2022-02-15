@@ -41,7 +41,7 @@ interface Error {
   // A map of metadata returning additional error details that can be used programmatically. The schema of metadata should be documented and fixed per `type`. A change in this schema could mean a breaking change. 
   metadata?: dict<string, any>
 }
-
+```
 
 - The `title` field is intended for consumption by humans, and therefore 
   **may** change, even within a single version.
@@ -53,7 +53,7 @@ interface Error {
 
 
 
-### Messages
+### Error Messages
 
 Error messages **should** help a reasonably technical user understand and
 resolve the issue, and **should not** assume that the user is an expert in the
@@ -75,7 +75,48 @@ Below are some examples of good errors and not so good errors:
 
     ❌  Bad input
     ✅  'ID' must be provided in the input
-    
+
+
+### Example Error Responses
+
+Below are examples of how error response could look like:
+
+1. Book name is too long
+
+```
+{
+   "type": "book_name_too_long",
+   "title": "Book name must be between 5 and 50 characters",
+   "status": 400,
+   "incidentId": "ASAZasGFG2135qsfas2"
+}
+```
+
+2. Invalid input parameters
+
+```
+{
+  "type": "invalid_input_parameters",
+  "title": "Your request parameters aren't valid",
+  "status": 400,
+  "metadata": {
+    "invalid-params": [
+      {
+        "name": "age",
+        "reason": "must be a positive integer"
+      },
+      {
+        "name": "color",
+        "reason": "must be 'green', 'red' or 'blue'"
+      }
+    ]
+  }
+}
+```
+
+
+
+
 ### Localization
 
 Error messages **must** be in American English. If a localized error message is
