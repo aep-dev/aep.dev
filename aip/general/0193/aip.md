@@ -26,14 +26,11 @@ interface Error {
   // A machine-readable code indicating the type of error (like `name_too_long`). This value is parseable for programmatic error handling.
   type: string;
 
-  // A human readable description of the problem. Should not change from occurrence to occurrence (except for localization).
-  title?: string
+  // A human readable description of the problem. Should not change from occurrence to occurrence.
+  message?: string
 
   // The HTTP status code between 100 and 500
   status?: integer
-
-  // A human-readable explanation specific to this occurrence of the problem
-  detail?: string
 
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
   incidentId?: string
@@ -43,7 +40,7 @@ interface Error {
 }
 ```
 
-- The `title` field is intended for consumption by humans, and therefore 
+- The `message` field is intended for consumption by humans, and therefore 
   **may** change, even within a single version.
 - The `type` field is intended to support comparison as an opaque sequence of
   code points, and therefore **must not** change (even by case folding or
@@ -86,7 +83,7 @@ Below are examples of how error response could look like:
 ```
 {
    "type": "book_name_too_long",
-   "title": "Book name must be between 5 and 50 characters",
+   "message": "Book name must be between 5 and 50 characters",
    "status": 400,
    "incidentId": "ASAZasGFG2135qsfas2"
 }
@@ -97,7 +94,7 @@ Below are examples of how error response could look like:
 ```
 {
   "type": "invalid_input_parameters",
-  "title": "Your request parameters aren't valid",
+  "message": "Your request parameters aren't valid",
   "status": 400,
   "metadata": {
     "invalid-params": [
@@ -131,7 +128,7 @@ interface LocalizedMessage {
   locale: string;
 
   // The localized error message in the above locale.
-  title: string;
+  message: string;
 }
 ```
 
