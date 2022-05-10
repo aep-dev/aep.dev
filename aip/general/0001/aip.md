@@ -1,17 +1,35 @@
 # AIP Purpose and Guidelines
 
-Service APIs on the Internet continue to proliferate; having a machine-readable
-API is an expectation and prerequisite to adoption for many services. By some
-estimates, there are now more than 20,000 public REST APIs available.
+An API standard is a collection of rules, guidance, and patterns that will help
+an API Designer achieve a certain degree of consistency and quality in the API
+being written. A well defined standard – when followed – can improve a system’s
+overall performance, availability, security, and developer experience.
 
-As this corpus continues to grow, many companies struggle with API Governance:
-even as companies grow and disparate teams work to deliver discrete services,
-APIs ought to remain simple, intuitive, and consistent.
+However, many companies struggle with API Governance. This is in part because
+there is no golden solution for creating an API. There are a myriad of API
+methodologies, programming languages, transport protocols, interface design
+languages, architectural styles and serialization techniques which have been
+used in the creation of successful APIs. As of yet, there is no golden
+combination of these attributes that has been able to satisfy all cost,
+performance, quality, and functional concerns of every system.
 
-Therefore, it is increasingly necessary to have a corpus of documentation for
-API producers, reviewers, and other interested parties to reference. The AIP
-collection provides a way to provide consistent documentation for API design
-guidance.
+Despite this diversity, there is one consistency that will surface once all the
+variables in an API implementation have been decided; API designers,
+developers, and consumers will want to standardize.
+
+Just as there is no golden API implementation, as of yet there is also no
+golden API standard. However, there are a number of cross cutting concerns that
+should be addressed in each API standard.
+
+The purpose of aip.dev is to provide the infrastructure and patterns for
+defining API Standards. The cross cutting concerns that should be defined in an
+API standard are enumerated into AIPs. This helps remind standard writers of
+the topics which need to be defined for their standard. It also enables
+standars to be compared or referenced easily. When an organization writes their
+standard for pagination (AIP 158), they may choose to write their own, or they
+may choose to reference or extend an AIP 158 written by another organization.
+For the API developer they know that concerning pagination they only need to
+refer to their organization's definition of AIP 158.
 
 ## What is an AIP?
 
@@ -46,10 +64,10 @@ approvers for each AIP on [aip.dev][].
 
 The technical steering committee membership is currently:
 
-- Antoine Boyer (@tinnou), Netflix
-- Ross Hamilton (@rhamiltonsf), Salesforce
-- Mike Kistler (@mkistler), IBM
-- Luke Sneeringer (@lukesneeringer), Google
+- Sam Woodard (@shwoodard), Google
+- Ross Hamilton (@hamilton-dfp), DeepSee
+- Mike Kistler (@mkistler), Microsoft
+- Luke Sneeringer (@lukesneeringer)
 
 The committee is also responsible for the administrative and editorial aspects
 of shepherding AIPs and managing the AIP pipeline and workflow. They approve
@@ -219,3 +237,4 @@ approved, will replace the old one. The old one then enters "Replaced" state,
 and will link to the new, current AIP.
 
 [aip.dev]: https://aip.dev/
+[api design patterns]: https://www.manning.com/books/api-design-patterns
