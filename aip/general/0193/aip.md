@@ -26,7 +26,7 @@ interface Error {
   // A machine-readable code indicating the type of error (like `name_too_long`). This value is parseable for programmatic error handling.
   type: string;
 
-  // A human readable description of the problem. Should not change from occurrence to occurrence.
+  // A human-readable description of the problem. Messages are likely to be logged in plain text and should not include information about a specific occurrence. Information about specific occurrences should be part of `metadata`.
   message?: string
 
   // The HTTP status code between 100 and 500
@@ -69,9 +69,6 @@ Below are some examples of good errors and not so good errors:
 
     ❌  Access is denied
     ✅  Only admin users have access to this resource.
-
-    ❌  Bad input
-    ✅  'ID' must be provided in the input
 
 
 ### Example Error Responses
