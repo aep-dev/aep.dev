@@ -59,38 +59,60 @@ the following concepts:
 
 ### General common types
 
-- `Color`: RGB or RGBA colors.
+- [`Color`][color]: RGB or RGBA colors.
 
-- `Fraction`: A numeric fraction.
+- [`Fraction`][fraction]: A numeric fraction.
 
-- `LatLng`: Geographic coordinates.
+- [`LatLng`][lat_lng]: Geographic coordinates.
 
-- `Money`: An amount of money in a given currency.
+- [`Money`][money]: An amount of money in a given currency.
 
-- `PhoneNumber`: A phone number in most countries.
+- [`PhoneNumber`][phone_number]: A phone number in most countries.
 
-- `PostalAddress`: Postal addresses in most countries.
+- [`PostalAddress`][postal_address]: Postal addresses in most countries.
 
-- `Quaternion`: A geometric quaternion.
+- [`Quaternion`][quaternion]: A geometric quaternion.
+
+<!-- prettier-ignore-start -->
+[color]: https://github.com/aip-dev/type/tree/master/color
+[fraction]: https://github.com/aip-dev/type/tree/master/fraction
+[lat_lng]: https://github.com/aip-dev/type/tree/master/lat_lng
+[money]: https://github.com/aip-dev/type/tree/master/money
+[phone_number]: https://github.com/aip-dev/type/tree/master/phone_number
+[postal_address]: https://github.com/aip-dev/type/tree/master/postal_address
+[quaternion]: https://github.com/aip-dev/type/tree/master/quaternion
+<!-- prettier-ignore-end -->
 
 ### Date- and time-related types
 
-- `Date`: A calendar date, with no time or time zone component.
+- [`Date`][date]: A calendar date, with no time or time zone component.
 
-- `DateTime`: A calendar date and wall-clock time, with optional time zone or
-  UTC offset information.
+- [`DateTime`][date_time]: A calendar date and wall-clock time, with optional
+  time zone or UTC offset information.
 
-- `DayOfWeek`: An enumeration representing the day of the week.
+- [`DayOfWeek`][day_of_week]: An enumeration representing the day of the week.
 
-- `Duration`: A duration with nanosecond-level precision.
+- [`Duration`][duration]: A duration with nanosecond-level precision.
 
-- `Interval`: An interval between two timestamps.
+- [`Interval`][interval]: An interval between two timestamps.
 
-- `Month`: An enumeration representing the Gregorian month.
+- [`Month`][month]: An enumeration representing the Gregorian month.
 
-- `TimeOfDay`: Wall-clock time, with no date or time zone component.
+- [`TimeOfDay`][time_of_day]: Wall-clock time, with no date or time zone
+  component.
 
-- `Timestamp`: A timestamp with nanosecond-level precision.
+- [`Timestamp`][timestamp]: A timestamp with nanosecond-level precision.
+
+<!-- prettier-ignore-start -->
+[date]: https://github.com/aip-dev/type/tree/master/date
+[date_time]: https://github.com/aip-dev/type/tree/master/date_time
+[day_of_week]: https://github.com/aip-dev/type/tree/master/day_of_week
+[duration]: https://github.com/aip-dev/type/tree/master/duration
+[interval]: https://github.com/aip-dev/type/tree/master/interval
+[month]: https://github.com/aip-dev/type/tree/master/month
+[time_of_day]: https://github.com/aip-dev/type/tree/master/time_of_day
+[timestamp]: https://github.com/aip-dev/type/tree/master/timestamp
+<!-- prettier-ignore-end -->
 
 ### Protobuf types
 
