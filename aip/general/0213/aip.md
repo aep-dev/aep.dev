@@ -1,158 +1,160 @@
-# Unicode
+# Common components
 
-APIs should be consistent on how they explain, limit, and bill for string
-values and their encodings. This ranges from little ambiguities (like fields
-"limited to 1024 characters") all the way to billing confusion (are names and
-values of properties in Datastore billed based on characters or bytes?).
+In general, APIs should be designed to be self-contained. APIs generally need
+to be able to move forward independently of one another, and mutual
+dependencies can cause downstream APIs to be forced into taking major version
+changes or even lead to dependency conflicts.
 
-In general, if limits are measured in bytes, we are discriminating against
-non-ASCII text since it takes up more space. On the other hand, if limits are
-measured in "characters", this is ambiguous about whether those are Unicode
-"code points", "code units" for a particular encoding (e.g. UTF-8 or UTF-16),
-"graphemes", or "grapheme clusters".
-
-## Unicode primer
-
-Character encoding tends to be an area we often gloss over, so a quick primer:
-
-- Strings are just sequences of bytes that represent text according to some
-  encoding format.
-- When we talk about **characters**, we sometimes mean Unicode **code points**,
-  which are 21-bit unsigned integers `0` through `0x10FFFF`.
-- Other times we might mean **grapheme clusters**, which are _perceived_ as
-  single characters but may be composed of multiple code points. For example,
-  `á` can be represented as the single code point `U+00E1` or as a sequence of
-  `U+0061` followed by `U+0301` (the letter `a`, then a combining acute
-  accent).
-- Protocol buffers uses **UTF-8** ("Unicode Transformation Format") which is a
-  variable-length encoding scheme that represents each code point as a sequence
-  of 1 to 4 single-byte **code units**.
+However, there are also cases where common structures are valuable, especially
+where a concept is well-known and it is sufficiently clear that it will not
+change. Common components serve this use case. This AIP defines those common
+components.
 
 ## Guidance
 
-### Character definition
+The public representation of APIs **should** be self-contained (for protocol
+buffers, this means that all API protos used by the API originate in the same
+proto `package`), except for common components, which **may** be used freely in
+any API.
 
-**TL;DR:** In our APIs, "character" means "Unicode code point".
+An API **must not** define a set of API-specific common components which live
+outside of its versioning structure. This prevents independent movement of
+particular versions and also causes problems for client libraries in many
+languages that compile the proto messages into classes.
 
-In API documentation (e.g., API reference documents, blog posts, marketing
-documentation, billing explanations, etc), "character" **must** be defined as a
-Unicode code point.
+An API **should not** define alternative representations of any of the existing
+common components described below, even within its versioning structure.
 
-### Length units
+## Existing common components
 
-**TL;DR:** Set size limits in "characters" (as defined above).
+The common components, which public-facing APIs **may** safely depend on, are
+defined canonically in the [AIP type][] repository. These include definitions
+of common type schemas, in both JSON Schema and protobuf formats. The protobufs
+are also published to the Buf Schema Sepository at [`buf.build/aip/type`][buf],
+and the JSON schemas are published to the [JSON Schema Store][] with names of
+the form `aip-type-money`.
 
-All string field length limits defined in the API **must** be measured and
-enforced in characters as defined above. This means that there is an underlying
-maximum limit of (`4 * characters`) bytes, though this limit will only be hit
-when using exclusively characters that consist of 4 UTF-8 code units (32 bits).
+While the [AIP type][] repository is canonical and has precedence over this
+list, some of the common components defined there include representations of
+the following concepts:
 
-If you use a database system (e.g. Spanner) which allows you to define a limit
-in characters, it is safe to assume that this byte-defined requirement is
-handled by the underlying storage system.
+### API design patterns
 
-### Billing units
+- `StatusMonitor` / `Operation`: Represents the status of a long-running
+  request (see [AIP-151][] for details).
 
-APIs **may** use either code points or bytes (using the UTF-8 encoding) as the
-unit for billing or quota measurement (e.g., Cloud Translation chooses to use
-characters). If an API does not define this, the assumption is that the unit of
-billing is characters (e.g., $0.01 _per character_, not $0.01 _per byte_).
+#### gRPC-specific API design patterns
 
-### Unique identifiers
+- [`google.api.*`][api] (but _not_ subpackages of `google.api`): Annotations
+  useful for gRPC/JSON transcoding, supported by frameworks including .NET 7.
 
-**TL;DR:** Unique identifiers **should** limit to ASCII, generally only
-letters, numbers, hyphens, and underscores. Additionally, unique identifiers
-**should** start with a letter, **should** end in either a letter or number,
-and **should not** have hyphens or underscores that are next to other hyphens
-or underscores.
+- [`google.rpc.*`][rpc]: A small number of components related to gRPC
+  request/response status and errors.
 
-Strings used as unique identifiers **should** limit inputs to ASCII characters,
-typically letters, numbers, hyphens, and underscores
-(`[a-zA-Z][a-zA-Z0-9_-]*`). This ensures that there are never accidental
-collisions due to normalization. If an API decides to allow all valid Unicode
-characters in unique identifiers, the API **must** reject any inputs that are
-not in Normalization Form C.
+<!-- prettier-ignore-start -->
+[api]: https://github.com/googleapis/googleapis/tree/master/google/api
+[rpc]: https://github.com/googleapis/googleapis/tree/master/google/rpc
+<!-- prettier-ignore-end -->
 
-Unique identifiers **should** use a maximum length of 64 characters, though
-this limit may be expanded as necessary. 64 characters should be sufficient for
-most purposes as even UUIDs only require 36 characters.
+### General common types
 
-### Normalization
+- `Color`: RGB or RGBA colors.
 
-**TL;DR:** Unicode values **should** be stored in [Normalization Form C][].
+- `Fraction`: A numeric fraction.
 
-Values **should** always be normalized into Normalization Form C. Unique
-identifiers **must** always be stored in Normalization Form C (see the next
-section).
+- `LatLng`: Geographic coordinates.
 
-Imagine we're dealing with Spanish input "estar<strong>é</strong>" (the
-accented part will be bolded throughout). This text has 6 grapheme clusters,
-and can be represented by two distinct sequences of Unicode code points:
+- `Money`: An amount of money in a given currency.
 
-- Using 6 code points: `U+0065` `U+0073` `U+0074` `U+0061` `U+0072`
-  **`U+00E9`**
-- Using 7 code points: `U+0065` `U+0073` `U+0074` `U+0061` `U+0072` **`U+0065`
-  `U+0301`**
+- `PhoneNumber`: A phone number in most countries.
 
-Further, when encoding to UTF-8, these code points have two different
-serialized representations:
+- `PostalAddress`: Postal addresses in most countries.
 
-- Using 7 code-units (7 bytes): `0x65` `0x73` `0x74` `0x61` `0x72` **`0xC3`
-  `0xA9`**
-- Using 8 code-units (8 bytes): `0x65` `0x73` `0x74` `0x61` `0x72` **`0x65`
-  `0xCC` `0x81`**
+- `Quaternion`: A geometric quaternion.
 
-To avoid this discrepancy in size (both code units and code points), use
-[Normalization Form C][] which provides a canonical representation for strings.
+### Date- and time-related types
 
-[normalization form c]: https://unicode.org/reports/tr15/
+- `Date`: A calendar date, with no time or time zone component.
 
-### Uniqueness
+- `DateTime`: A calendar date and wall-clock time, with optional time zone or
+  UTC offset information.
 
-**TL;DR:** Unicode values **must** be normalized to [Normalization Form C][]
-before checking uniqueness.
+- `DayOfWeek`: An enumeration representing the day of the week.
 
-For the purposes of unique identification (e.g., `name`, `id`, or `parent`),
-the value **must** be normalized into [Normalization Form C][] (which happens
-to be the most compact). Otherwise we may have what is essentially "the same
-string" used to identify two entirely different resources.
+- `Duration`: A duration with nanosecond-level precision.
 
-In our example above, there are two ways of representing what is essentially
-the same text. This raises the question about whether the two representations
-should be treated as equivalent or not. In other words, if someone were to use
-both of those byte sequences in a string field that acts as a unique
-identifier, would it violate a uniqueness constraint?
+- `Interval`: An interval between two timestamps.
 
-The W3C recommends using Normalization Form C for all content moving across the
-internet. It is the most compact normalized form on Unicode text, and avoids
-most interoperability problems. If we were to treat two Unicode byte sequences
-as different when they have the same representation in NFC, we'd be required to
-reply to possible "Get" requests with content that is **not** in normalized
-form. Since that is definitely unacceptable, we **must** treat the two as
-identical by transforming any incoming string data into Normalized Form C or
-rejecting identifiers not in the normalized form.
+- `Month`: An enumeration representing the Gregorian month.
 
-There is some debate about whether we should view strings as sequences of code
-points encoded into byte sequences (leading to uniqueness determined based on
-the byte-representation of said string) or to interpret strings as a higher
-level abstraction having many different possible byte-representations. The
-stance taken here is that we already have a field type for handling that:
-`bytes`. Fields of type `string` already express an opinion of the validity of
-an input (it must be valid UTF-8). As a result, treating two inputs that have
-identical normalized forms as different due to their underlying byte
-representation seems to go against the original intent of the `string` type.
-This distinction typically doesn't matter for strings that are opaque to our
-services (e.g., `description` or `display_name`), however when we rely on
-strings to uniquely identify resources, we are forced to take a stance.
+- `TimeOfDay`: Wall-clock time, with no date or time zone component.
 
-Put differently, our goal is to allow someone with text in any encoding (ASCII,
-UTF-16, UTF-32, etc) to interact with our APIs without a lot of "gotchas".
+- `Timestamp`: A timestamp with nanosecond-level precision.
 
-## References
+### Protobuf types
 
-- [Unicode normalization forms](https://unicode.org/reports/tr15/)
-- [Datastore pricing "name and value of each property"](https://cloud.google.com/datastore/pricing)
-  doesn't clarify this.
-- [Natural Language pricing](https://cloud.google.com/natural-language/pricing)
-  uses charges based on UTF-8 code points rather than code units.
-- [Text matching and normalization](https://sites.google.com/a/google.com/intl-eng/apis/matching?pli=1)
+The [`google.protobuf`][protobuf] package is somewhat special in that it is
+shipped with protocol buffers itself, rather than with API tooling. The
+Well-Known Types defined in this package should always be used when
+appropriate, and the [AIP type][] repo **does not** define any protos for these
+types, even when it defines a corresponding JSON Schema. These include:
+
+- [`google.protobuf.Duration`][duration]: Durations, with nanosecond-level
+  precision. The protobuf runtime provides helper functions to convert to and
+  from language-native duration objects where applicable (such as Python's
+  [`timedelta`][timedelta]).
+- [`google.protobuf.Timestamp`][timestamp]: Timestamps, with nanosecond-level
+  precision. The protobuf runtime provides helper functions in most languages
+  to convert to and from language-native timestamp objects (such as Python's
+  [`datetime`][datetime]).
+
+`google.protobuf` also provides some useful components that correspond to JSON
+primitives (and so have no representation at all in the [AIP type][] repo),
+namely:
+
+- [`google.protobuf.Value`][struct]: An arbitrary JSON value. The protobuf
+  runtime provides helper functions in most languages to convert `Value`
+  objects to and from JSON.
+- [`google.protobuf.Struct`][struct]: JSON-like structures (a dictionary of
+  primitives, lists, and other dictionaries). The protobuf runtime provides
+  helper functions in most languages to convert `Struct` objects to and from
+  JSON.
+
+`google.protobuf.Struct` and `google.protobuf.Value` are designated common
+components by this AIP; proto-based APIs **should** use them when appropriate.
+
+<!-- prettier-ignore-start -->
+[datetime]: https://docs.python.org/3/library/datetime.html#datetime.datetime
+[duration]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto
+[protobuf]: https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf
+[struct]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto
+[timedelta]: https://docs.python.org/3/library/datetime.html#datetime.timedelta
+[timestamp]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto
+<!-- prettier-ignore-end -->
+
+## Appendix: Adding to common components
+
+Occasionally, it may be useful to add protos to these packages or to add to the
+list of common components. In order to do this, [open an issue][] on the [AIP
+type][] repository in GitHub.
+
+However, some general guidelines are worth noting for this:
+
+- Schemas **should** only be granted common component status if we are certain
+  that they will never change (at all -- even in ways that would normally be
+  considered backwards compatible). Common components are generally not
+  versioned, and it must be the case that we can rely on the component to be a
+  complete and accurate representation indefinitely.
+- Schemas must be applicable to a significant number of APIs for consideration
+  as common components.
+- Even after a common component is added, APIs using local versions **must**
+  continue to do so until they go to the next major version.
+
+In the event that you believe adding a common component is appropriate, please
+[open an issue][].
+
+[open an issue]: https://github.com/aip-dev/type/issues
+[aip type]: https://github.com/aip-dev/type
+[json schema store]: https://www.schemastore.org/json/
+[aip-151]: ../0151
+[buf]: https://buf.build/aip/type
