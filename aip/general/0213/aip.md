@@ -28,11 +28,12 @@ common components described below, even within its versioning structure.
 ## Existing common components
 
 The common components, which public-facing APIs **may** safely depend on, are
-defined canonically in the [AIP type][] repository. These include definitions
-of common type schemas, in both JSON Schema and protobuf formats. The protobufs
-are also published to the Buf Schema Sepository at [`buf.build/aip/type`][buf],
-and the JSON schemas are published to the [JSON Schema Store][] with names of
-the form `aip-type-money`.
+defined canonically in the [AIP type][] repository. These include READMEs with
+guidance for each type, and -- when applicable -- definitions of type schemas,
+in both JSON Schema and protobuf formats. The protobufs are also published to
+the Buf Schema Sepository at [`buf.build/aip/type`][buf], and the JSON schemas
+are published to the [JSON Schema Store][] with names of the form
+`aip-type-money`.
 
 While the [AIP type][] repository is canonical and has precedence over this
 list, some of the common components defined there include representations of
