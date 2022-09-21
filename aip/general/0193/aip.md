@@ -35,7 +35,7 @@ interface Error {
   // A unique identifier that identifies the specific occurrence of the problem. Can be provided to the API owner for debugging purposes.
   incidentId?: string
 
-  // A map of metadata returning additional error details that can be used programmatically. The schema of metadata should be documented and fixed per `type`. A change in this schema could mean a breaking change. 
+  // A map of metadata returning additional error details that can be used programmatically. The schema of metadata should be documented and fixed per `type`. Schema of `metadata` is part of your API. Within a single version, breaking changes to `metadata` structure should not be performed; consider limiting depth of nested objects.
   metadata?: dict<string, any>
 }
 ```
