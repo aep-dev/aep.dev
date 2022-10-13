@@ -20,24 +20,37 @@ any API.
 An API **must not** define a set of API-specific common components which live
 outside of its versioning structure. This prevents independent movement of
 particular versions and also causes problems for client libraries in many
-languages that compile the proto messages into classes.
+languages that compile protobuf messages into classes.
 
 An API **should not** define alternative representations of any of the existing
 common components described below, even within its versioning structure.
 
+### Extending common components
+
+An API **may** define extensions of the common components, and these **may**
+have a different namespace/package name. These extensions **must** be both
+semantically and wire-compatible with the existing common components for all
+relevant transport mechanisms (gRPC, JSON, ...), but may contain additional
+fields (as long as this doesn't break semantic or wire-compatibility).
+
+For example, Google **may** use `google.type.Money` in place of
+`aip.type.Money`, but `google.type.Money` **must** have all the same fields as
+`aip.type.Money`, with identical tag numbers and equivalent documentation.
+
 ## Existing common components
 
 The common components, which public-facing APIs **may** safely depend on, are
-defined canonically in the [AIP type][] repository. These include READMEs with
-guidance for each type, and -- when applicable -- definitions of type schemas,
-in both JSON Schema and protobuf formats. The protobufs are also published to
-the Buf Schema Sepository at [`buf.build/aip/type`][buf], and the JSON schemas
-are published to the [JSON Schema Store][] with names of the form
-`aip-type-money`.
+defined canonically in the [AIP common components][] repository. These include
+READMEs with canonical definitions for each component, and -- when applicable
+-- implementations of these definitions, in both JSON Schema and protobuf
+formats. The protobufs are also published to the Buf Schema Sepository at
+[`buf.build/aip/common`][buf], and the JSON schemas are published to the [JSON
+Schema Store][] with names beginning with `aip-`, for example `aip-type-money`
+or `aip-longrunning-operation`.
 
-While the [AIP type][] repository is canonical and has precedence over this
-list, some of the common components defined there include representations of
-the following concepts:
+While the [AIP common components][] repository is canonical and takes
+precedence over this list, some of the common components defined there include
+representations of the following concepts:
 
 ### API design patterns
 
@@ -74,13 +87,13 @@ the following concepts:
 - [`Quaternion`][quaternion]: A geometric quaternion.
 
 <!-- prettier-ignore-start -->
-[color]: https://github.com/aip-dev/type/tree/master/color
-[fraction]: https://github.com/aip-dev/type/tree/master/fraction
-[lat_lng]: https://github.com/aip-dev/type/tree/master/lat_lng
-[money]: https://github.com/aip-dev/type/tree/master/money
-[phone_number]: https://github.com/aip-dev/type/tree/master/phone_number
-[postal_address]: https://github.com/aip-dev/type/tree/master/postal_address
-[quaternion]: https://github.com/aip-dev/type/tree/master/quaternion
+[color]: https://github.com/aip-dev/common-components/tree/master/aip/type/color
+[fraction]: https://github.com/aip-dev/common-components/tree/master/aip/type/fraction
+[lat_lng]: https://github.com/aip-dev/common-components/tree/master/aip/type/lat_lng
+[money]: https://github.com/aip-dev/common-components/tree/master/aip/type/money
+[phone_number]: https://github.com/aip-dev/common-components/tree/master/aip/type/phone_number
+[postal_address]: https://github.com/aip-dev/common-components/tree/master/aip/type/postal_address
+[quaternion]: https://github.com/aip-dev/common-components/tree/master/aip/type/quaternion
 <!-- prettier-ignore-end -->
 
 ### Date- and time-related types
@@ -104,14 +117,14 @@ the following concepts:
 - [`Timestamp`][timestamp]: A timestamp with nanosecond-level precision.
 
 <!-- prettier-ignore-start -->
-[date]: https://github.com/aip-dev/type/tree/master/date
-[date_time]: https://github.com/aip-dev/type/tree/master/date_time
-[day_of_week]: https://github.com/aip-dev/type/tree/master/day_of_week
-[duration]: https://github.com/aip-dev/type/tree/master/duration
-[interval]: https://github.com/aip-dev/type/tree/master/interval
-[month]: https://github.com/aip-dev/type/tree/master/month
-[time_of_day]: https://github.com/aip-dev/type/tree/master/time_of_day
-[timestamp]: https://github.com/aip-dev/type/tree/master/timestamp
+[date]: https://github.com/aip-dev/common-components/tree/master/aip/type/date
+[date_time]: https://github.com/aip-dev/common-components/tree/master/aip/type/date_time
+[day_of_week]: https://github.com/aip-dev/common-components/tree/master/aip/type/day_of_week
+[duration]: https://github.com/aip-dev/common-components/tree/master/aip/type/duration
+[interval]: https://github.com/aip-dev/common-components/tree/master/aip/type/interval
+[month]: https://github.com/aip-dev/common-components/tree/master/aip/type/month
+[time_of_day]: https://github.com/aip-dev/common-components/tree/master/aip/type/time_of_day
+[timestamp]: https://github.com/aip-dev/common-components/tree/master/aip/type/timestamp
 <!-- prettier-ignore-end -->
 
 ### Protobuf types
@@ -119,8 +132,9 @@ the following concepts:
 The [`google.protobuf`][protobuf] package is somewhat special in that it is
 shipped with protocol buffers itself, rather than with API tooling. The
 Well-Known Types defined in this package should always be used when
-appropriate, and the [AIP type][] repo **does not** define any protos for these
-types, even when it defines a corresponding JSON Schema. These include:
+appropriate, and the [AIP common components][] repo **does not** define any
+protos for these types, even when it defines a corresponding JSON Schema. These
+include:
 
 - [`google.protobuf.Duration`][duration]: Durations, with nanosecond-level
   precision. The protobuf runtime provides helper functions to convert to and
@@ -132,8 +146,8 @@ types, even when it defines a corresponding JSON Schema. These include:
   [`datetime`][datetime]).
 
 `google.protobuf` also provides some useful components that correspond to JSON
-primitives (and so have no representation at all in the [AIP type][] repo),
-namely:
+primitives (and so have no representation at all in the [AIP common
+components][] repo), namely:
 
 - [`google.protobuf.Value`][struct]: An arbitrary JSON value. The protobuf
   runtime provides helper functions in most languages to convert `Value`
@@ -155,11 +169,28 @@ components by this AIP; proto-based APIs **should** use them when appropriate.
 [timestamp]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto
 <!-- prettier-ignore-end -->
 
+## Libraries for common types
+
+For the common components in the `aip.type` namespace, which represent common
+data types, the [AIP common components][] repo may contain canonical libraries
+in a number of languages. These libraries are designed to be idiomatic in a
+given language, and should feel similar to using the language's standard
+libraries. They should provide basic functionality like adding two `Money`
+values, or determining if one `Date` comes before another.
+
+When a language already has a standard library representation of a common type
+(such as Python's `datetime` for the `Timestamp` type), there may instead be a
+library for converting the JSON or protobuf representation to the standard
+library representation.
+
+If a library you want does not exist, and you want to contribute one, please
+[open an issue][] on the [AIP common components][] repository in GitHub.
+
 ## Appendix: Adding to common components
 
 Occasionally, it may be useful to add protos to these packages or to add to the
 list of common components. In order to do this, [open an issue][] on the [AIP
-type][] repository in GitHub.
+common components][] repository in GitHub.
 
 However, some general guidelines are worth noting for this:
 
@@ -176,8 +207,8 @@ However, some general guidelines are worth noting for this:
 In the event that you believe adding a common component is appropriate, please
 [open an issue][].
 
-[open an issue]: https://github.com/aip-dev/type/issues
-[aip type]: https://github.com/aip-dev/type
+[open an issue]: https://github.com/aip-dev/common-components/issues
+[aip common components]: https://github.com/aip-dev/common-components
 [json schema store]: https://www.schemastore.org/json/
 [aip-151]: ../0151
 [buf]: https://buf.build/aip/type
