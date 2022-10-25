@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en-US" class="glue-flexbox">
+  <head>
+    <title>AIP-132: GET for collections</title>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
+    <link rel="shortcut icon" href="/aip.dev/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/aip.dev/assets/css/style.css?v=00fb0e2c">
+    <link rel="stylesheet" type="text/css" media="print" href="/aip.dev/assets/css/print.css?v=00fb0e2c">
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
+    <script type="text/javascript">
+      $('html').css('visibility', 'hidden');
+      $.when($.ready).then(() => {
+        $('html').css('visibility', 'visible');
+      });
+    </script>
+    <script type="text/javascript" src="/aip.dev/assets/js/global.js?v=00fb0e2c"></script>
+    
+<script type="text/javascript" src="/aip.dev/assets/js/syntax.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-140054909-1');
+    </script>
+  </head>
+  <body>
+    <!-- prettier-ignore -->
+<header class="glue-header glue-header--single">
+  <div class="glue-header__bar glue-header__bar--desktop glue-header__drawer">
+    <div class="glue-header__tier">
+      <!-- LOCK up-->
+      <div class="glue-header__container">
+        <div class="glue-header__lock-up">
+          <div class="glue-header__logo">
+            <a class="glue-header__logo-link" href="/aip.dev/" title="Google">
+              <div class="glue-header__logo-container">
+                <svg role="img" aria-hidden="true" class="glue-header__logo-svg">
+                <use xlink:href="/aip.dev/assets/images/glue-icons.svg#google-color-logo"></use>
+                </svg>
+              </div>
+              <p class="glue-header__logo--product">AIPs</p>
+            </a>
+          </div>
+          <a href="#page-content" class="glue-header__skip-content">
+            <p class="glue-header__skip-content-text">Jump to Content</p>
+          </a>
+        </div>
+      </div>
+      <!-- LINK BAR-->
+      <div class="glue-header__container glue-header__container--flex-auto">
+        <nav class="glue-header__link-bar">
+          <ul id="list-1" class="glue-header__list">
+            
+              
+                <li class="glue-header__item">
+                  <a class="glue-header__link" href="/aip.dev/general" aria-level="1">Browse AIPs</a>
+                </li>
+              
+            
+              
+                <li class="glue-header__item">
+                  <a class="glue-header__link" href="/aip.dev/contributing" aria-level="1">Contributing</a>
+                </li>
+              
+            
+          </ul>
+        </nav>
+      </div>
+      <!-- CTA-->
+      <div class="glue-header__container glue-header__container--cta">
+        <div class="glue-header__cta">
+        <div class="glue-sitesearch">
+          <form method="GET" action="/aip.dev/search">
+          <label for="q">Search this site</label>
+          <input class="glue-sitesearch__input" type="text" name="q" id="q"
+            placeholder="Search AIPs">
+          <button type="submit" class="glue-button glue-sitesearch__submit" title="Submit">
+            <svg role="img" class="glue-icon glue-icon--24px">
+            <use xlink:href="/aip.dev/assets/images/glue-icons.svg#search"></use>
+            </svg>
+          </button>
+          </form>
+        </div>
+        <a href="https://github.com/aip-dev/aip.dev" target="_blank" class="glue-button glue-button--high-emphasis">
+          <img src="/aip.dev/assets/images/github.png" class="github-logo">
+          View on GitHub
+        </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile header placeholder -->
+  <div class="glue-header__bar glue-header__bar--mobile">
+    <div class="glue-header__tier">
+      <!-- LOCK up-->
+      <div class="glue-header__container">
+        <div class="glue-header__lock-up">
+          <div class="glue-header__hamburger glue-header__hamburger--first-tier">
+            <div class="glue-header__hamburger-wrapper">
+              <button type="button" class="glue-header__drawer-toggle-btn"
+                aria-controls="drawer" aria-expanded="false" aria-label="Open the navigation drawer">
+                <svg role="img" class="glue-icon glue-icon--24px"><use xlink:href="/aip.dev/assets/images/glue-icons.svg#menu"></use></svg>
+              </button>
+            </div>
+          </div>
+          <div class="glue-header__logo">
+            <a class="glue-header__logo-link" href="/aip.dev/" title="Google">
+              <div class="glue-header__logo-container">
+                <svg role="img" aria-hidden="true" class="glue-header__logo-svg">
+                  <use xlink:href="/aip.dev/assets/images/glue-icons.svg#google-color-logo"></use>
+                </svg>
+              </div>
+              <p class="glue-header__logo--product">AIPs</p>
+            </a>
+          </div>
+          <!-- SKIP -->
+          <a href="#page-content" class="glue-header__skip-content">
+            <p class="glue-header__skip-content-text">Jump to Content</p>
+          </a>
+        </div>
+      </div>
+      <!-- CTA -->
+      <div class="glue-header__container">
+        <div class="glue-header__cta">
+        <a href="https://github.com/aip-dev/aip.dev" class="glue-button glue-button--high-emphasis">
+          <img src="/aip.dev/assets/images/github.png" class="github-logo">
+          View on GitHub
+        </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="glue-header__drawer-backdrop"></div>
+</header>
+    <div class="glue-page">
+      
+      <main role="main" id="page-content">
+        
+<nav id="aip-nav" class="docs-component-nav">
+  <ul class="nav-list">
+    <li class="nav-item nav-item-header">AIPs by Scope</li>
+    <li class="nav-item">
+      <a href="/aip.dev/general">General</a>
+    </li>
+    <li class="nav-item nav-item-header">AIPs</li>
+    <li class="nav-item">
+      <a href="/aip.dev/1">
+        <span class="aip-number">1</span>
+        AIP Purpose and Guidelines
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/126">
+        <span class="aip-number">126</span>
+        Enumerations
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/131">
+        <span class="aip-number">131</span>
+        GET for individual resources
+      </a>
+    </li>
+    <li class="nav-item nav-item-active">
+      <a href="/aip.dev/132">
+        <span class="aip-number">132</span>
+        GET for collections
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/136">
+        <span class="aip-number">136</span>
+        Custom operations
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/141">
+        <span class="aip-number">141</span>
+        Quantities
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/142">
+        <span class="aip-number">142</span>
+        Time and duration
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/144">
+        <span class="aip-number">144</span>
+        Array fields
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/145">
+        <span class="aip-number">145</span>
+        Ranges
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/151">
+        <span class="aip-number">151</span>
+        Long-running requests
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/154">
+        <span class="aip-number">154</span>
+        Resource freshness validation
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/158">
+        <span class="aip-number">158</span>
+        Pagination
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/164">
+        <span class="aip-number">164</span>
+        Soft delete
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/210">
+        <span class="aip-number">210</span>
+        Unicode
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="/aip.dev/211">
+        <span class="aip-number">211</span>
+        Authorization checks
+      </a>
+    </li>
+    </ul>
+</nav>
+<section id="jump-content">
+          
+<aside id="aip-sidebar" class="docs-component-sidebar">
+  <table id="aip-summary">
+    <tr><th colspan="2">GET for collections</th></tr>
+    <tr><td>Number</td><td>132</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aip-dev.github.io/aip.dev/132">aip-dev.github.io/aip.dev/132</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2019-01-22</td></tr>
+    <tr><td>Updated</td><td>2019-01-22</td></tr>
+  </table>
+
+  <section id="aip-toc" class="docs-component-sidebar-toc">
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#requests">Requests</a></li>
+<li><a href="#responses">Responses</a></li>
+<li><a href="#errors">Errors</a></li>
+<li><a href="#ordering">Ordering</a></li>
+<li><a href="#filtering">Filtering</a></li>
+<li><a href="#soft-deleted-resources">Soft-deleted resources</a></li>
+</ul>
+</li>
+<li><a href="#interface-definitions">Interface Definitions</a></li>
+</ul>
+</div>
+
+  </section>
+
+  <section class="docs-component-sidebar-actions">
+    <ul>
+      <li><a href="https://github.com/aip-dev/aip.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/blob/master/aip/general/0132">View source</a></li>
+      <li><a href="https://github.com/aip-dev/aip.dev/edit/master/aip/general/0132">Edit this page</a></li>
+    </ul>
+  </section>
+</aside>
+<section id="aip-main" class="docs-component-main">
+  <section class="section-breadcrumbs">
+  <nav
+    class="glue-breadcrumbs glue-mod-mt-std glue-mod-mb-std"
+    aria-label="You are here."
+  >
+    <ol class="glue-breadcrumbs__list aip-breadcrumbs">
+      <li class="glue-breadcrumbs__item" aria-level="1">
+        <a class="glue-breadcrumbs__link" href="/aip.dev/">
+          API Improvement Proposals
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/aip.dev/general">
+          General AIPs
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
+          aria-level="3">
+        GET for collections
+      </li>
+    </ol>
+  </nav>
+</section>
+  
+  <h4 class="aip-number">AIP-132</h4>
+  <h1 id="get-for-collections">GET for collections</h1>
+<p>In REST APIs, it is customary to make a <code>GET</code> request to a resource
+collection's URI (for example, <code>/v1/publishers/{publisher}/books</code>) in order to
+retrieve a list of the resources within that collection. These are sometimes
+colloquially called "list" operations.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>should</strong> generally provide a <code>GET</code> method for resource collections
+unless it is not valuable for users to do so. When the <code>GET</code> method is used on
+a URI ending in a resource collection, the result should be a list of
+resources. For more information about using the <code>GET</code> method on a URI ending
+with a discrete resource ID, see <a href="/aip.dev/131">AIP-131</a>.</p>
+<h3 id="requests">Requests</h3>
+<p>Collection <code>GET</code> operations <strong>must</strong> be made by sending a <code>GET</code> request to the
+resource collection's URI:</p>
+<div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/publishers/{publisher}/books</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">library.googleapis.com</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+</code></pre></div>
+<ul>
+<li>The HTTP method <strong>must</strong> be <code>GET</code>.<ul>
+<li>The request <strong>must</strong> be safe and <strong>must not</strong> have side effects.</li>
+</ul>
+</li>
+<li>There <strong>must not</strong> be a request body.<ul>
+<li>If a <code>GET</code> request contains a body, the body <strong>must</strong> be ignored, and
+  <strong>must not</strong> cause an error.</li>
+</ul>
+</li>
+<li>The request <strong>must not</strong> require any fields in the query string.<ul>
+<li>The query string <strong>may</strong> include fields for common design patterns
+  relevant to list methods, such as <code>string filter</code> and <code>string orderBy</code>.</li>
+<li>The query string <strong>may</strong> include custom fields if necessary for a specific
+  resource, but not in place of any of the common fields for list methods.</li>
+</ul>
+</li>
+</ul>
+<h3 id="responses">Responses</h3>
+<p>Collection <code>GET</code> operations <strong>must</strong> return a page of results, with each
+individual result being a resource:</p>
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;results&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;publishers/lacroix/books/les-mis&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-037-540317-0&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Les Misérables&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;authors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Victor Hugo&quot;</span><span class="p">],</span>
+      <span class="nt">&quot;rating&quot;</span><span class="p">:</span> <span class="mf">9.6</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;publishers/lacroix/books/hunchback-of-notre-dame&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;isbn&quot;</span><span class="p">:</span> <span class="s2">&quot;978-140-274575-1&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;The Hunchback of Notre Dame&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;authors&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Victor Hugo&quot;</span><span class="p">],</span>
+      <span class="nt">&quot;rating&quot;</span><span class="p">:</span> <span class="mf">9.3</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;nextPageToken&quot;</span><span class="p">:</span> <span class="s2">&quot;xyz&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The array of resources <strong>must</strong> be named <code>results</code> and contain resources with
+  no additional wrapping.</li>
+<li>The <code>string nextPageToken</code> field <strong>must</strong> be included in the list response
+  schema. It <strong>must</strong> be set if there are subsequent pages, and <strong>must not</strong> be
+  set if the response represents the final page. For more information, see
+  <a href="/aip.dev/158">AIP-158</a>.</li>
+<li>The response struct <strong>may</strong> include a <code>int32 totalSize</code> (or
+  <code>int64 totalSize</code>) field with the number of items in the collection.<ul>
+<li>The value <strong>may</strong> be an estimate (the field <strong>should</strong> clearly document
+  this if so).</li>
+<li>If filtering is used, the <code>totalSize</code> field <strong>should</strong> reflect the size of
+  the collection <em>after</em> the filter is applied.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note:</strong> List methods <strong>may</strong> return the complete collection to any user with
+permission to make a successful List request on the collection, <em>or</em> <strong>may</strong>
+return a collection only containing resources for which the user has read permission.
+This behavior <strong>should</strong> be clearly documented either for each List method or as
+a standard convention in service-level documentation. Permission checks on individual
+resources may have a negative performance impact so should be used only where
+absolutely necessary.</p>
+<h3 id="errors">Errors</h3>
+<p>If the user does not have sufficient permission to know that the collection
+exists, the service <strong>should</strong> reply with an HTTP 404 error, regardless of
+whether or not the collection exists. Permission <strong>must</strong> be checked prior to
+checking whether the collection exists.</p>
+<p>If the user does have proper permission, but the requested collection does not
+exist (generally because the parent does not exist), the service <strong>must</strong> reply
+with an HTTP 404 error.</p>
+<p><strong>Note:</strong> An empty collection which the user has permission to access <strong>must</strong>
+return <code>200 OK</code> with an empty results array, and not <code>404 Not Found</code>.</p>
+<h3 id="ordering">Ordering</h3>
+<p><code>List</code> methods <strong>may</strong> allow clients to specify sorting order; if they do, the
+request message <strong>should</strong> contain a <code>string orderBy</code> field.</p>
+<ul>
+<li>Values <strong>should</strong> be a comma separated list of fields. For example:
+  <code>"foo,bar"</code>.</li>
+<li>The default sorting order is ascending. To specify descending order for a
+  field, users append a <code>-</code> prefix; for example: <code>"foo,-bar"</code>, <code>"-foo,bar"</code>.</li>
+<li>Redundant space characters in the syntax are insignificant. <code>"foo, -bar"</code>,
+  <code>" foo , -bar "</code>, and <code>"foo,-bar"</code> are all equivalent.</li>
+<li>Subfields are specified with a <code>.</code> character, such as <code>foo.bar</code> or
+  <code>address.street</code>.</li>
+</ul>
+<p><strong>Note:</strong> Only include ordering if there is an established need to do so. It is
+always possible to add ordering later, but removing it is a breaking change.</p>
+<h3 id="filtering">Filtering</h3>
+<p>List methods <strong>may</strong> allow clients to specify filters; if they do, the request
+message <strong>should</strong> contain a <code>string filter</code> field. Filtering is described in
+more detail in <a href="/aip.dev/160">AIP-160</a>.</p>
+<p><strong>Note:</strong> Only include filtering if there is an established need to do so. It
+is always possible to add filtering later, but removing it is a breaking
+change.</p>
+<h3 id="soft-deleted-resources">Soft-deleted resources</h3>
+<p>Some APIs need to "<a href="/aip.dev/135">soft delete</a>" resources, marking them as deleted
+or pending deletion (and optionally purging them later).</p>
+<p>APIs that do this <strong>should not</strong> include deleted resources by default in list
+requests. APIs with soft deletion of a resource <strong>should</strong> include a
+<code>bool showDeleted</code> field in the list request that, if set, will cause
+soft-deleted resources to be included.</p>
+<h2 id="interface-definitions">Interface Definitions</h2>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<p>List operations are specified using the following pattern:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Get a single book.</span>
+<span class="k">rpc</span> <span class="n">ListBooks</span><span class="p">(</span><span class="n">ListBooksRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">ListBooksResponse</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">option</span> <span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">get</span><span class="o">:</span> <span class="s">&quot;/v1/{parent=publishers/*}/books&quot;</span>
+  <span class="p">};</span>
+  <span class="k">option</span> <span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span> <span class="o">=</span> <span class="s">&quot;parent&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The RPC's name <strong>must</strong> begin with the word <code>List</code>. The remainder of the RPC
+  name <strong>should</strong> be the plural form of the resource's message name.</li>
+<li>The request message <strong>must</strong> match the RPC name, with a <code>-Request</code> suffix.</li>
+<li>The response message <strong>must</strong> match the RPC name, with a <code>-Response</code> suffix.<ul>
+<li>The response <strong>should</strong> usually include fully-populated resources unless
+  there is a reason to return a partial response (see <a href="/aip.dev/157">AIP-157</a>).</li>
+</ul>
+</li>
+<li>The HTTP verb <strong>must</strong> be <code>GET</code>.</li>
+<li>The URI <strong>should</strong> contain a single variable field corresponding to the
+  collection parent's name.<ul>
+<li>This field <strong>should</strong> be called <code>parent</code>.</li>
+<li>The URI <strong>should</strong> have a variable corresponding to this field.</li>
+<li>The <code>parent</code> field <strong>should</strong> be the only variable in the URI path. All
+  remaining parameters <strong>should</strong> map to URI query parameters.</li>
+</ul>
+</li>
+<li>There <strong>must not</strong> be a <code>body</code> key in the <code>google.api.http</code> annotation.</li>
+<li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation,
+  with a value of <code>"parent"</code>.</li>
+</ul>
+<p>List operations also implement a common request message pattern:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message to list a collection of books.</span>
+<span class="kd">message</span> <span class="nc">ListBooksRequest</span> <span class="p">{</span>
+  <span class="c1">// The publisher to list books for.</span>
+  <span class="kt">string</span> <span class="na">parent</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span> <span class="o">=</span> <span class="n">REQUIRED</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">child_type</span><span class="o">:</span> <span class="s">&quot;library.googleapis.com/Book&quot;</span>
+    <span class="p">}];</span>
+
+  <span class="c1">// The maximum number of books to return.</span>
+  <span class="c1">// The service may send fewer.</span>
+  <span class="kt">int32</span> <span class="na">max_page_size</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+  <span class="c1">// The page token.</span>
+  <span class="c1">// If a `next_page_token` value was received on a previous</span>
+  <span class="c1">// ListBooks call, providing it here will return the next page.</span>
+  <span class="kt">string</span> <span class="na">page_token</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>A <code>parent</code> field <strong>must</strong> be included unless the resource being listed is a
+  top-level resource. It <strong>should</strong> be called <code>parent</code>.<ul>
+<li>The field <strong>should</strong> be <a href="/aip.dev/203">annotated as required</a>.</li>
+<li>The field <strong>should</strong> identify the <a href="/aip.dev/123">resource type</a> of the resource
+  being listed.</li>
+</ul>
+</li>
+<li>The <code>max_page_size</code> and <code>page_token</code> fields, which support pagination,
+  <strong>must</strong> be specified on all list request messages. For more information, see
+  <a href="/aip.dev/158">AIP-158</a>.</li>
+</ul>
+<p><strong>Note:</strong> The <code>parent</code> field in the request object corresponds to the <code>parent</code>
+variable in the <code>google.api.http</code> annotation on the RPC. This causes the
+<code>parent</code> field in the request to be populated based on the value in the URL
+when the REST/JSON interface is used.</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Response message for listing a collection of books.</span>
+<span class="kd">message</span> <span class="nc">ListBooksResponse</span> <span class="p">{</span>
+  <span class="c1">// The books under the umbrella of the given publisher.</span>
+  <span class="k">repeated</span> <span class="n">Book</span> <span class="na">results</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="c1">// The token to retrieve the next page. This is populated if and only if</span>
+  <span class="c1">// there are more pages.</span>
+  <span class="kt">string</span> <span class="na">next_page_token</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The response message <strong>must</strong> include a field corresponding to the resources
+  being returned, named for the English plural term for the resource, and
+  <strong>should not</strong> include any other repeated fields.</li>
+<li>Fields providing metadata about the list request (such as
+  <code>string next_page_token</code> or <code>int32 total_size</code>) <strong>must</strong> be included on the
+  response message (not as part of the resource itself).</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p>Collection <code>GET</code> operations <strong>must</strong> be specified with consistent OpenAPI
+metadata:</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books</span><span class="p p-Indicator">:</span>
+    <span class="nt">parameters</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">publisherId</span>
+        <span class="nt">in</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">path</span>
+        <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The publisher to list books for.</span>
+        <span class="nt">required</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+        <span class="nt">schema</span><span class="p">:</span>
+          <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+    <span class="nt">get</span><span class="p">:</span>
+      <span class="nt">operationId</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">listBooks</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Get a collection of books.</span>
+      <span class="nt">parameters</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pageToken</span>
+          <span class="nt">in</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">query</span>
+          <span class="nt">description</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+            <span class="no">The page token.</span>
+            <span class="no">If a `next_page_token` value was received on a previous</span>
+            <span class="no">ListBooks call, providing it here will return the next page.</span>
+          <span class="nt">schema</span><span class="p">:</span>
+            <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">string</span>
+        <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">maxPageSize</span>
+          <span class="nt">in</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">query</span>
+          <span class="nt">description</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+            <span class="no">The maximum number of books to return.</span>
+          <span class="nt">schema</span><span class="p">:</span>
+            <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">integer</span>
+      <span class="nt">responses</span><span class="p">:</span>
+        <span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span>
+          <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OK</span>
+          <span class="nt">content</span><span class="p">:</span>
+            <span class="nt">application/json</span><span class="p">:</span>
+              <span class="nt">schema</span><span class="p">:</span>
+                <span class="nt">$ref</span><span class="p">:</span> <span class="s">&#39;#/components/schemas/ListBooksResponse&#39;</span>
+</code></pre></div>
+<ul>
+<li>The <code>operationId</code> <strong>must</strong> begin with the word <code>list</code>. The remainder of the
+  <code>operationId</code> <strong>should</strong> be the plural form of the resource type's name.</li>
+<li>The response content <strong>must</strong> be the resource itself. For example:
+  <code>#/components/schemas/Book</code><ul>
+<li>The response <strong>should</strong> usually include the fully-populated resource unless
+  there is a reason to return a partial response (see <a href="/aip.dev/157">AIP-157</a>).</li>
+</ul>
+</li>
+<li>The URI <strong>should</strong> contain a variable for each individual ID in the resource
+  hierarchy.<ul>
+<li>The path parameter for all resource IDs <strong>must</strong> be in the form
+  <code>{resourceName}Id</code> (such as <code>bookId</code>), and path parameters representing the
+  ID of parent resources <strong>must</strong> end with <code>Id</code>.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+  <footer>
+  Except as otherwise noted, the content of this page is licensed under the
+  <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+  Attribution 4.0 License</a>, and code samples are licensed under the
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>.
+  <span class="no-print">For details, see <a href="/licensing">content
+  licensing</a>.</span>
+</footer>
+</section>
+
+        </section>
+      </main>
+      
+    </div>
+    <script src="//www.gstatic.com/external_hosted/hammerjs/v2_0_2/hammer.min.js"></script>
+    <script src="//www.gstatic.com/glue/v22_1/glue-vanilla.min.js"></script>
+    <script type="text/javascript">
+      const headerElement = document.querySelector('.glue-header');
+      if (headerElement) {
+        new window.glue.ui.header.Header(headerElement);
+      }
+    </script>
+  </body>
+</html>
