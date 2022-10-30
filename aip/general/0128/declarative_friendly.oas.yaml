@@ -3,15 +3,25 @@ openapi: 3.0.3
 info:
   title: Library
   version: 1.0.0
+paths: {}
 components:
-  schema:
+  schemas:
     Book:
       description: A representation of a single book.
-      x-declarative-friendly: true
       properties:
         name:
           type: string
           description: |
             The name of the book.
             Format: publishers/{publisher}/books/{book}
+        
+        annotations:
+          description: |
+            A dictionary of key-value pairs.
+            This has no effect on the service's behavior, but clients may use it
+            to persistently store small amounts of information related to this
+            resource.
+          additionalProperties:
+            type: string
+
         # Additional fields...
