@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /authors/{author}/config:
+    parameters:
+      - name: author
+        in: path
+        description: The id of the author.
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getConfig
+      description: Get the configuration for a author.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+
+    patch:
+      operationId: updateConfig
+      description: Get the configuration for a author.
+      requestBody:
+        content:
+          'application/json':
+            schema:
+               $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+components:
+  schemas:
+    Config:
+      description: The configuration options for a author.
+      type: object
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the config.
+            Format: authors/{author}/config
+        languageCode:
+          type: string
+          description: |
+            The author's preferred language.
+        timeZone:
+          type: string
+          description: TThe time zone where the author resides.
