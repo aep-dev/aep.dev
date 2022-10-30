@@ -21,7 +21,7 @@ import "google/api/resource.proto";
 import "google/protobuf/empty.proto";
 
 service Library {
-  // Get a single book.
+  // Delete a single book.
   rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/{name=publishers/*/books/*}"

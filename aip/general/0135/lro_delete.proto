@@ -21,7 +21,7 @@ import "google/api/resource.proto";
 import "google/longrunning/operations.proto";
 
 service Library {
-  // Get a single book.
+  // Delete a single book.
   rpc DeleteBook(DeleteBookRequest) returns (google.longrunning.Operation) {
     option (google.api.http) = {
       delete: "/v1/{name=publishers/*/books/*}"

@@ -5,18 +5,36 @@ info:
   version: 1.0.0
 paths:
   /publishers/{publisherId}/books/{bookId}:
+    parameters:
+    - $ref: "#/components/parameters/PublisherId"
+    - $ref: "#/components/parameters/BookId"
     delete:
       operationId: deleteBook
       description: Delete a single book.
       responses:
-        202:
+        '202':
           description: Accepted
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteBookStatus'
 components:
-  schema:
+  parameters:
+    PublisherId:
+      name: publisherId
+      in: path
+      description: The id of the book publisher.
+      required: true
+      schema:
+        type: string
+    BookId:
+      name: bookId
+      in: path
+      description: The id of the book.
+      required: true
+      schema:
+        type: string
+  schemas:
     Book:
       description: A representation of a single book.
       properties:
@@ -38,7 +56,8 @@ components:
             type: string
           description: The author or authors of the book.
         rating:
-          type: float
+          type: number
+          format: float32
           description: The rating assigned to the book.
     DeleteBookStatus:
       description: The status of the deleteBook operation.
@@ -52,11 +71,11 @@ components:
             metadata:
               type: object
               properties:
-                start_time:
+                startTime:
                   type: string
                   format: date-time
                   description: The time the operation started.
-                progress_percent:
+                progressPercent:
                   type: integer
                   format: int32
                   description: The current progress, expressed as an integer.
@@ -69,3 +88,20 @@ components:
                     - CANCELLING
                     - CANCELLED
                     - FAILED
+    StatusMonitor:
+      description: The status of a long running operation.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The server-assigned name, which is only unique within the same service that originally returns it.
+        done:
+          type: boolean
+          description: >-
+            If the value is false, it means the operation is still in progress. If true, the operation is completed,
+            and either response or error is available.
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+        - name
+        - done

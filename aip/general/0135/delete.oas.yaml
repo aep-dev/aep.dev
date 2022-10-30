@@ -5,14 +5,32 @@ info:
   version: 1.0.0
 paths:
   /publishers/{publisherId}/books/{bookId}:
+    parameters:
+    - $ref: "#/components/parameters/PublisherId"
+    - $ref: "#/components/parameters/BookId"
     delete:
       operationId: deleteBook
       description: Delete a single book.
       responses:
-        204:
-          description: No Content
+        '204':
+          description: Book was deleted
 components:
-  schema:
+  parameters:
+    PublisherId:
+      name: publisherId
+      in: path
+      description: The id of the book publisher.
+      required: true
+      schema:
+        type: string
+    BookId:
+      name: bookId
+      in: path
+      description: The id of the book.
+      required: true
+      schema:
+        type: string
+  schemas:
     Book:
       description: A representation of a single book.
       properties:
@@ -34,5 +52,6 @@ components:
             type: string
           description: The author or authors of the book.
         rating:
-          type: float
+          type: number
+          format: float32
           description: The rating assigned to the book.
