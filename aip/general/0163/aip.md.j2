@@ -67,4 +67,12 @@ live request is likely to succeed, but is not a full guarantee of success.
 - In protocol buffers, the same response type is always used for a single RPC.
   The operation **may** return the response message with no fields populated.
 
+{% tab operations %}
+
+{% sample 'standard_operation.oas.yaml', 'paths' %}
+
+- The `dryRun` query parameter **must** be `type: boolean`.
+- The `dryRun` query parameter **must not** be `required: true`.
+- createBook could also return a 204 response if `dryRun` is `true`.
+
 {% endtabs %}
