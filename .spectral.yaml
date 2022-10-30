@@ -1,0 +1,36 @@
+extends: spectral:oas
+rules:
+  info-contact: off
+  info-description: off
+  oas3-api-servers: off
+  operation-tags: off
+
+  # Turn off oas3-unused-component because many examples are partial
+  # and thus do not include the use of every component
+  oas3-unused-component: off
+
+  # OAS conventions for AIPs
+
+  aip-parameter-names-convention:
+    description: Parameter names should be camelCase.
+    severity: warn
+    # Make an exception for header parameters, which should be kebab-case
+    given:
+    - $.paths[*].parameters.[?(@.in!='header')]
+    - $.paths.*[get,put,post,patch,delete,options,head].parameters[?(@.in!='header')]
+    then:
+      field: "name"
+      function: "casing"
+      functionOptions:
+        type: "camel"
+
+  aip-property-names-convention:
+    description: Property names should be camelCase.
+    severity: warn
+    given: $..properties.*~
+    then:
+      field: "@key"
+      function: "casing"
+      functionOptions:
+        type: "camel"
+  
