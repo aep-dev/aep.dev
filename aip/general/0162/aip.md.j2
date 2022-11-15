@@ -1,5 +1,8 @@
 # Resource Revisions
 
+| This AIP is pending final review. See the [#todos][] section for a list of known issues to be resolved. |
+| :- |
+
 Some APIs need to have resources with a revision history, where users can
 reason about the state of the resource over time. There are several reasons for
 this:
@@ -60,7 +63,7 @@ When it is necessary to refer to a specific revision of a resource, APIs
     publishers/123/books/les-miserables@c7cfa2a8
 
 **Note:** The `@` character is selected because it is the only character
-permitted by [RFC 1738 §2.2][] for special meaning within a URI scheme that is
+permitted by [RFC 3987][] for special meaning within a URI scheme that is
 not already used elsewhere.
 
 APIs **should** generally accept a resource reference at a particular revision
@@ -234,9 +237,9 @@ operation:
 
 {% sample 'revisions.oas.yaml', '/publishers/{publisherId}/books/{bookId}:rollback' %}
 
+- The operation **must** use the `POST` HTTP method.
 {% endtabs %}
 
-- The operation **must** use the `POST` HTTP method.
 - The operation **should** return the resource, and the resource ID **must**
   include the revision ID.
 - The request message **must** have a `id` field to identify the resource being
@@ -301,4 +304,8 @@ do permit it need to support resources with revisions, they **should** pick an
 appropriate separator depending on how and where the API is used, and **must**
 clearly document it.
 
-[rfc 1738 §2.2]: https://tools.ietf.org/html/rfc1738
+## Todos
+
+- Revisit the selection of the `@` character as the delimiter for the version.
+
+[rfc 3987]: https://tools.ietf.org/html/rfc3987
