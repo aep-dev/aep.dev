@@ -85,6 +85,7 @@ of the following after the guidance, in the following order:
 The guidance section **may** include subsections that elaborate further on
 details. Subsections will automatically create an entry in the table of
 contents, and an anchor for citations.
+The guidance section **may** include abstract descriptions of structures and wherever possible these should use Typescript syntax.  Typescript is easy to follow for anyone familiar with either dynamic languages (like JavaScript or Python) or static languages (like Java or C++). These descriptions are intended as pseudo-code and are not intended to represent the actual implementation of the API in a TypeScript library.
 
 Below is an example AIP shell that uses each major section:
 
