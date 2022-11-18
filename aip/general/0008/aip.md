@@ -54,8 +54,9 @@ Front matter for AIPs **must** include:
 - The `permalink` key (required): This **must** be set to
   `/{aip.scope}/{aip.id}`. If there is no scope, use `/{aip.id}` instead.
 - The `redirect_from` key: This should include one path
-   that a reader would be likely to enter, including:
-  - `/{aip.id}` (for AIPs where the permalink includes the scope)
+   that a reader would be likely to enter, such as "get" for the AIP about
+   the standard method `Get`.  This means a link like `aip.dev/get` will
+   redirect a user to that AIP.
 
 ### Document structure
 
