@@ -56,8 +56,6 @@ Front matter for AIPs **must** include:
 - The `redirect_from` key: This should include one path
    that a reader would be likely to enter, including:
   - `/{aip.id}` (for AIPs where the permalink includes the scope)
-  - AIP IDs with zero-padding, for each level of zero-padding up to four digits
-    (for example: `/08`, `/008`, `/0008`).
 
 ### Document structure
 
