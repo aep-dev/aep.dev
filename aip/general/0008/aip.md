@@ -22,11 +22,11 @@ printed pages.
 
 ### File structure
 
-AIPs **must** be written in Markdown, and **must** be named using their
-four-digit number (example: `0008.md`). AIPs that serve a specific scope
+AIPs **must** be written in Markdown, and **must** be placed in corresponding directory using their
+four-digit number (example: `0008/aip.md`). AIPs that serve a specific scope
 **must** be in the subdirectory for that scope.
 
-AIPs **must** have appropriate front matter.
+AIPs **must** have appropriate front matter that lives in the `aip.yaml` file.
 
 ```yaml
 ---
@@ -35,10 +35,6 @@ aip:
   state: reviewing
   created: 2019-05-28
 permalink: /8
-redirect_from:
-  - /08
-  - /008
-  - /0008
 ---
 
 ```
@@ -57,7 +53,7 @@ Front matter for AIPs **must** include:
     that scope. Required for AIPs with IDs >= 1000, prohibited otherwise.
 - The `permalink` key (required): This **must** be set to
   `/{aip.scope}/{aip.id}`. If there is no scope, use `/{aip.id}` instead.
-- The `redirect_from` key: This should include a list of any `/{aip.id}`
+- The `redirect_from` key: This should include a ist of any `/{aip.id}`
   permutations that a reader would be likely to enter, including:
   - `/{aip.id}` (for AIPs where the permalink includes the scope)
   - AIP IDs with zero-padding, for each level of zero-padding up to four digits
@@ -82,10 +78,10 @@ of the following after the guidance, in the following order:
 - "Changelog" is a bulleted list of changes made to the AIP since the first
   writing.
 
-The guidance section **may** include subsections that elaborate further on
+The guidance section **should** include subsections that elaborate further on
 details. Subsections will automatically create an entry in the table of
 contents, and an anchor for citations.
-The guidance section **may** include abstract descriptions of structures and wherever possible these should use Typescript syntax.  Typescript is easy to follow for anyone familiar with either dynamic languages (like JavaScript or Python) or static languages (like Java or C++). These descriptions are intended as pseudo-code and are not intended to represent the actual implementation of the API in a TypeScript library.
+The guidance section **may** include abstract descriptions of structures and wherever possible these should use TypeScript syntax.  TypeScript is easy to follow for anyone familiar with either dynamic languages (like JavaScript or Python) or static languages (like Java or C++). These descriptions are intended as pseudo-code and are not intended to represent the actual implementation of the API in a TypeScript library.
 
 Below is an example AIP shell that uses each major section:
 
@@ -151,7 +147,7 @@ terms **must not** be used).
 
 ### Code examples
 
-API design examples in AIPs **should** use both [OpenAPI]{} and [protocol buffers][]. Examples
+API design examples in AIPs **should** use both [OpenAPI]{} and [protocol buffers][] in tabs. Examples
 **should** cover only enough syntax to explain the concept. When using RPCs in
 examples, a `google.api.http` annotation **should** be included.
 
