@@ -168,6 +168,7 @@ viewing the Markdown file on GitHub, using the local development server, or a
 branch.
 
 [aip-1]: ./0001.md
+[OpenAPI]: https://github.com/OAI/OpenAPI-Specification/blob/3.0.3/versions/3.0.3.md
 [protocol buffers]: https://developers.google.com/protocol-buffers/
 [rfc 2119]: https://www.ietf.org/rfc/rfc2119.txt
 
