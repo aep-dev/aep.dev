@@ -150,7 +150,7 @@ terms **must not** be used).
 
 ### Code examples
 
-API design examples in AIPs **should** use [protocol buffers][]. Examples
+API design examples in AIPs **should** use both [OpenAPI]{} and [protocol buffers][]. Examples
 **should** cover only enough syntax to explain the concept. When using RPCs in
 examples, a `google.api.http` annotation **should** be included.
 
