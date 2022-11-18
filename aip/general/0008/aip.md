@@ -53,8 +53,8 @@ Front matter for AIPs **must** include:
     that scope. Required for AIPs with IDs >= 1000, prohibited otherwise.
 - The `permalink` key (required): This **must** be set to
   `/{aip.scope}/{aip.id}`. If there is no scope, use `/{aip.id}` instead.
-- The `redirect_from` key: This should include a ist of any `/{aip.id}`
-  permutations that a reader would be likely to enter, including:
+- The `redirect_from` key: This should include one path
+   that a reader would be likely to enter, including:
   - `/{aip.id}` (for AIPs where the permalink includes the scope)
   - AIP IDs with zero-padding, for each level of zero-padding up to four digits
     (for example: `/08`, `/008`, `/0008`).
