@@ -35,6 +35,7 @@ aip:
   state: reviewing
   created: 2019-05-28
 permalink: /8
+redirect_from: style-guide
 ---
 ```
 
