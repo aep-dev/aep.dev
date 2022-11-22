@@ -3,8 +3,8 @@
 AIP stands for **API Improvement Proposal**, which is a design document
 providing high-level, concise documentation for API development. The goal is
 for these documents to serve as the source of truth for API-related
-documentation and the way API teams discuss and come to consensus on
-API guidance.
+documentation and the way API teams discuss and come to consensus on API
+guidance.
 
 AIPs are most useful when they are clear and concise, and cover a single topic
 or inquiry well. In the same way that AIPs describe consistent patterns and
@@ -22,9 +22,9 @@ printed pages.
 
 ### File structure
 
-AIPs **must** be written in Markdown, and **must** be placed in corresponding directory using their
-four-digit number (example: `0008/aip.md`). AIPs that serve a specific scope
-**must** be in the subdirectory for that scope.
+AIPs **must** be written in Markdown, and **must** be placed in corresponding
+directory using their four-digit number (example: `0008/aip.md`). AIPs that
+serve a specific scope **must** be in the subdirectory for that scope.
 
 AIPs **must** have appropriate front matter that lives in the `aip.yaml` file.
 
@@ -36,7 +36,6 @@ aip:
   created: 2019-05-28
 permalink: /8
 ---
-
 ```
 
 Front matter for AIPs **must** include:
@@ -53,10 +52,9 @@ Front matter for AIPs **must** include:
     that scope. Required for AIPs with IDs >= 1000, prohibited otherwise.
 - The `permalink` key (required): This **must** be set to
   `/{aip.scope}/{aip.id}`. If there is no scope, use `/{aip.id}` instead.
-- The `redirect_from` key: This should include one path
-   that a reader would be likely to enter, such as "get" for the AIP about
-   the standard method `Get`.  This means a link like `aip.dev/get` will
-   redirect a user to that AIP.
+- The `redirect_from` key: This should include one path that a reader would be
+  likely to enter, such as "get" for the AIP about the standard method `Get`.
+  This means a link like `aip.dev/get` will redirect a user to that AIP.
 
 ### Document structure
 
@@ -79,8 +77,12 @@ of the following after the guidance, in the following order:
 
 The guidance section **should** include subsections that elaborate further on
 details. Subsections will automatically create an entry in the table of
-contents, and an anchor for citations.
-The guidance section **may** include abstract descriptions of structures and wherever possible these should use TypeScript syntax.  TypeScript is easy to follow for anyone familiar with either dynamic languages (like JavaScript or Python) or static languages (like Java or C++). These descriptions are intended as pseudo-code and are not intended to represent the actual implementation of the API in a TypeScript library.
+contents, and an anchor for citations. The guidance section **may** include
+abstract descriptions of structures and wherever possible these should use
+TypeScript syntax. TypeScript is easy to follow for anyone familiar with either
+dynamic languages (like JavaScript or Python) or static languages (like Java or
+C++). These descriptions are intended as pseudo-code and are not intended to
+represent the actual implementation of the API in a TypeScript library.
 
 Below is an example AIP shell that uses each major section:
 
@@ -146,9 +148,10 @@ terms **must not** be used).
 
 ### Code examples
 
-API design examples in AIPs **should** use both [OpenAPI]{} and [protocol buffers][] in tabs. Examples
-**should** cover only enough syntax to explain the concept. When using RPCs in
-examples, a `google.api.http` annotation **should** be included.
+API design examples in AIPs **should** use both [OpenAPI]{} and [protocol
+buffers][] in tabs. Examples **should** cover only enough syntax to explain the
+concept. When using RPCs in examples, a `google.api.http` annotation **should**
+be included.
 
 ### Referencing AIPs
 
@@ -164,7 +167,8 @@ viewing the Markdown file on GitHub, using the local development server, or a
 branch.
 
 [aip-1]: ./0001.md
-[OpenAPI]: https://github.com/OAI/OpenAPI-Specification/blob/3.0.3/versions/3.0.3.md
+[openapi]:
+  https://github.com/OAI/OpenAPI-Specification/blob/3.0.3/versions/3.0.3.md
 [protocol buffers]: https://developers.google.com/protocol-buffers/
 [rfc 2119]: https://www.ietf.org/rfc/rfc2119.txt
 
