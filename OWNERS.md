@@ -8,7 +8,7 @@ This page lists all active maintainers of the aip.dev and standard. Maintainers 
 | --------------------------------------------------- | ------------------------------------------------ | ---------------------------- |
 | [Yusuke Tsutsumi](mailto:yusuketsutsumi@google.com) | [@toumorokoshi](https://github.com/toumorokoshi) | Google                       |
 | [Mak Ahmad](mailto:mak1@fb.com)                     | [@makahmad](https://github.com/makahmad)         | Meta                         |
-| Richard Frankle                                     | [@rofrankel](https://github.com/rofrankel)       | Roblox                       |
+| Richard Frankel                                     | [@rofrankel](https://github.com/rofrankel)       | Roblox                       |
 | Dan Hudlow                                          | [@hudlow](https://github.com/hudlow)             | IBM                          |
 | Alfred Fuller                                       | [@alfus](https://github.com/alfus)               |                              |
 | Jeff Albert                                         | [@monkey-jeff](https://github.com/monkey-jeff)   | Salesforce                   |
