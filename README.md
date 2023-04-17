@@ -43,6 +43,18 @@ AIPs for others to follow.
 [adopting aips in your company]: ./aip/adopting.md
 [contributing to the project]: ./CONTRIBUTING.md
 
+## Learn and Connect
+
+If you'd like to get involved in the AIP community, we'd love to have you! The
+following channels of communication are available:
+
+- [The #aip channel in the CNCF
+  Slack](https://cloud-native.slack.com/archives/C04TX46UCTV). Sign up at https://slack.cncf.io.
+- [The AIP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar/u/0?cid=N2UzNWRkM2RmMTk0YTMyZjRmYTdjMDNhMzQ1NGUyNGJhMzY1MWU2ZjU2ODI0OGVmZTFkZGYxZTM0YTdiZWU5ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t).
+  - [The AIP Community Meeting, for general topics, those who want to introduce
+    themselves, or want to learn more about the AIPs](https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NXRiMmMxcTRoY2hnbG51ZGpnN2kyZHBqbjlfMjAyMzA0MTlUMTYwMDAwWiA3ZTM1ZGQzZGYxOTRhMzJmNGZhN2MwM2EzNDU0ZTI0YmEzNjUxZTZmNTY4MjQ4ZWZlMWRkZjFlMzRhN2JlZTllQGc&tmsrc=7e35dd3df194a32f4fa7c03a3454e24ba3651e6f568248efe1ddf1e34a7bee9e%40group.calendar.google.com&scp=ALL).
+
+
 ## License
 
 Except as otherwise noted, the content of this repository is licensed under the
