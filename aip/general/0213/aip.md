@@ -129,7 +129,7 @@ representations of the following concepts:
 
 ### Protobuf types
 
-The [`google.protobuf`][protobuf] package is somewhat special in that it is
+The [`google.protobuf`][protobuf] package is
 shipped with protocol buffers itself, rather than with API tooling. The
 Well-Known Types defined in this package should always be used when
 appropriate, and the [AIP common components][] repo **does not** define any
