@@ -132,7 +132,7 @@ representations of the following concepts:
 The [`google.protobuf`][protobuf] package is
 shipped with protocol buffers itself, rather than with API tooling. The
 Well-Known Types defined in this package should always be used when
-appropriate, and the [AIP common components][] repo **does not** define any
+appropriate, and the [AIP common components][] repo does not define any
 protos for these types, even when it defines a corresponding JSON Schema. These
 include:
 
