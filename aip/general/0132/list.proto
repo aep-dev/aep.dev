@@ -1,0 +1,83 @@
+// Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+service Library {
+  // Get a single book.
+  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = {
+      get: "/v1/{parent=publishers/*}/books"
+    };
+    option (google.api.method_signature) = "parent";
+  }
+}
+
+// Request message to list a collection of books.
+message ListBooksRequest {
+  // The publisher to list books for.
+  string parent = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      child_type: "library.googleapis.com/Book"
+    }];
+
+  // The maximum number of books to return.
+  // The service may send fewer.
+  int32 max_page_size = 2;
+
+  // The page token.
+  // If a `next_page_token` value was received on a previous
+  // ListBooks call, providing it here will return the next page.
+  string page_token = 3;
+}
+
+// Response message for listing a collection of books.
+message ListBooksResponse {
+  // The books under the umbrella of the given publisher.
+  repeated Book results = 1;
+
+  // The token to retrieve the next page. This is populated if and only if
+  // there are more pages.
+  string next_page_token = 2;
+}
+
+// A representation of a single book.
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  // The name of the book.
+  // Format: publishers/{publisher}/books/{book}
+  string name = 1;
+
+  // The ISBN (International Standard Book Number) for this book.
+  string isbn = 2;
+
+  // The title of the book.
+  string title = 3;
+
+  // The author or authors of the book.
+  repeated string authors = 4;
+
+  // The rating assigned to the book.
+  float rating = 5;
+}
