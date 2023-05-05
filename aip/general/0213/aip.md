@@ -154,7 +154,8 @@ components][] repo), namely:
   JSON.
 
 `google.protobuf.Struct` and `google.protobuf.Value` are designated common
-components by this AIP; proto-based APIs **should** use them when appropriate.
+components by this AIP; proto-based APIs **should** use them when representing
+arbitrary JSON-like structures.
 
 <!-- prettier-ignore-start -->
 [datetime]: https://docs.python.org/3/library/datetime.html#datetime.datetime
