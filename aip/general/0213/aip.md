@@ -158,9 +158,9 @@ However, some general guidelines are worth noting for this:
 
 - Schemas **should** only be granted common component status if it is certain
   that they will never change (at all -- even in ways that would normally be
-  considered backwards compatible). Common components are generally not
-  versioned, and it must be the case that we can rely on the component to be a
-  complete and accurate representation indefinitely.
+  considered backwards compatible). Common components are not versioned, and it
+  must be the case that API creators and consumers can rely on the component to
+  be a complete and accurate representation indefinitely.
 - Schemas must be applicable to a significant number of APIs for consideration
   as common components.
 - Even after a common component is added, APIs using local versions **must**
