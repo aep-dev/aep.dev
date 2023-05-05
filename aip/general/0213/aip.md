@@ -166,9 +166,6 @@ However, some general guidelines are worth noting for this:
 - Even after a common component is added, APIs using local versions **must**
   continue to do so until they go to the next major version.
 
-In the event that you believe adding a common component is appropriate, please
-[open an issue][].
-
 <!-- prettier-ignore-start -->
 [api]: https://github.com/googleapis/googleapis/tree/master/google/api
 [rpc]: https://github.com/googleapis/googleapis/tree/master/google/rpc
