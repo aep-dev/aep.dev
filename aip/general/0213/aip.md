@@ -57,11 +57,6 @@ representations of the following concepts:
 - [`google.rpc.*`][rpc]: A small number of components related to gRPC
   request/response status and errors.
 
-<!-- prettier-ignore-start -->
-[api]: https://github.com/googleapis/googleapis/tree/master/google/api
-[rpc]: https://github.com/googleapis/googleapis/tree/master/google/rpc
-<!-- prettier-ignore-end -->
-
 ### Common types
 
 This section provides examples for the sake of illustration; it may not be
@@ -83,16 +78,6 @@ exhaustive. The [AIP common components][] repo is canonical.
 
 - [`Quaternion`][quaternion]: A geometric quaternion.
 
-<!-- prettier-ignore-start -->
-[color]: https://github.com/aip-dev/common-components/tree/master/aip/type/color
-[fraction]: https://github.com/aip-dev/common-components/tree/master/aip/type/fraction
-[lat_lng]: https://github.com/aip-dev/common-components/tree/master/aip/type/lat_lng
-[money]: https://github.com/aip-dev/common-components/tree/master/aip/type/money
-[phone_number]: https://github.com/aip-dev/common-components/tree/master/aip/type/phone_number
-[postal_address]: https://github.com/aip-dev/common-components/tree/master/aip/type/postal_address
-[quaternion]: https://github.com/aip-dev/common-components/tree/master/aip/type/quaternion
-<!-- prettier-ignore-end -->
-
 #### Date- and time-related types
 
 - [`Date`][date]: A calendar date, with no time or time zone component.
@@ -112,17 +97,6 @@ exhaustive. The [AIP common components][] repo is canonical.
   component.
 
 - [`Timestamp`][timestamp]: A timestamp with nanosecond-level precision.
-
-<!-- prettier-ignore-start -->
-[date]: https://github.com/aip-dev/common-components/tree/master/aip/type/date
-[date_time]: https://github.com/aip-dev/common-components/tree/master/aip/type/date_time
-[day_of_week]: https://github.com/aip-dev/common-components/tree/master/aip/type/day_of_week
-[duration]: https://github.com/aip-dev/common-components/tree/master/aip/type/duration
-[interval]: https://github.com/aip-dev/common-components/tree/master/aip/type/interval
-[month]: https://github.com/aip-dev/common-components/tree/master/aip/type/month
-[time_of_day]: https://github.com/aip-dev/common-components/tree/master/aip/type/time_of_day
-[timestamp]: https://github.com/aip-dev/common-components/tree/master/aip/type/timestamp
-<!-- prettier-ignore-end -->
 
 #### Protobuf types
 
@@ -156,15 +130,6 @@ components][] repo), namely:
 `google.protobuf.Struct` and `google.protobuf.Value` are designated common
 components by this AIP; proto-based APIs **should** use them when representing
 arbitrary JSON-like structures.
-
-<!-- prettier-ignore-start -->
-[datetime]: https://docs.python.org/3/library/datetime.html#datetime.datetime
-[duration]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto
-[protobuf]: https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf
-[struct]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto
-[timedelta]: https://docs.python.org/3/library/datetime.html#datetime.timedelta
-[timestamp]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto
-<!-- prettier-ignore-end -->
 
 ## Libraries for common types
 
@@ -204,8 +169,37 @@ However, some general guidelines are worth noting for this:
 In the event that you believe adding a common component is appropriate, please
 [open an issue][].
 
+<!-- prettier-ignore-start -->
+[api]: https://github.com/googleapis/googleapis/tree/master/google/api
+[rpc]: https://github.com/googleapis/googleapis/tree/master/google/rpc
+
+[color]: https://github.com/aip-dev/common-components/tree/master/aip/type/color
+[fraction]: https://github.com/aip-dev/common-components/tree/master/aip/type/fraction
+[lat_lng]: https://github.com/aip-dev/common-components/tree/master/aip/type/lat_lng
+[money]: https://github.com/aip-dev/common-components/tree/master/aip/type/money
+[phone_number]: https://github.com/aip-dev/common-components/tree/master/aip/type/phone_number
+[postal_address]: https://github.com/aip-dev/common-components/tree/master/aip/type/postal_address
+[quaternion]: https://github.com/aip-dev/common-components/tree/master/aip/type/quaternion
+
+[date]: https://github.com/aip-dev/common-components/tree/master/aip/type/date
+[date_time]: https://github.com/aip-dev/common-components/tree/master/aip/type/date_time
+[day_of_week]: https://github.com/aip-dev/common-components/tree/master/aip/type/day_of_week
+[duration]: https://github.com/aip-dev/common-components/tree/master/aip/type/duration
+[interval]: https://github.com/aip-dev/common-components/tree/master/aip/type/interval
+[month]: https://github.com/aip-dev/common-components/tree/master/aip/type/month
+[time_of_day]: https://github.com/aip-dev/common-components/tree/master/aip/type/time_of_day
+[timestamp]: https://github.com/aip-dev/common-components/tree/master/aip/type/timestamp
+
+[datetime]: https://docs.python.org/3/library/datetime.html#datetime.datetime
+[duration]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto
+[protobuf]: https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf
+[struct]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto
+[timedelta]: https://docs.python.org/3/library/datetime.html#datetime.timedelta
+[timestamp]: https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto
+
 [open an issue]: https://github.com/aip-dev/common-components/issues
 [aip common components]: https://github.com/aip-dev/common-components
 [json schema store]: https://www.schemastore.org/json/
 [aip-151]: ../0151
 [buf]: https://buf.build/aip/type
+<!-- prettier-ignore-end -->
