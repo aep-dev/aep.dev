@@ -156,7 +156,7 @@ common components][] repository in GitHub.
 
 However, some general guidelines are worth noting for this:
 
-- Schemas **should** only be granted common component status if we are certain
+- Schemas **should** only be granted common component status if it is certain
   that they will never change (at all -- even in ways that would normally be
   considered backwards compatible). Common components are generally not
   versioned, and it must be the case that we can rely on the component to be a
