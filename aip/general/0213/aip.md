@@ -29,18 +29,6 @@ languages that compile protobuf messages into classes.
 An API **should not** define alternative representations of any of the existing
 common components described below, even within its versioning structure.
 
-### Extending common components
-
-An API **may** define extensions of the common components, and these **may**
-have a different namespace/package name. These extensions **must** be both
-semantically and wire-compatible with the existing common components for all
-relevant transport mechanisms (gRPC, JSON, ...), but may contain additional
-fields (as long as this doesn't break semantic or wire-compatibility).
-
-For example, Google **may** use `google.type.Money` in place of
-`aip.type.Money`, but `google.type.Money` **must** have all the same fields as
-`aip.type.Money`, with identical tag numbers and equivalent documentation.
-
 ## Existing common components
 
 The common components, which public-facing APIs **may** safely depend on, are
