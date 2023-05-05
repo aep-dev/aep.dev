@@ -62,7 +62,12 @@ representations of the following concepts:
 [rpc]: https://github.com/googleapis/googleapis/tree/master/google/rpc
 <!-- prettier-ignore-end -->
 
-### General common types
+### Common types
+
+This section provides examples for the sake of illustration; it may not be
+exhaustive. The [AIP common components][] repo is canonical.
+
+#### General common types
 
 - [`Color`][color]: RGB or RGBA colors.
 
@@ -88,7 +93,7 @@ representations of the following concepts:
 [quaternion]: https://github.com/aip-dev/common-components/tree/master/aip/type/quaternion
 <!-- prettier-ignore-end -->
 
-### Date- and time-related types
+#### Date- and time-related types
 
 - [`Date`][date]: A calendar date, with no time or time zone component.
 
@@ -119,7 +124,7 @@ representations of the following concepts:
 [timestamp]: https://github.com/aip-dev/common-components/tree/master/aip/type/timestamp
 <!-- prettier-ignore-end -->
 
-### Protobuf types
+#### Protobuf types
 
 The [`google.protobuf`][protobuf] package is shipped with protocol buffers
 itself, rather than with API tooling. The Well-Known Types defined in this
