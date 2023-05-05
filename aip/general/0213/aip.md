@@ -7,8 +7,12 @@ changes or even lead to dependency conflicts.
 
 However, there are also cases where common structures are valuable, especially
 where a concept is well-known and it is sufficiently clear that it will not
-change. Common components serve this use case. This AIP defines those common
-components.
+change. Having a single representation of these common structures is valuable
+because it avoids disrepancies between APIs in things like how dates or
+monetary values are represented. It also enables shared libraries for common
+operations, such as basic arithmetic on monetary values.
+
+Common components serve this use case.
 
 ## Guidance
 
@@ -129,12 +133,11 @@ representations of the following concepts:
 
 ### Protobuf types
 
-The [`google.protobuf`][protobuf] package is
-shipped with protocol buffers itself, rather than with API tooling. The
-Well-Known Types defined in this package should always be used when
-appropriate, and the [AIP common components][] repo does not define any
-protos for these types, even when it defines a corresponding JSON Schema. These
-include:
+The [`google.protobuf`][protobuf] package is shipped with protocol buffers
+itself, rather than with API tooling. The Well-Known Types defined in this
+package should always be used when appropriate, and the [AIP common
+components][] repo does not define any protos for these types, even when it
+defines a corresponding JSON Schema. These include:
 
 - [`google.protobuf.Duration`][duration]: Durations, with nanosecond-level
   precision. The protobuf runtime provides helper functions to convert to and
