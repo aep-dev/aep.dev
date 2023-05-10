@@ -30,8 +30,8 @@ Accept: application/json
   - If a `GET` request contains a body, the body **must** be ignored, and
     **must not** cause an error.
 - The request **must not** require any fields in the query string.
-  - The query string **may** include fields for common design patterns
-    relevant to list methods, such as `string filter` and `string orderBy`.
+  - The query string **may** include fields for common design patterns relevant
+    to list methods, such as `string filter` and `string orderBy`.
   - The query string **may** include custom fields if necessary for a specific
     resource, but not in place of any of the common fields for list methods.
 
@@ -77,11 +77,11 @@ individual result being a resource:
 
 **Note:** List methods **may** return the complete collection to any user with
 permission to make a successful List request on the collection, _or_ **may**
-return a collection only containing resources for which the user has read permission.
-This behavior **should** be clearly documented either for each List method or as
-a standard convention in service-level documentation. Permission checks on individual
-resources may have a negative performance impact so should be used only where
-absolutely necessary.
+return a collection only containing resources for which the user has read
+permission. This behavior **should** be clearly documented either for each List
+method or as a standard convention in service-level documentation. Permission
+checks on individual resources may have a negative performance impact so should
+be used only where absolutely necessary.
 
 ### Errors
 

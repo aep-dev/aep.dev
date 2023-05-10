@@ -160,24 +160,25 @@ what this document describes as a `StatusMonitor`.
 {% sample 'lro.oas.yaml', 'paths' %}
 
 - `202` **must** be the only success status code defined.
-- The `202` response **must** define an `application/json` response body and no other
-  response content types.
-- The response body schema **must** be an object with `name`, `done`, and `result`
-  properties as described above for a StatusMonitor
-- The response body schema **may** contain an object property named `metadata` to
-  hold service-specific metadata associated with the operation, for example progress
-  information and common metadata such as create time.  The service **should** define
-  the contents of the `metadata` object in a separate schema, which **should** specify
-  `additionalProperties: true` to allow for future extensibility.
+- The `202` response **must** define an `application/json` response body and no
+  other response content types.
+- The response body schema **must** be an object with `name`, `done`, and
+  `result` properties as described above for a StatusMonitor
+- The response body schema **may** contain an object property named `metadata`
+  to hold service-specific metadata associated with the operation, for example
+  progress information and common metadata such as create time. The service
+  **should** define the contents of the `metadata` object in a separate schema,
+  which **should** specify `additionalProperties: true` to allow for future
+  extensibility.
 - The `response` property **must** be a schema that defines the success
-  response for the operation. For an operation that typically gives a `204 No Content`
-  response, such as a `Delete`, `response` should be defined as an empty object schema.
-  For a standard `Get/Create/Update` operation, `response` should be a representation
-  of the resource.
+  response for the operation. For an operation that typically gives a
+  `204 No Content` response, such as a `Delete`, `response` should be defined
+  as an empty object schema. For a standard `Get/Create/Update` operation,
+  `response` should be a representation of the resource.
 - If a service has any long running operations, the service **must** define an
-  `StatusMonitor` resource with a `list` operation to retrieve a potentially filtered
-  list of status monitors and a `get` operation to retrieve a specific status monitor
-  by its `name`.
+  `StatusMonitor` resource with a `list` operation to retrieve a potentially
+  filtered list of status monitors and a `get` operation to retrieve a specific
+  status monitor by its `name`.
 
 {% endtabs %}
 
