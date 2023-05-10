@@ -1,11 +1,11 @@
 ---
-name: test
+name: lint
 on:
   pull_request:
     branches:
       - main
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     container: node:20
     steps:
