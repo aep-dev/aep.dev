@@ -1,0 +1,39 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/product.schema.json
+title: Decimal
+description: |
+  Represents a decimal number in a form similar to scientific notation.
+
+  Examples:
+  17            === {"significand": 17,   "exponent": 0}
+  -0.005        === {"significand": -5,   "exponent": -3}
+  33.5 million  === {"significand": 335,  "exponent": 5}
+  11/8 (1.375)  === {"significand": 1375, "exponent": -3}
+
+  Note that the range of a Decmial exceeds that of a JSON `number` (double),
+  as well as that of a `decimal64`.
+type: object
+required:
+- significand
+- exponent
+additionalProperties: false
+properties:
+  significand:
+    description: The significant digits of the number.
+    type: integer
+    format: int64
+  exponent:
+    description: |
+      Represents the position of the decimal point within the significand.
+
+      When the exponent is 0, the value of the Decimal is simply the value of
+      `significand`.
+
+      When the exponent is greater than 0, represents the number of trailing
+      zeroes after the significant digits.
+
+      When the exponent is < less than, represents how many of the
+      significant digits (and implicit leading zeroes, as needed) come after
+      the decmial point.
+    type: integer
+    format: int32
