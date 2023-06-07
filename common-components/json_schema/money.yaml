@@ -1,0 +1,36 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/product.schema.json
+title: Money
+description: |
+  Represents an amount of money with its currency type.
+
+  Examples:
+
+  Five US dollars === `{"currency_code": "USD", "quantity": {"significand": 5}}`
+  One and a half Bitcoin ===
+    `{"currency_code": "X-BTC", "quantity": {"significand": 15, "exponent": -1}}`
+type: object
+required:
+- currency_code
+- quantity
+additionalProperties: false
+properties:
+  currency_code:
+    description: |
+      A currency code.
+
+      This may be a three-letter currency code defined in ISO 4217.
+
+      APIs may define additional currency codes that are not included in the ISO
+      4217 standard (for example, virtual currencies or cryptocurrencies). These
+      must start with "X-", in order to distinguish them from potential future
+      ISO 4217 codes.
+
+      Examples:
+        "USD"  - ISO 4217 code for United States dollar.
+        "X-BTC" - Potential API-defined extension for Bitcoin.
+        "X-RBX" - Potential API-defined extension for the virtual currency Robux.
+    type: string
+  quantity:
+    description: The quantity of currency.
+    $ref: decimal.yaml#/definitions/Decimal
