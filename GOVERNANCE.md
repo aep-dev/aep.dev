@@ -2,9 +2,9 @@
 
 ## Article I: Purpose
 
-1. The API Improvement Proposals (AIP) project exists to help developers and
+1. The API Extension Proposals (AEP) project exists to help developers and
    organizations build clear, consistent network APIs and clients by providing
-   an extensible set of design guidelines (AIPs) and an ecosystem of tools to
+   an extensible set of design guidelines (AEPs) and an ecosystem of tools to
    apply those rules in practice.
 2. To support this aim, the project provides and maintains tools that enrich
    the experience of developing and using APIs that conform to the project's
@@ -13,12 +13,12 @@
 
 ## Article II: Association
 
-1. The AIP project is a project of the Cloud Native Computing Foundation. As
-   such, it accepts the [CNCF Code of Conduct][0].
+1. The AEP project aims to be a project of the Cloud Native Computing
+   Foundation. As such, it accepts the [CNCF Code of Conduct][0].
 
 ## Article III: Steering Committee
 
-1. The AIP project shall be governed by a steering committee, comprising at
+1. The AEP project shall be governed by a steering committee, comprising at
    least five representatives from at least five distinct organizations.
 2. No more than one third of the committee shall represent or be employed by
    the same organization.
@@ -31,9 +31,9 @@
    to consider the addition, removal, or replacement of members.
 4. The members of the steering committee shall be maintained in a
    MAINTAINERS.md file in the
-   [primary AIP GitHub repository](https://github.com/aip-dev/aip).
+   [primary AEP GitHub repository](https://github.com/aep-dev/aep.dev).
 5. Steering committee members accept the following responsibilities:
-   1. Ownership of the charter, vision, and direction of the AIP project.
+   1. Ownership of the charter, vision, and direction of the AEP project.
    2. Regular attendance and participation at stated committee meetings.
    3. Contribution of design guidance or code as appropriate, and reviewing the
       contributions of others.
@@ -47,7 +47,7 @@
 
 ## Article IV: Source of Truth
 
-1. The AIP GitHub repositories are the source of truth for everything in the
+1. The AEP GitHub repositories are the source of truth for everything in the
    project, including both code and guidelines.
 
 ## Article V: Meetings & Voting
