@@ -1,58 +1,25 @@
-# API Improvement Proposals
+# API Extension Proposals
 
-**TL;DR:** AIPs are lots of documents on how Google does APIs.
+**NOTE**: this repository currently has a significant amount of outdated
+content. Active development and discussion is occuring in
+[aepc](https://github.com/aep-dev/aepc).
+
+Once an API specification and design pattern guide solidifies, this repository
+will be updated.
 
 ## Overview
 
-AIP stands for **API Improvement Proposal**, which is a design document
-providing high-level, concise documentation for API development. The goal is
-for these documents to serve as the source of truth for API-related
-documentation at Google and the way API teams discuss and come to consensus on
-API guidance. The program is named and styled after Python's enhancement
-proposals (PEPs) which have seemed to work pretty well over the years.
-
-### Specific areas inside Google
-
-While much of the API-related guidance is general and spans across all the
-different products at Google, we've found that some teams working in different
-areas may have different customs, styles, or guidance. To accommodate these
-historical differences, we've provided separate blocks of numbers for those
-areas where they might override or extend the more general guidance.
-
-## Getting started
-
-### New to AIPs?
-
-If you're **new to AIPs**, check out the [Frequently Asked Questions][] which
-answer some common questions about how AIPs work and what you need to know.
-
-### Want to use this in your company?
-
-If you like what you see and **want to adopt the general AIPs for your
-organization**, check out our guide on [Adopting AIPs in your company][]. This
-guide walks you through how to start using AIPs and write your own guidance
-specific to your organization.
-
-### Have an idea for an AIP?
-
-If you **have an idea for an AIP that isn't written yet** (yes, there are
-plenty!) check out [Contributing to the project][] to see how you can write
-AIPs for others to follow.
-
-[frequently asked questions]: ./aip/faq.md
-[adopting aips in your company]: ./aip/adopting.md
-[contributing to the project]: ./CONTRIBUTING.md
+See [GOVERNANCE.md](./GOVERNANCE.md).
 
 ## Learn and Connect
 
 If you'd like to get involved in the AIP community, we'd love to have you! The
 following channels of communication are available:
 
-- [The #aip channel in the CNCF Slack](https://cloud-native.slack.com/archives/C04TX46UCTV).
+- [The #aep channel in the CNCF Slack](https://cloud-native.slack.com/archives/C04TX46UCTV).
   Sign up at https://slack.cncf.io.
-- [The AIP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar/u/0?cid=N2UzNWRkM2RmMTk0YTMyZjRmYTdjMDNhMzQ1NGUyNGJhMzY1MWU2ZjU2ODI0OGVmZTFkZGYxZTM0YTdiZWU5ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t).
-  - A community meeting is also listed, subject to change but currently
-    Wednesday mornings PST.
+- [The AEP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar/u/0?cid=N2UzNWRkM2RmMTk0YTMyZjRmYTdjMDNhMzQ1NGUyNGJhMzY1MWU2ZjU2ODI0OGVmZTFkZGYxZTM0YTdiZWU5ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t).
+  - A weekly project meeting is held, which anyone interested is welcome to attend!
 
 ## License
 
