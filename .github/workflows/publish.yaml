@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+# Recommended by https://github.com/JamesIves/github-pages-deploy-action
+permissions:
+  contents: write
 jobs:
   github-pages:
     runs-on: ubuntu-latest
