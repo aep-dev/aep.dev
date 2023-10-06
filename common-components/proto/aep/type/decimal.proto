@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package aip.type;
+package aep.type;
 
 option cc_enable_arenas = true;
-option go_package = "aip.golang.org/genproto/common-components/type/decimal;decimal";
+option go_package = "aep.golang.org/genproto/common-components/type/decimal;decimal";
 option java_multiple_files = true;
 option java_outer_classname = "DecimalProto";
-option java_package = "dev.aip.type";
-option objc_class_prefix = "AIP";
+option java_package = "dev.aep.type";
+option objc_class_prefix = "AEP";
 
 // Represents a decimal number in a form similar to scientific notation.
 //
