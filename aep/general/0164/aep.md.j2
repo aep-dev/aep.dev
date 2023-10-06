@@ -16,8 +16,8 @@ system. If the method behaves this way, it **should** return `200 OK` with the
 updated resource instead of `204 No Content`.
 
 Resources that support soft delete **should** have an `expire_time` field as
-described in AIP-148. Additionally, resources **should** include a `DELETED`
-state value if the resource includes a `state` field (AIP-216).
+described in AEP-148. Additionally, resources **should** include a `DELETED`
+state value if the resource includes a `state` field (AEP-216).
 
 ### Undelete
 
@@ -44,7 +44,7 @@ A resource that supports soft delete **should** provide an `Undelete` method:
   - The comment for the field **should** document the resource pattern.
 - The request message **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in this
-  or another AIP.
+  or another AEP.
 
 {% tab oas %}
 
@@ -56,7 +56,7 @@ A resource that supports soft delete **should** provide an `Undelete` method:
     infeasible to do so.
 - The operation **must not** require any other fields, and **should not**
   contain other optional query parameters except those described in this or
-  another AIP.
+  another AEP.
 
 {% endtabs %}
 
@@ -64,27 +64,27 @@ A resource that supports soft delete **should** provide an `Undelete` method:
 
 Some resources take longer to undelete a resource than is reasonable for a
 regular API request. In this situation, the API **should** follow the
-long-running request pattern (AIP-151).
+long-running request pattern (AEP-151).
 
 ### List and Get
 
-Soft-deleted resources **should not** be returned in `List` (AIP-132) responses
+Soft-deleted resources **should not** be returned in `List` (AEP-132) responses
 by default (unless `bool show_deleted` is true).
 
-A `Get` (AIP-131) request for a soft deleted resource **should** error with
+A `Get` (AEP-131) request for a soft deleted resource **should** error with
 `410 Gone` unless `bool show_deleted` is true, in which case soft-deleted
 resources **must** return the resource.
 
 Services that soft delete resources **may** choose a reasonable strategy for
 purging those resources, including automatic purging after a reasonable time
-(such as 30 days), allowing users to set an expiry time (AIP-214), or retaining
+(such as 30 days), allowing users to set an expiry time (AEP-214), or retaining
 the resources indefinitely. Regardless of what strategy is selected, the
 service **should** document when soft deleted resources will be completely
 removed.
 
 ### Declarative-friendly resources
 
-A resource that is declarative-friendly (AIP-128) **should** support soft
+A resource that is declarative-friendly (AEP-128) **should** support soft
 delete and undelete.
 
 **Important:** There is an ambiguity in declarative tooling between "create"
@@ -100,8 +100,8 @@ Declarative-friendly resources **must** use long-running operations for both
 soft delete and undelete. The service **may** return an LRO that is already set
 to done if the request is effectively immediate.
 
-Declarative-friendly resources **must** include `validate_only` (AIP-163) and
-`etag` (AIP-154) in their `Undelete` methods.
+Declarative-friendly resources **must** include `validate_only` (AEP-163) and
+`etag` (AEP-154) in their `Undelete` methods.
 
 ### Errors
 
@@ -123,7 +123,7 @@ resource is not deleted, the service **must** error with `409 Conflict`.
 
 ## Further reading
 
-- For the `Delete` standard method, see AIP-135.
-- For long-running operations, see AIP-151.
-- For resource freshness validation (`etag`), see AIP-154.
-- For change validation (`validate_only`), see AIP-163.
+- For the `Delete` standard method, see AEP-135.
+- For long-running operations, see AEP-151.
+- For resource freshness validation (`etag`), see AEP-154.
+- For change validation (`validate_only`), see AEP-163.

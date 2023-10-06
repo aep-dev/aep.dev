@@ -63,7 +63,7 @@ back. This is fine for many situations, particularly when the array field is
 expected to have a small size (fewer than 10 or so) and race conditions are not
 an issue, or can be guarded against with [ETags][aip-154].
 
-**Note:** Declarative-friendly resources (AIP-128) **must** use the standard
+**Note:** Declarative-friendly resources (AEP-128) **must** use the standard
 `Update` method, and not introduce `Add` and `Remove` methods. If declarative
 tools need to reason about particular relationships while ignoring others,
 consider using a subresource instead.
@@ -144,7 +144,7 @@ subresource instead.
   - The field **should** be [annotated as required][aip-203].
 - The request message **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in this
-  or another AIP.
+  or another AEP.
 
 {% tab oas %}
 

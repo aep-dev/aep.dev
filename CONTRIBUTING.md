@@ -4,7 +4,7 @@ We'd love to accept your patches and contributions to this project.
 
 ## Development Environment
 
-If you are contributing AIP content (rather than code) and want to be able to
+If you are contributing AEP content (rather than code) and want to be able to
 view it in your browser, the easiest way to do so is to run the provided
 development server.
 

@@ -11,7 +11,7 @@ APIs **should** generally provide a `GET` method for resource collections
 unless it is not valuable for users to do so. When the `GET` method is used on
 a URI ending in a resource collection, the result should be a list of
 resources. For more information about using the `GET` method on a URI ending
-with a discrete resource ID, see AIP-131.
+with a discrete resource ID, see AEP-131.
 
 ### Requests
 
@@ -67,7 +67,7 @@ individual result being a resource:
 - The `string nextPageToken` field **must** be included in the list response
   schema. It **must** be set if there are subsequent pages, and **must not** be
   set if the response represents the final page. For more information, see
-  AIP-158.
+  AEP-158.
 - The response struct **may** include a `int32 totalSize` (or
   `int64 totalSize`) field with the number of items in the collection.
   - The value **may** be an estimate (the field **should** clearly document
@@ -118,7 +118,7 @@ always possible to add ordering later, but removing it is a breaking change.
 
 List methods **may** allow clients to specify filters; if they do, the request
 message **should** contain a `string filter` field. Filtering is described in
-more detail in AIP-160.
+more detail in AEP-160.
 
 **Note:** Only include filtering if there is an established need to do so. It
 is always possible to add filtering later, but removing it is a breaking
@@ -147,7 +147,7 @@ List operations are specified using the following pattern:
 - The request message **must** match the RPC name, with a `-Request` suffix.
 - The response message **must** match the RPC name, with a `-Response` suffix.
   - The response **should** usually include fully-populated resources unless
-    there is a reason to return a partial response (see AIP-157).
+    there is a reason to return a partial response (see AEP-157).
 - The HTTP verb **must** be `GET`.
 - The URI **should** contain a single variable field corresponding to the
   collection parent's name.
@@ -170,7 +170,7 @@ List operations also implement a common request message pattern:
     being listed.
 - The `max_page_size` and `page_token` fields, which support pagination,
   **must** be specified on all list request messages. For more information, see
-  AIP-158.
+  AEP-158.
 
 **Note:** The `parent` field in the request object corresponds to the `parent`
 variable in the `google.api.http` annotation on the RPC. This causes the
@@ -198,7 +198,7 @@ metadata:
 - The response content **must** be the resource itself. For example:
   `#/components/schemas/Book`
   - The response **should** usually include the fully-populated resource unless
-    there is a reason to return a partial response (see AIP-157).
+    there is a reason to return a partial response (see AEP-157).
 - The URI **should** contain a variable for each individual ID in the resource
   hierarchy.
   - The path parameter for all resource IDs **must** be in the form

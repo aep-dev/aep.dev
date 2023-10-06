@@ -13,13 +13,14 @@ See [GOVERNANCE.md](./GOVERNANCE.md).
 
 ## Learn and Connect
 
-If you'd like to get involved in the AIP community, we'd love to have you! The
+If you'd like to get involved in the AEP community, we'd love to have you! The
 following channels of communication are available:
 
 - [The #aep channel in the CNCF Slack](https://cloud-native.slack.com/archives/C04TX46UCTV).
   Sign up at https://slack.cncf.io.
 - [The AEP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar/u/0?cid=N2UzNWRkM2RmMTk0YTMyZjRmYTdjMDNhMzQ1NGUyNGJhMzY1MWU2ZjU2ODI0OGVmZTFkZGYxZTM0YTdiZWU5ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t).
-  - A weekly project meeting is held, which anyone interested is welcome to attend!
+  - A weekly project meeting is held, which anyone interested is welcome to
+    attend!
 
 ## License
 
