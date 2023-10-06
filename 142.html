@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>Contributing</title>
+    <title>AEP-142: Time and duration</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -20,6 +20,8 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
     
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -64,7 +66,7 @@
               
             
               
-                <li class="glue-header__item glue-header--is-active">
+                <li class="glue-header__item">
                   <a class="glue-header__link" href="/contributing" aria-level="1">Contributing</a>
                 </li>
               
@@ -141,7 +143,8 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        <nav id="aep-nav" class="docs-component-nav">
+        
+<nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -184,7 +187,7 @@
         Quantities
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/142">
         <span class="aep-number">142</span>
         Time and duration
@@ -243,17 +246,24 @@
 <section id="jump-content">
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Time and duration</th></tr>
+    <tr><td>Number</td><td>142</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/142">aep.dev/142</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2019-07-16</td></tr>
+    <tr><td>Updated</td><td>2019-07-16</td></tr>
+  </table>
+
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#development-environment">Development Environment</a><ul>
-<li><a href="#arguments">Arguments</a></li>
-<li><a href="#hot-reloading">Hot reloading</a></li>
-<li><a href="#local-installation">Local Installation</a></li>
-</ul>
-</li>
-<li><a href="#contributor-license-agreement">Contributor License Agreement</a></li>
-<li><a href="#code-reviews">Code reviews</a><ul>
-<li><a href="#formatting">Formatting</a></li>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#timestamps">Timestamps</a></li>
+<li><a href="#durations">Durations</a></li>
+<li><a href="#fractional-seconds">Fractional seconds</a></li>
+<li><a href="#civil-dates-and-times">Civil dates and times</a></li>
+<li><a href="#recurring-time">Recurring time</a></li>
+<li><a href="#compatibility">Compatibility</a></li>
 </ul>
 </li>
 </ul>
@@ -264,8 +274,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/CONTRIBUTING.md">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/CONTRIBUTING.md">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0142">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0142">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -282,70 +292,106 @@
         </a>
       </li>
       
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Contributing
+        Time and duration
       </li>
     </ol>
   </nav>
 </section>
-  <h1 id="contributing">Contributing</h1>
-<p>We'd love to accept your patches and contributions to this project.</p>
-<h2 id="development-environment">Development Environment</h2>
-<p>If you are contributing AIP content (rather than code) and want to be able to
-view it in your browser, the easiest way to do so is to run the provided
-development server.</p>
-<p>We use <a href="https://pages.github.com/">GitHub Pages</a> to make this documentation available, and a specific
-<a href="https://github.com/aip-dev/site-generator">site generator</a> to build the site.</p>
-<p>If you have <a href="https://docker.com/">Docker</a> installed, clone this repository and run the <code>serve.sh</code>
-file at the root of the repository. This script does two things:</p>
+  
+  <h4 class="aep-number">AEP-142</h4>
+  <h1 id="time-and-duration">Time and duration</h1>
+<p>Many services need to represent the concepts surrounding time. Representing
+time can be challenging due to the intricacies of calendars and time zones, as
+well as the fact that common exchange formats (such as JSON) lack a native
+concept of time.</p>
+<h2 id="guidance">Guidance</h2>
+<p>Fields representing time <strong>should</strong> use a <code>string</code> field with values conforming
+to <a href="https://datatracker.ietf.org/doc/html/rfc3339">RFC 3339</a>, such as <code>2012-04-21T15:00:00Z</code>.</p>
+<p>Services <strong>should</strong> use IDL-specific timestamps or format indicators where
+applicable (such as <a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto"><code>google.protobuf.Timestamp</code></a> in protocol
+buffers, or <code>format: date-time</code> in OpenAPI) provided that the service converts
+values to RFC 3339 timestamp strings in JSON.</p>
+<h3 id="timestamps">Timestamps</h3>
+<p>Fields that represent an absolute point in time (independent of any time zone
+or calendar) <strong>should</strong> use a <code>string</code> field with RFC 3339 values, and
+<strong>should</strong> send values in UTC, with the <code>Z</code> time zone explicitly included.</p>
+<p>These fields <strong>should</strong> have names ending in <code>_time</code>, such as <code>create_time</code> or
+<code>update_time</code>. For array fields, the names <strong>should</strong> end in <code>_times</code> instead.</p>
+<p>Many timestamp fields refer to an activity (for example, <code>create_time</code> refers
+to when the applicable resource was created). For these, the field <strong>should</strong>
+be named with the <code>{root_word}_time</code> form. For example, if a book is being
+published, the field storing the time when this happens would use the root form
+of the verb "to publish" ("publish"), resulting in a field called
+<code>publish_time</code>. Fields <strong>should not</strong> be named using the past tense (such as
+<code>published_time</code>, <code>created_time</code> or <code>last_updated_time</code>).</p>
+<p>When accepting timestamps as input, services <strong>should</strong> canonicalize the
+timestamp into UTC, and return values in UTC.</p>
+<h3 id="durations">Durations</h3>
+<p>Fields that represent a span between two points in time (independent of any
+time zone or calendar) <strong>should</strong> use an <code>int</code> field if there is a single
+canonical unit (for example, <code>ttl_seconds</code> for an expiring resource, or
+<code>offset_seconds</code> for position in a video).</p>
+<p><strong>Note:</strong> A <code>float</code> field <strong>may</strong> be used if fractional seconds are needed.
+However, only fractional seconds are permitted; other fractional units (such as
+hours or days) <strong>must not</strong> be used.</p>
+<p>If there is no canonical unit, the service <strong>should</strong> use a <code>string</code> field with
+<a href="https://www.iso.org/iso-8601-date-and-time-format.html">ISO 8601</a> duration values, such as <code>P3Y6M4DT12H30M5S</code>. The field name
+<strong>should</strong> end with <code>_duration</code>. Designators for zero values <strong>may</strong> be omitted
+in accordance with ISO 8601 (for example: <code>PT12H</code> is sufficient to represent
+"12 hours"), but at least one designator <strong>must</strong> be present (therefore, a zero
+duration is <code>PT0S</code> or <code>P0D</code>).</p>
+<p>Services <strong>should</strong> use IDL-specific durations where applicable (such as
+<a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto"><code>google.protobuf.Duration</code></a> in protocol buffers) provided that the
+service converts values to ISO 8601 duration strings in JSON.</p>
+<h3 id="fractional-seconds">Fractional seconds</h3>
+<p>Services <strong>may</strong> support fractional seconds for both timestamps and durations,
+but <strong>should not</strong> support precision more granular than the nanosecond.
+Services <strong>may</strong> also limit the supported precision, and <strong>may</strong> <em>truncate</em>
+values received from the user to the supported precision.</p>
+<p><strong>Note:</strong> Truncation is recommended rather than rounding because rounding to
+the nearest second has the potential to change day, month, year, etc., which is
+surprisingly significant.</p>
+<h3 id="civil-dates-and-times">Civil dates and times</h3>
+<p>Fields that represent a calendar date or wall-clock time <strong>should</strong> use partial
+ISO 8601 strings.</p>
+<p>Fields representing civil dates <strong>should</strong> have names ending in <code>_date</code>, while
+fields representing civil times or datetimes <strong>should</strong> have names ending in
+<code>_time</code>.</p>
+<h3 id="recurring-time">Recurring time</h3>
+<p>A service that needs to document a recurring event <strong>should</strong> use cronspec if
+cronspec is able to support the service's use case.</p>
+<h3 id="compatibility">Compatibility</h3>
+<p>Occasionally, APIs are unable to use RFC 3339 strings for legacy or
+compatibility reasons. For example, an API may conform to a separate
+specification that mandates that timestamps be Unix timestamp integers.</p>
+<p>In these situations, fields <strong>may</strong> use other types. If possible, the following
+naming conventions apply:</p>
 <ul>
-<li>It builds the provided Docker image (unless you already have it) and tags it
-  as <code>aep-site</code>.</li>
-<li>It runs the <code>aep-site</code> image.</li>
+<li>Unix timestamps <strong>should</strong> use a <code>unix_time</code> suffix.<ul>
+<li>Multipliers of Unix time (such as milliseconds) <strong>should not</strong> be used; if
+  they are unavoidable, the field name <strong>should</strong> use both <code>unix_time</code> and
+  the unit, such as <code>unix_time_millis</code>.</li>
 </ul>
-<p>The development server uses port 4000; point your web browser to
-<code>http://localhost:4000</code>, and you should see the site.</p>
-<p><strong>Note:</strong> After building the Docker image for the first time, you may
-experience issues if Python dependencies change underneath you. If this
-happens, remove your Docker image (<code>docker rmi aep-site</code>) and run <code>serve.sh</code>
-again.</p>
-<h3 id="arguments">Arguments</h3>
-<p>Any arguments provided to <code>serve.sh</code> (or <code>docker run</code>) are forwarded (however,
-the current site generator does not honor any; this may change in the future).</p>
-<h3 id="hot-reloading">Hot reloading</h3>
-<p>The development server recognizes when files change (including static files)
-and local changes will be automatically reflected in your browser upon reload.</p>
-<h3 id="local-installation">Local Installation</h3>
-<p>It is possible to run the development server locally also. The general gist of
-how to do so correctly is:</p>
-<ul>
-<li>Install Python 3.8 if you do not already have it (direct install is fine, but
-  <a href="https://github.com/pyenv/pyenv">pyenv</a> is probably the best way if you have other Python projects).</li>
-<li>Create a Python 3.8 <a href="https://docs.python.org/3/library/venv.html">venv</a>. Once it is created, activate it in your shell
-  (<code>source path/to/venv/bin/activate</code>).</li>
-<li><code>pip install git+https://github.com/aip-dev/site-generator.git</code></li>
-<li><code>aep-site-serve .</code></li>
+</li>
+<li>For other integers, include the meaning (examples: <code>time</code>, <code>duration</code>,
+  <code>delay</code>, <code>latency</code>) <strong>and</strong> the unit of measurement (valid values: <code>seconds</code>,
+  <code>millis</code>, <code>micros</code>, <code>nanos</code>) as a final suffix. For example,
+  <code>send_time_millis</code>.</li>
+<li>For strings, include the meaning (examples: <code>time</code>, <code>duration</code>, <code>delay</code>,
+  <code>latency</code>) but no unit suffix.</li>
 </ul>
-<h2 id="contributor-license-agreement">Contributor License Agreement</h2>
-<p>Contributions to this project must be accompanied by a Contributor License
-Agreement. You (or your employer) retain the copyright to your contribution,
-this simply gives us permission to use and redistribute your contributions as
-part of the project. Head over to <a href="https://cla.developers.google.com/">https://cla.developers.google.com/</a> to see
-your current agreements on file or to sign a new one.</p>
-<p>You generally only need to submit a CLA once, so if you have already submitted
-one (even if it was for a different project), you probably do not need to do it
-again.</p>
-<h2 id="code-reviews">Code reviews</h2>
-<p>All submissions, including submissions by project members, require review. We
-use GitHub pull requests for this purpose. Consult
-<a href="https://help.github.com/articles/about-pull-requests/">GitHub Help</a> for more
-information on using pull requests.</p>
-<h3 id="formatting">Formatting</h3>
-<p>We use <a href="https://prettier.io/">prettier</a> to format Markdown, JavaScript, and (most) HTML, in order
-to ensure a consistent style throughout our source. You can add prettier as a
-plugin in most development environments.</p>
-
+<p>In all cases, clearly document the expected format, and the rationale for its
+use.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
@@ -354,7 +400,7 @@ plugin in most development environments.</p>
   <span class="no-print">For details, see <a href="/licensing">content
   licensing</a>.</span>
 </footer>
-  </section>
+</section>
 
         </section>
       </main>

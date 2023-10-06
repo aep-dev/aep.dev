@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>Search</title>
+    <title>AEP-211: Authorization checks</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -9,14 +9,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=df0881fc">
-    
-<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/search.css">
-<style type="text/css">
-  .tipue_search_content_url a:before {
-    content: 'https://aep.dev';
-  }
-</style>
-<link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -27,10 +20,7 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
     
-<script type="text/javascript" src="/assets/js/search/tipuesearch_content.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch_set.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch.min.js"></script>
-<script type="text/javascript" src="/assets/js/search/pagination.js"></script>
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -153,7 +143,8 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        <nav id="aep-nav" class="docs-component-nav">
+        
+<nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -244,7 +235,7 @@
         Unicode
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/211">
         <span class="aep-number">211</span>
         Authorization checks
@@ -254,34 +245,135 @@
 </nav>
 <section id="jump-content">
           
+<aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Authorization checks</th></tr>
+    <tr><td>Number</td><td>211</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/211">aep.dev/211</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2021-02-24</td></tr>
+    <tr><td>Updated</td><td>2021-02-24</td></tr>
+  </table>
+
+  <section id="aep-toc" class="docs-component-sidebar-toc">
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#multiple-operations">Multiple operations</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a></li>
+</ul>
+</div>
+
+  </section>
+
+  <section class="docs-component-sidebar-actions">
+    <ul>
+      <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0211">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0211">Edit this page</a></li>
+    </ul>
+  </section>
+</aside>
 <section id="aep-main" class="docs-component-main">
-<form method="GET" action="/search">
-  <div class="primary-search">
-    <input
-      type="text"
-      name="q"
-      id="tipue_search_input"
-      pattern=".{3,}"
-      title="At least 3 characters"
-      required
-    />
-    <button type="submit" class="glue-button glue-button--high-emphasis">
-      <div>Search</div>
-    </button>
-  </div>
-</form>
-
-<h3 class="search-results-header">Search results</h3>
-<div id="tipue_search_content"></div>
+  <section class="section-breadcrumbs">
+  <nav
+    class="glue-breadcrumbs glue-mod-mt-std glue-mod-mb-std"
+    aria-label="You are here."
+  >
+    <ol class="glue-breadcrumbs__list aep-breadcrumbs">
+      <li class="glue-breadcrumbs__item" aria-level="1">
+        <a class="glue-breadcrumbs__link" href="/">
+          API Improvement Proposals
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
+          aria-level="3">
+        Authorization checks
+      </li>
+    </ol>
+  </nav>
 </section>
-
-<script>
-  $.when($.ready).then(() =>
-    $('#tipue_search_input').tipuesearch({
-      wholeWords: false,
-    })
-  );
-</script>
+  
+  <h4 class="aep-number">AEP-211</h4>
+  <h1 id="authorization-checks">Authorization checks</h1>
+<p>The majority of operations, whether reads or writes, require authorization:
+permission to do the thing the user is asking to do. Additionally, it is
+important to be careful how much information is provided to <em>unauthorized</em>
+users, since leaking information can be a security concern.</p>
+<h2 id="guidance">Guidance</h2>
+<p>Services <strong>must</strong> check authorization before validating any request, to ensure
+both a secure API surface and a consistent user experience. An operation
+<strong>may</strong> require multiple permissions or preconditions in order to grant
+authorization.</p>
+<p>If a request can not pass the authorization check for any reason, the service
+<strong>should</strong> error with <code>403 Forbidden</code>, and the corresponding error message
+<strong>should</strong> look like: "Permission <code>{p}</code> denied on resource <code>{r}</code> (or it might
+not exist)." This avoids leaking resource existence.</p>
+<p>If it is not possible to determine authorization for a resource because the
+resource does not exist, the service <strong>should</strong> check authorization to read
+children on the parent resource, and return <code>404 Not Found</code> if the
+authorization check passes.</p>
+<h3 id="multiple-operations">Multiple operations</h3>
+<p>A service could encounter a situation where it has two different operations
+with two different permissions, either of which would reveal the existence of a
+resource if called, but a user only has permission to call one of them.</p>
+<p>In this situation, the service <strong>should</strong> still only check for authorization
+applicable to the operation being called, and <strong>should not</strong> try to "help out"
+by checking for related authorization that would provide permission to reveal
+existence, because such algorithms are complicated to implement correctly and
+prone to accidental leaks.</p>
+<p>For example, posit a scenario where:</p>
+<ul>
+<li>A resource exists within a given collection that a user is unable to read.</li>
+<li>The user <em>does</em> have the ability to create other resources, and the
+  collection uses user-specified IDs (meaning that a failure because of a
+  duplicate ID would reveal existance).</li>
+</ul>
+<p>In this situation, the get or create methods <strong>should</strong> still only check
+<em>their</em> permissions when determining what error to return, and not one
+another's.</p>
+<h2 id="rationale">Rationale</h2>
+<p><a href="https://tools.ietf.org/html/rfc7231#section-6.5.3">RFC 7231 §6.5.3</a> states that services are permitted to use <code>404 Not Found</code>
+in lieu of <code>403 Forbidden</code> in situations where the service does not want to
+divulge existance, whereas this AIP argues for the use of <code>403 Forbidden</code>
+instead. We take this position for the following reasons:</p>
+<ul>
+<li>The practice of "getting <code>404 Not Found</code> until you have enough permission to
+  get <code>403 Forbidden</code>" is counter-intuitive and increases the difficulty of
+  troubleshooting.<ul>
+<li>A service <em>could</em> ameliorate this by sending information about missing
+  permissions while still using the <code>404 Not Found</code> status code, but this
+  constitutes a mixed message.</li>
+</ul>
+</li>
+<li>While <code>403 Forbidden</code> is essentially always an error requiring manual action,
+  <code>404 Not Found</code> is often a valid response that the application can handle
+  (e.g. "get or create"); overloading it for permission errors deprives
+  applications of this benefit.</li>
+<li>RFC 7231 §6.5.4 states that <code>404 Not Found</code> results are cacheable, but
+  permission errors are not generally cacheable. Sending explicit cache
+  controls on a conditional basis could ameliorate this, but would defeat the
+  purpose.</li>
+<li>The guidance here is more consistent with most other real-world authorization
+  systems.</li>
+</ul>
+  <footer>
+  Except as otherwise noted, the content of this page is licensed under the
+  <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+  Attribution 4.0 License</a>, and code samples are licensed under the
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>.
+  <span class="no-print">For details, see <a href="/licensing">content
+  licensing</a>.</span>
+</footer>
+</section>
 
         </section>
       </main>

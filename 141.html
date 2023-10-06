@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>Search</title>
+    <title>AEP-141: Quantities</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -9,14 +9,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=df0881fc">
-    
-<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/search.css">
-<style type="text/css">
-  .tipue_search_content_url a:before {
-    content: 'https://aep.dev';
-  }
-</style>
-<link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -27,10 +20,7 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
     
-<script type="text/javascript" src="/assets/js/search/tipuesearch_content.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch_set.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch.min.js"></script>
-<script type="text/javascript" src="/assets/js/search/pagination.js"></script>
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -153,7 +143,8 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        <nav id="aep-nav" class="docs-component-nav">
+        
+<nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -190,7 +181,7 @@
         Custom operations
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/141">
         <span class="aep-number">141</span>
         Quantities
@@ -254,34 +245,138 @@
 </nav>
 <section id="jump-content">
           
+<aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Quantities</th></tr>
+    <tr><td>Number</td><td>141</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/141">aep.dev/141</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2019-07-18</td></tr>
+    <tr><td>Updated</td><td>2019-07-18</td></tr>
+  </table>
+
+  <section id="aep-toc" class="docs-component-sidebar-toc">
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#specialized-messages">Specialized messages</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
+</div>
+
+  </section>
+
+  <section class="docs-component-sidebar-actions">
+    <ul>
+      <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0141">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0141">Edit this page</a></li>
+    </ul>
+  </section>
+</aside>
 <section id="aep-main" class="docs-component-main">
-<form method="GET" action="/search">
-  <div class="primary-search">
-    <input
-      type="text"
-      name="q"
-      id="tipue_search_input"
-      pattern=".{3,}"
-      title="At least 3 characters"
-      required
-    />
-    <button type="submit" class="glue-button glue-button--high-emphasis">
-      <div>Search</div>
-    </button>
-  </div>
-</form>
-
-<h3 class="search-results-header">Search results</h3>
-<div id="tipue_search_content"></div>
+  <section class="section-breadcrumbs">
+  <nav
+    class="glue-breadcrumbs glue-mod-mt-std glue-mod-mb-std"
+    aria-label="You are here."
+  >
+    <ol class="glue-breadcrumbs__list aep-breadcrumbs">
+      <li class="glue-breadcrumbs__item" aria-level="1">
+        <a class="glue-breadcrumbs__link" href="/">
+          API Improvement Proposals
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
+          aria-level="3">
+        Quantities
+      </li>
+    </ol>
+  </nav>
 </section>
+  
+  <h4 class="aep-number">AEP-141</h4>
+  <h1 id="quantities">Quantities</h1>
+<p>Many services need to represent a discrete quantity of items (number of bytes,
+number of miles, number of nodes, etc.).</p>
+<h2 id="guidance">Guidance</h2>
+<p>Quantities with a clear unit of measurement (such as bytes, miles, and so on)
+<strong>must</strong> include the unit of measurement as the suffix. When appropriate and
+unambiguous, units <strong>should</strong> use generally accepted abbreviations (for
+example, <code>distance_km</code> rather than <code>distance_kilometers</code>).</p>
+<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a non-stop air route.</span><span class="w"></span>
+<span class="kd">interface</span><span class="w"> </span><span class="nx">Route</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The airport where the route begins.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">origin</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
 
-<script>
-  $.when($.ready).then(() =>
-    $('#tipue_search_input').tipuesearch({
-      wholeWords: false,
-    })
-  );
-</script>
+<span class="w">  </span><span class="c1">// The destination airport.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">destination</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// The distance between the origin and destination airports.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// This value is also used to determine the credited frequent flyer miles.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">distance_miles</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>If the quantity is a number of items (for example, the number of nodes in a
+cluster), then the field <strong>should</strong> use the suffix <code>_count</code> (<strong>not</strong> the prefix
+<code>num_</code>):</p>
+<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A cluster of individual nodes.</span><span class="w"></span>
+<span class="kd">interface</span><span class="w"> </span><span class="nx">Cluster</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The number of nodes in the cluster.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">node_count</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p><strong>Note:</strong> Fields <strong>must not</strong> use unsigned integer types, because many
+programming languages and systems do not support them well.</p>
+<h3 id="specialized-messages">Specialized messages</h3>
+<p>It is sometimes useful to create a message that represents a particular
+quantity. This is particularly valuable in two situations.</p>
+<ul>
+<li>Grouping two or more individual quantities together.</li>
+<li>Representing a common concept where the unit of measurement may itself vary.</li>
+</ul>
+<p>Consider the example of money, which could need to do both of these:</p>
+<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of an amount of money, in an arbitrary currency.</span><span class="w"></span>
+<span class="kd">interface</span><span class="w"> </span><span class="nx">Money</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The 3-letter currency code defined in ISO 4217.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">currency_code</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// The whole units of the amount.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// For example if `currency_code` is &quot;USD&quot;, then 1 unit is one US dollar.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">units</span><span class="o">:</span><span class="w"> </span><span class="kt">bigint</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Number of nano (10^-9) units of the amount.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The value must be between -999,999,999 and +999,999,999 inclusive.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// If `units` is positive, `nanos` must be positive or zero.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// If `units` is zero, `nanos` can be positive, zero, or negative.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// If `units` is negative, `nanos` must be negative or zero.</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.</span><span class="w"></span>
+<span class="w">  </span><span class="nx">nanos</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>APIs <strong>may</strong> create structs to represent quantities when appropriate. When
+using these structs as fields, APIs <strong>should</strong> use the name of the struct as
+the suffix for the field name if it makes intuitive sense to do so.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2019-09-13</strong>: Added the prohibition on unsigned types.</li>
+</ul>
+  <footer>
+  Except as otherwise noted, the content of this page is licensed under the
+  <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+  Attribution 4.0 License</a>, and code samples are licensed under the
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>.
+  <span class="no-print">For details, see <a href="/licensing">content
+  licensing</a>.</span>
+</footer>
+</section>
 
         </section>
       </main>

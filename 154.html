@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>Contributing</title>
+    <title>AEP-154: Resource freshness validation</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -20,6 +20,8 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
     
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -64,7 +66,7 @@
               
             
               
-                <li class="glue-header__item glue-header--is-active">
+                <li class="glue-header__item">
                   <a class="glue-header__link" href="/contributing" aria-level="1">Contributing</a>
                 </li>
               
@@ -141,7 +143,8 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        <nav id="aep-nav" class="docs-component-nav">
+        
+<nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -208,7 +211,7 @@
         Long-running requests
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/154">
         <span class="aep-number">154</span>
         Resource freshness validation
@@ -243,19 +246,25 @@
 <section id="jump-content">
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Resource freshness validation</th></tr>
+    <tr><td>Number</td><td>154</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/154">aep.dev/154</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2019-07-24</td></tr>
+    <tr><td>Updated</td><td>2019-07-24</td></tr>
+  </table>
+
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#development-environment">Development Environment</a><ul>
-<li><a href="#arguments">Arguments</a></li>
-<li><a href="#hot-reloading">Hot reloading</a></li>
-<li><a href="#local-installation">Local Installation</a></li>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#condition-headers">Condition headers</a></li>
+<li><a href="#read-requests">Read requests</a></li>
+<li><a href="#strong-and-weak-etags">Strong and weak ETags</a></li>
 </ul>
 </li>
-<li><a href="#contributor-license-agreement">Contributor License Agreement</a></li>
-<li><a href="#code-reviews">Code reviews</a><ul>
-<li><a href="#formatting">Formatting</a></li>
-</ul>
-</li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#changelog">Changelog</a></li>
 </ul>
 </div>
 
@@ -264,8 +273,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/CONTRIBUTING.md">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/CONTRIBUTING.md">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0154">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0154">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -282,70 +291,109 @@
         </a>
       </li>
       
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Contributing
+        Resource freshness validation
       </li>
     </ol>
   </nav>
 </section>
-  <h1 id="contributing">Contributing</h1>
-<p>We'd love to accept your patches and contributions to this project.</p>
-<h2 id="development-environment">Development Environment</h2>
-<p>If you are contributing AIP content (rather than code) and want to be able to
-view it in your browser, the easiest way to do so is to run the provided
-development server.</p>
-<p>We use <a href="https://pages.github.com/">GitHub Pages</a> to make this documentation available, and a specific
-<a href="https://github.com/aip-dev/site-generator">site generator</a> to build the site.</p>
-<p>If you have <a href="https://docker.com/">Docker</a> installed, clone this repository and run the <code>serve.sh</code>
-file at the root of the repository. This script does two things:</p>
+  
+  <h4 class="aep-number">AEP-154</h4>
+  <h1 id="resource-freshness-validation">Resource freshness validation</h1>
+<p>APIs often need to validate that a client and server agree on the current state
+of a resource before taking some kind of action on that resource. For example,
+two processes updating the same resource in parallel could create a race
+condition, where the latter process "stomps over" the effort of the former one.</p>
+<p>ETags provide a way to deal with this, by allowing the server to send a
+checksum based on the current content of a resource; when the client sends that
+checksum back, the server can ensure that the checksums match before acting on
+the request.</p>
+<h2 id="guidance">Guidance</h2>
+<p>A resource <strong>may</strong> provide an <code>ETag</code> header when retrieving a single resource
+when it is important to ensure that the client has an up to date resource
+before acting on certain requests:</p>
+<div class="highlight language-None"><pre><span></span><code>200 OK
+Content-type: application/json
+ETag: &quot;55cc0347-66fc-46c3-a26f-98a9a7d61d0e&quot;
+</code></pre></div>
+<p>The ETag <strong>must</strong> be provided by the server on output, and values <strong>should</strong>
+conform to <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>. Resources <strong>must</strong> support the <code>If-Match</code> header (and
+<strong>may</strong> support the <code>If-None-Match</code> header) if and only if resources provide
+the ETag.</p>
+<p><strong>Note:</strong> ETag values <strong>must</strong> include quotes as described in <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>. For
+example, a valid ETag is <code>"foo"</code>, not <code>foo</code>.</p>
+<p>ETags <strong>must</strong> be based on an opaque checksum or hash of the resource that
+guarantees it will change if the resource changes.</p>
+<h3 id="condition-headers">Condition headers</h3>
+<p>Services that provide ETags <strong>should</strong> support the <code>If-Match</code> and
+<code>If-None-Match</code> headers on incoming requests:</p>
+<div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/publishers/{publisher}/books/{book}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">library.googleapis.com</span>
+<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">If-Match</span><span class="o">:</span> <span class="l">&quot;55cc0347-66fc-46c3-a26f-98a9a7d61d0e&quot;</span>
+</code></pre></div>
+<p>If the service receives a request to modify a resource that includes an
+<code>If-Match</code> header, the service <strong>must</strong> validate that the value matches the
+current ETag. If the <code>If-Match</code> header value does not match the ETag, the
+service <strong>must</strong> reply with an HTTP 412 error.</p>
+<p>If the user omits the <code>If-Match</code> header, the service <strong>should</strong> permit the
+request. However, services with strong consistency or parallelism requirements
+<strong>may</strong> require users to send ETags all the time and reject the request with an
+HTTP 400 error if it does not contain an ETag.</p>
+<p>If any conditional headers are supported for any operation within a service,
+the same conditional headers <strong>must</strong> be supported for all mutation methods
+(<code>POST</code>, <code>PATCH</code>, <code>PUT</code>, and <code>DELETE</code>) of any path that supports them, and
+<strong>should</strong> be supported uniformly for all operations across the service.</p>
+<p>If any validator or conditional headers are supported for any operations in the
+service, the use of unsupported conditional headers <strong>must</strong> result in an
+error. (In other words, once a service gives the client reason to believe it
+understands conditional headers, it <strong>must not</strong> ever ignore them.)</p>
+<h3 id="read-requests">Read requests</h3>
+<p>If a service receives a <code>GET</code> or <code>HEAD</code> request with an <code>If-Match</code> header, the
+service <strong>must</strong> proceed with the request if the ETag matches, or send a
+<code>412 Precondition Failed</code> error if the ETag does not match.</p>
+<p>If a service receives a <code>GET</code> or <code>HEAD</code> request with an <code>If-None-Match</code> header,
+the service <strong>must</strong> proceed with the request if the ETag does not match, or
+return a <code>304 Not Modified</code> response if the ETag does match.</p>
+<h3 id="strong-and-weak-etags">Strong and weak ETags</h3>
+<p>ETags can be either "strongly validated" or "weakly validated":</p>
 <ul>
-<li>It builds the provided Docker image (unless you already have it) and tags it
-  as <code>aep-site</code>.</li>
-<li>It runs the <code>aep-site</code> image.</li>
+<li>A strongly validated ETag means that two resources bearing the same ETag are
+  byte-for-byte identical.</li>
+<li>A weakly validated ETag means that two resources bearing the same ETag are
+  equivalent, but may differ in ways that the service does not consider to be
+  important.</li>
 </ul>
-<p>The development server uses port 4000; point your web browser to
-<code>http://localhost:4000</code>, and you should see the site.</p>
-<p><strong>Note:</strong> After building the Docker image for the first time, you may
-experience issues if Python dependencies change underneath you. If this
-happens, remove your Docker image (<code>docker rmi aep-site</code>) and run <code>serve.sh</code>
-again.</p>
-<h3 id="arguments">Arguments</h3>
-<p>Any arguments provided to <code>serve.sh</code> (or <code>docker run</code>) are forwarded (however,
-the current site generator does not honor any; this may change in the future).</p>
-<h3 id="hot-reloading">Hot reloading</h3>
-<p>The development server recognizes when files change (including static files)
-and local changes will be automatically reflected in your browser upon reload.</p>
-<h3 id="local-installation">Local Installation</h3>
-<p>It is possible to run the development server locally also. The general gist of
-how to do so correctly is:</p>
+<p>Resources <strong>may</strong> use either strong or weak ETags, as it sees fit, but
+<strong>should</strong> document the behavior. Additionally, weak ETags <strong>must</strong> have a <code>W/</code>
+prefix as mandated by <a href="https://tools.ietf.org/html/rfc7232#section-2.3">RFC 7232</a>:</p>
+<div class="highlight language-None"><pre><span></span><code>200 OK
+Content-type: application/json
+ETag: W/&quot;55cc0347-66fc-46c3-a26f-98a9a7d61d0e&quot;
+</code></pre></div>
+<p>Strong ETags <strong>must</strong> and weak ETags <strong>should</strong> be guaranteed to change if any
+properties on the resource change that are directly mutable by the client.
+Additionally, strong ETags <strong>should</strong> be guaranteed to change if the resource's
+representation changes in a meaningful way (meaning the new representation is
+not equivalent to the old one).</p>
+<h2 id="further-reading">Further reading</h2>
 <ul>
-<li>Install Python 3.8 if you do not already have it (direct install is fine, but
-  <a href="https://github.com/pyenv/pyenv">pyenv</a> is probably the best way if you have other Python projects).</li>
-<li>Create a Python 3.8 <a href="https://docs.python.org/3/library/venv.html">venv</a>. Once it is created, activate it in your shell
-  (<code>source path/to/venv/bin/activate</code>).</li>
-<li><code>pip install git+https://github.com/aip-dev/site-generator.git</code></li>
-<li><code>aep-site-serve .</code></li>
+<li>For how to retry on errors in client libraries, see AIP-194.</li>
 </ul>
-<h2 id="contributor-license-agreement">Contributor License Agreement</h2>
-<p>Contributions to this project must be accompanied by a Contributor License
-Agreement. You (or your employer) retain the copyright to your contribution,
-this simply gives us permission to use and redistribute your contributions as
-part of the project. Head over to <a href="https://cla.developers.google.com/">https://cla.developers.google.com/</a> to see
-your current agreements on file or to sign a new one.</p>
-<p>You generally only need to submit a CLA once, so if you have already submitted
-one (even if it was for a different project), you probably do not need to do it
-again.</p>
-<h2 id="code-reviews">Code reviews</h2>
-<p>All submissions, including submissions by project members, require review. We
-use GitHub pull requests for this purpose. Consult
-<a href="https://help.github.com/articles/about-pull-requests/">GitHub Help</a> for more
-information on using pull requests.</p>
-<h3 id="formatting">Formatting</h3>
-<p>We use <a href="https://prettier.io/">prettier</a> to format Markdown, JavaScript, and (most) HTML, in order
-to ensure a consistent style throughout our source. You can add prettier as a
-plugin in most development environments.</p>
-
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2020-09-02</strong>: Clarified that other errors may take precedence over
+  <code>FAILED_PRECONDITION</code> for ETag mismatches.</li>
+<li><strong>2020-09-02</strong>: Add guidance for ETags on request messages.</li>
+<li><strong>2019-09-23</strong>: Changed the title to "resource freshness validation".</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
@@ -354,7 +402,7 @@ plugin in most development environments.</p>
   <span class="no-print">For details, see <a href="/licensing">content
   licensing</a>.</span>
 </footer>
-  </section>
+</section>
 
         </section>
       </main>
