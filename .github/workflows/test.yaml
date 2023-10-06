@@ -13,4 +13,4 @@ jobs:
       - name: Install the site-generator
         run: pip install -r requirements.txt
       - name: Build the site.
-        run: aip-site-gen . /out
+        run: aep-site-gen . /out

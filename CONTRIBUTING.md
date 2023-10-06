@@ -15,15 +15,15 @@ If you have [Docker][3] installed, clone this repository and run the `serve.sh`
 file at the root of the repository. This script does two things:
 
 - It builds the provided Docker image (unless you already have it) and tags it
-  as `aip-site`.
-- It runs the `aip-site` image.
+  as `aep-site`.
+- It runs the `aep-site` image.
 
 The development server uses port 4000; point your web browser to
 `http://localhost:4000`, and you should see the site.
 
 **Note:** After building the Docker image for the first time, you may
 experience issues if Python dependencies change underneath you. If this
-happens, remove your Docker image (`docker rmi aip-site`) and run `serve.sh`
+happens, remove your Docker image (`docker rmi aep-site`) and run `serve.sh`
 again.
 
 ### Arguments
@@ -46,7 +46,7 @@ how to do so correctly is:
 - Create a Python 3.8 [venv][6]. Once it is created, activate it in your shell
   (`source path/to/venv/bin/activate`).
 - `pip install git+https://github.com/aip-dev/site-generator.git`
-- `aip-site-serve .`
+- `aep-site-serve .`
 
 ## Contributor License Agreement
 

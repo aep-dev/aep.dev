@@ -18,8 +18,8 @@
 # -----------------------------------------------------------------------------
 
 # Build the image (if and only if it is not already built).
-if [[ "$(docker images -q aip-site 2> /dev/null)" == "" ]]; then
-  docker build -t aip-site .
+if [[ "$(docker images -q aep-site 2> /dev/null)" == "" ]]; then
+  docker build -t aep-site .
   if [ $? != 0 ]; then
     exit $?
   fi
@@ -30,5 +30,5 @@ docker run --rm \
   -p 4000:4000/tcp -p 4000:4000/udp \
   -p 35729:35729/tcp -p 35729:35729/udp \
   --mount type=bind,source=`pwd`,destination=/code/,readonly \
-  aip-site \
+  aep-site \
   "$@"
