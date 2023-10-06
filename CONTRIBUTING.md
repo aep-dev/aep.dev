@@ -45,7 +45,7 @@ how to do so correctly is:
   [pyenv][5] is probably the best way if you have other Python projects).
 - Create a Python 3.8 [venv][6]. Once it is created, activate it in your shell
   (`source path/to/venv/bin/activate`).
-- `pip install git+https://github.com/aip-dev/site-generator.git`
+- `pip install git+https://github.com/aep-dev/site-generator.git`
 - `aep-site-serve .`
 
 ## Contributor License Agreement
@@ -74,7 +74,7 @@ to ensure a consistent style throughout our source. You can add prettier as a
 plugin in most development environments.
 
 [1]: https://pages.github.com/
-[2]: https://github.com/aip-dev/site-generator
+[2]: https://github.com/aep-dev/site-generator
 [3]: https://docker.com/
 [4]: https://prettier.io/
 [5]: https://github.com/pyenv/pyenv

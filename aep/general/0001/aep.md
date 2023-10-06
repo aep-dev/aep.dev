@@ -27,22 +27,22 @@ metadata in the AEP GitHub repository.
 
 Companies **may** adopt the AEP system in one of two ways:
 
-- By applying the guidance described at [aip.dev][].
+- By applying the guidance described at [aep.dev][].
 - By "forking" the AEP system and setting up their own subdomain.
 
 Companies with an already-established corpus of services are unlikely to have
-exactly followed the guidance at [aip.dev][]. Forking the system is valuable
+exactly followed the guidance at [aep.dev][]. Forking the system is valuable
 because the guidance becomes comparable. Forks **must** retain the same
 numbering system (AEP-2) to provide that comparability.
 
 ### Technical leadership
 
-The AEP system, as well as the guidance on [aip.dev][], is overseen by the AEP
+The AEP system, as well as the guidance on [aep.dev][], is overseen by the AEP
 technical steering committee. The committee is the set of people who make
 decisions on AEPs. The general goal is that the AEP process is collaborative
 and that we largely work on the basis of consensus. However, a limited number
 of designated approvers is necessary, and these committee members will be
-approvers for each AEP on [aip.dev][].
+approvers for each AEP on [aep.dev][].
 
 The technical steering committee membership is currently:
 
@@ -60,7 +60,7 @@ sentence structure, markup, etc.).
 Committee membership is by invitation of the current committee. The committee
 **must not** include more than two members from the same company.
 
-**Note:** Companies that maintain their own fork of [aip.dev][] select their
+**Note:** Companies that maintain their own fork of [aep.dev][] select their
 own leadership and have full control of their fork's content.
 
 ## States
@@ -218,4 +218,4 @@ then the technical steering committee **should** create a new AEP that, once
 approved, will replace the old one. The old one then enters "Replaced" state,
 and will link to the new, current AEP.
 
-[aip.dev]: https://aip.dev/
+[aep.dev]: https://aep.dev/
