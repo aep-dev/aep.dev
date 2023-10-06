@@ -1,6 +1,6 @@
 # Content licensing
 
-We are pleased to license much of the AIP content under terms that explicitly
+We are pleased to license much of the AEP content under terms that explicitly
 encourage people to take, modify, reuse, re-purpose, and remix our work as they
 see fit.
 
