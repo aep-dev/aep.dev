@@ -13,14 +13,14 @@
 // limitations under the License.
 
 // This file contains JavaScript-applied rules that render graphviz objects
-// in AIPs.
+// in AEPs.
 //
-// Note: This script is not included in AIPs by default, because the scripts
+// Note: This script is not included in AEPs by default, because the scripts
 // needed to render graphviz are nearly 1.5 MB in size that including them
 // everywhere adds significant weight.
 //
-// See the front matter for AIP-1 or AIP-100 for examples of how to add this
-// for AIPs that need graphviz rendering.
+// See the front matter for AEP-1 or AEP-100 for examples of how to add this
+// for AEPs that need graphviz rendering.
 $.when($.ready).then(() => {
   $('.language-graphviz').each((_, el) => {
     let pre = $(el).children('pre');

@@ -32,7 +32,7 @@ $.when($.ready).then(() => {
     extend.set(`.docs-component-main h${h}`, classes);
   }
   extend.set('table:not(.no-h)', ['glue-table']);
-  extend.set('#aip-main table:not(.no-h)', ['glue-table--datatable']);
+  extend.set('#aep-main table:not(.no-h)', ['glue-table--datatable']);
   extend.set('.tipue_search_content_title', [
     'glue-headline',
     'glue-headline--headline-4',
@@ -45,34 +45,37 @@ $.when($.ready).then(() => {
   // Make callouts for notes, warnings, etc. work.
   for (let callout of ['Important', 'Note', 'TL;DR', 'Warning', 'Summary']) {
     $(`p strong:contains(${callout}:)`)
-      .parent()
-      .addClass(callout.replace(';', '').toLowerCase());
+        .parent()
+        .addClass(callout.replace(';', '').toLowerCase());
   }
 
   // Make "spec terms" (must, should, may, must not, should not) that
   // are bold-faced be further emphasized.
-  for (let directive of ['may', 'must', 'must not', 'must\nnot',
-                         'should', 'should not', 'should\nnot']) {
+  for (let directive
+           of ['may', 'must', 'must not', 'must\nnot', 'should', 'should not',
+               'should\nnot']) {
     $('strong')
-      .filter((_, el) => $(el).text() === directive)
-      .addClass('spec-directive')
-      .addClass(`spec-${directive.split(' ')[0].split('\n')[0]}`);
+        .filter((_, el) => $(el).text() === directive)
+        .addClass('spec-directive')
+        .addClass(`spec-${directive.split(' ')[0].split('\n')[0]}`);
   }
 
-  // Make "reviewing sections" of approved AIPs show a badge.
-  let reviewing = $('h3 + p').filter((_, el) => $(el).text() === '[^reviewing]');
+  // Make "reviewing sections" of approved AEPs show a badge.
+  let reviewing =
+      $('h3 + p').filter((_, el) => $(el).text() === '[^reviewing]');
   reviewing.prev('h3').addClass('reviewing');
   reviewing.remove();
 
-  // Make AIP banners appear in a better spot.
-  $('#aip-state-banner').insertAfter('#aip-main h1');
+  // Make AEP banners appear in a better spot.
+  $('#aep-state-banner').insertAfter('#aep-main h1');
 
   // Control the maximum height of the nav sidebar.
   $(window)
-    .on('resize', () => {
-      $('nav.docs-component-nav').css({
-        maxHeight: `${$(window).height() - 110}px`,
-      });
-    })
-    .resize();
+      .on('resize',
+          () => {
+            $('nav.docs-component-nav').css({
+              maxHeight: `${$(window).height() - 110}px`,
+            });
+          })
+      .resize();
 });

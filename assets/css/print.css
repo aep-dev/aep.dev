@@ -9,7 +9,7 @@ footer {
   footer p {
     font-size: 13px; }
 
-.aip-breadcrumbs, #aip-nav, #aip-nav-mobile, #aip-sidebar, .glue-header,
+.aep-breadcrumbs, #aep-nav, #aep-nav-mobile, #aep-sidebar, .glue-header,
 .glue-page svg:first-child, .no-print {
   display: none; }
 
