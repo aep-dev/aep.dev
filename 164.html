@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=df0881fc">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=b27cc4d7">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=b27cc4d7">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=b27cc4d7"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -154,7 +154,7 @@
     <li class="nav-item">
       <a href="/1">
         <span class="aep-number">1</span>
-        AIP Purpose and Guidelines
+        AEP Purpose and Guidelines
       </a>
     </li>
     <li class="nav-item">
@@ -320,8 +320,8 @@ mark the resource as having been deleted, but not completely remove it from the
 system. If the method behaves this way, it <strong>should</strong> return <code>200 OK</code> with the
 updated resource instead of <code>204 No Content</code>.</p>
 <p>Resources that support soft delete <strong>should</strong> have an <code>expire_time</code> field as
-described in AIP-148. Additionally, resources <strong>should</strong> include a <code>DELETED</code>
-state value if the resource includes a <code>state</code> field (AIP-216).</p>
+described in <a href="/148">AEP-148</a>. Additionally, resources <strong>should</strong> include a <code>DELETED</code>
+state value if the resource includes a <code>state</code> field (<a href="/216">AEP-216</a>).</p>
 <h3 id="undelete">Undelete</h3>
 <p>A resource that supports soft delete <strong>should</strong> provide an <code>Undelete</code> method:</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
@@ -367,7 +367,7 @@ state value if the resource includes a <code>state</code> field (AIP-216).</p>
 </li>
 <li>The request message <strong>must not</strong> contain any other required fields, and
   <strong>should not</strong> contain other optional fields except those described in this
-  or another AIP.</li>
+  or another AEP.</li>
 </ul>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
@@ -393,28 +393,28 @@ state value if the resource includes a <code>state</code> field (AIP-216).</p>
 </li>
 <li>The operation <strong>must not</strong> require any other fields, and <strong>should not</strong>
   contain other optional query parameters except those described in this or
-  another AIP.</li>
+  another AEP.</li>
 </ul>
 </div>
 </div>
 <h3 id="long-running-undelete">Long-running undelete</h3>
 <p>Some resources take longer to undelete a resource than is reasonable for a
 regular API request. In this situation, the API <strong>should</strong> follow the
-long-running request pattern (AIP-151).</p>
+long-running request pattern (<a href="/151">AEP-151</a>).</p>
 <h3 id="list-and-get">List and Get</h3>
-<p>Soft-deleted resources <strong>should not</strong> be returned in <code>List</code> (AIP-132) responses
+<p>Soft-deleted resources <strong>should not</strong> be returned in <code>List</code> (<a href="/132">AEP-132</a>) responses
 by default (unless <code>bool show_deleted</code> is true).</p>
-<p>A <code>Get</code> (AIP-131) request for a soft deleted resource <strong>should</strong> error with
+<p>A <code>Get</code> (<a href="/131">AEP-131</a>) request for a soft deleted resource <strong>should</strong> error with
 <code>410 Gone</code> unless <code>bool show_deleted</code> is true, in which case soft-deleted
 resources <strong>must</strong> return the resource.</p>
 <p>Services that soft delete resources <strong>may</strong> choose a reasonable strategy for
 purging those resources, including automatic purging after a reasonable time
-(such as 30 days), allowing users to set an expiry time (AIP-214), or retaining
+(such as 30 days), allowing users to set an expiry time (<a href="/214">AEP-214</a>), or retaining
 the resources indefinitely. Regardless of what strategy is selected, the
 service <strong>should</strong> document when soft deleted resources will be completely
 removed.</p>
 <h3 id="declarative-friendly-resources">Declarative-friendly resources</h3>
-<p>A resource that is declarative-friendly (AIP-128) <strong>should</strong> support soft
+<p>A resource that is declarative-friendly (<a href="/128">AEP-128</a>) <strong>should</strong> support soft
 delete and undelete.</p>
 <p><strong>Important:</strong> There is an ambiguity in declarative tooling between "create"
 and "undelete". When given an alias which was previously deleted and a
@@ -427,8 +427,8 @@ anything to undelete at all.</p>
 <p>Declarative-friendly resources <strong>must</strong> use long-running operations for both
 soft delete and undelete. The service <strong>may</strong> return an LRO that is already set
 to done if the request is effectively immediate.</p>
-<p>Declarative-friendly resources <strong>must</strong> include <code>validate_only</code> (AIP-163) and
-<code>etag</code> (AIP-154) in their <code>Undelete</code> methods.</p>
+<p>Declarative-friendly resources <strong>must</strong> include <code>validate_only</code> (<a href="/163">AEP-163</a>) and
+<code>etag</code> (<a href="/154">AEP-154</a>) in their <code>Undelete</code> methods.</p>
 <h3 id="errors">Errors</h3>
 <p>If the user does not have permission to access the resource, regardless of
 whether or not it exists, the service <strong>must</strong> error with <code>403 Forbidden</code>.
@@ -444,10 +444,10 @@ resource is already deleted, the service <strong>must</strong> succeed if <code>
 resource is not deleted, the service <strong>must</strong> error with <code>409 Conflict</code>.</p>
 <h2 id="further-reading">Further reading</h2>
 <ul>
-<li>For the <code>Delete</code> standard method, see AIP-135.</li>
-<li>For long-running operations, see AIP-151.</li>
-<li>For resource freshness validation (<code>etag</code>), see AIP-154.</li>
-<li>For change validation (<code>validate_only</code>), see AIP-163.</li>
+<li>For the <code>Delete</code> standard method, see <a href="/135">AEP-135</a>.</li>
+<li>For long-running operations, see <a href="/151">AEP-151</a>.</li>
+<li>For resource freshness validation (<code>etag</code>), see <a href="/154">AEP-154</a>.</li>
+<li>For change validation (<code>validate_only</code>), see <a href="/163">AEP-163</a>.</li>
 </ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the

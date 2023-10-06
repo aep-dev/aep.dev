@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-1: AIP Purpose and Guidelines</title>
+    <title>AEP-1: AEP Purpose and Guidelines</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=df0881fc">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=df0881fc">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=b27cc4d7">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=b27cc4d7">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,12 +18,12 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=df0881fc"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=b27cc4d7"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
-<script type="text/javascript" src="/assets/js/graphviz/viz.js?v=df0881fc"></script>
-<script type="text/javascript" src="/assets/js/graphviz/lite.render.js?v=df0881fc"></script>
-<script type="text/javascript" src="/assets/js/aip/aip-graphviz.js?v=df0881fc"></script>
+<script type="text/javascript" src="/assets/js/graphviz/viz.js?v=b27cc4d7"></script>
+<script type="text/javascript" src="/assets/js/graphviz/lite.render.js?v=b27cc4d7"></script>
+<script type="text/javascript" src="/assets/js/aip/aip-graphviz.js?v=b27cc4d7"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -157,7 +157,7 @@
     <li class="nav-item nav-item-active">
       <a href="/1">
         <span class="aep-number">1</span>
-        AIP Purpose and Guidelines
+        AEP Purpose and Guidelines
       </a>
     </li>
     <li class="nav-item">
@@ -250,7 +250,7 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">AIP Purpose and Guidelines</th></tr>
+    <tr><th colspan="2">AEP Purpose and Guidelines</th></tr>
     <tr><td>Number</td><td>1</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/1">aep.dev/1</a></td></tr>
     <tr><td>State</td><td>Reviewing</td></tr>
@@ -260,8 +260,8 @@
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#what-is-an-aip">What is an AIP?</a></li>
-<li><a href="#adopting-aips">Adopting AIPs</a><ul>
+<li><a href="#what-is-an-aep">What is an AEP?</a></li>
+<li><a href="#adopting-aeps">Adopting AEPs</a><ul>
 <li><a href="#technical-leadership">Technical leadership</a></li>
 </ul>
 </li>
@@ -275,10 +275,10 @@
 </li>
 <li><a href="#workflow">Workflow</a><ul>
 <li><a href="#overview">Overview</a></li>
-<li><a href="#proposing-an-aip">Proposing an AIP</a></li>
-<li><a href="#accepting-an-aip">Accepting an AIP</a></li>
-<li><a href="#withdrawing-or-rejecting-an-aip">Withdrawing or Rejecting an AIP</a></li>
-<li><a href="#replacing-an-aip">Replacing an AIP</a></li>
+<li><a href="#proposing-an-aep">Proposing an AEP</a></li>
+<li><a href="#accepting-an-aep">Accepting an AEP</a></li>
+<li><a href="#withdrawing-or-rejecting-an-aep">Withdrawing or Rejecting an AEP</a></li>
+<li><a href="#replacing-an-aep">Replacing an AEP</a></li>
 </ul>
 </li>
 </ul>
@@ -315,7 +315,7 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        AIP Purpose and Guidelines
+        AEP Purpose and Guidelines
       </li>
     </ol>
   </nav>
@@ -327,7 +327,7 @@
   close to its current state.
 </p>
   <h4 class="aep-number">AEP-1</h4>
-  <h1 id="aip-purpose-and-guidelines">AIP Purpose and Guidelines</h1>
+  <h1 id="aep-purpose-and-guidelines">AEP Purpose and Guidelines</h1>
 <p>Service APIs on the Internet continue to proliferate; having a machine-readable
 API is an expectation and prerequisite to adoption for many services. By some
 estimates, there are now more than 20,000 public REST APIs available.</p>
@@ -335,33 +335,33 @@ estimates, there are now more than 20,000 public REST APIs available.</p>
 even as companies grow and disparate teams work to deliver discrete services,
 APIs ought to remain simple, intuitive, and consistent.</p>
 <p>Therefore, it is increasingly necessary to have a corpus of documentation for
-API producers, reviewers, and other interested parties to reference. The AIP
+API producers, reviewers, and other interested parties to reference. The AEP
 collection provides a way to provide consistent documentation for API design
 guidance.</p>
-<h2 id="what-is-an-aip">What is an AIP?</h2>
-<p>AIP stands for <strong>API Improvement Proposal</strong>, which is a design document
+<h2 id="what-is-an-aep">What is an AEP?</h2>
+<p>AEP stands for <strong>API Enhancement Proposal</strong>, which is a design document
 providing high-level, concise documentation for API development.</p>
-<p>Companies that adopt the AIP program use them as a source of truth for
+<p>Companies that adopt the AEP program use them as a source of truth for
 API-related documentation, and the means by which service producers discuss and
-come to consensus on API guidance. AIPs are maintained as Markdown files with
-metadata in the AIP GitHub repository.</p>
-<h2 id="adopting-aips">Adopting AIPs</h2>
-<p>Companies <strong>may</strong> adopt the AIP system in one of two ways:</p>
+come to consensus on API guidance. AEPs are maintained as Markdown files with
+metadata in the AEP GitHub repository.</p>
+<h2 id="adopting-aeps">Adopting AEPs</h2>
+<p>Companies <strong>may</strong> adopt the AEP system in one of two ways:</p>
 <ul>
 <li>By applying the guidance described at <a href="https://aip.dev/">aip.dev</a>.</li>
-<li>By "forking" the AIP system and setting up their own subdomain.</li>
+<li>By "forking" the AEP system and setting up their own subdomain.</li>
 </ul>
 <p>Companies with an already-established corpus of services are unlikely to have
 exactly followed the guidance at <a href="https://aip.dev/">aip.dev</a>. Forking the system is valuable
 because the guidance becomes comparable. Forks <strong>must</strong> retain the same
-numbering system (AIP-2) to provide that comparability.</p>
+numbering system (<a href="/2">AEP-2</a>) to provide that comparability.</p>
 <h3 id="technical-leadership">Technical leadership</h3>
-<p>The AIP system, as well as the guidance on <a href="https://aip.dev/">aip.dev</a>, is overseen by the AIP
+<p>The AEP system, as well as the guidance on <a href="https://aip.dev/">aip.dev</a>, is overseen by the AEP
 technical steering committee. The committee is the set of people who make
-decisions on AIPs. The general goal is that the AIP process is collaborative
+decisions on AEPs. The general goal is that the AEP process is collaborative
 and that we largely work on the basis of consensus. However, a limited number
 of designated approvers is necessary, and these committee members will be
-approvers for each AIP on <a href="https://aip.dev/">aip.dev</a>.</p>
+approvers for each AEP on <a href="https://aip.dev/">aip.dev</a>.</p>
 <p>The technical steering committee membership is currently:</p>
 <ul>
 <li>Antoine Boyer (@tinnou), Netflix</li>
@@ -370,68 +370,68 @@ approvers for each AIP on <a href="https://aip.dev/">aip.dev</a>.</p>
 <li>Luke Sneeringer (@lukesneeringer), Google</li>
 </ul>
 <p>The committee is also responsible for the administrative and editorial aspects
-of shepherding AIPs and managing the AIP pipeline and workflow. They approve
-PRs to AIPs, assign proposal numbers, manage the agenda, set AIP states, and so
-forth. They also ensure that AIPs are readable (proper spelling, grammar,
+of shepherding AEPs and managing the AEP pipeline and workflow. They approve
+PRs to AEPs, assign proposal numbers, manage the agenda, set AEP states, and so
+forth. They also ensure that AEPs are readable (proper spelling, grammar,
 sentence structure, markup, etc.).</p>
 <p>Committee membership is by invitation of the current committee. The committee
 <strong>must not</strong> include more than two members from the same company.</p>
 <p><strong>Note:</strong> Companies that maintain their own fork of <a href="https://aip.dev/">aip.dev</a> select their
 own leadership and have full control of their fork's content.</p>
 <h2 id="states">States</h2>
-<p>At any given time, AIPs may exist in a variety of states as they work their way
+<p>At any given time, AEPs may exist in a variety of states as they work their way
 through the process. The following is a summary of each state.</p>
 <h3 id="reviewing">Reviewing</h3>
-<p>Initial discussion on most AIPs occurs in the initial pull request to submit
-the AIP. Once this PR is merged, the AIP exists in the "Reviewing" state. This
+<p>Initial discussion on most AEPs occurs in the initial pull request to submit
+the AEP. Once this PR is merged, the AEP exists in the "Reviewing" state. This
 means that the authors and the technical steering committee have reached a
 general consensus on the proposal.</p>
 <p>At this stage, the committee may request changes or suggest alternatives to the
 proposal before moving forward, but there is a general expectation that the
 proposal will move forward and it is usually safe to "early adopt" it.</p>
-<p>An AIP <strong>must</strong> be in the reviewing state for at least 14 days before being
+<p>An AEP <strong>must</strong> be in the reviewing state for at least 14 days before being
 approved, and the committee <strong>should</strong> send appropriate communication regarding
 the pending approval.</p>
-<p><strong>Note:</strong> As a formal matter, one AIP approver (other than the author) <strong>must</strong>
-provide formal signoff to advance an AIP to the reviewing state. Additionally,
+<p><strong>Note:</strong> As a formal matter, one AEP approver (other than the author) <strong>must</strong>
+provide formal signoff to advance an AEP to the reviewing state. Additionally,
 there <strong>must not</strong> be formal objections ("changes requested" on the GitHub PR)
 from other approvers.</p>
 <h3 id="approved">Approved</h3>
-<p>Once an AIP has been agreed upon, it enters "approved" state and is considered
+<p>Once an AEP has been agreed upon, it enters "approved" state and is considered
 "best current practice".</p>
-<p>AIPs <strong>may</strong> be edited after they are approved, either to correct grammar or
+<p>AEPs <strong>may</strong> be edited after they are approved, either to correct grammar or
 word choices, or to clarify semantic guidance (in response to reader
 questions). In rare occasions, new guidance <strong>may</strong> be added.</p>
 <p>Clarifications and new guidance <strong>must</strong> be reflected in the changelog.
 Correction of typos or minor language alterations <strong>may</strong> be done silently.</p>
-<p><strong>Note:</strong> As a formal matter, two AIP approvers (other than the author)
-<strong>must</strong> provide formal signoff to advance an AIP to the approved state.
+<p><strong>Note:</strong> As a formal matter, two AEP approvers (other than the author)
+<strong>must</strong> provide formal signoff to advance an AEP to the approved state.
 Additionally, there <strong>must not</strong> be formal objections ("changes requested" on
 the GitHub PR) from other approvers.</p>
 <h3 id="final">Final</h3>
-<p>If an AIP has been approved for a significant period and the technical steering
+<p>If an AEP has been approved for a significant period and the technical steering
 committee is certain that no further guidance will be needed, they <strong>may</strong> move
-the AIP in to "final" state.</p>
-<p>AIPs in the final state <strong>must not</strong> be amended with new guidance. They <strong>may</strong>
+the AEP in to "final" state.</p>
+<p>AEPs in the final state <strong>must not</strong> be amended with new guidance. They <strong>may</strong>
 be editied to correct spelling, grammar, or clarity provided there are no
 semantic changes.</p>
-<p><strong>Note:</strong> As a formal matter, two AIP approvers <strong>must</strong> provide formal signoff
-to advance an AIP to the final state. Additionally, there <strong>must not</strong> be
+<p><strong>Note:</strong> As a formal matter, two AEP approvers <strong>must</strong> provide formal signoff
+to advance an AEP to the final state. Additionally, there <strong>must not</strong> be
 formal objections ("changes requested" on the GItHub PR) from other approvers.</p>
 <h3 id="replaced">Replaced</h3>
-<p>If an AIP has been replaced by another AIP, it enters "replaced" state. The AIP
+<p>If an AEP has been replaced by another AEP, it enters "replaced" state. The AEP
 <strong>must</strong> include a notice explaining the replacement and rationale (the
-replacement AIP <strong>should</strong> also clearly explain the rationale).</p>
-<p>In general, service producers rely primarily on AIPs in the "approved" state.
-Service producers <strong>may</strong> rely on AIPs in the "reviewing" state</p>
+replacement AEP <strong>should</strong> also clearly explain the rationale).</p>
+<p>In general, service producers rely primarily on AEPs in the "approved" state.
+Service producers <strong>may</strong> rely on AEPs in the "reviewing" state</p>
 <h3 id="withdrawn">Withdrawn</h3>
-<p>If an AIP is withdrawn by the author or champion, or is rejected by the
+<p>If an AEP is withdrawn by the author or champion, or is rejected by the
 technical steering committee after reaching the "reviewing" state, it enters
-"withdrawn" state. Withdrawn AIPs remain accessible, but are removed from the
+"withdrawn" state. Withdrawn AEPs remain accessible, but are removed from the
 indexes; they provide documentation and reference to inform future discussions.</p>
 <h2 id="workflow">Workflow</h2>
-<p>The following workflow describes the process for proposing an AIP, and moving
-an AIP from proposal to implementation to final acceptance.</p>
+<p>The following workflow describes the process for proposing an AEP, and moving
+an AEP from proposal to implementation to final acceptance.</p>
 <h3 id="overview">Overview</h3>
 <div class="highlight language-graphviz"><pre><span></span><code><span class="k">digraph</span><span class="w"> </span><span class="nt">d_front_back</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="na">rankdir</span><span class="p">=</span><span class="s">LR</span><span class="p">;</span><span class="w"></span>
@@ -451,46 +451,46 @@ an AIP from proposal to implementation to final acceptance.</p>
 <span class="w">  </span><span class="nt">final</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nt">replaced</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="na">style</span><span class="p">=</span><span class="s">dashed</span><span class="w"> </span><span class="na">color</span><span class="p">=</span><span class="s">lightsteelblue3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h3 id="proposing-an-aip">Proposing an AIP</h3>
-<p>In order to propose an AIP, first open a pull request with a draft AIP; the AIP
-should conform to the guidance in AIP-8. Most AIPs <strong>should</strong> be no more than
+<h3 id="proposing-an-aep">Proposing an AEP</h3>
+<p>In order to propose an AEP, first open a pull request with a draft AEP; the AEP
+should conform to the guidance in <a href="/8">AEP-8</a>. Most AEPs <strong>should</strong> be no more than
 two pages if printed out.</p>
-<p>If the technical steering committee has suggested an AIP number, use that;
+<p>If the technical steering committee has suggested an AEP number, use that;
 otherwise use 99 (and expect to change it during the course of the review).</p>
 <p><strong>Important:</strong> Ensure that the PR is editable by maintainers.</p>
-<p>In most circumstances, the committee will assign the proposal an AIP number and
+<p>In most circumstances, the committee will assign the proposal an AEP number and
 begin discussion. Once there is consensus, the committee will merge the PR, and
-the AIP will enter the "reviewing" state.</p>
-<p>The committee <strong>may</strong> reject an AIP outright if they have an obvious reason to
-do so (e.g. the proposal was already discussed and rejected in another AIP or
+the AEP will enter the "reviewing" state.</p>
+<p>The committee <strong>may</strong> reject an AEP outright if they have an obvious reason to
+do so (e.g. the proposal was already discussed and rejected in another AEP or
 is fundamentally unsound), in which case the PR is not merged.</p>
-<h3 id="accepting-an-aip">Accepting an AIP</h3>
+<h3 id="accepting-an-aep">Accepting an AEP</h3>
 <p>The editors will work together to ensure that qualified proposals do not linger
 in review.</p>
-<p>To gain final approval, an AIP <strong>must</strong> be approved by, at minimum, two members
+<p>To gain final approval, an AEP <strong>must</strong> be approved by, at minimum, two members
 of the technical steering committee. Additionally, there <strong>should not</strong> be any
 committee members requesting significant changes (indicated by the use of the
 "changes requested" feature on GitHub).</p>
-<p><strong>Note:</strong> If an AIP editor is the primary author of an AIP, then at least two
+<p><strong>Note:</strong> If an AEP editor is the primary author of an AEP, then at least two
 <em>other</em> editors must approve it.</p>
-<h3 id="withdrawing-or-rejecting-an-aip">Withdrawing or Rejecting an AIP</h3>
-<p>The author of an AIP may decide, after further consideration, that an AIP
-should not advance. If so, the author may withdraw the AIP by updating the PR
+<h3 id="withdrawing-or-rejecting-an-aep">Withdrawing or Rejecting an AEP</h3>
+<p>The author of an AEP may decide, after further consideration, that an AEP
+should not advance. If so, the author may withdraw the AEP by updating the PR
 adding a notice of withdrawal with an explanation of the rationale.</p>
 <p>Additionally, the author may be unable to get consensus among the group and the
-technical steering committee may elect to reject the AIP. In this situation,
+technical steering committee may elect to reject the AEP. In this situation,
 the committee shall amend the PR adding a notice of rejection with an
 explanation of the rationale. In both cases, the committee <strong>must</strong> update the
 state accordingly and submit the PR.</p>
-<h3 id="replacing-an-aip">Replacing an AIP</h3>
-<p>In rare cases, it may be necessary to replace an AIP with another one. This is
-not general practice: minor edits to approved AIPs are acceptable, and AIPs
+<h3 id="replacing-an-aep">Replacing an AEP</h3>
+<p>In rare cases, it may be necessary to replace an AEP with another one. This is
+not general practice: minor edits to approved AEPs are acceptable, and AEPs
 only enter final state when there is high confidence that further edits will
 not be necessary.</p>
 <p>However, if new guidance fundamentally alters the old guidance in some way,
-then the technical steering committee <strong>should</strong> create a new AIP that, once
+then the technical steering committee <strong>should</strong> create a new AEP that, once
 approved, will replace the old one. The old one then enters "Replaced" state,
-and will link to the new, current AIP.</p>
+and will link to the new, current AEP.</p>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
