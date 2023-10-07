@@ -7,15 +7,17 @@ approval privileges to the aep-dev organization.
 
 | Name            | GitHub                                           | Organization |
 | --------------- | ------------------------------------------------ | ------------ |
-| Yusuke Tsutsumi | [@toumorokoshi](https://github.com/toumorokoshi) | Cruise       |
-| Mak Ahmad       | [@makahmad](https://github.com/makahmad)         |              |
-| Richard Frankel | [@rofrankel](https://github.com/rofrankel)       | Roblox       |
-| Dan Hudlow      | [@hudlow](https://github.com/hudlow)             | IBM          |
 | Alfred Fuller   | [@alfus](https://github.com/alfus)               | Buf          |
 | Jeff Albert     | [@monkey-jeff](https://github.com/monkey-jeff)   | Salesforce   |
-| Mike Kistler    | [@mkistler](https://github.com/mkistler)         | Microsoft    |
-| Richard Gibson  | [@gibson042](https://github.com/gibson042)       | Algoric      |
 | JJ Geewax       | [@jgeewax](https://github.com/jgeewax)           | Meta         |
+| Dan Hudlow      | [@hudlow](https://github.com/hudlow)             | IBM          |
+| Mike Kistler    | [@mkistler](https://github.com/mkistler)         | Microsoft    |
+| Mak Ahmad       | [@makahmad](https://github.com/makahmad)         |              |
+| Marsh Gardiner  | [@earth2marsh](https://github.com/earth2marsh)   |              |
+| Richard Frankel | [@rofrankel](https://github.com/rofrankel)       | Roblox       |
+| Richard Gibson  | [@gibson042](https://github.com/gibson042)       | Algoric      |
+| Yusuke Tsutsumi | [@toumorokoshi](https://github.com/toumorokoshi) | Cruise       |
+
 
 ## Emiritus
 
