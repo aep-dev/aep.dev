@@ -21,7 +21,7 @@ approval privileges to the aep-dev organization.
 
 ## Emiritus
 
-The following table enumerates previous maintainers of aip.dev, the original
+The following table enumerates previous maintainers of aep.dev, the original
 style guide from which aep.dev was forked.
 
 | Name            | GitHub                                               | Organization |

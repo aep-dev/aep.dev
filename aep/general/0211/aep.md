@@ -49,7 +49,7 @@ another's.
 
 [RFC 7231 §6.5.3][] states that services are permitted to use `404 Not Found`
 in lieu of `403 Forbidden` in situations where the service does not want to
-divulge existance, whereas this AIP argues for the use of `403 Forbidden`
+divulge existance, whereas this AEP argues for the use of `403 Forbidden`
 instead. We take this position for the following reasons:
 
 - The practice of "getting `404 Not Found` until you have enough permission to

@@ -1,4 +1,4 @@
-# API Improvement Proposals: Project Charter
+# API Enhancement Proposals: Project Charter
 
 ## Article I: Purpose
 

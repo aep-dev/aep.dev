@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package aip.type;
+package aep.type;
 
 option cc_enable_arenas = true;
-option go_package = "aip.golang.org/genproto/common-components/type/money;money";
+option go_package = "aep.golang.org/genproto/common-components/type/money;money";
 option java_multiple_files = true;
 option java_outer_classname = "MoneyProto";
-option java_package = "dev.aip.type";
-option objc_class_prefix = "AIP";
+option java_package = "dev.aep.type";
+option objc_class_prefix = "AEP";
 
-import "aip/type/decimal.proto";
+import "aep/type/decimal.proto";
 
 // Represents an amount of money with its currency type.
 //

@@ -103,7 +103,7 @@ not equivalent to the old one).
 
 ## Further reading
 
-- For how to retry on errors in client libraries, see AIP-194.
+- For how to retry on errors in client libraries, see AEP-194.
 
 ## Changelog
 

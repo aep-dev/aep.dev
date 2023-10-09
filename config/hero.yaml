@@ -1,30 +1,30 @@
 ---
 buttons:
-  - text: Explore the AIPs
+  - text: Explore the AEPs
     href: /general
   - text: Learn how it works
     href: /1
 shortcuts:
   - title: Curious about the basics?
     description: |
-      AIPs are a combination of design guidance and a system we use to manage
-      and track that guidance. Learn more about how the AIP program works in
-      the first AIP!
+      AEPs are a combination of design guidance and a system we use to manage
+      and track that guidance. Learn more about how the AEP program works in
+      the first AEP!
     button:
       href: /1
-      text: Read AIP-1
+      text: Read AEP-1
   - title: Want to help?
     description: |
-      Interested in helping with AIPs? Contribute by proposing new guidance,
-      commenting on existing AIPs, or fixing typos. All contributions are
+      Interested in helping with AEPs? Contribute by proposing new guidance,
+      commenting on existing AEPs, or fixing typos. All contributions are
       welcome!
     button:
       href: /contributing
       text: Contribute to the project
-  - title: Want to use AIPs for your organization?
+  - title: Want to use AEPs for your organization?
     description: |
-      AIPs are designed to be useful outside of Google. Take a look at how you
-      might choose which AIPs are best suited to your API design needs.
+      AEPs are designed to be useful outside of Google. Take a look at how you
+      might choose which AEPs are best suited to your API design needs.
     button:
       href: /adopting
       text: Learn more
@@ -34,5 +34,5 @@ shortcuts:
       questions</a>. If you don't find an answer there, file an issue on our
       GitHub repository.
     button:
-      href: https://github.com/aip-dev/google.aip.dev/issues
+      href: https://github.com/aep-dev/aep.dev/issues
       text: Ask us on GitHub

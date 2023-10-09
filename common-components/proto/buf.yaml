@@ -1,5 +1,5 @@
 version: v1
-name: buf.build/aip/common-components
+name: buf.build/aep/type
 breaking:
   use:
     - FILE
