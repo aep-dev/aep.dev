@@ -34,7 +34,7 @@ the leading slash:
     characters that require URL-escaping, or characters outside of ASCII.
   - If Unicode characters can not be avoided, resource paths **must** be stored
     in Normalization Form C (see [AIP-210][]).
-- Eacg resource **must** expose a `path` field that contains its resource path.
+- Each resource **must** expose a `path` field that contains its resource path.
   - Resources **may** provide the resource ID, i.e. the last segment of the
     path, as a separate field named `id`.
   - Resources **may** expose a separate, system-generated unique ID field
