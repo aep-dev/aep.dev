@@ -3,8 +3,8 @@
 Most APIs expose _resources_ (their primary nouns) which users are able to
 create, retrieve, and manipulate. Additionally, resources have _paths_: each
 resource has a unique identifying path that users use to reference that
-resource, and these paths are what users should _store_ as the canonical identifier
-for the resources.
+resource, and these paths are what users should _store_ as the canonical
+identifier for the resources.
 
 ## Guidance
 
@@ -15,25 +15,21 @@ information on referring to resources across APIs.)
 Resource paths are formatted according to the [URI path schema][], but without
 the leading slash:
 
-    publishers/123/books/les-miserables
-    users/vhugo1802
+publishers/123/books/les-miserables users/vhugo1802
 
 - Resource path components **should** usually alternate between collection
   identifiers (example: `publishers`, `books`, `users`) and resource IDs
   (example: `123`, `les-miserables`, `vhugo1802`).
 - Resource paths **must** use the `/` character to separate individual segments
   of the resource path.
-  - Non-terminal segments of a resource path **must not** contain a `/`
-    character.
-  - The terminal segment of a resource path **should not** contain a `/`
-    character.
+- Each segment of a resource path **must not** contain a `/` character.
 - Resource paths **should** only use characters available in DNS names, as
   defined by [RFC-1123](https://tools.ietf.org/html/rfc1123).
   - Additionally, resource IDs **should not** use upper-case letters.
   - If additional characters are necessary, resource paths **should not** use
     characters that require URL-escaping, or characters outside of ASCII.
   - If Unicode characters can not be avoided, resource paths **must** be stored
-    in Normalization Form C (see [AIP-210][]).
+    in Normalization Form C (see [AEP-210][]).
 - Each resource **must** expose a `path` field that contains its resource path.
   - Resources **may** provide the resource ID, i.e. the last segment of the
     path, as a separate field named `id`.
@@ -49,7 +45,7 @@ context), and are only required to be unique within that scope. For this
 reason, they are sometimes called _relative resource paths_ to distinguish them
 from _full resource paths_ (discussed below).
 
-[aip-210]: ./0210.md
+[aep-210]: ./0210.md
 [uri path schema]: https://datatracker.ietf.org/doc/html/rfc3986#appendix-A
 
 ### Collection identifiers
@@ -63,10 +59,10 @@ form of the noun used for the resource. (For example, a collection of
 - Collection identifiers **must** begin with a lower-cased letter and contain
   only lower-case ASCII letters, numbers. and hyphens (`/[a-z][a-z0-9-]*/`).
 - Collection identifiers **must** be plural.
-  - In situations where there is no plural word ("info"), or where the singular
-    and plural terms are the same ("moose"), the non-pluralized (singular) form
-    is correct. Collection segments **must not** "coin" words by adding "s" in
-    such cases (e.g. avoid "infos").
+- In situations where there is no plural word ("info"), or where the singular
+  and plural terms are the same ("moose"), the non-pluralized (singular) form
+  is correct. Collection segments **must not** "coin" words by adding "s" in
+  such cases (e.g. avoid "infos").
 
 #### Nested collections
 
@@ -101,23 +97,22 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
   creation), optionally set by users (optional on resource creation,
   server-generated if unset), or never set by users (not accepted at resource
   creation). They **should** be immutable once created.
-  - If resource IDs are user-settable, the API **must** document allowed
-    formats. User-settable resource IDs **should** conform to [RFC-1034][];
-    which restricts to letters, numbers, and hyphen, with the first character a
-    letter, the last a letter or a number, and a 63 character maximum.
-    - Additionally, user-settable resource IDs **should** restrict letters to
-      lower-case (`^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`).
-    - Characters outside of ASCII **should not** be permitted; however, if
-      Unicode characters are necessary, APIs **must** follow guidance in
-      [AIP-210][].
-    - User-settable IDs **should not** be permitted to be a UUID (or any value
-      that syntactically appears to be a UUID).
-  - If resource IDs are not user-settable, the API **should** document the
-    basic format, and any upper boundaries (for example, "at most 63
-    characters").
-  - For more information, see the [create][] standard method.
+- If resource IDs are user-settable, the API **must** document allowed formats.
+  User-settable resource IDs **should** conform to [RFC-1034][]; which
+  restricts to letters, numbers, and hyphen, with the first character a letter,
+  the last a letter or a number, and a 63 character maximum.
+  - Additionally, user-settable resource IDs **should** restrict letters to
+    lower-case (`^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`).
+  - Characters outside of ASCII **should not** be permitted; however, if
+    Unicode characters are necessary, APIs **must** follow guidance in
+    [AEP-210][].
+  - User-settable IDs **should not** be permitted to be a UUID (or any value
+    that syntactically appears to be a UUID).
+- If resource IDs are not user-settable, the API **should** document the basic
+  format, and any upper boundaries (for example, "at most 63 characters").
+- For more information, see the [create][] standard method.
 
-[aip-128]: ./0128.md
+[aep-128]: ./0128.md
 [create]: ./0133.md#user-specified-ids
 [rfc-1034]: https://tools.ietf.org/html/rfc1034
 
@@ -177,21 +172,21 @@ and the full resource path does not change between these.
 When defining a resource, the first field **should** be the resource path,
 which **must** be of type `string` and **must** be called `path` for the
 resource path. The message **should** include a `google.api.resource`
-annotation declaring the type (see [AIP-123][] for more on this).
+annotation declaring the type (see [AEP-123][] for more on this).
 
 ```proto
 // A representation of a book in the library.
 message Book {
-  option (google.api.resource) = {
-    type: "apis.example.com/library/Book"
-    pattern: "publishers/{publisher}/books/{book}"
-  };
+option (google.api.resource) = {
+  type: "apis.example.com/library/Book"
+  pattern: "publishers/{publisher}/books/{book}"
+};
 
-  // The resource path of the book.
-  // Format: publishers/{publisher}/books/{book}
-  string path = 1;
+// The resource path of the book.
+// Format: publishers/{publisher}/books/{book}
+string path = 1;
 
-  // Other fields...
+// Other fields...
 }
 ```
 
@@ -200,20 +195,20 @@ When defining a method that retrieves or acts on an already-existing resource
 **should** be the resource path, which **must** be of type `string` and
 **must** be called `path` for the resource path. The field **should** also be
 annotated with the `google.api.resource_reference` annotation, referencing the
-resource type ([AIP-123][]).
+resource type ([AEP-123][]).
 
 ```proto
 // Request message for ArchiveBook
 message ArchiveBookRequest {
-  // The book to archive.
-  // Format: publishers/{publisher}/books/{book}
-  string path = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "apis.example.com/library/Book"
-    }];
+// The book to archive.
+// Format: publishers/{publisher}/books/{book}
+string path = 1 [
+  (google.api.field_behavior) = REQUIRED,
+  (google.api.resource_reference) = {
+    type: "apis.example.com/library/Book"
+  }];
 
-  // Other fields...
+// Other fields...
 }
 ```
 
@@ -221,7 +216,7 @@ message ArchiveBookRequest {
 other use cases, either use a different term or prepend an adjective (for
 example: `file_path`).
 
-[aip-123]: ./0123.md
+[aep-123]: ./0123.md
 
 ### Fields representing a resource's parent
 
@@ -230,18 +225,18 @@ resource to a collection (such as `ListBooks` or `CreateBook`), the first field
 of the request message **should** be of type `string` and **should** be called
 `parent` for the resource path of the collection. The `parent` field **should**
 also be annotated with the `google.api.resource_reference` annotation,
-referencing the parent's resource type ([AIP-123][]).
+referencing the parent's resource type ([AEP-123][]).
 
 ```proto
 // Request message for ListBooks.
 message ListBooksRequest {
-  // The publisher to list books from.
-  // Format: publishers/{publisher_id}
-  string parent = 1 [(google.api.resource_reference) = {
-    type: "apis.example.com/library/Publisher"
-  }];
+// The publisher to list books from.
+// Format: publishers/{publisher_id}
+string parent = 1 [(google.api.resource_reference) = {
+  type: "apis.example.com/library/Publisher"
+}];
 
-  // Other fields (e.g. max_page_size, page_token, filter, etc.)...
+// Other fields (e.g. max_page_size, page_token, filter, etc.)...
 }
 ```
 
@@ -252,17 +247,17 @@ instead:
 ```proto
 // Request message for ListBooks.
 message ListBooksRequest {
-  // The parent to list books from.
-  // Format:
-  //   - publishers/{publisher_id}
-  //   - authors/{author_id}
-  string parent = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      child_type: "apis.example.com/library/Book"
-    }];
+// The parent to list books from.
+// Format:
+//   - publishers/{publisher_id}
+//   - authors/{author_id}
+string parent = 1 [
+  (google.api.field_behavior) = REQUIRED,
+  (google.api.resource_reference) = {
+    child_type: "apis.example.com/library/Book"
+  }];
 
-  // Other fields (e.g. max_page_size, page_token, filter, etc.)...
+// Other fields (e.g. max_page_size, page_token, filter, etc.)...
 }
 ```
 
@@ -286,22 +281,22 @@ equivalent to the corresponding message's name in snake case.
 ```proto
 // A representation of a book in a library.
 message Book {
-  option (google.api.resource) = {
-    type: "apis.example.com/library/Book"
-    pattern: "publishers/{publisher}/books/{book}"
-  };
+option (google.api.resource) = {
+  type: "apis.example.com/library/Book"
+  pattern: "publishers/{publisher}/books/{book}"
+};
 
-  // Path of the book.
-  // Format is `publishers/{publisher}/books/{book}`
-  string path = 1;
+// Path of the book.
+// Format is `publishers/{publisher}/books/{book}`
+string path = 1;
 
-  // The shelf where the book currently sits.
-  // Format is `shelves/{shelf}`.
-  string shelf = 2 [(google.api.resource_reference) = {
-    type: "apis.example.com/library/Shelf"
-  }];
+// The shelf where the book currently sits.
+// Format is `shelves/{shelf}`.
+string shelf = 2 [(google.api.resource_reference) = {
+  type: "apis.example.com/library/Shelf"
+}];
 
-  // Other fields...
+// Other fields...
 }
 ```
 
@@ -314,5 +309,5 @@ alone is strictly necessary, the field **should** use an `_id` suffix (e.g.
 ## Further reading
 
 - For evolving resource paths over time, see
-  [AIP-180](./0180.md#changing-resource-paths).
-- For resource types, see [AIP-123][].
+  [AEP-180](./0180.md#changing-resource-paths).
+- For resource types, see [AEP-123][].
