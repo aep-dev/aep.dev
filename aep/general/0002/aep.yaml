@@ -1,0 +1,11 @@
+---
+id: 2
+state: approved
+created: 2023-10-12
+placement:
+  category: meta
+  order: 10
+js_scripts:
+  - /assets/js/graphviz/viz.js
+  - /assets/js/graphviz/lite.render.js
+  - /assets/js/aip/aip-graphviz.js
