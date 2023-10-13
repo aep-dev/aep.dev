@@ -6,8 +6,8 @@ AEP provides a numbering system that:
 
 - Groups AEPs primarily by their purpose, and secondarily by the general theme
   they are discussing.
-- Allows for new AEPs to be added incrementally, without adjusting the
-  numbers of existing AEPs.
+- Allows for new AEPs to be added incrementally, without adjusting the numbers
+  of existing AEPs.
 
 ## AEP Blocks
 
@@ -17,7 +17,7 @@ The list of blocks are:
 | --------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1-999     | meta topics     | topics that are not directly related to API guidance, but provide guidance or clarity for the AEPs themselves                                                                         |
 | 1000-1999 | specification   | APIs which are AEP-compliant **must** adhere to these AEPs. Clients authors may read these AEPs to determine what behavior they can rely on when integrating with AEP-compliant APIs. |
-| 2000-2999 | design patterns | Best practice design patterns for common API use cases. API authors should read these AEPs to help with the  design of their APIs.                                                    |
+| 2000-2999 | design patterns | Best practice design patterns for common API use cases. API authors should read these AEPs to help with the design of their APIs.                                                     |
 | 3000-9999 | reserved        | Reserved for future use by the AEP project.                                                                                                                                           |
 
 ## Organization-specific AEPs
