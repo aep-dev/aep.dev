@@ -2,7 +2,7 @@
 
 ## Article I: Purpose
 
-1. The API Extension Proposals (AEP) project exists to help developers and
+1. The API Enhancement Proposals (AEP) project exists to help developers and
    organizations build clear, consistent network APIs and clients by providing
    an extensible set of design guidelines (AEPs) and an ecosystem of tools to
    apply those rules in practice.
