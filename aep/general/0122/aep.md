@@ -2,9 +2,9 @@
 
 Most APIs expose _resources_ (their primary nouns) which users are able to
 create, retrieve, and manipulate. Additionally, resources have _paths_: each
-resource has a unique identifying path that users use to reference that
-resource, and these paths are what users should _store_ as the canonical
-identifier for the resources.
+resource has a unique (within the API service) identifying path that users use
+to reference that resource, and these paths are what users should _store_ as
+the canonical identifier for the resources.
 
 ## Guidance
 
