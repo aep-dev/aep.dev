@@ -110,7 +110,7 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
   - User-settable IDs **should not** be permitted to be a UUID (or any value
     that syntactically appears to be a UUID).
   - Field annotations **should** use [protovalidate][] in protobuf and
-    `@pattern` with OAS/JSON Schema.
+    [`pattern`][] with OAS/JSON Schema.
 - If resource IDs are not user-settable, the API **should** document the basic
   format, and any upper boundaries (for example, "at most 63 characters").
 - For more information, see the [create][] standard method.
@@ -317,4 +317,5 @@ alone is strictly necessary, the field **should** use an `_id` suffix (e.g.
 
 <!-- prettier-ignore-start -->
 [protovalidate]: https://github.com/bufbuild/protovalidate
+[`pattern`]: https://json-schema.org/understanding-json-schema/reference/string#regexp
 <!-- prettier-ignore-end -->
