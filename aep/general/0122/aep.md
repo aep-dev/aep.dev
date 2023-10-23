@@ -97,10 +97,11 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
   creation), optionally set by users (optional on resource creation,
   server-generated if unset), or never set by users (not accepted at resource
   creation). They **should** be immutable once created.
-- If resource IDs are user-settable, the API **must** document allowed formats.
-  User-settable resource IDs **should** conform to [RFC-1034][]; which
-  restricts to letters, numbers, and hyphen, with the first character a letter,
-  the last a letter or a number, and a 63 character maximum.
+- If resource IDs are user-settable, the API **must** document and/or annotate
+  the field with the allowed formats. User-settable resource IDs **should**
+  conform to [RFC-1034][]; which restricts to letters, numbers, and hyphen,
+  with the first character a letter, the last a letter or a number, and a 63
+  character maximum.
   - Additionally, user-settable resource IDs **should** restrict letters to
     lower-case (`^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`).
   - Characters outside of ASCII **should not** be permitted; however, if
@@ -108,6 +109,8 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
     [AEP-210][].
   - User-settable IDs **should not** be permitted to be a UUID (or any value
     that syntactically appears to be a UUID).
+  - Field annotations **should** use [protovalidate][] in protobuf and
+    `@pattern` with OAS/JSON Schema.
 - If resource IDs are not user-settable, the API **should** document the basic
   format, and any upper boundaries (for example, "at most 63 characters").
 - For more information, see the [create][] standard method.
@@ -311,3 +314,7 @@ alone is strictly necessary, the field **should** use an `_id` suffix (e.g.
 - For evolving resource paths over time, see
   [AEP-180](./0180.md#changing-resource-paths).
 - For resource types, see [AEP-123][].
+
+<!-- prettier-ignore-start -->
+[protovalidate]: https://github.com/bufbuild/protovalidate
+<!-- prettier-ignore-end -->
