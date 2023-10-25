@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>Search</title>
+    <title>AEP-2: AEP Numbering and Organization</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -9,14 +9,7 @@
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=4a176eed">
-    
-<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/search.css">
-<style type="text/css">
-  .tipue_search_content_url a:before {
-    content: 'https://aep.dev';
-  }
-</style>
-<link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=4a176eed">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=4a176eed">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -27,10 +20,10 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=4a176eed"></script>
     
-<script type="text/javascript" src="/assets/js/search/tipuesearch_content.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch_set.js"></script>
-<script type="text/javascript" src="/assets/js/search/tipuesearch.min.js"></script>
-<script type="text/javascript" src="/assets/js/search/pagination.js"></script>
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
+<script type="text/javascript" src="/assets/js/graphviz/viz.js?v=4a176eed"></script>
+<script type="text/javascript" src="/assets/js/graphviz/lite.render.js?v=4a176eed"></script>
+<script type="text/javascript" src="/assets/js/aip/aip-graphviz.js?v=4a176eed"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -153,7 +146,8 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        <nav id="aep-nav" class="docs-component-nav">
+        
+<nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -166,7 +160,7 @@
         AEP Purpose and Guidelines
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item nav-item-active">
       <a href="/2">
         <span class="aep-number">2</span>
         AEP Numbering and Organization
@@ -260,34 +254,157 @@
 </nav>
 <section id="jump-content">
           
+<aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">AEP Numbering and Organization</th></tr>
+    <tr><td>Number</td><td>2</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/2">aep.dev/2</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2023-10-25</td></tr>
+    <tr><td>Updated</td><td>2023-10-25</td></tr>
+  </table>
+
+  <section id="aep-toc" class="docs-component-sidebar-toc">
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#aep-numbers">AEP Numbers</a><ul>
+<li><a href="#core-aeps">Core AEPs</a></li>
+<li><a href="#organization-specific-aeps">Organization-specific AEPs</a></li>
+</ul>
+</li>
+<li><a href="#aep-categories">AEP Categories</a></li>
+<li><a href="#aep-slugs">AEP Slugs</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#why-aep-slugs">Why AEP Slugs</a></li>
+<li><a href="#why-aep-categories">Why AEP Categories</a></li>
+<li><a href="#why-organization-specific-aeps">Why Organization-specific AEPs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+  </section>
+
+  <section class="docs-component-sidebar-actions">
+    <ul>
+      <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0002">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0002">Edit this page</a></li>
+    </ul>
+  </section>
+</aside>
 <section id="aep-main" class="docs-component-main">
-<form method="GET" action="/search">
-  <div class="primary-search">
-    <input
-      type="text"
-      name="q"
-      id="tipue_search_input"
-      pattern=".{3,}"
-      title="At least 3 characters"
-      required
-    />
-    <button type="submit" class="glue-button glue-button--high-emphasis">
-      <div>Search</div>
-    </button>
-  </div>
-</form>
-
-<h3 class="search-results-header">Search results</h3>
-<div id="tipue_search_content"></div>
+  <section class="section-breadcrumbs">
+  <nav
+    class="glue-breadcrumbs glue-mod-mt-std glue-mod-mb-std"
+    aria-label="You are here."
+  >
+    <ol class="glue-breadcrumbs__list aep-breadcrumbs">
+      <li class="glue-breadcrumbs__item" aria-level="1">
+        <a class="glue-breadcrumbs__link" href="/">
+          API Enhancement Proposals
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
+          aria-level="3">
+        AEP Numbering and Organization
+      </li>
+    </ol>
+  </nav>
 </section>
-
-<script>
-  $.when($.ready).then(() =>
-    $('#tipue_search_input').tipuesearch({
-      wholeWords: false,
-    })
-  );
-</script>
+  
+  <h4 class="aep-number">AEP-2</h4>
+  <h1 id="aep-numbering-and-organization">AEP Numbering and Organization</h1>
+<p>This document describes the numbering system and general organization of AEPs.</p>
+<p>AEP numbers:</p>
+<ul>
+<li>Are unique. No two AEPs share the same number.</li>
+<li>Indicate the order in which they are authored.</li>
+</ul>
+<p>To help with organization and discovery, AEPs also have a category and a slug
+to easily discovery and refer to the AEP.</p>
+<p>See below for an example of an AEP id, category, and slug, expressed via YAML
+front-matter:</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span><span class="w"></span>
+<span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources&#39;</span><span class="w"></span>
+<span class="nt">slug</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;create&#39;</span><span class="w"></span>
+</code></pre></div>
+<h2 id="aep-numbers">AEP Numbers</h2>
+<h3 id="core-aeps">Core AEPs</h3>
+<p>To uniquely identify an AEP, each one is assigned a permanent number as it is
+merged.</p>
+<ul>
+<li>A merged AEP <strong>must</strong> use the next available number.</li>
+<li>AEPs <strong>must</strong> be numbered between 1 and 9999.</li>
+</ul>
+<h3 id="organization-specific-aeps">Organization-specific AEPs</h3>
+<ul>
+<li>Organizations <strong>may</strong> extend the AEPs with guidance that is relevant to them.</li>
+<li>Organization-specific AEPs <strong>must</strong> use AEP numbers 10000 or greater.</li>
+</ul>
+<h2 id="aep-categories">AEP Categories</h2>
+<p>To help with discovery of an AEP, each one is assigned a category: a string
+that describes a theme or grouping the AEP belongs in.</p>
+<ul>
+<li>The category of an AEP <strong>may</strong> change over time.</li>
+</ul>
+<p>As an example, the guidance around custom methods may grow to multiple AEPs. As
+such, AEPS may create a new category "custom-methods" and recategorize relevant
+AEPs (mutating custom methods, retrieval custom methods) under it.</p>
+<p>Categories are expressed in the YAML front-matter of an AEP:</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;custom-methods&#39;</span><span class="w"></span>
+</code></pre></div>
+<h2 id="aep-slugs">AEP Slugs</h2>
+<p>Each AEP is given a slug: a string by which it can be easily referenced and
+accessible via an URL on the aep.dev site.</p>
+<ul>
+<li>The slug of an AEP <strong>may</strong> change over time, sometimes to refer to a new
+  revision of an existing AEP.</li>
+<li>On the AEP site, the AEP is then available by with a path of the slug:
+  <code>/{slug}</code>.</li>
+</ul>
+<p>For example, an <a href="/123">AEP-123</a> may author guidance around a design pattern for
+revisions of resources, and be given the slug "revisions". If a new <a href="/1340">AEP-1340</a>
+that provides a significant change is authored, then it may be use the slug
+"revisions", with <a href="/123">AEP-123</a> given a slug like "revisions-deprecated".</p>
+<p>Slugs are expressed in the YAML front-matter of an AEP:</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">slug</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;create&#39;</span><span class="w"></span>
+</code></pre></div>
+<p>And is available via the path "/create" on the site hosting aep.dev.</p>
+<h2 id="rationale">Rationale</h2>
+<h3 id="why-aep-slugs">Why AEP Slugs</h3>
+<p>In the original aip.dev project, numbers were the primary identifier for an
+AEP. However, as a number does not hint to its purpose or the guidance it
+contains, conversations around AIPs were difficult to hold and often the AIPs
+were be referred to by an unofficial colloquial name rather than by its number.</p>
+<p>As such, AEPs provide the ability for a semantic slug.</p>
+<h3 id="why-aep-categories">Why AEP Categories</h3>
+<p>With aip.dev, numbers were an organizational scheme, with AIPs sorted by number
+in navigation. Using numbers resulted in difficulties putting a new AEP
+alongside related AEPs if a number was not available.</p>
+<p>By adding categories, new AEPs can easily be organized, as well as produce more
+granular categories as the need arises.</p>
+<h3 id="why-organization-specific-aeps">Why Organization-specific AEPs</h3>
+<p>Similar to <a href="google.aip.dev">google.aip.dev</a>, the organizations supporting the
+AEP project found the need for providing organization-specific guidance that is
+a superset of the open specification. By allocating a specific range,
+organizations may safely extend the AEPs without concern of conflicting AEP
+numbers.</p>
+  <footer>
+  Except as otherwise noted, the content of this page is licensed under the
+  <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+  Attribution 4.0 License</a>, and code samples are licensed under the
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>.
+  <span class="no-print">For details, see <a href="/licensing">content
+  licensing</a>.</span>
+</footer>
+</section>
 
         </section>
       </main>
