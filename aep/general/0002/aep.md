@@ -53,10 +53,13 @@ category: 'custom-methods'
 
 ## AEP Slugs
 
-Each AEP is given a slug: a string by which it can be easily referenced.
+Each AEP is given a slug: a string by which it can be easily referenced and
+accessible via an URL on the aep.dev site.
 
 - The slug of an AEP **may** change over time, sometimes to refer to a new
   revision of an existing AEP.
+- On the AEP site, the AEP is then available by with a path of the slug:
+  `/{slug}`.
 
 For example, an AEP-123 may author guidance around a design pattern for
 revisions of resources, and be given the slug "revisions". If a new AEP-1340
@@ -68,6 +71,8 @@ Slugs are expressed in the YAML front-matter of an AEP:
 ```yaml
 slug: 'create'
 ```
+
+And is available via the path "/create" on the site hosting aep.dev.
 
 ## Rationale
 
