@@ -96,7 +96,7 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
 - Resource IDs **may** be either always set by users (required on resource
   creation), optionally set by users (optional on resource creation,
   server-generated if unset), or never set by users (not accepted at resource
-  creation). They **should** be immutable once created.
+  creation). They **must** be immutable once created.
 - If resource IDs are user-settable, the API **must** document and/or annotate
   the field with the allowed formats. User-settable resource IDs **should**
   conform to [RFC-1034][]; which restricts to letters, numbers, and hyphen,
