@@ -17,9 +17,10 @@ the leading slash:
 
 publishers/123/books/les-miserables users/vhugo1802
 
-- Resource path components **should** usually alternate between collection
-  identifiers (example: `publishers`, `books`, `users`) and resource IDs
-  (example: `123`, `les-miserables`, `vhugo1802`).
+- Resource path components **must** alternate between collection identifiers
+  (example: `publishers`, `books`, `users`) and resource IDs (example: `123`,
+  `les-miserables`, `vhugo1802`), _except_ when [singleton resources][] are
+  present.
 - Resource paths **must** use the `/` character to separate individual segments
   of the resource path.
 - Each segment of a resource path **must not** contain a `/` character.
@@ -33,8 +34,6 @@ publishers/123/books/les-miserables users/vhugo1802
 - Each resource **must** expose a `path` field that contains its resource path.
   - Resources **may** provide the resource ID, i.e. the last segment of the
     path, as a separate field named `id`.
-  - Resources **may** expose a separate, system-generated unique ID field
-    (`uid`).
   - Resources **must not** expose tuples, self-links, or other forms of
     resource identification.
   - All ID fields **must** be strings.
@@ -47,6 +46,7 @@ from _full resource paths_ (discussed below).
 
 [aep-210]: ./0210.md
 [uri path schema]: https://datatracker.ietf.org/doc/html/rfc3986#appendix-A
+[singleton resources]: https://aep.dev/singletons
 
 ### Collection identifiers
 
