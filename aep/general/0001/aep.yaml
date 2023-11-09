@@ -2,6 +2,7 @@
 id: 1
 state: reviewing
 created: 2020-10-05
+slug: purpose
 placement:
   category: meta
   order: 10

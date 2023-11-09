@@ -1,7 +1,8 @@
 ---
 id: 154
 state: approved
+slug: etag
 created: 2019-07-24
 placement:
-  category: design-patterns
+  category: operations
   order: 30

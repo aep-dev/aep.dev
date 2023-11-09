@@ -1,6 +1,7 @@
 ---
 id: 211
 state: approved
+slug: auth
 created: 2021-02-24
 placement:
   category: design-patterns

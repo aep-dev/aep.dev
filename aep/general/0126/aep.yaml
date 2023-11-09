@@ -1,7 +1,8 @@
 ---
 id: 126
 state: approved
+slug: enums
 created: 2019-07-24
 placement:
-  category: resource-design
+  category: resources
   order: 60

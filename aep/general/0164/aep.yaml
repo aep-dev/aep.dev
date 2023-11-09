@@ -1,6 +1,7 @@
 ---
 id: 164
 state: approved
+slug: soft-delete
 created: 2020-10-06
 placement:
   category: design-patterns

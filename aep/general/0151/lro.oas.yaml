@@ -22,12 +22,15 @@ components:
       properties:
         name:
           type: string
-          description: The server-assigned name, which is only unique within the same service that originally returns it.
+          description:
+            The server-assigned name, which is only unique within the same
+            service that originally returns it.
         done:
           type: boolean
           description: >-
-            If the value is false, it means the operation is still in progress. If true, the operation is completed,
-            and either response or error is available.
+            If the value is false, it means the operation is still in progress.
+            If true, the operation is completed, and either response or error
+            is available.
         error:
           $ref: '#/components/schemas/Error'
       required:
