@@ -2,6 +2,7 @@
 id: 2
 state: approved
 created: 2023-10-25
+slug: numbering
 placement:
   category: meta
   order: 10

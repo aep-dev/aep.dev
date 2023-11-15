@@ -1,4 +1,4 @@
-# Quantities
+Quantities
 
 Many services need to represent a discrete quantity of items (number of bytes,
 number of miles, number of nodes, etc.).

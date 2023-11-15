@@ -1,7 +1,8 @@
 ---
 id: 158
 state: approved
+slug: pagination
 created: 2019-02-18
 placement:
-  category: design-patterns
+  category: operations
   order: 60

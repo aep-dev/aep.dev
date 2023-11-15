@@ -1,3 +1,16 @@
 ---
 title: General
 order: 0
+categories:
+  - code: meta
+    title: Meta
+  - code: resources
+    title: Resources
+  - code: standard-methods
+    title: Standard Methods
+  - code: fields
+    title: Fields
+  - code: operations
+    title: Fields
+  - code: design-patterns
+    title: Design Patterns
