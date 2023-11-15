@@ -1,8 +1,9 @@
 ---
 id: 151
 state: reviewing
-slug: lro
+slug: long-running-operations
 created: 2019-07-25
 placement:
   category: standard-methods
   order: 70
+redirect_from: "/lro"

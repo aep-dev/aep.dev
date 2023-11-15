@@ -1,8 +1,9 @@
 ---
 id: 211
 state: approved
-slug: auth
+slug: authorization
 created: 2021-02-24
 placement:
   category: design-patterns
   order: 115
+redirect_from: "/authz"
