@@ -4,6 +4,8 @@ order: 0
 categories:
   - code: meta
     title: Meta
+  - code: general
+    title: General
   - code: resources
     title: Resources
   - code: standard-methods
@@ -11,6 +13,6 @@ categories:
   - code: fields
     title: Fields
   - code: operations
-    title: Fields
+    title: Operations
   - code: design-patterns
     title: Design Patterns
