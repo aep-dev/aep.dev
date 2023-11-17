@@ -39,7 +39,7 @@ A well-structured representation of an API Service.
 
 Refers to a network address that an API Service uses to handle incoming API
 Requests. One API Service may have multiple API Service Endpoints, such as
-`https://pubsub.googleapis.com` and `https://content-pubsub.googleapis.com`.
+`https://pubsub.example.com` and `https://content-pubsub.example.com`.
 
 ### API Gateway
 
@@ -58,22 +58,16 @@ logging, monitoring, and rate limiting.
 
 ### API Resource
 
-An object that one or more API methods operate on.
+An object upon which one or more API methods operate.
 
 ### API Resource Type
 
-An API resource type represents a category of that one or more API objects
-belongs to. It may provide a structured schema.
+An API resource type represents a category of that consumes and API,
 
-### API Service
+### Consumer
 
-An implementation of an API, exposing API methods on one or more network
-addresses.
-
-### API Name
-
-Refers to the logical identifier of an API, such as "example.com". The API name
-is used for namespacing of API Resource Types.
+Either a programmatic client or a user that consumes an API. This term should be
+used when a statement refers broadly to both programs and users.
 
 ### Declarative Clients
 
