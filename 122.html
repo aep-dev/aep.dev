@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en-US" class="glue-flexbox">
+  <head>
+    <title>AEP-122: Resource paths</title>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
+    <link rel="shortcut icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=4f5edfa5">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=4f5edfa5">
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
+    <script type="text/javascript">
+      $('html').css('visibility', 'hidden');
+      $.when($.ready).then(() => {
+        $('html').css('visibility', 'visible');
+      });
+    </script>
+    <script type="text/javascript" src="/assets/js/global.js?v=4f5edfa5"></script>
+    
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-140054909-1');
+    </script>
+  </head>
+  <body>
+    <!-- prettier-ignore -->
+<header class="glue-header glue-header--single">
+  <div class="glue-header__bar glue-header__bar--desktop glue-header__drawer">
+    <div class="glue-header__tier">
+      <!-- LOCK up-->
+      <div class="glue-header__container">
+        <div class="glue-header__lock-up">
+          <div class="glue-header__logo">
+            <a class="glue-header__logo-link" href="/" title="Google">
+              <div class="glue-header__logo-container">
+                <svg role="img" aria-hidden="true" class="glue-header__logo-svg">
+                <!--<use xlink:href="/assets/images/glue-icons.svg#google-color-logo"></use>-->
+                </svg>
+              </div>
+              <p class="glue-header__logo--product">AEPs</p>
+            </a>
+          </div>
+          <a href="#page-content" class="glue-header__skip-content">
+            <p class="glue-header__skip-content-text">Jump to Content</p>
+          </a>
+        </div>
+      </div>
+      <!-- LINK BAR-->
+      <div class="glue-header__container glue-header__container--flex-auto">
+        <nav class="glue-header__link-bar">
+          <ul id="list-1" class="glue-header__list">
+            
+              
+                <li class="glue-header__item">
+                  <a class="glue-header__link" href="/general" aria-level="1">Browse AEPs</a>
+                </li>
+              
+            
+              
+                <li class="glue-header__item">
+                  <a class="glue-header__link" href="/contributing" aria-level="1">Contributing</a>
+                </li>
+              
+            
+          </ul>
+        </nav>
+      </div>
+      <!-- CTA-->
+      <div class="glue-header__container glue-header__container--cta">
+        <div class="glue-header__cta">
+        <div class="glue-sitesearch">
+          <form method="GET" action="/search">
+          <label for="q">Search this site</label>
+          <input class="glue-sitesearch__input" type="text" name="q" id="q"
+            placeholder="Search AEPs">
+          <button type="submit" class="glue-button glue-sitesearch__submit" title="Submit">
+            <svg role="img" class="glue-icon glue-icon--24px">
+            <use xlink:href="/assets/images/glue-icons.svg#search"></use>
+            </svg>
+          </button>
+          </form>
+        </div>
+        <a href="https://github.com/aep-dev/aep.dev" target="_blank" class="glue-button glue-button--high-emphasis">
+          <img src="/assets/images/github.png" class="github-logo">
+          View on GitHub
+        </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile header placeholder -->
+  <div class="glue-header__bar glue-header__bar--mobile">
+    <div class="glue-header__tier">
+      <!-- LOCK up-->
+      <div class="glue-header__container">
+        <div class="glue-header__lock-up">
+          <div class="glue-header__hamburger glue-header__hamburger--first-tier">
+            <div class="glue-header__hamburger-wrapper">
+              <button type="button" class="glue-header__drawer-toggle-btn"
+                aria-controls="drawer" aria-expanded="false" aria-label="Open the navigation drawer">
+                <svg role="img" class="glue-icon glue-icon--24px"><use xlink:href="/assets/images/glue-icons.svg#menu"></use></svg>
+              </button>
+            </div>
+          </div>
+          <div class="glue-header__logo">
+            <a class="glue-header__logo-link" href="/" title="Google">
+              <div class="glue-header__logo-container">
+                <svg role="img" aria-hidden="true" class="glue-header__logo-svg">
+                  <!--<use xlink:href="/assets/images/glue-icons.svg#google-color-logo"></use>-->
+                </svg>
+              </div>
+              <p class="glue-header__logo--product">AEPs</p>
+            </a>
+          </div>
+          <!-- SKIP -->
+          <a href="#page-content" class="glue-header__skip-content">
+            <p class="glue-header__skip-content-text">Jump to Content</p>
+          </a>
+        </div>
+      </div>
+      <!-- CTA -->
+      <div class="glue-header__container">
+        <div class="glue-header__cta">
+        <a href="https://github.com/aep-dev/aep.dev" class="glue-button glue-button--high-emphasis">
+          <img src="/assets/images/github.png" class="github-logo">
+          View on GitHub
+        </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="glue-header__drawer-backdrop"></div>
+</header>
+    <div class="glue-page">
+      
+      <main role="main" id="page-content">
+        
+<nav id="aep-nav" class="docs-component-nav">
+  <ul class="nav-list">
+    <li class="nav-item nav-item-header">AEPs by Scope</li>
+    <li class="nav-item">
+      <a href="/general">General</a>
+    </li>
+    <li class="nav-item nav-item-header">AEPs</li>
+    <li class="nav-item">Meta</li>
+      <li class="nav-item">
+          <a href="/1">
+            <span class="aep-number">1</span>
+            AEP Purpose and Guidelines
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/2">
+            <span class="aep-number">2</span>
+            AEP Numbering and Organization
+          </a>
+        </li>
+      <li class="nav-item">Resources</li>
+      <li class="nav-item nav-item-active">
+          <a href="/122">
+            <span class="aep-number">122</span>
+            Resource paths
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/126">
+            <span class="aep-number">126</span>
+            Enumerations
+          </a>
+        </li>
+      <li class="nav-item">Standard Methods</li>
+      <li class="nav-item">
+          <a href="/131">
+            <span class="aep-number">131</span>
+            GET for individual resources
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/151">
+            <span class="aep-number">151</span>
+            Long-running requests
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/136">
+            <span class="aep-number">136</span>
+            Custom operations
+          </a>
+        </li>
+      <li class="nav-item">Fields</li>
+      <li class="nav-item">
+          <a href="/141">
+            <span class="aep-number">141</span>
+            Quantities
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/142">
+            <span class="aep-number">142</span>
+            Time and duration
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/144">
+            <span class="aep-number">144</span>
+            Array fields
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/145">
+            <span class="aep-number">145</span>
+            Ranges
+          </a>
+        </li>
+      <li class="nav-item">Fields</li>
+      <li class="nav-item">
+          <a href="/132">
+            <span class="aep-number">132</span>
+            GET for collections
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/154">
+            <span class="aep-number">154</span>
+            Resource freshness validation
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/158">
+            <span class="aep-number">158</span>
+            Pagination
+          </a>
+        </li>
+      <li class="nav-item">Design Patterns</li>
+      <li class="nav-item">
+          <a href="/164">
+            <span class="aep-number">164</span>
+            Soft delete
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/210">
+            <span class="aep-number">210</span>
+            Unicode
+          </a>
+        </li>
+      <li class="nav-item">
+          <a href="/211">
+            <span class="aep-number">211</span>
+            Authorization checks
+          </a>
+        </li>
+      </ul>
+</nav>
+<section id="jump-content">
+          
+<aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Resource paths</th></tr>
+    <tr><td>Number</td><td>122</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/122">aep.dev/122</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2023-10-11</td></tr>
+    <tr><td>Updated</td><td>2023-10-11</td></tr>
+  </table>
+
+  <section id="aep-toc" class="docs-component-sidebar-toc">
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#collection-identifiers">Collection identifiers</a></li>
+<li><a href="#resource-id-segments">Resource ID segments</a></li>
+<li><a href="#resource-id-aliases">Resource ID aliases</a></li>
+<li><a href="#full-resource-paths">Full resource paths</a></li>
+<li><a href="#resource-uris">Resource URIs</a></li>
+<li><a href="#fields-representing-resource-paths">Fields representing resource paths</a></li>
+<li><a href="#fields-representing-a-resources-parent">Fields representing a resource's parent</a></li>
+<li><a href="#fields-representing-another-resource">Fields representing another resource</a></li>
+</ul>
+</li>
+<li><a href="#further-reading">Further reading</a></li>
+</ul>
+</div>
+
+  </section>
+
+  <section class="docs-component-sidebar-actions">
+    <ul>
+      <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0122">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0122">Edit this page</a></li>
+    </ul>
+  </section>
+</aside>
+<section id="aep-main" class="docs-component-main">
+  <section class="section-breadcrumbs">
+  <nav
+    class="glue-breadcrumbs glue-mod-mt-std glue-mod-mb-std"
+    aria-label="You are here."
+  >
+    <ol class="glue-breadcrumbs__list aep-breadcrumbs">
+      <li class="glue-breadcrumbs__item" aria-level="1">
+        <a class="glue-breadcrumbs__link" href="/">
+          API Enhancement Proposals
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
+      <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
+          aria-level="3">
+        Resource paths
+      </li>
+    </ol>
+  </nav>
+</section>
+  
+  <h4 class="aep-number">AEP-122</h4>
+  <h1 id="resource-paths">Resource paths</h1>
+<p>Most APIs expose <em>resources</em> (their primary nouns) which users are able to
+create, retrieve, and manipulate. Additionally, resources have <em>paths</em>: each
+resource has a unique (within the API service) identifying path that users use
+to reference that resource, and these paths are what users should <em>store</em> as
+the canonical identifier for the resources.</p>
+<h2 id="guidance">Guidance</h2>
+<p>All resource paths defined by an API <strong>must</strong> be unique within that API. (See
+the section on <a href="#full-resource-paths">full resource paths</a> below for more
+information on referring to resources across APIs.)</p>
+<p>Resource paths are formatted according to the <a href="https://datatracker.ietf.org/doc/html/rfc3986#appendix-A">URI path schema</a>, but without
+the leading slash:</p>
+<p>publishers/123/books/les-miserables users/vhugo1802</p>
+<ul>
+<li>Resource path components <strong>must</strong> alternate between collection identifiers
+  (example: <code>publishers</code>, <code>books</code>, <code>users</code>) and resource IDs (example: <code>123</code>,
+  <code>les-miserables</code>, <code>vhugo1802</code>), <em>except</em> when <a href="https://aep.dev/singletons">singleton resources</a> are
+  present.</li>
+<li>Resource paths <strong>must</strong> use the <code>/</code> character to separate individual segments
+  of the resource path.</li>
+<li>Each segment of a resource path <strong>must not</strong> contain a <code>/</code> character.</li>
+<li>Resource paths <strong>should</strong> only use characters available in DNS names, as
+  defined by <a href="https://tools.ietf.org/html/rfc1123">RFC-1123</a>.<ul>
+<li>Additionally, resource IDs <strong>should not</strong> use upper-case letters.</li>
+<li>If additional characters are necessary, resource paths <strong>should not</strong> use
+  characters that require URL-escaping, or characters outside of ASCII.</li>
+<li>If Unicode characters can not be avoided, resource paths <strong>must</strong> be stored
+  in Normalization Form C (see <a href="/210">AEP-210</a>).</li>
+</ul>
+</li>
+<li>Each resource <strong>must</strong> expose a <code>path</code> field that contains its resource path.<ul>
+<li>Resources <strong>may</strong> provide the resource ID, i.e. the last segment of the
+  path, as a separate field named <code>id</code>.</li>
+<li>Resources <strong>must not</strong> expose tuples, self-links, or other forms of
+  resource identification.</li>
+<li>All ID fields <strong>must</strong> be strings.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note:</strong> Resource paths as described here are used within the scope of a
+single API (or else in situations where the owning API is clear from the
+context), and are only required to be unique within that scope. For this
+reason, they are sometimes called <em>relative resource paths</em> to distinguish them
+from <em>full resource paths</em> (discussed below).</p>
+<h3 id="collection-identifiers">Collection identifiers</h3>
+<p>The collection identifier segments in a resource path <strong>must</strong> be the plural
+form of the noun used for the resource. (For example, a collection of
+<code>Publisher</code> resources is called <code>publishers</code> in the resource path.)</p>
+<ul>
+<li>Collection identifiers <strong>must</strong> be concise American English terms.</li>
+<li>Collection identifiers <strong>must</strong> be in <code>kebab-case</code>.</li>
+<li>Collection identifiers <strong>must</strong> begin with a lower-cased letter and contain
+  only lower-case ASCII letters, numbers. and hyphens (<code>/[a-z][a-z0-9-]*/</code>).</li>
+<li>Collection identifiers <strong>must</strong> be plural.</li>
+<li>In situations where there is no plural word ("info"), or where the singular
+  and plural terms are the same ("moose"), the non-pluralized (singular) form
+  is correct. Collection segments <strong>must not</strong> "coin" words by adding "s" in
+  such cases (e.g. avoid "infos").</li>
+</ul>
+<h4 id="nested-collections">Nested collections</h4>
+<p>If a resource path contains multiple levels of a hierarchy, and a parent
+collection's path is used as a prefix for the child resource's path, the child
+collection's path <strong>may</strong> omit the prefix. For example, given a collection of
+<code>UserEvent</code> resources that would normally be nested underneath <code>users</code>:</p>
+<div class="highlight language-None"><pre><span></span><code>users/vhugo1802/user-events/birthday-dinner-226/user-event-guests/123
+</code></pre></div>
+<p>An API <strong>may</strong> use the less-redundant form:</p>
+<div class="highlight language-None"><pre><span></span><code>users/vhugo1802/events/birthday-dinner-226/guests/123
+</code></pre></div>
+<p>In this situation, the <em>message</em> is still called <code>UserEvent</code> or
+<code>UserEventGuest</code>; only the collection name is shortened.</p>
+<p><strong>Note:</strong> APIs wishing to do this <strong>must</strong> follow this format consistently
+throughout the API, or else not at all.</p>
+<h3 id="resource-id-segments">Resource ID segments</h3>
+<p>A resource ID segment identifies the resource within its parent collection. In
+the resource path <code>publishers/123/books/les-miserables</code>, <code>123</code> is the resource
+ID for the publisher, and <code>les-miserables</code> is the resource ID for the book.</p>
+<ul>
+<li>Resource IDs <strong>may</strong> be either always set by users (required on resource
+  creation), optionally set by users (optional on resource creation,
+  server-generated if unset), or never set by users (not accepted at resource
+  creation). They <strong>must</strong> be immutable once created.</li>
+<li>If resource IDs are user-settable, the API <strong>must</strong> document and/or annotate
+  the field with the allowed formats. User-settable resource IDs <strong>should</strong>
+  conform to <a href="https://tools.ietf.org/html/rfc1034">RFC-1034</a>; which restricts to letters, numbers, and hyphen,
+  with the first character a letter, the last a letter or a number, and a 63
+  character maximum.<ul>
+<li>Additionally, user-settable resource IDs <strong>should</strong> restrict letters to
+  lower-case (<code>^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$</code>).</li>
+<li>Characters outside of ASCII <strong>should not</strong> be permitted; however, if
+  Unicode characters are necessary, APIs <strong>must</strong> follow guidance in
+  <a href="/210">AEP-210</a>.</li>
+<li>User-settable IDs <strong>should not</strong> be permitted to be a UUID (or any value
+  that syntactically appears to be a UUID).</li>
+<li>Field annotations <strong>should</strong> use <a href="https://github.com/bufbuild/protovalidate">protovalidate</a> in protobuf and <a href="https://swagger.io/docs/specification/data-models/keywords/">JSON
+  Schema keywords</a> like [<code>pattern</code>][] with OAS/JSON Schema.</li>
+</ul>
+</li>
+<li>If resource IDs are not user-settable, the API <strong>should</strong> document the basic
+  format, and any upper boundaries (for example, "at most 63 characters").</li>
+<li>For more information, see the <a href="/133#user-specified-ids">create</a> standard method.</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+
+<h3 id="resource-id-aliases">Resource ID aliases</h3>
+<p>It is sometimes valuable to provide an alias for common lookup patterns for
+resource IDs. For example, an API with <code>users</code> at the top of its resource
+hierarchy may wish to provide <code>users/me</code> as a shortcut for retrieving
+information for the authenticated user.</p>
+<p>APIs <strong>may</strong> provide programmatic aliases for common lookup patterns. However,
+all data returned from the API <strong>must</strong> use the canonical resource path.</p>
+<h3 id="full-resource-paths">Full resource paths</h3>
+<p>In most cases, resource paths are used within a single API only, or else they
+are used in contexts where the owning API is clear (for example,
+<code>string pubsub_topic</code>).</p>
+<p>However, sometimes it is necessary for services to refer to resources in an
+arbitrary API. In this situation, the service <strong>should</strong> use the <em>full resource
+path</em>, a schemeless URI with the owning API's service endpoint, followed by the
+relative resource path:</p>
+<div class="highlight language-None"><pre><span></span><code>//apis.example.com/library/publishers/123/books/les-miserables
+//apis.example.com/calendar/users/vhugo1802
+</code></pre></div>
+<p><strong>Note:</strong> The full resource path <strong>should not</strong> be used for cross-API
+references where the owning API is clear; it is only used if a field refers to
+resources in multiple APIs where ambiguity is possible.</p>
+<h3 id="resource-uris">Resource URIs</h3>
+<p>The full resource path is a schemeless URI, but slightly distinct from the full
+URIs we use to access a resource. The latter adds two components: the protocol
+(HTTPS) and the API version:</p>
+<div class="highlight language-None"><pre><span></span><code>https://apis.example.com/library/v1/publishers/123/books/les-miserables
+https://apis.example.com/calendar/v3/users/vhugo1802
+</code></pre></div>
+<p>The version is not included in the full resource path because the full resource
+path is expected to persist from version to version. Even though the API
+surface may change between major versions, multiple major versions of the same
+API are expected to use the same underlying data.</p>
+<p><strong>Note:</strong> The correlation between the full resource path and the service's
+hostname is by convention. In particular, one service is able to have multiple
+hostnames (example use cases include regionalization or staging environments),
+and the full resource path does not change between these.</p>
+<h3 id="fields-representing-resource-paths">Fields representing resource paths</h3>
+<p>When defining a resource, the first field <strong>should</strong> be the resource path,
+which <strong>must</strong> be of type <code>string</code> and <strong>must</strong> be called <code>path</code> for the
+resource path. The message <strong>should</strong> include a <code>google.api.resource</code>
+annotation declaring the type (see <a href="/123">AEP-123</a> for more on this).</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// A representation of a book in the library.</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Book&quot;</span>
+<span class="w">  </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;publishers/{publisher}/books/{book}&quot;</span>
+<span class="p">};</span>
+
+<span class="c1">// The resource path of the book.</span>
+<span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">// Other fields...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>When defining a method that retrieves or acts on an already-existing resource
+(such as <code>GetBook</code> or <code>ArchiveBook</code>), the first field of the request message
+<strong>should</strong> be the resource path, which <strong>must</strong> be of type <code>string</code> and
+<strong>must</strong> be called <code>path</code> for the resource path. The field <strong>should</strong> also be
+annotated with the <code>google.api.resource_reference</code> annotation, referencing the
+resource type (<a href="/123">AEP-123</a>).</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message for ArchiveBook</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">ArchiveBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="c1">// The book to archive.</span>
+<span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">  </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Book&quot;</span>
+<span class="w">  </span><span class="p">}];</span>
+
+<span class="c1">// Other fields...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Note:</strong> Fields <strong>must not</strong> be called <code>path</code> except for this purpose. For
+other use cases, either use a different term or prepend an adjective (for
+example: <code>file_path</code>).</p>
+<h3 id="fields-representing-a-resources-parent">Fields representing a resource's parent</h3>
+<p>When defining a method that retrieves resources from a collection or adds a new
+resource to a collection (such as <code>ListBooks</code> or <code>CreateBook</code>), the first field
+of the request message <strong>should</strong> be of type <code>string</code> and <strong>should</strong> be called
+<code>parent</code> for the resource path of the collection. The <code>parent</code> field <strong>should</strong>
+also be annotated with the <code>google.api.resource_reference</code> annotation,
+referencing the parent's resource type (<a href="/123">AEP-123</a>).</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message for ListBooks.</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">ListBooksRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="c1">// The publisher to list books from.</span>
+<span class="c1">// Format: publishers/{publisher_id}</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Publisher&quot;</span>
+<span class="p">}];</span>
+
+<span class="c1">// Other fields (e.g. max_page_size, page_token, filter, etc.)...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If there is more than one possible parent type, the <code>parent</code> field <strong>should</strong>
+be annotated with the <code>child_type</code> key on <code>google.api.resource_reference</code>
+instead:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message for ListBooks.</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">ListBooksRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="c1">// The parent to list books from.</span>
+<span class="c1">// Format:</span>
+<span class="c1">//   - publishers/{publisher_id}</span>
+<span class="c1">//   - authors/{author_id}</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">  </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">child_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Book&quot;</span>
+<span class="w">  </span><span class="p">}];</span>
+
+<span class="c1">// Other fields (e.g. max_page_size, page_token, filter, etc.)...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Note:</strong> Fields <strong>should not</strong> be called <code>parent</code> except for this purpose. For
+other use cases, use a synonymous term if possible.</p>
+<h3 id="fields-representing-another-resource">Fields representing another resource</h3>
+<p>When referencing a resource path for a different resource, the field <strong>should</strong>
+be of type <code>string</code> for the resource path, and the field name <strong>should</strong> be
+equivalent to the corresponding message's name in snake case.</p>
+<ul>
+<li>Field names <strong>may</strong> include a leading adjective if appropriate (such as
+  <code>string dusty_book</code>).</li>
+<li>Field names <strong>should not</strong> use the <code>_path</code> suffix unless the field would be
+  ambiguous without it (e.g., <code>crypto_key_path</code>)</li>
+<li>Fields representing another resource <strong>should</strong> provide the
+  <code>google.api.resource_reference</code> annotation with the resource type being
+  referenced.</li>
+</ul>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// A representation of a book in a library.</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Book&quot;</span>
+<span class="w">  </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;publishers/{publisher}/books/{book}&quot;</span>
+<span class="p">};</span>
+
+<span class="c1">// Path of the book.</span>
+<span class="c1">// Format is `publishers/{publisher}/books/{book}`</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">// The shelf where the book currently sits.</span>
+<span class="c1">// Format is `shelves/{shelf}`.</span>
+<span class="kt">string</span><span class="w"> </span><span class="na">shelf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;apis.example.com/library/Shelf&quot;</span>
+<span class="p">}];</span>
+
+<span class="c1">// Other fields...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Note:</strong> When referring to other resources in this way, we use the resource
+path as the value, not just the ID component. Services <strong>should</strong> use the
+resource path to reference resources when possible. If using the ID component
+alone is strictly necessary, the field <strong>should</strong> use an <code>_id</code> suffix (e.g.
+<code>shelf_id</code>).</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>For evolving resource paths over time, see
+  <a href="/180#changing-resource-paths">AEP-180</a>.</li>
+<li>For resource types, see <a href="/123">AEP-123</a>.</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+  <footer>
+  Except as otherwise noted, the content of this page is licensed under the
+  <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
+  Attribution 4.0 License</a>, and code samples are licensed under the
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a>.
+  <span class="no-print">For details, see <a href="/licensing">content
+  licensing</a>.</span>
+</footer>
+</section>
+
+        </section>
+      </main>
+      
+    </div>
+    <script src="//www.gstatic.com/external_hosted/hammerjs/v2_0_2/hammer.min.js"></script>
+    <script src="//www.gstatic.com/glue/v22_1/glue-vanilla.min.js"></script>
+    <script type="text/javascript">
+      const headerElement = document.querySelector('.glue-header');
+      if (headerElement) {
+        new window.glue.ui.header.Header(headerElement);
+      }
+    </script>
+  </body>
+</html>
