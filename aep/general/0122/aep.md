@@ -1,0 +1,324 @@
+# Resource paths
+
+Most APIs expose _resources_ (their primary nouns) which users are able to
+create, retrieve, and manipulate. Additionally, resources have _paths_: each
+resource has a unique (within the API service) identifying path that users use
+to reference that resource, and these paths are what users should _store_ as
+the canonical identifier for the resources.
+
+## Guidance
+
+All resource paths defined by an API **must** be unique within that API. (See
+the section on [full resource paths](#full-resource-paths) below for more
+information on referring to resources across APIs.)
+
+Resource paths are formatted according to the [URI path schema][], but without
+the leading slash:
+
+publishers/123/books/les-miserables users/vhugo1802
+
+- Resource path components **must** alternate between collection identifiers
+  (example: `publishers`, `books`, `users`) and resource IDs (example: `123`,
+  `les-miserables`, `vhugo1802`), _except_ when [singleton resources][] are
+  present.
+- Resource paths **must** use the `/` character to separate individual segments
+  of the resource path.
+- Each segment of a resource path **must not** contain a `/` character.
+- Resource paths **should** only use characters available in DNS names, as
+  defined by [RFC-1123](https://tools.ietf.org/html/rfc1123).
+  - Additionally, resource IDs **should not** use upper-case letters.
+  - If additional characters are necessary, resource paths **should not** use
+    characters that require URL-escaping, or characters outside of ASCII.
+  - If Unicode characters can not be avoided, resource paths **must** be stored
+    in Normalization Form C (see [AEP-210][]).
+- Each resource **must** expose a `path` field that contains its resource path.
+  - Resources **may** provide the resource ID, i.e. the last segment of the
+    path, as a separate field named `id`.
+  - Resources **must not** expose tuples, self-links, or other forms of
+    resource identification.
+  - All ID fields **must** be strings.
+
+**Note:** Resource paths as described here are used within the scope of a
+single API (or else in situations where the owning API is clear from the
+context), and are only required to be unique within that scope. For this
+reason, they are sometimes called _relative resource paths_ to distinguish them
+from _full resource paths_ (discussed below).
+
+[aep-210]: ./0210.md
+[uri path schema]: https://datatracker.ietf.org/doc/html/rfc3986#appendix-A
+[singleton resources]: https://aep.dev/singletons
+
+### Collection identifiers
+
+The collection identifier segments in a resource path **must** be the plural
+form of the noun used for the resource. (For example, a collection of
+`Publisher` resources is called `publishers` in the resource path.)
+
+- Collection identifiers **must** be concise American English terms.
+- Collection identifiers **must** be in `kebab-case`.
+- Collection identifiers **must** begin with a lower-cased letter and contain
+  only lower-case ASCII letters, numbers. and hyphens (`/[a-z][a-z0-9-]*/`).
+- Collection identifiers **must** be plural.
+- In situations where there is no plural word ("info"), or where the singular
+  and plural terms are the same ("moose"), the non-pluralized (singular) form
+  is correct. Collection segments **must not** "coin" words by adding "s" in
+  such cases (e.g. avoid "infos").
+
+#### Nested collections
+
+If a resource path contains multiple levels of a hierarchy, and a parent
+collection's path is used as a prefix for the child resource's path, the child
+collection's path **may** omit the prefix. For example, given a collection of
+`UserEvent` resources that would normally be nested underneath `users`:
+
+```
+users/vhugo1802/user-events/birthday-dinner-226/user-event-guests/123
+```
+
+An API **may** use the less-redundant form:
+
+```
+users/vhugo1802/events/birthday-dinner-226/guests/123
+```
+
+In this situation, the _message_ is still called `UserEvent` or
+`UserEventGuest`; only the collection name is shortened.
+
+**Note:** APIs wishing to do this **must** follow this format consistently
+throughout the API, or else not at all.
+
+### Resource ID segments
+
+A resource ID segment identifies the resource within its parent collection. In
+the resource path `publishers/123/books/les-miserables`, `123` is the resource
+ID for the publisher, and `les-miserables` is the resource ID for the book.
+
+- Resource IDs **may** be either always set by users (required on resource
+  creation), optionally set by users (optional on resource creation,
+  server-generated if unset), or never set by users (not accepted at resource
+  creation). They **must** be immutable once created.
+- If resource IDs are user-settable, the API **must** document and/or annotate
+  the field with the allowed formats. User-settable resource IDs **should**
+  conform to [RFC-1034][]; which restricts to letters, numbers, and hyphen,
+  with the first character a letter, the last a letter or a number, and a 63
+  character maximum.
+  - Additionally, user-settable resource IDs **should** restrict letters to
+    lower-case (`^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$`).
+  - Characters outside of ASCII **should not** be permitted; however, if
+    Unicode characters are necessary, APIs **must** follow guidance in
+    [AEP-210][].
+  - User-settable IDs **should not** be permitted to be a UUID (or any value
+    that syntactically appears to be a UUID).
+  - Field annotations **should** use [protovalidate][] in protobuf and [JSON
+    Schema keywords][] like [`pattern`][] with OAS/JSON Schema.
+- If resource IDs are not user-settable, the API **should** document the basic
+  format, and any upper boundaries (for example, "at most 63 characters").
+- For more information, see the [create][] standard method.
+
+<!-- prettier-ignore-start -->
+[aep-128]: ./0128.md
+[create]: ./0133.md#user-specified-ids
+[rfc-1034]: https://tools.ietf.org/html/rfc1034
+[JSON Schema keywords]: https://swagger.io/docs/specification/data-models/keywords/
+<!-- prettier-ignore-end -->
+
+### Resource ID aliases
+
+It is sometimes valuable to provide an alias for common lookup patterns for
+resource IDs. For example, an API with `users` at the top of its resource
+hierarchy may wish to provide `users/me` as a shortcut for retrieving
+information for the authenticated user.
+
+APIs **may** provide programmatic aliases for common lookup patterns. However,
+all data returned from the API **must** use the canonical resource path.
+
+### Full resource paths
+
+In most cases, resource paths are used within a single API only, or else they
+are used in contexts where the owning API is clear (for example,
+`string pubsub_topic`).
+
+However, sometimes it is necessary for services to refer to resources in an
+arbitrary API. In this situation, the service **should** use the _full resource
+path_, a schemeless URI with the owning API's service endpoint, followed by the
+relative resource path:
+
+```
+//apis.example.com/library/publishers/123/books/les-miserables
+//apis.example.com/calendar/users/vhugo1802
+```
+
+**Note:** The full resource path **should not** be used for cross-API
+references where the owning API is clear; it is only used if a field refers to
+resources in multiple APIs where ambiguity is possible.
+
+### Resource URIs
+
+The full resource path is a schemeless URI, but slightly distinct from the full
+URIs we use to access a resource. The latter adds two components: the protocol
+(HTTPS) and the API version:
+
+```
+https://apis.example.com/library/v1/publishers/123/books/les-miserables
+https://apis.example.com/calendar/v3/users/vhugo1802
+```
+
+The version is not included in the full resource path because the full resource
+path is expected to persist from version to version. Even though the API
+surface may change between major versions, multiple major versions of the same
+API are expected to use the same underlying data.
+
+**Note:** The correlation between the full resource path and the service's
+hostname is by convention. In particular, one service is able to have multiple
+hostnames (example use cases include regionalization or staging environments),
+and the full resource path does not change between these.
+
+### Fields representing resource paths
+
+When defining a resource, the first field **should** be the resource path,
+which **must** be of type `string` and **must** be called `path` for the
+resource path. The message **should** include a `google.api.resource`
+annotation declaring the type (see [AEP-123][] for more on this).
+
+```proto
+// A representation of a book in the library.
+message Book {
+option (google.api.resource) = {
+  type: "apis.example.com/library/Book"
+  pattern: "publishers/{publisher}/books/{book}"
+};
+
+// The resource path of the book.
+// Format: publishers/{publisher}/books/{book}
+string path = 1;
+
+// Other fields...
+}
+```
+
+When defining a method that retrieves or acts on an already-existing resource
+(such as `GetBook` or `ArchiveBook`), the first field of the request message
+**should** be the resource path, which **must** be of type `string` and
+**must** be called `path` for the resource path. The field **should** also be
+annotated with the `google.api.resource_reference` annotation, referencing the
+resource type ([AEP-123][]).
+
+```proto
+// Request message for ArchiveBook
+message ArchiveBookRequest {
+// The book to archive.
+// Format: publishers/{publisher}/books/{book}
+string path = 1 [
+  (google.api.field_behavior) = REQUIRED,
+  (google.api.resource_reference) = {
+    type: "apis.example.com/library/Book"
+  }];
+
+// Other fields...
+}
+```
+
+**Note:** Fields **must not** be called `path` except for this purpose. For
+other use cases, either use a different term or prepend an adjective (for
+example: `file_path`).
+
+[aep-123]: ./0123.md
+
+### Fields representing a resource's parent
+
+When defining a method that retrieves resources from a collection or adds a new
+resource to a collection (such as `ListBooks` or `CreateBook`), the first field
+of the request message **should** be of type `string` and **should** be called
+`parent` for the resource path of the collection. The `parent` field **should**
+also be annotated with the `google.api.resource_reference` annotation,
+referencing the parent's resource type ([AEP-123][]).
+
+```proto
+// Request message for ListBooks.
+message ListBooksRequest {
+// The publisher to list books from.
+// Format: publishers/{publisher_id}
+string parent = 1 [(google.api.resource_reference) = {
+  type: "apis.example.com/library/Publisher"
+}];
+
+// Other fields (e.g. max_page_size, page_token, filter, etc.)...
+}
+```
+
+If there is more than one possible parent type, the `parent` field **should**
+be annotated with the `child_type` key on `google.api.resource_reference`
+instead:
+
+```proto
+// Request message for ListBooks.
+message ListBooksRequest {
+// The parent to list books from.
+// Format:
+//   - publishers/{publisher_id}
+//   - authors/{author_id}
+string parent = 1 [
+  (google.api.field_behavior) = REQUIRED,
+  (google.api.resource_reference) = {
+    child_type: "apis.example.com/library/Book"
+  }];
+
+// Other fields (e.g. max_page_size, page_token, filter, etc.)...
+}
+```
+
+**Note:** Fields **should not** be called `parent` except for this purpose. For
+other use cases, use a synonymous term if possible.
+
+### Fields representing another resource
+
+When referencing a resource path for a different resource, the field **should**
+be of type `string` for the resource path, and the field name **should** be
+equivalent to the corresponding message's name in snake case.
+
+- Field names **may** include a leading adjective if appropriate (such as
+  `string dusty_book`).
+- Field names **should not** use the `_path` suffix unless the field would be
+  ambiguous without it (e.g., `crypto_key_path`)
+- Fields representing another resource **should** provide the
+  `google.api.resource_reference` annotation with the resource type being
+  referenced.
+
+```proto
+// A representation of a book in a library.
+message Book {
+option (google.api.resource) = {
+  type: "apis.example.com/library/Book"
+  pattern: "publishers/{publisher}/books/{book}"
+};
+
+// Path of the book.
+// Format is `publishers/{publisher}/books/{book}`
+string path = 1;
+
+// The shelf where the book currently sits.
+// Format is `shelves/{shelf}`.
+string shelf = 2 [(google.api.resource_reference) = {
+  type: "apis.example.com/library/Shelf"
+}];
+
+// Other fields...
+}
+```
+
+**Note:** When referring to other resources in this way, we use the resource
+path as the value, not just the ID component. Services **should** use the
+resource path to reference resources when possible. If using the ID component
+alone is strictly necessary, the field **should** use an `_id` suffix (e.g.
+`shelf_id`).
+
+## Further reading
+
+- For evolving resource paths over time, see
+  [AEP-180](./0180.md#changing-resource-paths).
+- For resource types, see [AEP-123][].
+
+<!-- prettier-ignore-start -->
+[protovalidate]: https://github.com/bufbuild/protovalidate
+[`pattern`]: https://json-schema.org/understanding-json-schema/reference/string#regexp
+<!-- prettier-ignore-end -->

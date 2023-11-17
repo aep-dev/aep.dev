@@ -1,0 +1,9 @@
+---
+id: 122
+slug: resource-paths
+state: approved
+created: 2023-10-11
+placement:
+  category: resources
+  order: 20
+redirect_from: /resource-paths
