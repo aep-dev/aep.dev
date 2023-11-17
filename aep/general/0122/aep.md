@@ -109,15 +109,18 @@ ID for the publisher, and `les-miserables` is the resource ID for the book.
     [AEP-210][].
   - User-settable IDs **should not** be permitted to be a UUID (or any value
     that syntactically appears to be a UUID).
-  - Field annotations **should** use [protovalidate][] in protobuf and
-    [`pattern`][] with OAS/JSON Schema.
+  - Field annotations **should** use [protovalidate][] in protobuf and [JSON
+    Schema keywords][] like [`pattern`][] with OAS/JSON Schema.
 - If resource IDs are not user-settable, the API **should** document the basic
   format, and any upper boundaries (for example, "at most 63 characters").
 - For more information, see the [create][] standard method.
 
+<!-- prettier-ignore-start -->
 [aep-128]: ./0128.md
 [create]: ./0133.md#user-specified-ids
 [rfc-1034]: https://tools.ietf.org/html/rfc1034
+[JSON Schema keywords]: https://swagger.io/docs/specification/data-models/keywords/
+<!-- prettier-ignore-end -->
 
 ### Resource ID aliases
 
