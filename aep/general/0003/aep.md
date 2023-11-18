@@ -66,8 +66,8 @@ An API resource type represents a category of that consumes and API,
 
 ### Consumer
 
-Either a programmatic client or a user that consumes an API. This term should be
-used when a statement refers broadly to both programs and users.
+Either a programmatic client or a user that consumes an API. This term should
+be used when a statement refers broadly to both programs and users.
 
 ### Declarative Clients
 
