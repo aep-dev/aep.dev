@@ -6,4 +6,4 @@ created: 2021-02-24
 placement:
   category: design-patterns
   order: 115
-redirect_from: "/authz"
+redirect_from: '/authz'
