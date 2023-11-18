@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-2: AEP Numbering and Organization</title>
+    <title>AEP-3: Glossary</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -21,9 +21,6 @@
     <script type="text/javascript" src="/assets/js/global.js?v=e3ca43d0"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
-<script type="text/javascript" src="/assets/js/graphviz/viz.js?v=e3ca43d0"></script>
-<script type="text/javascript" src="/assets/js/graphviz/lite.render.js?v=e3ca43d0"></script>
-<script type="text/javascript" src="/assets/js/aip/aip-graphviz.js?v=e3ca43d0"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140054909-1"></script>
     <script>
@@ -161,14 +158,14 @@
             AEP Purpose and Guidelines
           </a>
         </li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/2">
             <span class="aep-number">2</span>
             AEP Numbering and Organization
           </a>
         </li>
       <li class="nav-item">General</li>
-      <li class="nav-item">
+      <li class="nav-item nav-item-active">
           <a href="/3">
             <span class="aep-number">3</span>
             Glossary
@@ -275,29 +272,34 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">AEP Numbering and Organization</th></tr>
-    <tr><td>Number</td><td>2</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/2">aep.dev/2</a></td></tr>
+    <tr><th colspan="2">Glossary</th></tr>
+    <tr><td>Number</td><td>3</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/3">aep.dev/3</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2023-10-25</td></tr>
-    <tr><td>Updated</td><td>2023-10-25</td></tr>
+    <tr><td>Created</td><td>2023-11-15</td></tr>
+    <tr><td>Updated</td><td>2023-11-15</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#aep-numbers">AEP Numbers</a><ul>
-<li><a href="#core-aeps">Core AEPs</a></li>
-<li><a href="#organization-specific-aeps">Organization-specific AEPs</a></li>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#api">API</a></li>
+<li><a href="#api-backend">API Backend</a></li>
+<li><a href="#api-client">API Client</a></li>
+<li><a href="#api-definition">API Definition</a></li>
+<li><a href="#api-endpoint">API Endpoint</a></li>
+<li><a href="#api-gateway">API Gateway</a></li>
+<li><a href="#api-method">API Method</a></li>
+<li><a href="#api-request">API Request</a></li>
+<li><a href="#api-resource">API Resource</a></li>
+<li><a href="#api-resource-type">API Resource Type</a></li>
+<li><a href="#consumer">Consumer</a></li>
+<li><a href="#declarative-clients">Declarative Clients</a></li>
+<li><a href="#user">User</a></li>
+<li><a href="#network-api">Network API</a></li>
 </ul>
 </li>
-<li><a href="#aep-categories">AEP Categories</a></li>
-<li><a href="#aep-slugs">AEP Slugs</a></li>
-<li><a href="#rationale">Rationale</a><ul>
-<li><a href="#why-aep-slugs">Why AEP Slugs</a></li>
-<li><a href="#why-aep-categories">Why AEP Categories</a></li>
-<li><a href="#why-organization-specific-aeps">Why Organization-specific AEPs</a></li>
-</ul>
-</li>
+<li><a href="#changelog">Changelog</a></li>
 </ul>
 </div>
 
@@ -306,8 +308,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0002">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0002">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0003">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0003">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -332,89 +334,83 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        AEP Numbering and Organization
+        Glossary
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aep-number">AEP-2</h4>
-  <h1 id="aep-numbering-and-organization">AEP Numbering and Organization</h1>
-<p>This document describes the numbering system and general organization of AEPs.</p>
-<p>AEP numbers:</p>
+  <h4 class="aep-number">AEP-3</h4>
+  <h1 id="glossary">Glossary</h1>
+<p>This AEP defines common terminology.</p>
+<h2 id="guidance">Guidance</h2>
+<p>The following terminology <strong>must</strong> be used consistently throughout AEPs.</p>
+<h3 id="api">API</h3>
+<p>Application Programming Interface. This can be a local interface (such as an
+SDK) or a Network API (defined below).</p>
+<h3 id="api-backend">API Backend</h3>
+<p>A set of servers and related infrastructure that implements the business logic
+for an API Service.</p>
+<h3 id="api-client">API Client</h3>
+<p>An API Client is a program or library that perform a specific tasks by calling
+an API or generic tools, such as CLIs, that expose the API in a user-accessible
+fashion or operate on resource data at rest.</p>
+<p>Examples of clients include the following:</p>
 <ul>
-<li>Are unique. No two AEPs share the same number.</li>
-<li>Indicate the order in which they are authored.</li>
+<li>Command line interfaces</li>
+<li>Libraries, such as an SDK for a particular programming language</li>
+<li>Scripts that operates on a JSON representation of a resource after reading it
+  from an API</li>
+<li>Tools, such as a [Declarative client][]</li>
+<li>Visual UIs, such as a web application</li>
 </ul>
-<p>To help with organization and discovery, AEPs also have a category and a slug
-to easily discovery and refer to the AEP.</p>
-<p>See below for an example of an AEP id, category, and slug, expressed via YAML
-front-matter:</p>
-<div class="highlight language-yaml"><pre><span></span><code><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11</span><span class="w"></span>
-<span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;resources&#39;</span><span class="w"></span>
-<span class="nt">slug</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;create&#39;</span><span class="w"></span>
-</code></pre></div>
-<h2 id="aep-numbers">AEP Numbers</h2>
-<h3 id="core-aeps">Core AEPs</h3>
-<p>To uniquely identify an AEP, each one is assigned a permanent number as it is
-merged.</p>
+<h3 id="api-definition">API Definition</h3>
+<p>A well-structured representation of an API Service.</p>
+<h3 id="api-endpoint">API Endpoint</h3>
+<p>Refers to a network address that an API Service uses to handle incoming API
+Requests. One API Service may have multiple API Service Endpoints, such as
+<code>https://pubsub.example.com</code> and <code>https://content-pubsub.example.com</code>.</p>
+<h3 id="api-gateway">API Gateway</h3>
+<p>One or more services that together provide common functionality across API
+Services, such as load balancing and authentication.</p>
+<h3 id="api-method">API Method</h3>
+<p>An individual operation within an API. It is typically represented in Protocol
+Buffers by an <code>rpc</code> definition, or in HTTP via a <code>method</code> and a <code>path</code>.</p>
+<h3 id="api-request">API Request</h3>
+<p>A single invocation of an API Method. It is often used as the unit for billing,
+logging, monitoring, and rate limiting.</p>
+<h3 id="api-resource">API Resource</h3>
+<p>An object upon which one or more API methods operate.</p>
+<h3 id="api-resource-type">API Resource Type</h3>
+<p>An API resource type represents a category of that consumes and API,</p>
+<h3 id="consumer">Consumer</h3>
+<p>Either a programmatic client or a user that consumes an API. This term should
+be used when a statement refers broadly to both programs and users.</p>
+<h3 id="declarative-clients">Declarative Clients</h3>
+<p>Declarative Clients, also known as Infrastructure as Code (IaC), describes a
+category of clients that consumes a markup language or code that represents
+resources exposed by an API, and executes the appropriate imperative actions to
+drive the resource to that desired state. To determine what changes to make and
+if a set of updates was successful a declarative client compares server side
+resource attributes with client defined values. The comparison feature ensures
+accuracy of a creation or an update but it requires services to treat the
+client set fields as read-only and diligently preserve those values.</p>
+<p>Examples of complexities that declarative clients abstract away include:</p>
 <ul>
-<li>A merged AEP <strong>must</strong> use the next available number.</li>
-<li>AEPs <strong>must</strong> be numbered between 1 and 9999.</li>
+<li>Determing the appropriate imperative action (create / update / delete) to
+  achieve desired state.</li>
+<li>Ordering of these imperative actions.</li>
 </ul>
-<h3 id="organization-specific-aeps">Organization-specific AEPs</h3>
-<ul>
-<li>Organizations <strong>may</strong> extend the AEPs with guidance that is relevant to them.</li>
-<li>Organization-specific AEPs <strong>must</strong> use AEP numbers 10000 or greater.</li>
-</ul>
-<h2 id="aep-categories">AEP Categories</h2>
-<p>To help with discovery of an AEP, each one is assigned a category: a string
-that describes a theme or grouping the AEP belongs in.</p>
-<ul>
-<li>The category of an AEP <strong>may</strong> change over time.</li>
-</ul>
-<p>As an example, the guidance around custom methods may grow to multiple AEPs. As
-such, AEPS may create a new category "custom-methods" and recategorize relevant
-AEPs (mutating custom methods, retrieval custom methods) under it.</p>
-<p>Categories are expressed in the YAML front-matter of an AEP:</p>
-<div class="highlight language-yaml"><pre><span></span><code><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;custom-methods&#39;</span><span class="w"></span>
-</code></pre></div>
-<h2 id="aep-slugs">AEP Slugs</h2>
-<p>Each AEP is given a slug: a string by which it can be easily referenced and
-accessible via an URL on the aep.dev site.</p>
-<ul>
-<li>The slug of an AEP <strong>may</strong> change over time, sometimes to refer to a new
-  revision of an existing AEP.</li>
-<li>On the AEP site, the AEP is then available by with a path of the slug:
-  <code>/{slug}</code>.</li>
-</ul>
-<p>For example, an <a href="/123">AEP-123</a> may author guidance around a design pattern for
-revisions of resources, and be given the slug "revisions". If a new <a href="/1340">AEP-1340</a>
-that provides a significant change is authored, then it may be use the slug
-"revisions", with <a href="/123">AEP-123</a> given a slug like "revisions-deprecated".</p>
-<p>Slugs are expressed in the YAML front-matter of an AEP:</p>
-<div class="highlight language-yaml"><pre><span></span><code><span class="nt">slug</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;create&#39;</span><span class="w"></span>
-</code></pre></div>
-<p>And is available via the path "/create" on the site hosting aep.dev.</p>
-<h2 id="rationale">Rationale</h2>
-<h3 id="why-aep-slugs">Why AEP Slugs</h3>
-<p>In the original aip.dev project, numbers were the primary identifier for an
-AEP. However, as a number does not hint to its purpose or the guidance it
-contains, conversations around AIPs were difficult to hold and often the AIPs
-were be referred to by an unofficial colloquial name rather than by its number.</p>
-<p>As such, AEPs provide the ability for a semantic slug.</p>
-<h3 id="why-aep-categories">Why AEP Categories</h3>
-<p>With aip.dev, numbers were an organizational scheme, with AIPs sorted by number
-in navigation. Using numbers resulted in difficulties putting a new AEP
-alongside related AEPs if a number was not available.</p>
-<p>By adding categories, new AEPs can easily be organized, as well as produce more
-granular categories as the need arises.</p>
-<h3 id="why-organization-specific-aeps">Why Organization-specific AEPs</h3>
-<p>Similar to <a href="google.aip.dev">google.aip.dev</a>, the organizations supporting the
-AEP project found the need for providing organization-specific guidance that is
-a superset of the open specification. By allocating a specific range,
-organizations may safely extend the AEPs without concern of conflicting AEP
-numbers.</p>
+<p><a href="https://www.terraform.io/">Terraform</a> is an example of such a client.</p>
+<h3 id="user">User</h3>
+<p>A human being which is using an API directly, such as with cURL. This term is
+defined to differentiate usage in the AIPs between a human <em>user</em> and a
+programmatic <em>client</em>.</p>
+<h3 id="network-api">Network API</h3>
+<p>An API that operates across a network of computers. Network APIs communicate
+using network protocols including HTTP, and are frequently produced by
+organizations separate from those that consume them.</p>
+<h2 id="changelog">Changelog</h2>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
