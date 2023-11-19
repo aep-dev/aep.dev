@@ -1,0 +1,101 @@
+# Resource types
+
+Most APIs expose _resources_ (their primary nouns) which users are able to
+create, retrieve, and manipulate. APIs are allowed to name their resource types
+as they see fit, and are only required to ensure uniqueness within that API.
+This means that it is possible (and often desirable) for different APIs to use
+the same type name. For example, a Memcache and Redis API would both want to
+use `Instance` as a type name.
+
+When mapping the relationships between APIs and their resources, however, it
+becomes important to have a single, globally-unique type name. Additionally,
+tools such as Kubernetes or GraphQL interact with APIs from multiple providers.
+
+## Guidance
+
+APIs **must** define a resource type for each resource in the API, according to
+the following pattern: `{API Name}/{Type}`. The type name:
+
+- **must** Start with an uppercase letter.
+- **must** Only contain alphanumeric characters.
+- **must** Be of the singular form of the noun.
+- **must** Use PascalCase (UpperCamelCase).
+- For Kubernetes, the type name **must** match the [object][] name.
+- For Protobuf, the type name **must** match the name of the protobuf message.
+
+### Examples
+
+Examples of resource types include:
+
+- `pubsub.googleapis.com/Topic`
+- `pubsub.googleapis.com/Subscription`
+- `spanner.googleapis.com/Database`
+- `spanner.googleapis.com/Instance`
+- `networking.istio.io/Instance`
+
+### Annotating resource types
+
+APIs **must** annotate the resource types for each resource in the API using
+the [`google.api.resource`][resource] annotation:
+
+```proto
+// A representation of a Pub/Sub topic.
+message Topic {
+  option (google.api.resource) = {
+    type: "pubsub.googleapis.com/Topic"
+    pattern: "projects/{project}/topics/{topic}"
+    singular: "topic"
+    plural: "topics"
+  };
+
+  // Name and other fields...
+}
+```
+
+- Patterns **must** correspond to the [resource path][resource-paths].
+- Pattern variables (the segments within braces) **must** use `snake_case`, and
+  **must not** use an `_id` suffix.
+- Pattern variables **must** conform to the format `[a-z][_a-z0-9]*[a-z0-9]`.
+- Pattern variables **must** be unique within any given pattern. (e.g.
+  `projects/{abc}/topics/{abc}` is invalid; this is usually a natural corollary
+  of collection identifiers being unique within a pattern.)
+- Singular **must** be the lower camel case of the type.
+  - Pattern variables **must** be the singular form of the resource type e.g. a
+    pattern variable representing a `Topic` resource ID is named `{topic}`.
+- Plural **must** be the lower camel case plural of the singular.
+  - Pattern collection identifier segments **must** match the plural of the
+    resources, except in the case of [nested collections][].
+
+#### Pattern uniqueness
+
+When multiple patterns are defined within a resource, these patterns **must**
+be mutually unique, where uniqueness is defined as being by-character identical
+once all resource ID path segments have been removed, leaving all `/`
+separators.
+
+Therefore the following two patterns **must not** be defined within the same
+resource:
+
+- `user/{user}`
+- `user/{user_part_1}~{user_part_2}`
+
+## Rationale
+
+### Singular and Plural
+
+Well-defined singular and plurals of a resource enable clients to determine the
+proper name to use in code and documentation.
+
+lowerCamelCase can be translated into other common forms of a resource path
+such as UpperCamelCase and snake_case.
+
+<!-- prettier-ignore-start -->
+[resource-paths]: /resource-paths
+[API Group]: https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-groups
+[nested collections]: ./0122.md#collection-identifiers
+[Object]: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+[resource]: https://github.com/googleapis/googleapis/blob/master/google/api/resource.proto
+[service configuration]: https://github.com/googleapis/googleapis/blob/master/google/api/service.proto
+<!-- prettier-ignore-end -->
+
+## Changelog

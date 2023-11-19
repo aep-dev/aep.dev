@@ -11,6 +11,8 @@ The following terminology **must** be used consistently throughout AEPs.
 Application Programming Interface. This can be a local interface (such as an
 SDK) or a Network API (defined below).
 
+APIs define one or more operations upon resource types.
+
 ### API Backend
 
 A set of servers and related infrastructure that implements the business logic
@@ -33,23 +35,27 @@ Examples of clients include the following:
 
 ### API Definition
 
-A well-structured representation of an API Service.
+A well-structured representation of an API.
 
 ### API Endpoint
 
-Refers to a network address that an API Service uses to handle incoming API
-Requests. One API Service may have multiple API Service Endpoints, such as
-`https://pubsub.example.com` and `https://content-pubsub.example.com`.
+Refers to a network address that an API uses to handle incoming requests. One
+API may have multiple endpoints, such as `https://pubsub.example.com` and
+`https://content-pubsub.example.com`.
 
 ### API Gateway
 
 One or more services that together provide common functionality across API
-Services, such as load balancing and authentication.
+services, such as load balancing and authentication.
 
 ### API Method
 
 An individual operation within an API. It is typically represented in Protocol
 Buffers by an `rpc` definition, or in HTTP via a `method` and a `path`.
+
+### API Name
+
+The name by which to refer to an API.
 
 ### API Request
 
@@ -58,11 +64,17 @@ logging, monitoring, and rate limiting.
 
 ### API Resource
 
-An object upon which one or more API methods operate.
+An object upon which one or more methods can operate.
 
 ### API Resource Type
 
-An API resource type represents a category of that consumes and API,
+The type of an object exposed via an API. It is globally unique within an
+API.
+
+### API Service
+
+An implementation of an API, exposing API methods on one or more network
+addresses.
 
 ### Consumer
 
