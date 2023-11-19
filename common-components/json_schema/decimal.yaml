@@ -14,8 +14,8 @@ description: |
   as well as that of a `decimal64`.
 type: object
 required:
-- significand
-- exponent
+  - significand
+  - exponent
 additionalProperties: false
 properties:
   significand:

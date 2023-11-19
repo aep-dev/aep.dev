@@ -11,8 +11,8 @@ description: |
     `{"currency_code": "X-BTC", "quantity": {"significand": 15, "exponent": -1}}`
 type: object
 required:
-- currency_code
-- quantity
+  - currency_code
+  - quantity
 additionalProperties: false
 properties:
   currency_code:
