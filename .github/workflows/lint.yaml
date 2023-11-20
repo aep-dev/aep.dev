@@ -11,6 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install prettier.
-        run: npm install --global prettier
+        run: npm install --global prettier@3.0.3
       - name: Verify proper formatting.
-        run: prettier --check **/*.md **/*.md.j2
+        run: prettier --check .
