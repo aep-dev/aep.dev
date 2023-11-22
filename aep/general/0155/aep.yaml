@@ -1,0 +1,9 @@
+---
+id: 155
+state: approved
+slug: idempotency
+created: 2019-05-06
+placement:
+  category: design-patterns
+  order: 60
+redirect_from: '/idempotency'
