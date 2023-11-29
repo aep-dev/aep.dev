@@ -2,8 +2,11 @@
 
 It is sometimes useful for an API to have a unique, customer-provided
 identifier for particular requests. This can be useful for several purposes,
-such as de-duplicating requests from parallel processes, ensuring the safety of
-retries, or auditing.
+such as:
+
+- De-duplicating requests from parallel processes
+- Ensuring the safety of retries
+- Auditing
 
 The purpose of idempotency keys is to provide idempotency guarantees: allowing
 the same request to be issued more than once without subsequent calls having
@@ -41,7 +44,7 @@ message CreateBookRequest {
   - If a duplicate request is detected, the server **should** return the
     response for the previously successful request, because the client most
     likely did not receive the previous response.
-  - APIs **may** choose any reasonable timeframe for honoring idempotency keys.
+  - APIs **should** honor idempotency keys for at least an hour.
 - The `idempotency_key` field **must** be provided on the request message to
   which it applies (and it **must not** be a field on resources themselves).
 - Idempotency keys **should** be optional.

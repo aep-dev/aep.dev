@@ -4,6 +4,5 @@ state: approved
 slug: idempotency
 created: 2019-05-06
 placement:
-  category: design-patterns
+  category: requests
   order: 60
-redirect_from: '/idempotency'
