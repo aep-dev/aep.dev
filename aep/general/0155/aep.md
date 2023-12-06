@@ -48,7 +48,7 @@ message CreateBookRequest {
 - The `idempotency_key` field **must** be provided on the request message to
   which it applies (and it **must not** be a field on resources themselves).
 - Idempotency keys **should** be optional.
-- Idempotency keys **should** be able to be UUIDs, and **may** allow UUIDs to
+- Idempotency keys **must** be able to be UUIDs, and **may** allow UUIDs to
   be the only valid format. The format restrictions for idempotency keys
   **must** be documented.
   - Idempotency keys that are UUIDs **must** be annotated with the
