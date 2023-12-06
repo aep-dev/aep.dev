@@ -64,7 +64,7 @@ message Topic {
     pattern variable representing a `Topic` resource ID is named `{topic}`.
 - Plural **must** be the lower camel case plural of the singular.
   - Pattern collection identifier segments **must** match the plural of the
-    resources, except in the case of [nested collections][].
+    resource, except in the case of [nested collections][].
 
 #### Pattern uniqueness
 
