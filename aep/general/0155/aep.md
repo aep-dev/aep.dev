@@ -51,10 +51,10 @@ message CreateBookRequest {
 - Idempotency keys **must** be able to be UUIDs, and **may** allow UUIDs to be
   the only valid format. The format restrictions for idempotency keys **must**
   be documented.
-  - Idempotency keys that are UUIDs **must** be annotated with the
-    `google.api.FieldInfo.Format` value `UUID4` using the extension
-    `(google.api.field_info).format = UUID4`. See [AEP-202](../0202/aep.md) for
-    more.
+  - When using protocol buffers, idempotency keys that are UUIDs **must** be
+    annotated with the `google.api.FieldInfo.Format` value `UUID4` using the
+    extension `(google.api.field_info).format = UUID4`. See
+    [AEP-202](../0202/aep.md) for more.
 
 ### Stale success responses
 
