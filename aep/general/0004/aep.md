@@ -14,23 +14,25 @@ tools such as Kubernetes or GraphQL interact with APIs from multiple providers.
 ## Guidance
 
 APIs **must** define a resource type for each resource in the API, according to
-the following pattern: `{API Name}/{Type}`. The type name:
+the following pattern: `{API Name}/{Type Name}`. The type name:
 
 - **must** Start with an uppercase letter.
 - **must** Only contain alphanumeric characters.
 - **must** Be of the singular form of the noun.
 - **must** Use PascalCase (UpperCamelCase).
 - For Kubernetes, the type name **must** match the [object][] name.
+- For OpenAPI, the type name **must** match the name of the schema representing
+  the object.
 - For Protobuf, the type name **must** match the name of the protobuf message.
 
 ### Examples
 
 Examples of resource types include:
 
-- `pubsub.googleapis.com/Topic`
-- `pubsub.googleapis.com/Subscription`
-- `spanner.googleapis.com/Database`
-- `spanner.googleapis.com/Instance`
+- `pubsub.example.com/Topic`
+- `pubsub.example.com/Subscription`
+- `spanner.example.com/Database`
+- `spanner.example.com/Instance`
 - `networking.istio.io/Instance`
 
 ### Annotating resource types
@@ -68,10 +70,9 @@ message Topic {
 
 #### Pattern uniqueness
 
-When multiple patterns are defined within a resource, these patterns **must**
-be mutually unique, where uniqueness is defined as being by-character identical
-once all resource ID path segments have been removed, leaving all `/`
-separators.
+If multiple patterns are defined within a resource, the patterns defined must
+not overlap in the set of resource paths that they can match. In other words, a
+resource path may match at most one of the patterns.
 
 Therefore the following two patterns **must not** be defined within the same
 resource:
@@ -86,8 +87,8 @@ resource:
 Well-defined singular and plurals of a resource enable clients to determine the
 proper name to use in code and documentation.
 
-lowerCamelCase can be translated into other common forms of a resource path
-such as UpperCamelCase and snake_case.
+lowerCamelCase was chosen as the formatting as it can easily translated into
+other common forms of a resource path such as UpperCamelCase and snake_case.
 
 <!-- prettier-ignore-start -->
 [resource-paths]: /resource-paths
