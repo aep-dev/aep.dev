@@ -86,6 +86,18 @@ message CreateBookRequest {
 
 - Idempotency keys **should** be optional.
 
+### Stale success responses
+
+In some unusual situations, it may not be possible to return an identical
+success response. For example, a duplicate request to create a resource may
+arrive after the resource has not only been created, but subsequently updated;
+because the service has no other need to retain the historical data, it is no
+longer feasible to return an identical success response.
+
+In this situation, the method **may** return the current state of the resource
+instead. In other words, it is permissible to substitute the historical success
+response with a similar response that reflects more current data.
+
 ## Further reading
 
 - For which codes to retry, see [AEP-194](https://aep.dev/194).
