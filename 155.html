@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-141: Quantities</title>
+    <title>AEP-155: Idempotency</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -204,7 +204,7 @@
           </a>
         </li>
       <li class="nav-item">Fields</li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/141">
             <span class="aep-number">141</span>
             Quantities
@@ -272,18 +272,21 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Quantities</th></tr>
-    <tr><td>Number</td><td>141</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/141">aep.dev/141</a></td></tr>
+    <tr><th colspan="2">Idempotency</th></tr>
+    <tr><td>Number</td><td>155</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/155">aep.dev/155</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2019-07-18</td></tr>
-    <tr><td>Updated</td><td>2019-07-18</td></tr>
+    <tr><td>Created</td><td>2019-05-06</td></tr>
+    <tr><td>Updated</td><td>2019-05-06</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#guidance">Guidance</a><ul>
-<li><a href="#specialized-messages">Specialized messages</a></li>
+<li><a href="#guidance">Guidance</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#naming-the-field-idempotency_key">Naming the field idempotency_key</a></li>
+<li><a href="#using-uuids-for-request-identification">Using UUIDs for request identification</a></li>
 </ul>
 </li>
 <li><a href="#changelog">Changelog</a></li>
@@ -295,8 +298,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0141">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0141">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0155">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0155">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -321,77 +324,160 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Quantities
+        Idempotency
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aep-number">AEP-141</h4>
-  <p>Quantities</p>
-<p>Many services need to represent a discrete quantity of items (number of bytes,
-number of miles, number of nodes, etc.).</p>
-<h2 id="guidance">Guidance</h2>
-<p>Quantities with a clear unit of measurement (such as bytes, miles, and so on)
-<strong>must</strong> include the unit of measurement as the suffix. When appropriate and
-unambiguous, units <strong>should</strong> use generally accepted abbreviations (for
-example, <code>distance_km</code> rather than <code>distance_kilometers</code>).</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of a non-stop air route.</span><span class="w"></span>
-<span class="kd">interface</span><span class="w"> </span><span class="nx">Route</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The airport where the route begins.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">origin</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// The destination airport.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">destination</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// The distance between the origin and destination airports.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// This value is also used to determine the credited frequent flyer miles.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">distance_miles</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>If the quantity is a number of items (for example, the number of nodes in a
-cluster), then the field <strong>should</strong> use the suffix <code>_count</code> (<strong>not</strong> the prefix
-<code>num_</code>):</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A cluster of individual nodes.</span><span class="w"></span>
-<span class="kd">interface</span><span class="w"> </span><span class="nx">Cluster</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The number of nodes in the cluster.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">node_count</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p><strong>Note:</strong> Fields <strong>must not</strong> use unsigned integer types, because many
-programming languages and systems do not support them well.</p>
-<h3 id="specialized-messages">Specialized messages</h3>
-<p>It is sometimes useful to create a message that represents a particular
-quantity. This is particularly valuable in two situations.</p>
+  <h4 class="aep-number">AEP-155</h4>
+  <h1 id="idempotency">Idempotency</h1>
+<p>It is sometimes useful for an API to have a unique, customer-provided
+identifier for particular requests. This can be useful for several purposes,
+such as:</p>
 <ul>
-<li>Grouping two or more individual quantities together.</li>
-<li>Representing a common concept where the unit of measurement may itself vary.</li>
+<li>De-duplicating requests from parallel processes</li>
+<li>Ensuring the safety of retries</li>
+<li>Auditing</li>
 </ul>
-<p>Consider the example of money, which could need to do both of these:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="c1">// A representation of an amount of money, in an arbitrary currency.</span><span class="w"></span>
-<span class="kd">interface</span><span class="w"> </span><span class="nx">Money</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The 3-letter currency code defined in ISO 4217.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">currency_code</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<p>The purpose of idempotency keys is to provide idempotency guarantees: allowing
+the same request to be issued more than once without subsequent calls having
+any effect. In the event of a network failure, the client can retry the
+request, and the server can detect duplication and ensure that the request is
+only processed once.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>may</strong> add a <code>aep.api.IdempotencyKey idempotency_key</code> parameter to
+request messages (including those of standard methods) in order to uniquely
+identify particular requests. API servers <strong>must not</strong> execute requests with
+the same <code>idempotency_key</code> more than once.</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">CreateBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The parent resource where this book will be created.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">child_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.example.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
 
-<span class="w">  </span><span class="c1">// The whole units of the amount.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// For example if `currency_code` is &quot;USD&quot;, then 1 unit is one US dollar.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">units</span><span class="o">:</span><span class="w"> </span><span class="kt">bigint</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// The book to create.</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
 
-<span class="w">  </span><span class="c1">// Number of nano (10^-9) units of the amount.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The value must be between -999,999,999 and +999,999,999 inclusive.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// If `units` is positive, `nanos` must be positive or zero.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// If `units` is zero, `nanos` can be positive, zero, or negative.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// If `units` is negative, `nanos` must be negative or zero.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">nanos</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// This request is only idempotent if `idempotency_key` is provided.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// This key will be honored for at least one hour after the first time it is</span>
+<span class="w">  </span><span class="c1">// seen by the server.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// The key is restricted to 36 ASCII characters. A random UUID is recommended.</span>
+<span class="w">  </span><span class="n">aep.api.IdempotencyKey</span><span class="w"> </span><span class="na">idempotency_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">(</span><span class="n">aep.api.field_info</span><span class="p">)</span><span class="o">.</span><span class="na">minimum_lifetime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">seconds</span><span class="o">:</span><span class="w"> </span><span class="mi">3600</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">];</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>APIs <strong>may</strong> create structs to represent quantities when appropriate. When
-using these structs as fields, APIs <strong>should</strong> use the name of the struct as
-the suffix for the field name if it makes intuitive sense to do so.</p>
+<ul>
+<li>
+<p>[<code>aep.api.IdempotencyKey</code>][] has a <code>key</code> and a <code>first_sent</code> timestamp.</p>
+<ul>
+<li><code>key</code> is simply a unique identifier.</li>
+</ul>
+</li>
+<li>
+<p>Providing an idempotency key <strong>must</strong> guarantee idempotency.</p>
+<ul>
+<li>
+<p>If a duplicate request is detected, the server <strong>must</strong> return one of:</p>
+<ul>
+<li>A response equivalent to the response for the previously successful
+  request, because the client most likely did not receive the previous
+  response.</li>
+<li>An error indicating that the <code>first_sent</code> field of the idempotency key is
+  invalid or cannot be honored (expired, in the future, or differs from a
+  previous <code>first_sent</code> value with the same <code>key</code>).</li>
+<li>
+<p>An error, if returning an equivalent response is not possible.</p>
+<p>For example, if a resource was created, then deleted, and then a
+duplicate request to create the resource is received, the server <strong>may</strong>
+return an error if returning the previously created resource is not
+possible.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>APIs <strong>should</strong> honor idempotency keys for at least an hour.</p>
+<ul>
+<li>When using protocol buffers, idempotency keys that are UUIDs <strong>must</strong> be
+  annotated with a minimum lifetime using the extension
+  [<code>(aep.api.field_info).minimum_lifetime</code>][].</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>The <code>idempotency_key</code> field <strong>must</strong> be provided on the request message to
+  which it applies (and it <strong>must not</strong> be a field on resources themselves).</p>
+<ul>
+<li>The <code>first_sent</code> field can be used by API servers to determine if a key is
+  expired. API servers <strong>must</strong> reject requests with expired keys, and
+  <strong>must</strong> reject requests with keys that are in the future. When feasible,
+  API servers <strong>should</strong> reject requests that use the same <code>key</code> but have a
+  different <code>first_sent</code> timestamp.</li>
+<li>The <code>key</code> field <strong>must</strong> be able to be a UUID, and <strong>may</strong> allow UUIDs to
+  be the only valid format. The format restrictions for idempotency keys
+  <strong>must</strong> be documented.</li>
+</ul>
+</li>
+<li>
+<p>Idempotency keys <strong>should</strong> be optional.</p>
+</li>
+</ul>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>For which codes to retry, see <a href="https://aep.dev/194">AEP-194</a>.</li>
+<li>For how to retry errors in client libraries, see
+  <a href="https://aep.dev/4221">AEP-4221</a>.</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="naming-the-field-idempotency_key">Naming the field <code>idempotency_key</code></h3>
+<p>The original content from which this AEP is derived defines a <code>request_id</code>
+field; we define <code>idempotency_key</code> instead for two reasons:</p>
+<ol>
+<li>There is an <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/">active Internet-Draft</a> to standardize an
+   HTTP header named <code>Idempotency-Key</code>.</li>
+<li>There may be edge cases in which separately identifying idempotent requests
+   is useful; <code>request_id</code> would be more appropriate for such use cases. For
+   example, an API producer might be testing the idempotency behavior of the
+   API server, and might want to issue multiple requests with the same
+   <code>idempotency_key</code> and trace the behavior of each request separately.</li>
+</ol>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+
+<h3 id="using-uuids-for-request-identification">Using UUIDs for request identification</h3>
+<p>When a value is required to be unique, leaving the format open-ended can lead
+to API consumers incorrectly providing a duplicate identifier. As such,
+standardizing on a universally unique identifier drastically reduces the chance
+for collisions when done correctly.</p>
 <h2 id="changelog">Changelog</h2>
 <ul>
-<li><strong>2019-09-13</strong>: Added the prohibition on unsigned types.</li>
+<li><strong>2023-23-20</strong>: Adopt AEP from from Google's AIP with the following changes:<ul>
+<li>Rename field from <code>request_id</code> to <code>idempotency_key</code> (plus some minor
+  releated rewording).</li>
+<li>Add a common component [<code>aep.api.IdempotencyKey</code>][] and use this rather
+  than <code>string</code> for the <code>idempotency_key</code> field; add related guidance about
+  <code>IdempotencyKey.first_seen</code>.</li>
+<li>Remove guidance about annotating <code>idempotency_key</code> with
+  <code>(google.api.field_info).format</code>.</li>
+<li>Add guidance about annotating <code>idempotency_key</code> with
+  [<code>(aep.api.field_info).minimum_lifetime</code>].</li>
+<li>Update guidance about responses to be more explicit about success and error
+  cases, while allowing "equivalent" rather than identical responses for
+  subsequent requests.</li>
+<li>Temporarily removed the section about stale success responses, pending
+  further discussion.</li>
+</ul>
+</li>
+<li><strong>2023-10-02</strong>: Add UUID format extension guidance.</li>
+<li><strong>2019-08-01</strong>: Changed the examples from "shelves" to "publishers", to
+  present a better example of resource ownership.</li>
 </ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
