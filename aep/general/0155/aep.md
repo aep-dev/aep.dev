@@ -70,7 +70,7 @@ message CreateBookRequest {
   - APIs **should** honor idempotency keys for at least an hour.
     - When using protocol buffers, idempotency keys that are UUIDs **must** be
       annotated with a minimum lifetime using the extension
-      [`(aep.api.field_info).minimum_lifetime`].
+      [`(aep.api.field_info).minimum_lifetime`][].
 
 - The `idempotency_key` field **must** be provided on the request message to
   which it applies (and it **must not** be a field on resources themselves).
@@ -85,18 +85,6 @@ message CreateBookRequest {
     **must** be documented.
 
 - Idempotency keys **should** be optional.
-
-### Stale success responses
-
-In some unusual situations, it may not be possible to return an identical
-success response. For example, a duplicate request to create a resource may
-arrive after the resource has not only been created, but subsequently updated;
-because the service has no other need to retain the historical data, it is no
-longer feasible to return an identical success response.
-
-In this situation, the method **may** return the current state of the resource
-instead. In other words, it is permissible to substitute the historical success
-response with a similar response that reflects more current data.
 
 ## Further reading
 
@@ -134,7 +122,7 @@ for collisions when done correctly.
 
 ## Changelog
 
-- **2023-11-21**: Adopt AEP from from Google's AIP with the following changes:
+- **2023-23-20**: Adopt AEP from from Google's AIP with the following changes:
   - Rename field from `request_id` to `idempotency_key` (plus some minor
     releated rewording).
   - Add a common component [`aep.api.IdempotencyKey`][] and use this rather
@@ -147,6 +135,8 @@ for collisions when done correctly.
   - Update guidance about responses to be more explicit about success and error
     cases, while allowing "equivalent" rather than identical responses for
     subsequent requests.
+  - Temporarily removed the section about stale success responses, pending
+    further discussion.
 - **2023-10-02**: Add UUID format extension guidance.
 - **2019-08-01**: Changed the examples from "shelves" to "publishers", to
   present a better example of resource ownership.
