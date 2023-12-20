@@ -52,14 +52,14 @@ message CreateBookRequest {
 
 - Providing an idempotency key **must** guarantee idempotency.
 
-  - If a duplicate request is detected, the server **must** return either:
+  - If a duplicate request is detected, the server **must** return one of:
 
     - A response equivalent to the response for the previously successful
       request, because the client most likely did not receive the previous
-      response; OR
+      response.
     - An error indicating that the `first_sent` field of the idempotency key is
       invalid (expired, in the future, or differs from a previous `first_sent`
-      value with the same `key`); OR
+      value with the same `key`).
     - An error, if returning an equivalent response is not possible.
 
       For example, if a resource was created, then deleted, and then a
