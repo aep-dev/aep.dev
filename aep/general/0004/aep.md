@@ -17,13 +17,13 @@ APIs **must** define a resource type for each resource in the API, according to
 the following pattern: `{API Name}/{Type Name}`. The type name:
 
 - **must** Start with an uppercase letter.
-- **must** Only contain alphanumeric characters.
+- **must** Only contain ASCII alphanumeric characters.
 - **must** Be of the singular form of the noun.
 - **must** Use PascalCase (UpperCamelCase).
 - For Kubernetes, the type name **must** match the [object][] name.
 - For OpenAPI, the type name **must** match the name of the schema representing
   the object.
-- For Protobuf, the type name **must** match the name of the protobuf message.
+- For protobuf, the type name **must** match the name of the protobuf message.
 
 ### Examples
 
@@ -70,11 +70,11 @@ message Topic {
 
 #### Pattern uniqueness
 
-If multiple patterns are defined within a resource, the patterns defined must
-not overlap in the set of resource paths that they can match. In other words, a
+If multiple patterns are defined within a resource, the patterns defined **must
+not** overlap in the set of resource paths that they can match. In other words, a
 resource path may match at most one of the patterns.
 
-Therefore the following two patterns **must not** be defined within the same
+For example, the following two patterns would not be valid for the same
 resource:
 
 - `user/{user}`
