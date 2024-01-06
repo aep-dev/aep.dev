@@ -16,63 +16,97 @@ tools such as Kubernetes or GraphQL interact with APIs from multiple providers.
 APIs **must** define a resource type for each resource in the API, according to
 the following pattern: `{API Name}/{Type Name}`. The type name:
 
-- **must** Start with an uppercase letter.
 - **must** Only contain ASCII alphanumeric characters.
+- **must** Start with a lowercase letter.
 - **must** Be of the singular form of the noun.
-- **must** Use PascalCase (UpperCamelCase).
-- For Kubernetes, the type name **must** match the [object][] name.
-- For OpenAPI, the type name **must** match the name of the schema representing
-  the object.
-- For protobuf, the type name **must** match the name of the protobuf message.
+- **must** Use kebab case.
+- For Kubernetes, the type name when converted to upper camel case **must**
+  match the [object][] name.
+- For OpenAPI, the type name when converted to upper camel case **must** match
+  the name of the schema representing the object.
+- For protobuf, the type name when converted to upper camel case **must** match
+  the name of the protobuf message.
 
 ### Examples
 
 Examples of resource types include:
 
-- `pubsub.example.com/Topic`
-- `pubsub.example.com/Subscription`
-- `spanner.example.com/Database`
-- `spanner.example.com/Instance`
-- `networking.istio.io/Instance`
+- `networking.istio.io/instance`
+- `pubsub.example.com/topic`
+- `pubsub.example.com/subscription`
+- `spanner.example.com/database`
+- `spanner.example.com/instance`
+- `user.example.com/user-event`
 
 ### Annotating resource types
 
-APIs **must** annotate the resource types for each resource in the API using
-the [`google.api.resource`][resource] annotation:
+APIs **must** annotate the resource types for each resource in the API
+
+{% tab proto %}
+
+For protobuf, use the [`google.api.resource`][resource] annotation:
 
 ```proto
-// A representation of a Pub/Sub topic.
+// A representation of a user event.
 message Topic {
   option (google.api.resource) = {
-    type: "pubsub.googleapis.com/Topic"
-    pattern: "projects/{project}/topics/{topic}"
-    singular: "topic"
-    plural: "topics"
+    type: "user.example.com/user-event"
+    singular: "user-event"
+    plural: "user-events"
+    // define one or more patterns, e.g. if a resource has more than one parent.
+    pattern: "projects/{project}/user-events/{user-event}"
+    pattern: "folder/{folder}/user-events/{user-event}"
+    pattern: "users/{user}/events/{user-event}"
   };
 
   // Name and other fields...
+```
+
+{% tab oas %}
+
+For OpenAPI 3.0, use the `x-aep-resource` extension:
+
+```json
+{
+  "type": "object",
+  "x-aep-resource": {
+    "singular": "user-event",
+    "plural": "user-events",
+    "patterns": [
+      "projects/{project}/user-events/{user-event}",
+      "folder/{folder}/user-events/{user-event}",
+      "users/{user}/events/{user-event}"
+    ]
+  }
 }
 ```
 
-- Patterns **must** correspond to the [resource path][resource-paths].
-- Pattern variables (the segments within braces) **must** use `snake_case`, and
-  **must not** use an `_id` suffix.
-- Pattern variables **must** conform to the format `[a-z][_a-z0-9]*[a-z0-9]`.
-- Pattern variables **must** be unique within any given pattern. (e.g.
-  `projects/{abc}/topics/{abc}` is invalid; this is usually a natural corollary
-  of collection identifiers being unique within a pattern.)
-- Singular **must** be the lower camel case of the type.
-  - Pattern variables **must** be the singular form of the resource type e.g. a
-    pattern variable representing a `Topic` resource ID is named `{topic}`.
-- Plural **must** be the lower camel case plural of the singular.
-  - Pattern collection identifier segments **must** match the plural of the
-    resource, except in the case of [nested collections][].
+{% endtabs %}
+
+- The `singular` field **must** match the type name.
+- The `plural` field **must** be the kebab-case plural of the singular.
+
+The `pattern` field **must** match the `pattern` rule in the following grammar,
+expressed as [EBNF][EBNF]:
+
+```ebnf
+pattern = element, { "/", element };
+element = variable | literal;
+variable = "{", literal, "}";
+```
+
+Where `literal` matches the regex `[a-z][a-z0-9\-]*[a-z0-9]`.
+
+- Patterns **must** match the possible [resource paths][resource-paths] of the
+  resource.
+- Pattern variables (the segments within braces) **must** match the singular of
+  the resource whose id is being matched by that value.
 
 #### Pattern uniqueness
 
 If multiple patterns are defined within a resource, the patterns defined **must
-not** overlap in the set of resource paths that they can match. In other words, a
-resource path may match at most one of the patterns.
+not** overlap in the set of resource paths that they can match. In other words,
+a resource path may match at most one of the patterns.
 
 For example, the following two patterns would not be valid for the same
 resource:
@@ -87,8 +121,10 @@ resource:
 Well-defined singular and plurals of a resource enable clients to determine the
 proper name to use in code and documentation.
 
-lowerCamelCase was chosen as the formatting as it can easily translated into
-other common forms of a resource path such as UpperCamelCase and snake_case.
+google.aip.dev defines the resource type to use upper camel case, while aeps
+define the kebab-case. This is to enforce better consistency in the
+representation of various multipart strings, as collection identifiers use
+kebab case.
 
 <!-- prettier-ignore-start -->
 [resource-paths]: /resource-paths
@@ -97,6 +133,7 @@ other common forms of a resource path such as UpperCamelCase and snake_case.
 [Object]: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds
 [resource]: https://github.com/googleapis/googleapis/blob/master/google/api/resource.proto
 [service configuration]: https://github.com/googleapis/googleapis/blob/master/google/api/service.proto
+[EBNF]: https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form
 <!-- prettier-ignore-end -->
 
 ## Changelog

@@ -68,8 +68,7 @@ An object upon which one or more methods can operate.
 
 ### API Resource Type
 
-The type of an object exposed via an API. It is globally unique within an
-API.
+The type of an object exposed via an API. It is globally unique within an API.
 
 ### API Service
 
