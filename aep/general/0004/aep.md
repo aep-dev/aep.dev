@@ -83,7 +83,7 @@ For OpenAPI 3.0, use the `x-aep-resource` extension:
 
 {% endtabs %}
 
-- The `singular` field **must** match the type name.
+- The `singular` field **must** be the kebab-case singular type name.
 - The `plural` field **must** be the kebab-case plural of the singular.
 
 The `pattern` field **must** match the `pattern` rule in the following grammar,
@@ -121,8 +121,8 @@ resource:
 Well-defined singular and plurals of a resource enable clients to determine the
 proper name to use in code and documentation.
 
-google.aip.dev defines the resource type to use upper camel case, while aeps
-define the kebab-case. This is to enforce better consistency in the
+google.aip.dev uses upper camel case for resource types, while aep.dev
+uses kebab-case. This is to enforce better consistency in the
 representation of various multipart strings, as collection identifiers use
 kebab case.
 
