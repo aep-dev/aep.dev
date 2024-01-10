@@ -64,11 +64,11 @@ logging, monitoring, and rate limiting.
 
 ### API Resource
 
-An object upon which one or more methods can operate.
+An entity upon which one or more methods can operate.
 
 ### API Resource Type
 
-The type of an object exposed via an API. It is globally unique within an API.
+The type of a API resource. It is globally unique within an API.
 
 ### API Service
 

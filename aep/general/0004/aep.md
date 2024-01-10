@@ -20,11 +20,11 @@ the following pattern: `{API Name}/{Type Name}`. The type name:
 - **must** Start with a lowercase letter.
 - **must** Be of the singular form of the noun.
 - **must** Use kebab case.
-- For Kubernetes, the type name when converted to upper camel case **must**
-  match the [object][] name.
-- For OpenAPI, the type name when converted to upper camel case **must** match
+- For Kubernetes, the type name when converted to UpperCamelCase **must** match
+  the [object][] name.
+- For OpenAPI, the type name when converted to UpperCamelCase **must** match
   the name of the schema representing the object.
-- For protobuf, the type name when converted to upper camel case **must** match
+- For protobuf, the type name when converted to UpperCamelCase **must** match
   the name of the protobuf message.
 
 ### Examples
@@ -36,7 +36,7 @@ Examples of resource types include:
 - `pubsub.example.com/subscription`
 - `spanner.example.com/database`
 - `spanner.example.com/instance`
-- `user.example.com/user-event`
+- `apis.example.com/user/user-event`
 
 ### Annotating resource types
 
@@ -121,10 +121,9 @@ resource:
 Well-defined singular and plurals of a resource enable clients to determine the
 proper name to use in code and documentation.
 
-google.aip.dev uses upper camel case for resource types, while aep.dev
-uses kebab-case. This is to enforce better consistency in the
-representation of various multipart strings, as collection identifiers use
-kebab case.
+google.aip.dev uses UpperCamelCase for resource types, while aep.dev uses
+kebab-case. This is to enforce better consistency in the representation of
+various multipart strings, as collection identifiers use kebab case.
 
 <!-- prettier-ignore-start -->
 [resource-paths]: /resource-paths
