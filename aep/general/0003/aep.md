@@ -100,7 +100,7 @@ An API that operates across a network of computers. Network APIs communicate
 using network protocols including HTTP, and are frequently produced by
 organizations separate from those that consume them.
 
-[Declarative clients]: #declarative-clients
-[Terraform]: https://www.terraform.io/
+[declarative clients]: #declarative-clients
+[terraform]: https://www.terraform.io/
 
 ## Changelog
