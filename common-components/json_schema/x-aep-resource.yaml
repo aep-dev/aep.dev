@@ -1,0 +1,31 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://aep.dev/common-components/json_schema/x-aep-resource.yaml
+title: AEP Resource
+description: |
+  Describes a resource exposed by an API.
+type: object
+required:
+  - type
+  - singular
+  - plural
+  - pattern
+additionalProperties: false
+properties:
+  type:
+    type: string
+    description: |
+      A string that describes the resource type.
+  singular:
+    type: string
+    description: |
+      The singular of the resource.
+  plural:
+    type: string
+    description: |
+      The plural of the resource.
+  pattern:
+    description: |
+      A list of possible resource paths that are used to identify the resource.
+    type: array
+    items:
+      type: string
