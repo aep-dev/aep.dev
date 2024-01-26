@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-3: Glossary</title>
+    <title>AEP-4: Resource types</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -177,7 +177,7 @@
           </a>
         </li>
       <li class="nav-item">General</li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/3">
             <span class="aep-number">3</span>
             Glossary
@@ -196,7 +196,7 @@
             Enumerations
           </a>
         </li>
-      <li class="nav-item">
+      <li class="nav-item nav-item-active">
           <a href="/4">
             <span class="aep-number">4</span>
             Resource types
@@ -380,9 +380,9 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Glossary</th></tr>
-    <tr><td>Number</td><td>3</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/3">aep.dev/3</a></td></tr>
+    <tr><th colspan="2">Resource types</th></tr>
+    <tr><td>Number</td><td>4</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/4">aep.dev/4</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
     <tr><td>Created</td><td>2023-11-15</td></tr>
     <tr><td>Updated</td><td>2023-11-15</td></tr>
@@ -391,22 +391,12 @@
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#api">API</a></li>
-<li><a href="#api-backend">API Backend</a></li>
-<li><a href="#api-client">API Client</a></li>
-<li><a href="#api-definition">API Definition</a></li>
-<li><a href="#api-endpoint">API Endpoint</a></li>
-<li><a href="#api-gateway">API Gateway</a></li>
-<li><a href="#api-method">API Method</a></li>
-<li><a href="#api-name">API Name</a></li>
-<li><a href="#api-request">API Request</a></li>
-<li><a href="#api-resource">API Resource</a></li>
-<li><a href="#api-resource-type">API Resource Type</a></li>
-<li><a href="#api-service">API Service</a></li>
-<li><a href="#consumer">Consumer</a></li>
-<li><a href="#declarative-clients">Declarative Clients</a></li>
-<li><a href="#user">User</a></li>
-<li><a href="#network-api">Network API</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#annotating-resource-types">Annotating resource types</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#singular-and-plural">Singular and Plural</a></li>
 </ul>
 </li>
 <li><a href="#changelog">Changelog</a></li>
@@ -418,8 +408,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0003">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0003">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0004">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0004">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -444,88 +434,121 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Glossary
+        Resource types
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aep-number">AEP-3</h4>
-  <h1 id="glossary">Glossary</h1>
-<p>This AEP defines common terminology.</p>
+  <h4 class="aep-number">AEP-4</h4>
+  <h1 id="resource-types">Resource types</h1>
+<p>Most APIs expose <em>resources</em> (their primary nouns) which users are able to
+create, retrieve, and manipulate. APIs are allowed to name their resource types
+as they see fit, and are only required to ensure uniqueness within that API.
+This means that it is possible (and often desirable) for different APIs to use
+the same type name. For example, a Memcache and Redis API would both want to
+use <code>Instance</code> as a type name.</p>
+<p>When mapping the relationships between APIs and their resources, however, it
+becomes important to have a single, globally-unique type name. Additionally,
+tools such as Kubernetes or GraphQL interact with APIs from multiple providers.</p>
 <h2 id="guidance">Guidance</h2>
-<p>The following terminology <strong>must</strong> be used consistently throughout AEPs.</p>
-<h3 id="api">API</h3>
-<p>Application Programming Interface. This can be a local interface (such as an
-SDK) or a Network API (defined below).</p>
-<p>APIs define one or more operations upon resource types.</p>
-<h3 id="api-backend">API Backend</h3>
-<p>A set of servers and related infrastructure that implements the business logic
-for an API Service.</p>
-<h3 id="api-client">API Client</h3>
-<p>An API Client is a program or library that perform a specific tasks by calling
-an API or generic tools, such as CLIs, that expose the API in a user-accessible
-fashion or operate on resource data at rest.</p>
-<p>Examples of clients include the following:</p>
+<p>APIs <strong>must</strong> define a resource type for each resource in the API, according to
+the following pattern: <code>{API Name}/{Type Name}</code>. The type name:</p>
 <ul>
-<li>Command line interfaces</li>
-<li>Libraries, such as an SDK for a particular programming language</li>
-<li>Scripts that operates on a JSON representation of a resource after reading it
-  from an API</li>
-<li>Tools, such as a [Declarative client][]</li>
-<li>Visual UIs, such as a web application</li>
+<li><strong>must</strong> Only contain ASCII alphanumeric characters.</li>
+<li><strong>must</strong> Start with a lowercase letter.</li>
+<li><strong>must</strong> Be of the singular form of the noun.</li>
+<li><strong>must</strong> Use kebab case.</li>
+<li>For Kubernetes, the type name when converted to UpperCamelCase <strong>must</strong> match
+  the <a href="https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds">object</a> name.</li>
+<li>For OpenAPI, the type name when converted to UpperCamelCase <strong>must</strong> match
+  the name of the schema representing the object.</li>
+<li>For protobuf, the type name when converted to UpperCamelCase <strong>must</strong> match
+  the name of the protobuf message.</li>
 </ul>
-<h3 id="api-definition">API Definition</h3>
-<p>A well-structured representation of an API.</p>
-<h3 id="api-endpoint">API Endpoint</h3>
-<p>Refers to a network address that an API uses to handle incoming requests. One
-API may have multiple endpoints, such as <code>https://pubsub.example.com</code> and
-<code>https://content-pubsub.example.com</code>.</p>
-<h3 id="api-gateway">API Gateway</h3>
-<p>One or more services that together provide common functionality across API
-services, such as load balancing and authentication.</p>
-<h3 id="api-method">API Method</h3>
-<p>An individual operation within an API. It is typically represented in Protocol
-Buffers by an <code>rpc</code> definition, or in HTTP via a <code>method</code> and a <code>path</code>.</p>
-<h3 id="api-name">API Name</h3>
-<p>The name by which to refer to an API.</p>
-<h3 id="api-request">API Request</h3>
-<p>A single invocation of an API Method. It is often used as the unit for billing,
-logging, monitoring, and rate limiting.</p>
-<h3 id="api-resource">API Resource</h3>
-<p>An entity upon which one or more methods can operate.</p>
-<h3 id="api-resource-type">API Resource Type</h3>
-<p>The type of a API resource. It is globally unique within an API.</p>
-<h3 id="api-service">API Service</h3>
-<p>An implementation of an API, exposing API methods on one or more network
-addresses.</p>
-<h3 id="consumer">Consumer</h3>
-<p>Either a programmatic client or a user that consumes an API. This term should
-be used when a statement refers broadly to both programs and users.</p>
-<h3 id="declarative-clients">Declarative Clients</h3>
-<p>Declarative Clients, also known as Infrastructure as Code (IaC), describes a
-category of clients that consumes a markup language or code that represents
-resources exposed by an API, and executes the appropriate imperative actions to
-drive the resource to that desired state. To determine what changes to make and
-if a set of updates was successful a declarative client compares server side
-resource attributes with client defined values. The comparison feature ensures
-accuracy of a creation or an update but it requires services to treat the
-client set fields as read-only and diligently preserve those values.</p>
-<p>Examples of complexities that declarative clients abstract away include:</p>
+<h3 id="examples">Examples</h3>
+<p>Examples of resource types include:</p>
 <ul>
-<li>Determing the appropriate imperative action (create / update / delete) to
-  achieve desired state.</li>
-<li>Ordering of these imperative actions.</li>
+<li><code>networking.istio.io/instance</code></li>
+<li><code>pubsub.example.com/topic</code></li>
+<li><code>pubsub.example.com/subscription</code></li>
+<li><code>spanner.example.com/database</code></li>
+<li><code>spanner.example.com/instance</code></li>
+<li><code>apis.example.com/user/user-event</code></li>
 </ul>
-<p><a href="https://www.terraform.io/">Terraform</a> is an example of such a client.</p>
-<h3 id="user">User</h3>
-<p>A human being which is using an API directly, such as with cURL. This term is
-defined to differentiate usage in the AIPs between a human <em>user</em> and a
-programmatic <em>client</em>.</p>
-<h3 id="network-api">Network API</h3>
-<p>An API that operates across a network of computers. Network APIs communicate
-using network protocols including HTTP, and are frequently produced by
-organizations separate from those that consume them.</p>
+<h3 id="annotating-resource-types">Annotating resource types</h3>
+<p>APIs <strong>must</strong> annotate the resource types for each resource in the API</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<p>For protobuf, use the <a href="https://github.com/googleapis/googleapis/blob/master/google/api/resource.proto"><code>google.api.resource</code></a> annotation:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// A representation of a user event.</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">Topic</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;user.example.com/user-event&quot;</span>
+<span class="w">    </span><span class="n">singular</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;user-event&quot;</span>
+<span class="w">    </span><span class="n">plural</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;user-events&quot;</span>
+<span class="w">    </span><span class="c1">// define one or more patterns, e.g. if a resource has more than one parent.</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;projects/{project}/user-events/{user-event}&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;folder/{folder}/user-events/{user-event}&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;users/{user}/events/{user-event}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// Name and other fields...</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p>For OpenAPI 3.0, use the <code>x-aep-resource</code> extension:</p>
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;x-aep-resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;singular&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user-event&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;plural&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;user-events&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;patterns&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">      </span><span class="s2">&quot;projects/{project}/user-events/{user-event}&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="s2">&quot;folder/{folder}/user-events/{user-event}&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="s2">&quot;users/{user}/events/{user-event}&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+<ul>
+<li>The <code>singular</code> field <strong>must</strong> be the kebab-case singular type name.</li>
+<li>The <code>plural</code> field <strong>must</strong> be the kebab-case plural of the singular.</li>
+</ul>
+<p>The <code>pattern</code> field <strong>must</strong> match the <code>pattern</code> rule in the following grammar,
+expressed as <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>:</p>
+<div class="highlight language-ebnf"><pre><span></span><code><span class="k">pattern </span><span class="o">=</span> <span class="k">element</span><span class="p">,</span> <span class="p">{</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="k">element </span><span class="p">};</span>
+<span class="k">element </span><span class="o">=</span> <span class="k">variable </span><span class="p">|</span> <span class="k">literal</span><span class="p">;</span>
+<span class="k">variable </span><span class="o">=</span> <span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="k">literal</span><span class="p">,</span> <span class="s2">&quot;}&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>Where <code>literal</code> matches the regex <code>[a-z][a-z0-9\-]*[a-z0-9]</code>.</p>
+<ul>
+<li>Patterns <strong>must</strong> match the possible <a href="/resource-paths">resource paths</a> of the
+  resource.</li>
+<li>Pattern variables (the segments within braces) <strong>must</strong> match the singular of
+  the resource whose id is being matched by that value.</li>
+</ul>
+<h4 id="pattern-uniqueness">Pattern uniqueness</h4>
+<p>If multiple patterns are defined within a resource, the patterns defined <strong>must
+not</strong> overlap in the set of resource paths that they can match. In other words,
+a resource path may match at most one of the patterns.</p>
+<p>For example, the following two patterns would not be valid for the same
+resource:</p>
+<ul>
+<li><code>user/{user}</code></li>
+<li><code>user/{user_part_1}~{user_part_2}</code></li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="singular-and-plural">Singular and Plural</h3>
+<p>Well-defined singular and plurals of a resource enable clients to determine the
+proper name to use in code and documentation.</p>
+<p>google.aip.dev uses UpperCamelCase for resource types, while aep.dev uses
+kebab-case. This is to enforce better consistency in the representation of
+various multipart strings, as collection identifiers use kebab case.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
+
 <h2 id="changelog">Changelog</h2>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
