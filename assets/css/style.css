@@ -128,9 +128,9 @@
       text-decoration: none; }
 .docs-component-main h4 {
   padding-bottom: 5px; }
-  .docs-component-main h4.aep-number {
+  .docs-component-main h4.aep-id {
     line-height: 1em; }
-    .docs-component-main h4.aep-number + h1 {
+    .docs-component-main h4.aep-id + h1 {
       margin-top: 0px;
       margin-left: -2px; }
 
@@ -416,11 +416,11 @@ table:not(.no-h) {
 .h-c-header__cta-li form.h-c-sitesearch {
   padding-right: 20px; }
 
-  #aep-nav .nav-item span.aep-number {
+  #aep-nav .nav-item span.aep-id {
     display: inline-block;
     min-width: 26px;
     text-align: right; }
-    #aep-nav .nav-item span.aep-number:after {
+    #aep-nav .nav-item span.aep-id:after {
       content: '. '; }
 
 .aep-newsletter-highlights > p {
