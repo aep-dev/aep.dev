@@ -4,5 +4,5 @@ state: approved
 created: 2019-01-22
 slug: list
 placement:
-  category: operations
+  category: standard-methods
   order: 20

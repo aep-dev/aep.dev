@@ -4,5 +4,5 @@ state: approved
 slug: etags
 created: 2019-07-24
 placement:
-  category: operations
+  category: design-patterns
   order: 30

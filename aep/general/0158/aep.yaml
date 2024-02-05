@@ -4,5 +4,5 @@ state: approved
 slug: pagination
 created: 2019-02-18
 placement:
-  category: operations
+  category: design-patterns
   order: 60
