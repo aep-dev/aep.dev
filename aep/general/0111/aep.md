@@ -1,28 +1,33 @@
 # Planes
 
-Resources and methods on an API can be divided into the _plane_ that they
-reside or perform operations upon. For the context of APIs, the following
-planes are defined:
+Systems such as software-defined networks and public clouds have distinct sets
+of APIs which are crucial for accomplishing a full user journey. For example,
+in networking, a user must:
 
-- Management plane: a uniform, resource-oriented API that primarily configures
-  and allows retrieval of resources.
+1. Configure the network to determine how data will flow (e.g. defining network
+   interfaces, gateways)
+2. Send data through the network.
+
+The API and operations for these steps can be divided into layers known as
+_planes_, indicating the role that the API plays in data.
+
+The AEPs define the following planes:
+
+- Management plane: contains AEP-compliant, resource-oriented APIs that
+  primarily configure and allow retrieval of resources. APIs in the management
+  plane generally do no accept nor interact with user data directly.
 - Data plane: a heterogenous API (ideally resource-oriented) that reads and
-  write user data. Often connects to entities provisioned by the management
-  plane, such as virtual machines.
-
-The term "plane" was originally used in networking architecture. Although
-system and network architecture often defines additional planes (e.g. control
-plane or power planes), as the AEPs are focused on the interface, they are not
-defined in this AEP.
+  writes user data. Often connects to entities provisioned by the management
+  plane plane, such as virtual machines.
 
 ## Guidance
 
 ### Management Plane
 
 Management resources and methods exist primarily to provision, configure, and
-audit the resources that the data plane interfaces with.
+audit the resources that the data plane APIs operates on.
 
-As an example, the following are considered management resources for a cloud
+For example, the following are considered management resources for a cloud
 provider:
 
 - virtual machines
@@ -41,9 +46,9 @@ Examples of data plane methods include:
 - pushing to or pulling from a message queue
 - uploading blobs to or downloading blobs from a blob store instance
 
-Data plane APIs **may** be heterogenous across a larger API surface, due to
-requirements including high throughput, low latency, or the need to adhere to
-an existing interface specification (e.g. ANSI SQL).
+Data plane APIs **may** not comply to AEPs due to requirements including high
+throughput, low latency, or the need to adhere to an existing interface
+specification (e.g. ANSI SQL).
 
 - For convenience, resources and methods that operate on the data plane **may**
   expose themselves via resource-oriented management APIs. If so, those
