@@ -2,6 +2,29 @@
 
 We'd love to accept your patches and contributions to this project.
 
+## Importing an AEP from google.aip.dev
+
+Currently, the project is focused on importing AIPs from
+https://google.aip.dev/. You can contribute! the process is:
+
+1. [Select an aip to adopt from the open adoption issues](https://github.com/aep-dev/aep.dev/labels/adoption).
+   1. Consider
+      [ones also with the label "good first issue"](https://github.com/aep-dev/aep.dev/issues?q=is%3Aopen+label%3A%22good+first+issue%22+label%3Aadoption).
+2. Find the original AIP, which is suffixed with the number in the issue. For
+   example https://google.aip.dev/126.
+3. Click on "view source" on the page, click on "raw", and copy the content.
+4. Create a directory for the aep, split the content in to an aep.md an
+   aep.yaml. [Example PR](https://github.com/aep-dev/aep.dev/pull/77/files).
+5. Modify content
+   1. remove any Google-isms (e.g. replace domains with example.com)
+   1. extend any proto guidance to include both OpenAPI and proto
+      representations.
+
+Some tips:
+
+- Less is more. If there's a hard disagreement about particular guidance,
+  consider filing a follow-up issue to get the agreed upon guidance merged.
+
 ## Development Environment
 
 If you are contributing AEP content (rather than code) and want to be able to
