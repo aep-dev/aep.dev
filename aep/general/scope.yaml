@@ -12,7 +12,17 @@ categories:
     title: Standard Methods
   - code: fields
     title: Fields
-  - code: operations
-    title: Operations
+  - code: types
+    title: Types
   - code: design-patterns
     title: Design Patterns
+  - code: batch-methods
+    title: Batch Methods
+  - code: security
+    title: Security
+  - code: governance
+    title: Governance
+  - code: best-practices
+    title: Best Practices
+  - code: protobuf
+    title: Protocol buffers
