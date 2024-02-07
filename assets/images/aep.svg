@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="768px" height="768px" viewBox="0 0 768 768" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #FFFFFF;">
+    <title>aep</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="768" height="768"></rect>
+        <g id="Group" transform="translate(-3, 59)">
+            <circle id="Oval" stroke="#FFFFFF" stroke-width="16" fill="#E3D08E" cx="96.5" cy="324.5" r="88.5"></circle>
+            <circle id="Oval" stroke="#FFFFFF" stroke-width="16" fill="#E3D08E" cx="677.5" cy="323.5" r="88.5"></circle>
+            <circle id="Oval" stroke="#FFFFFF" stroke-width="11" fill="#CB91FF" cx="388" cy="299" r="293.5"></circle>
+            <path d="M312.5,169 C338.706163,169 363.24944,176.121625 384.296554,188.540113 C385.644114,189.335218 386.979597,190.153367 388.305183,190.989784 C389.636563,190.167911 390.980252,189.369055 392.335595,188.593389 C413.011525,176.760513 436.966483,170 462.5,170 C501.574146,170 536.949146,185.837927 562.55561,211.44439 C588.162073,237.050854 604,272.425854 604,311.5 C604,350.574146 588.162073,385.949146 562.55561,411.55561 C536.949146,437.162073 501.574146,453 462.5,453 C436.293837,453 411.75056,445.878375 390.703446,433.459887 C389.355886,432.664782 388.020403,431.846633 386.694817,431.010216 C385.363437,431.832089 384.019748,432.630945 382.664405,433.406611 C361.988475,445.239487 338.033517,452 312.5,452 C273.425854,452 238.050854,436.162073 212.44439,410.55561 C186.837927,384.949146 171,349.574146 171,310.5 C171,271.425854 186.837927,236.050854 212.44439,210.44439 C238.050854,184.837927 273.425854,169 312.5,169 Z" id="Combined-Shape" stroke="#FFFFFF" stroke-width="16" fill="#E3D08E"></path>
+            <circle id="Oval" stroke="#FFFFFF" stroke-width="16" fill="#E3D08E" cx="388" cy="520" r="152"></circle>
+            <circle id="Oval" fill="#000000" cx="388" cy="441" r="40"></circle>
+            <circle id="Oval" fill="#000000" cx="286" cy="324" r="40"></circle>
+            <circle id="Oval" fill="#000000" cx="490" cy="324" r="40"></circle>
+            <circle id="Oval" stroke="#FFFFFF" stroke-width="16" cx="388" cy="299" r="291"></circle>
+        </g>
+    </g>
+</svg>
