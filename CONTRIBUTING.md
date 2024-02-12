@@ -14,20 +14,22 @@ or follow the step by step guide:
 1. [Select an AIP to adopt into an AEP from the open issues with the label "adoption"](https://github.com/aep-dev/aep.dev/labels/adoption).
    - Consider
      [ones also with the label "good first issue"](https://github.com/aep-dev/aep.dev/issues?q=is%3Aopen+label%3A%22good+first+issue%22+label%3Aadoption).
-2. Find the original AIP, which is suffixed with the number in the issue. For
-   example https://google.aip.dev/126.
-3. Click on "view source" on the page, click on "raw", and copy the content.
-4. Create a directory for the aep, split the content in to an aep.md an
-   aep.yaml. [Example PR](https://github.com/aep-dev/aep.dev/pull/77/files).
-5. Modify content
+1. Navigate to the
+   [GitHub Repository](https://github.com/aip-dev/google.aip.dev), and find the
+   AIP in the
+   [general directory](https://github.com/aip-dev/google.aip.dev/tree/master/aip/general).
+   Copy the raw content.
+1. Create a directory for the aep, and update the aep.yaml file to "approved".
+   [Full example PR](https://github.com/aep-dev/aep.dev/pull/77/files).
+1. Modify the content from the aip markdown and paste over the aep.md content.
    - Remove any Google-isms (e.g. replace Google domains with example.com).
    - Extend any proto-specific guidance to include both OpenAPI and proto.
      representations.
-6. Create a GitHub PR. A reviewer should be with you in 24 hours.
+1. Create a GitHub PR. A reviewer should be with you in 24 hours.
    - If a reviewer does not review within that time, please ping @rofrankel or
      @toumorokoshi.
    - Leave comments on any parts of the text that you would like to discuss.
-7. Come say hi in our various communication channels documented in the
+1. Come say hi in our various communication channels documented in the
    [README](README.md#learn-and-connect).
 
 Some tips:
