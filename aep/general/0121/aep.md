@@ -84,12 +84,12 @@ patterns, such as database transactions, import and export, or data analysis.
 ### Strong Consistency
 
 For methods that operate on the [management plane][], the completion of those
-operations (either successful or with an error, LRO or synchronous) **must**
-mean that the state of the resource's existence and all user-settable values
-have reached a steady-state.
+operations (either successful or with an error, [LRO][long-running-requests] or
+synchronous) **must** mean that the state of the resource's existence and all
+user-settable values have reached a steady-state.
 
 [output only][] values unrelated to the resource [state][] **should** also have
-reached a steady-state. for values that are related to the resource [state][].
+reached a steady-state.
 
 Examples include:
 
@@ -139,6 +139,7 @@ turn do not increase resource management complexity.
 [directed acyclic graph]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 [get]: ./0131.md
 [list]: ./0132.md
+[long-running-requests]: ./0151.md
 [management plane]: ./0111.md#management-plane
 [output only]: ./0203.md#output-only
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
