@@ -5,7 +5,7 @@ info:
 paths:
   /publishers/{publisherId}:
     parameters:
-    - $ref: "#/components/parameters/PublisherId"
+      - $ref: '#/components/parameters/PublisherId'
     delete:
       operationId: deletePublisher
       description: Delete a publisher.

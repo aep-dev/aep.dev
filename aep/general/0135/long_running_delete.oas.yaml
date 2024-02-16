@@ -5,8 +5,8 @@ info:
 paths:
   /publishers/{publisherId}/books/{bookId}:
     parameters:
-    - $ref: "#/components/parameters/PublisherId"
-    - $ref: "#/components/parameters/BookId"
+      - $ref: '#/components/parameters/PublisherId'
+      - $ref: '#/components/parameters/BookId'
     delete:
       operationId: deleteBook
       description: Delete a single book.
