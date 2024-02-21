@@ -12,7 +12,7 @@ This AEP serves as a high-level guide to designing an AEP-compliant API. AEPs.
 ## Enumerate use cases
 
 The first step in designing an API is understanding precisely what operations
-you would like your user to perform. Enumerate these operations, attempting to
+you would like your user to be able to perform. Enumerate these operations, attempting to
 be as granular as possible.
 
 For example, if the API is for VM management in a public cloud, the operations
@@ -72,9 +72,9 @@ Once the resources are defined, identify one or more standard methods for each
 of those resources. Standard methods operate on the lifecycle of a resource
 lifecycle: namely, they create, read, update, delete, and list resources.
 
-Ideally all 5 standard methods should be exposed for every resource.
+Ideally all five standard methods should be exposed for every resource.
 
-See the following AEPs to learn more about the standard operations:
+See the following AEPs to learn more about the standard methods:
 
 - [AEP-131][]
 
