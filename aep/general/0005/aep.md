@@ -12,8 +12,8 @@ This AEP serves as a high-level guide to designing an AEP-compliant API. AEPs.
 ## Enumerate use cases
 
 The first step in designing an API is understanding precisely what operations
-you would like your user to be able to perform. Enumerate these operations, attempting to
-be as granular as possible.
+you would like your user to be able to perform. Enumerate these operations,
+attempting to be as granular as possible.
 
 For example, if the API is for VM management in a public cloud, the operations
 may include:
@@ -34,6 +34,8 @@ Some best practices:
 
 - Attempt to define granular use cases that can be composed to satisfy more
   complex use cases.
+- Be comprehensive and consider lower-priority use cases: having more use cases
+  enumerated often leads to better API design.
 
 ## Identify resources
 
