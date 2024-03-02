@@ -1,27 +1,27 @@
-# AIP Style and Guidance
+# AEP Style and Guidance
 
-AIP stands for **API Improvement Proposal**, which is a design document
+AEP stands for **API Enhancement Proposal**, which is a design document
 providing high-level, concise documentation for API design and development. The
 goal is for these documents to serve as the source of truth for API-related
-documentation at Google and the way API teams discuss and come to consensus on
+documentation and the way API teams discuss and come to consensus on
 API guidance.
 
-AIPs are most useful when they are clear and concise, and cover a single topic
-or inquiry well. In the same way that AIPs describe consistent patterns and
+AEPs are most useful when they are clear and concise, and cover a single topic
+or inquiry well. In the same way that AEPs describe consistent patterns and
 style for use in APIs, they also _follow_ consistent patterns and style.
 
 ## Guidance
 
-- AIPs **must** cover a single, discrete topic, and provide clear, actionable
+- AEPs **must** cover a single, discrete topic, and provide clear, actionable
   guidance.
-- AIPs **must not** duplicate or contradict guidance in another AIP.
-- AIPs **may** also cover what _not_ to do, but **should not** cover _only_
+- AEPs **must not** duplicate or contradict guidance in another AEP.
+- AEPs **may** also cover what _not_ to do, but **should not** cover _only_
   anti-patterns.
-- If AIP guidance is conditional (e.g. a design pattern such as Jobs), the
+- If AEP guidance is conditional (e.g. a design pattern such as Jobs), the
   guidance **must** clearly explain under what conditions the guidance should be
   followed.
 
-Guidance contained within an AIP **must** be beneficial to one or more
+Guidance contained within an AEP **must** be beneficial to one or more
 types of clients or their authors, including but not limited to:
 
 - Asset inventories which can be used to audit and analyze resources.
@@ -40,13 +40,13 @@ types of clients or their authors, including but not limited to:
 - Visual User Interfaces for visualization and one-off manual actions.
 - Users.
 
-Examples of improvements include:
+Examples of enhancements include:
 
 - Requiring new proto annotations that enable more descriptive interfaces on
-  clients (e.g. requiring `singular` and `plural` on a `google.api.resource`
+  clients (e.g. requiring `singular` and `plural` on a `library.api.resource`
   annotation).
 
-AIP guidance **must not** be a significant detriment to a client's usability or
+AEP guidance **must not** be a significant detriment to a client's usability or
 implementation difficulty, or maintenance difficulty.
 
 Examples of detriments include:
@@ -54,21 +54,21 @@ Examples of detriments include:
 - Introduction of a non-uniform pattern in a standard method such that all
   clients must introduce additional code without sufficient benefit (e.g. List
   behaves like this *except* for resources that start with the name Foo).
-- Renames of well-established fields for minor improvements in readability (e.g.
+- Renames of well-established fields for minor enhancements in readability (e.g.
   rename `expire_time` to `lapse_time` since `lapse` is a common term in my
   service).
 
-While the length of AIPs will necessarily vary based on the complexity of the
-question, most AIPs **should** be able to cover their content in roughly two
+While the length of AEPs will necessarily vary based on the complexity of the
+question, most AEPs **should** be able to cover their content in roughly two
 printed pages.
 
 ### File structure
 
-AIPs **must** be written in Markdown, and **must** be named using their
-four-digit number (example: `0008.md`). AIPs that serve a specific scope
+AEPs **must** be written in Markdown, and **must** be named using their
+four-digit number (example: `0008.md`). AEPs that serve a specific scope
 **must** be in the subdirectory for that scope.
 
-AIPs **must** have appropriate front matter.
+AEPs **must** have appropriate front matter.
 
 ```yaml
 ---
@@ -84,55 +84,55 @@ redirect_from:
 
 ```
 
-Front matter for AIPs **must** include:
+Front matter for AEPs **must** include:
 
-- The `aip` key:
-  - `id`: Required. The ID for the given AIP, as an integer.
-  - `state`: Required. The current state of the AIP, in all lower-case. The
-    valid states are listed in [AIP-1][], and common states are `draft`,
+- The `aep` key:
+  - `id`: Required. The ID for the given AEP, as an integer.
+  - `state`: Required. The current state of the AEP, in all lower-case. The
+    valid states are listed in [AEP-1][], and common states are `draft`,
     `reviewing`, and `approved`.
-  - `created`: Required. The ISO-8601 date (`yyyy-mm-dd`) when the AIP was
+  - `created`: Required. The ISO-8601 date (`yyyy-mm-dd`) when the AEP was
     originally drafted, with no quotes.
-  - `updated`: The ISO-8601 date (`yyyy-mm-dd`) when the AIP was last revised.
-  - `scope`: The scope for the AIP. This **must** match the directory name for
-    that scope. Required for AIPs with IDs >= 1000, prohibited otherwise.
+  - `updated`: The ISO-8601 date (`yyyy-mm-dd`) when the AEP was last revised.
+  - `scope`: The scope for the AEP. This **must** match the directory name for
+    that scope. Required for AEPs with IDs >= 1000, prohibited otherwise.
 - The `permalink` key (required): This **must** be set to
-  `/{aip.scope}/{aip.id}`. If there is no scope, use `/{aip.id}` instead.
-- The `redirect_from` key: This should include a list of any `/{aip.id}`
+  `/{aep.scope}/{aep.id}`. If there is no scope, use `/{aep.id}` instead.
+- The `redirect_from` key: This should include a list of any `/{aep.id}`
   permutations that a reader would be likely to enter, including:
-  - `/{aip.id}` (for AIPs where the permalink includes the scope)
-  - AIP IDs with zero-padding, for each level of zero-padding up to four digits
+  - `/{aep.id}` (for AEPs where the permalink includes the scope)
+  - AEP IDs with zero-padding, for each level of zero-padding up to four digits
     (for example: `/08`, `/008`, `/0008`).
 
 ### Document structure
 
-AIPs **must** begin with a top-level heading with the AIP's title (`# Title`).
+AEPs **must** begin with a top-level heading with the AEP's title (`# Title`).
 The title **should** be a noun (not an imperative). For example, "Bad API
 precedents" not "Avoid breaking API precedent".
 
-AIPs **should** then begin with an introduction (with no additional heading),
-followed by a `## Guidance` heading. If necessary, the AIP **may** include any
+AEPs **should** then begin with an introduction (with no additional heading),
+followed by a `## Guidance` heading. If necessary, the AEP **may** include any
 of the following after the guidance, in the following order:
 
-- "Further reading" is a bulleted list of links to other AIPs that are useful to
-  fully understand the current AIP.
-- "Appendices" covering further explanation in the same AIP. These are
-  relatively rare but are important in cases where an AIP requires a lot of
+- "Further reading" is a bulleted list of links to other AEPs that are useful to
+  fully understand the current AEP.
+- "Appendices" covering further explanation in the same AEP. These are
+  relatively rare but are important in cases where an AEP requires a lot of
   justification for the decision. Often this is primarily an explanation of
   alternatives considered to help explain the guidance.
-- "Changelog" is a bulleted list of changes made to the AIP since the first
+- "Changelog" is a bulleted list of changes made to the AEP since the first
   writing.
 
 The guidance section **may** include subsections that elaborate further on
 details. Subsections will automatically create an entry in the table of
 contents, and an anchor for citations.
 
-Below is an example AIP shell that uses each major section:
+Below is an example AEP shell that uses each major section:
 
 ```md
-# AIP title
+# AEP title
 
-The introductory text explains the background and reason why the AIP exists. It
+The introductory text explains the background and reason why the AEP exists. It
 lays out the basic question, but does not tell the reader what to do.
 
 ## Guidance
@@ -149,7 +149,7 @@ details.
 ## Rationale
 
 The "rationale" section is optional, and helps the reader understand the
-motivation behind specific guidance within the AIP.
+motivation behind specific guidance within the AEP.
 
 Deeper explanations of design justification and tradeoffs **must** be in the
 rationale instead of other sections, to ensure the rest of the document acts as
@@ -158,10 +158,10 @@ an easily actionable reference.
 ## History
 
 The "history" section is optional, and documents events and context around a
-significant edit to an AIP. For example, explanation of rewrite would be
+significant edit to an AEP. For example, explanation of rewrite would be
 included in this section
 
-While the changelog is a dotted list of one-line summaries of changes to an AIP,
+While the changelog is a dotted list of one-line summaries of changes to an AEP,
 the history section should elaborate on significant events in a descriptive
 format.
 
@@ -170,9 +170,9 @@ is what the changelog provides.
 
 ## Further reading
 
-A bulleted list of (usually) other AIPs, in the following format:
+A bulleted list of (usually) other AEPs, in the following format:
 
-- [AIP-1](./0001.md): AIP purpose and guidelines
+- [AEP-1](./0001.md): AEP purpose and guidelines
 
 ## Changelog
 
@@ -183,22 +183,22 @@ format:
 - **2019-07-01**: Added a subsection clarifying XYZ.
 ```
 
-AIPs **should** attempt to follow this overall format if possible, but AIPs
-**may** deviate from it if necessary (in particular, if the AIP would be more
-difficult to understand, even for a reader already accustomed to reading AIPs in
+AEPs **should** attempt to follow this overall format if possible, but AEPs
+**may** deviate from it if necessary (in particular, if the AEP would be more
+difficult to understand, even for a reader already accustomed to reading AEPs in
 the usual format).
 
-**Note:** Except for the title, AIPs **must** only use the second heading level
-(`##`) and above. AIPs **should** only use the second and third heading levels
+**Note:** Except for the title, AEPs **must** only use the second heading level
+(`##`) and above. AEPs **should** only use the second and third heading levels
 (`##`, `###`).
 
 ### Requirement keywords
 
-AIPs **should** use the following requirement level keywords: "MUST", "MUST
+AEPs **should** use the following requirement level keywords: "MUST", "MUST
 NOT", "SHOULD", "SHOULD NOT", and "MAY", which are to be interpreted as
 described in [RFC 2119][].
 
-When using these terms in AIPs, they **must** be lower-case and **bold**. These
+When using these terms in AEPs, they **must** be lower-case and **bold**. These
 terms **should not** be used in other ways.
 
 If "SHOULD" or "SHOULD NOT" are used, they **must** include valid examples of
@@ -210,20 +210,25 @@ complete understanding, but **must not** contain guidance (and RFC-2119 terms
 
 ### Code examples
 
-API design examples in AIPs **should** use [protocol buffers][]. Examples
+API design examples in AEPs **should** be presented in both [OpenAPI][] and
+[protocol buffers][]. Examples
 **should** cover only enough syntax to explain the concept. When using RPCs in
-examples, a `google.api.http` annotation **should** be included.
+examples, a `library.api.http` annotation **should** be included.
 
-### Referencing AIPs
+AEPs should use snake-case naming for parameters and properties (fields), for
+consistency across OpenAPI and protocol buffers, but other casing conventions
+may be used as long as they are applied uniformly.
 
-When AIPs reference other AIPs, the prosaic text **must** use the format
-`AIP-XXXX` without zero-padding (e.g., `AIP-8`, not `AIP-0008`), and **must**
-link to the relevant AIP. AIP links **may** point to a particular section of the
-AIP if appropriate.
+### Referencing AEPs
 
-**Important:** AIP links **must** use the relative path to the file in the
-repository (such as `./0008.md` for core AIPs, or `../0008.md` for AIPs in a
-subdirectory); this ensures that the link works both on the AIP site, when
+When AEPs reference other AEPs, the prosaic text **must** use the format
+`AEP-XXXX` without zero-padding (e.g., `AEP-8`, not `AEP-0008`), and **must**
+link to the relevant AEP. AEP links **may** point to a particular section of the
+AEP if appropriate.
+
+**Important:** AEP links **must** use the relative path to the file in the
+repository (such as `./0008.md` for core AEPs, or `../0008.md` for AEPs in a
+subdirectory); this ensures that the link works both on the AEP site, when
 viewing the Markdown file on GitHub, using the local development server, or a
 branch.
 
@@ -239,15 +244,16 @@ APIs via a variety of clients, depending on their use case as enumerated above.
 
 API guidance must in turn consider the impact broadly across these clients.
 
-[aip-1]: ./0001.md
-[Infrastructure as Code]: ./0009.md#iac
-[IaC]: ./0009.md#iac
-[protocol buffers]: https://developers.google.com/protocol-buffers/
-[rfc 2119]: https://www.ietf.org/rfc/rfc2119.txt
 
 ## Changelog
 
-- **2023-05-20**: Increase API guidance scope to include broad set of clients.
-- **2023-03-30**: Removed appendix, added rationale and history to the template.
-- **2020-02-18**: Specified reverse chronological ordering for changelog items.
-- **2019-08-23**: Added guidance for internal AIP links.
+- **2024-03-02**: From from https://google.aip.dev/8
+
+<!-- Links -->
+
+[aep-1]: ./0001.md
+[Infrastructure as Code]: ./0009.md#iac
+[IaC]: ./0009.md#iac
+[OpenAPI]: https://www.openapis.org/
+[protocol buffers]: https://developers.google.com/protocol-buffers/
+[rfc 2119]: https://www.ietf.org/rfc/rfc2119.txt
