@@ -18,9 +18,9 @@ approval privileges to the aep-dev organization.
 | Richard Gibson  | [@gibson042](https://github.com/gibson042)       | Algoric      |
 | Yusuke Tsutsumi | [@toumorokoshi](https://github.com/toumorokoshi) | Cruise       |
 
-## Emiritus
+## Emeritus
 
-The following table enumerates previous maintainers of aep.dev, the original
+The following table enumerates previous maintainers of aip.dev, the original
 style guide from which aep.dev was forked.
 
 | Name            | GitHub                                               | Organization |
