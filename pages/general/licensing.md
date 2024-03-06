@@ -25,9 +25,7 @@ content (such as in examples) in the code of your own projects.
 
 We say "nearly everything" as there are a few simple conditions that apply.
 
-Google's trademarks and other brand features are not included in this license.
-Please see our [standard guidelines for third party use of Google brand
-features][branding] for information about this usage.
+Trademarks and other brand features are not included in this license.
 
 In some cases, a page may include content consisting of images, audio or video
 material, or a link to content on a different webpage (such as videos or slide
