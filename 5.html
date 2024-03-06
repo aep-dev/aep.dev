@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>General AEPs</title>
+    <title>AEP-5: Designing an API</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -20,6 +20,8 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=2780cb85"></script>
     
+<script type="text/javascript" src="/assets/js/syntax.js"></script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -61,7 +63,7 @@
           <ul id="list-1" class="glue-header__list">
             
               
-                <li class="glue-header__item glue-header--is-active">
+                <li class="glue-header__item">
                   <a class="glue-header__link" href="/general" aria-level="1">Browse AEPs</a>
                 </li>
               
@@ -148,7 +150,7 @@
 <nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
-    <li class="nav-item nav-item-active">
+    <li class="nav-item">
       <a href="/general">General</a>
     </li>
     <li class="nav-item nav-item-header">AEPs</li>
@@ -178,7 +180,7 @@
             Glossary
           </a>
         </li>
-      <li class="nav-item">
+      <li class="nav-item nav-item-active">
           <a href="/5">
             <span class="aep-id">5</span>
             Designing an API
@@ -487,33 +489,36 @@
 <section id="jump-content">
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
+  <table id="aep-summary">
+    <tr><th colspan="2">Designing an API</th></tr>
+    <tr><td>Slug</td><td>intro</td></tr>
+    <tr><td>Number</td><td>5</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/5">aep.dev/5</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-01-10</td></tr>
+    <tr><td>Updated</td><td>2024-01-10</td></tr>
+  </table>
+
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc">
-      <span class="toctitle">Categories</span>
-      <ul>
-        <li><a href="#meta">Meta</a></li>
-        <li><a href="#general">General</a></li>
-        <li><a href="#resources">Resources</a></li>
-        <li><a href="#standard-methods">Standard Methods</a></li>
-        <li><a href="#fields">Fields</a></li>
-        <li><a href="#types">Types</a></li>
-        <li><a href="#design-patterns">Design Patterns</a></li>
-        <li><a href="#batch-methods">Batch Methods</a></li>
-        <li><a href="#security">Security</a></li>
-        <li><a href="#governance">Governance</a></li>
-        <li><a href="#best-practices">Best Practices</a></li>
-        <li><a href="#protobuf">Protocol buffers</a></li>
-        </ul>
-    </div>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#process-summary">Process summary</a></li>
+<li><a href="#enumerate-use-cases">Enumerate use cases</a></li>
+<li><a href="#identify-resources">Identify resources</a></li>
+<li><a href="#identify-standard-operations">Identify standard operations</a></li>
+<li><a href="#identify-custom-operations">Identify custom operations</a></li>
+</ul>
+</div>
+
   </section>
 
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0005">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0005">Edit this page</a></li>
     </ul>
   </section>
 </aside>
-
 <section id="aep-main" class="docs-component-main">
   <section class="section-breadcrumbs">
   <nav
@@ -527,557 +532,104 @@
         </a>
       </li>
       
+      <li class="glue-breadcrumbs__item" aria-level="2">
+        <a class="glue-breadcrumbs__link" href="/general">
+          General AEPs
+        </a>
+      </li>
+      
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        General AEPs
+        Designing an API
       </li>
     </ol>
   </nav>
 </section>
-  <h3 id="meta">Meta</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">1</td>
-        <td>
-          <a href="/1">AEP Purpose and Guidelines</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">2</td>
-        <td>
-          <a href="/2">AEP Numbering and Organization</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">8</td>
-        <td>
-          <a href="/8">AIP Style guide</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="general">General</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">3</td>
-        <td>
-          <a href="/3">Glossary</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">5</td>
-        <td>
-          <a href="/5">Designing an API</a>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="resources">Resources</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">122</td>
-        <td>
-          <a href="/122">Resource paths</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">126</td>
-        <td>
-          <a href="/126">Enumerations</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">4</td>
-        <td>
-          <a href="/4">Resource types</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">121</td>
-        <td>
-          <a href="/121">Resource-oriented design</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">124</td>
-        <td>
-          <a href="/124">Resource association</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">159</td>
-        <td>
-          <a href="/159">Reading across collections</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="standard-methods">Standard Methods</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">131</td>
-        <td>
-          <a href="/131">GET for individual resources</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">132</td>
-        <td>
-          <a href="/132">GET for collections</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">151</td>
-        <td>
-          <a href="/151">Long-running requests</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">136</td>
-        <td>
-          <a href="/136">Custom operations</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">133</td>
-        <td>
-          <a href="/133">Standard methods: Create</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">134</td>
-        <td>
-          <a href="/134">Standard methods: Update</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">135</td>
-        <td>
-          <a href="/135">Standard methods: Delete</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="fields">Fields</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">141</td>
-        <td>
-          <a href="/141">Quantities</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">142</td>
-        <td>
-          <a href="/142">Time and duration</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">144</td>
-        <td>
-          <a href="/144">Array fields</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">145</td>
-        <td>
-          <a href="/145">Ranges</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">140</td>
-        <td>
-          <a href="/140">Field names</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">146</td>
-        <td>
-          <a href="/146">Generic fields</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">148</td>
-        <td>
-          <a href="/148">Standard fields</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">203</td>
-        <td>
-          <a href="/203">Field behavior documentation</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="types">Types</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">143</td>
-        <td>
-          <a href="/143">Standardized codes</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">213</td>
-        <td>
-          <a href="/213">Common components</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">215</td>
-        <td>
-          <a href="/215">Common component versions</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="design-patterns">Design Patterns</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">154</td>
-        <td>
-          <a href="/154">Resource freshness validation</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">158</td>
-        <td>
-          <a href="/158">Pagination</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">164</td>
-        <td>
-          <a href="/164">Soft delete</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">210</td>
-        <td>
-          <a href="/210">Unicode</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">211</td>
-        <td>
-          <a href="/211">Authorization checks</a>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">157</td>
-        <td>
-          <a href="/157">Partial responses</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">160</td>
-        <td>
-          <a href="/160">Filtering</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">161</td>
-        <td>
-          <a href="/161">Field masks</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">162</td>
-        <td>
-          <a href="/162">Resource Revisions</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">214</td>
-        <td>
-          <a href="/214">Resource expiration</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">216</td>
-        <td>
-          <a href="/216">States</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">217</td>
-        <td>
-          <a href="/217">Unreachable resources</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="batch-methods">Batch Methods</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">231</td>
-        <td>
-          <a href="/231">Batch methods: Get</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">233</td>
-        <td>
-          <a href="/233">Batch methods: Create</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">234</td>
-        <td>
-          <a href="/234">Batch methods: Update</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">235</td>
-        <td>
-          <a href="/235">Batch methods: Delete</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="governance">Governance</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">100</td>
-        <td>
-          <a href="/100">API Design Review FAQ</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">205</td>
-        <td>
-          <a href="/205">Beta-blocking changes</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="best-practices">Best Practices</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">180</td>
-        <td>
-          <a href="/180">Backwards compatibility</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">181</td>
-        <td>
-          <a href="/181">Stability levels</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">191</td>
-        <td>
-          <a href="/191">File and directory structure</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">192</td>
-        <td>
-          <a href="/192">Documentation</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      <tr>
-        <td style="text-align: right;">200</td>
-        <td>
-          <a href="/200">Precedent</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-  <h3 id="protobuf">Protocol buffers</h3>
-  <table class="aep-listing">
-    <thead>
-      <tr>
-        <th style="text-align: right;">Number</th>
-        <th>Title</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: right;">127</td>
-        <td>
-          <a href="/127">HTTP and gRPC Transcoding</a>
-          <span class="aep-state aep-state-reviewing">
-            Reviewing
-          </span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
+  
+  <h4 class="aep-id">intro (AEP-5)</h4>
+  <h1 id="designing-an-api">Designing an API</h1>
+<p>This AEP serves as a high-level guide to designing an AEP-compliant API. AEPs.</p>
+<h2 id="process-summary">Process summary</h2>
+<ol>
+<li>Enumerate the use cases you would like your API to satisfy.</li>
+<li>Identify resources.</li>
+<li>Identify standard operations.</li>
+<li>Identify custom operations.</li>
+</ol>
+<h2 id="enumerate-use-cases">Enumerate use cases</h2>
+<p>The first step in designing an API is understanding precisely what operations
+you would like your user to be able to perform. Enumerate these operations,
+attempting to be as granular as possible.</p>
+<p>For example, if the API is for VM management in a public cloud, the operations
+may include:</p>
+<ul>
+<li>Create a VM.</li>
+<li>List all VMs owned by a company.</li>
+<li>List all VMs owned by a user.</li>
+<li>Restart a running VM.</li>
+</ul>
+<p>Or for a multiplayer online game, operations may include:</p>
+<ul>
+<li>Proposing a trade to another player.</li>
+<li>Accepting a proposed trade.</li>
+<li>Find open trade offers containing an item.</li>
+<li>List items in a player's inventory.</li>
+</ul>
+<p>Some best practices:</p>
+<ul>
+<li>Attempt to define granular use cases that can be composed to satisfy more
+  complex use cases.</li>
+<li>Be comprehensive and consider lower-priority use cases: having more use cases
+  enumerated often leads to better API design.</li>
+</ul>
+<h2 id="identify-resources">Identify resources</h2>
+<p>Once your use cases are defined, consider how many of those can be represented
+by an <a href="/3#api-resource-type">API Resource Type</a>: entities that are created, read, updated, and
+deleted.</p>
+<p>Examples include:</p>
+<ul>
+<li>users</li>
+<li>virtual machines</li>
+<li>load balancers</li>
+<li>services</li>
+</ul>
+<p>One of the core concepts described by the AEPs is resource-oriented design:
+this design paradigm allows for uniform standard operations that reduce the
+cognitive overhead in learning about the operations and schemas exposed by your
+API.</p>
+<p>Resources can relate to each other. For example:</p>
+<ul>
+<li>A parent-child relationship defining ownership/scope (A user who created a
+  VM).</li>
+<li>A resource dependency, where one resource depends on another to function (A
+  VM depending on a disk).</li>
+</ul>
+<p>See the following AEPs to learn more about resource-oriented design:</p>
+<ul>
+<li>[resource-oriented design][AEP-121]</li>
+<li>[resource paths][AEP-122]</li>
+<li>[resource types][AEP-123]</li>
+</ul>
+<h2 id="identify-standard-operations">Identify standard operations</h2>
+<p>Once the resources are defined, identify one or more standard methods for each
+of those resources. Standard methods operate on the lifecycle of a resource
+lifecycle: namely, they create, read, update, delete, and list resources.</p>
+<p>Ideally all five standard methods should be exposed for every resource.</p>
+<p>See the following AEPs to learn more about the standard methods:</p>
+<ul>
+<li>[AEP-131][]</li>
+</ul>
+<h2 id="identify-custom-operations">Identify custom operations</h2>
+<p>To accomplish some of the user journeys, resources may need to support
+operations other than [Create][AEP-133], [Update][AEP-134], [AEP-135][Delete],
+[AEP-131][Get], and [AEP-132][List] them. Some examples include:</p>
+<ul>
+<li>restarting a virtual machine</li>
+<li>triggering a CI build</li>
+<li>wiping a disk</li>
+</ul>
+<p>Break down each of the actions into granular operations, then follow the
+<a href="/136">custom operations</a> AEP on how to design them.</p>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
