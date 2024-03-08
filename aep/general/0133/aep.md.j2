@@ -16,6 +16,29 @@ a new resource in an already-existing collection.
 
 Create methods are specified using the following pattern:
 
+- The response **must** be the resource itself. There is no separate response
+  schema.
+  - The response **should** include the fully-populated resource, and **must**
+    include any fields that were provided unless they are input only (see
+    AEP-203).
+  - If the create RPC is [long-running](#long-running-create), the response
+    message **must** be an `Operation` for which the type of the `response`
+    field is the resource itself.
+- The HTTP verb **must** be `POST`.
+- The collection where the resource is being added **should** map to the URI
+  path.
+  - The collection's parent resource **should** be called `parent`, and
+    **should** be the only variable in the URI path.
+  - The collection identifier (`books` in the above example) **must** be a
+    literal string.
+- If the API is operating on the [management plane][], the operation should
+  have [strong consistency][]: the completion of a create operation **must**
+  mean that all user-settable values and the existence of the resource have
+  reached a steady-state and reading resource state returns a consistent
+  response.
+
+{% tab proto %}
+
 ```proto
 rpc CreateBook(CreateBookRequest) returns (Book) {
   option (google.api.http) = {
@@ -28,20 +51,9 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 
 - The RPC's name **must** begin with the word `Create`. The remainder of the
   RPC name **should** be the singular form of the resource being created.
-- The request message **must** match the RPC name, with a `Request` suffix.
-- The response message **must** be the resource itself. There is no
-  `CreateBookResponse`.
-  - The response **should** include the fully-populated resource, and **must**
-    include any fields that were provided unless they are input only (see
-    AEP-203).
-  - If the create RPC is [long-running](#long-running-create), the response
-    message **must** be a `aep.api.Operation` which resolves to the resource
-    itself.
-- The HTTP verb **must** be `POST`.
-- The collection where the resource is being added **should** map to the URI
-  path.
-  - The collection's parent resource **should** be called `parent`, and
-    **should** be the only variable in the URI path.
+  - The request message **must** match the RPC name, with a `Request` suffix.
+- The collection's parent resource **should** be called `parent`, and
+  **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
 - There **must** be a `body` key in the `google.api.http` annotation, and it
@@ -50,15 +62,25 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
   resource ID is not required.
-- If the API is operating on the [management plane][], the operation should
-  have [strong consistency][]: the completion of a create operation **must**
-  mean that all user-settable values and the existence of the resource have
-  reached a steady-state and reading resource state returns a consistent
-  response.
+
+{% tab oas %}
+
+**Note:** OAS guidance not yet written
+
+{% endtabs %}
 
 ### Request message
 
 Create methods implement a common request message pattern:
+
+- An `id` field **must** be included for management plane resources, and
+  **should** be included for data plane resources.
+- The resource field **must** be included and **must** map to the POST body.
+- The request message **must not** contain any other required fields and
+  **should not** contain other optional fields except those described in this
+  or another AEP.
+
+{% tab proto %}
 
 ```proto
 message CreateBookRequest {
@@ -84,21 +106,26 @@ message CreateBookRequest {
 
 - A `parent` field **must** be included unless the resource being created is a
   top-level resource. It **should** be called `parent`.
-  - The field **should** be [annotated as required][aep-203].
+  - The field **should** be [annotated as `REQUIRED`][aep-203].
   - The field **must** identify the [resource type][aep-123] of the resource
     being created.
-- An `id` field **must** be included for management plane resources, and
-  **should** be included for data plane resources.
-- The resource field **must** be included and **must** map to the POST body.
-- The request message **must not** contain any other required fields and
-  **should not** contain other optional fields except those described in this
-  or another AEP.
+
+{% tab oas %}
+
+**Note:** OAS guidance not yet written
+
+{% endtabs %}
 
 ### Long-running create
 
 Some resources take longer to create a resource than is reasonable for a
 regular API request. In this situation, the API **should** use a long-running
 operation (AEP-151) instead:
+
+- The response type **must** be set to the resource (what the return type would
+  be if the RPC was not long-running).
+
+{% tab proto %}
 
 ```proto
 rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
@@ -112,9 +139,13 @@ rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
 }
 ```
 
-- The response type **must** be set to the resource (what the return type would
-  be if the RPC was not long-running).
 - Both the `response_type` and `metadata_type` fields **must** be specified.
+
+{% tab oas %}
+
+**Note:** OAS guidance not yet written
+
+{% endtabs %}
 
 **Important:** Declarative-friendly resources (AEP-128) **should** use
 long-running operations. The service **may** return an LRO that is already set
@@ -151,10 +182,6 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
   - The field **may** be required or optional. If it is required, it **should**
     include the corresponding annotation.
 - The `path` field on the resource **must** be ignored.
-- There **should** be exactly one `google.api.method_signature` annotation on
-  the RPC, with a value of `"parent,{resource},id"` if the resource being
-  created is not a top-level resource, or with a value of `"{resource},id"` if
-  the resource being created is a top-level resource.
 - The documentation **should** explain what the acceptable format is, and the
   format **should** follow the guidance for resource path formatting in
   AEP-122.
@@ -163,6 +190,19 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
   - However, if the user making the call does not have permission to see the
     duplicate resource, the service **must** error with `PERMISSION_DENIED`
     instead.
+
+{% tab proto %}
+
+- There **should** be exactly one `google.api.method_signature` annotation on
+  the RPC, with a value of `"parent,{resource},id"` if the resource being
+  created is not a top-level resource, or with a value of `"{resource},id"` if
+  the resource being created is a top-level resource.
+
+{% tab oas %}
+
+**Note:** OAS guidance not yet written
+
+{% endtabs %}
 
 **Note:** For REST APIs, the user-specified ID field, `id`, is provided as a
 query parameters on the request URI.
