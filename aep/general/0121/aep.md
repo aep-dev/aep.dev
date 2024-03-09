@@ -84,11 +84,11 @@ patterns, such as database transactions, import and export, or data analysis.
 ### Strong Consistency
 
 For methods that operate on the [management plane][], the completion of those
-operations (either successful or with an error, [LRO][long-running-requests] or
+operations (either successful or with an error, [long-running][long-running-requests] or
 synchronous) **must** mean that the state of the resource's existence and all
 user-settable values have reached a steady-state.
 
-[output only][] values unrelated to the resource [state][] **should** also have
+[Output only][output only] values unrelated to the resource [state][] **should** also have
 reached a steady-state.
 
 Examples include:
