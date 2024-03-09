@@ -1,28 +1,26 @@
-# GET for individual resources
+# Get
 
 In REST APIs, it is customary to make a `GET` request to a resource's URI (for
 example, `/v1/publishers/{publisher}/books/{book}`) in order to retrieve that
 resource.
 
-Our APIs honor this pattern by allowing `GET` requests to be sent to the
-resource URI, which returns the resource itself.
+Resource-oriented design (AEP-121) honors this pattern through the `Get`
+method. These RPCs accept the URI representing that resource and return the
+resource.
 
 ## Guidance
 
-APIs **should** generally provide a `GET` method for resources unless it is not
-valuable for users to do so. When the `GET` method is used on a URI ending in a
-resource ID or resource ID alias, the result should be a single resource. For
-more information about using the `GET` method on a URI ending with a resource
-collection identifier, see AEP-132.
+APIs **must** provide a get method for resources. The purpose of the get method
+is to return data from a single resource.
 
 ### Requests
 
-Single-resource `GET` operations **must** be made by sending a `GET` request to
-the resource's URI:
+`Get` operations **must** be made by sending a `GET` request to the resource's
+URI:
 
 ```http
 GET /v1/publishers/{publisher}/books/{book} HTTP/2
-Host: library.googleapis.com
+Host: library.example.com
 Accept: application/json
 ```
 
@@ -50,6 +48,9 @@ any additional wrapping:
 }
 ```
 
+The response **should** usually include the fully-populated resource unless
+there is a reason to return a partial response (see AEP-157).
+
 ### Errors
 
 If the user does not have sufficient permission to know that the resource
@@ -73,37 +74,35 @@ Get operations are specified using the following pattern:
 
 - The RPC's name **must** begin with the word `Get`. The remainder of the RPC
   name **should** be the singular form of the resource's message name.
-- The request message **must** match the RPC name, with a `-Request` suffix.
+- The request message **must** match the RPC name, with a `Request` suffix.
 - The response message **must** be the resource itself. (There is no
   `GetBookResponse`.)
-  - The response **should** usually include the fully-populated resource unless
-    there is a reason to return a partial response (see AEP-157).
 - The HTTP verb **must** be `GET`.
 - The URI **should** contain a single variable field corresponding to the
-  resource name.
-  - This field **should** be called `name`.
+  resource path.
+  - This field **should** be called `path`.
   - The URI **should** have a variable corresponding to this field.
-  - The `name` field **should** be the only variable in the URI path. All
+  - The `path` field **should** be the only variable in the URI path. All
     remaining parameters **should** map to URI query parameters.
 - There **must not** be a `body` key in the `google.api.http` annotation.
 - There **should** be exactly one `google.api.method_signature` annotation,
-  with a value of `"name"`.
+  with a value of `"path"`.
 
 Get operations also implement a common request message pattern:
 
 {% sample 'get.proto', 'message GetBookRequest' %}
 
-- A resource name field **must** be included. It **should** be called `name`.
-  - The field **should** be annotated as required.
-  - The field **should** identify the [resource type][aip-123] that it
+- A resource path field **must** be included. It **should** be called `path`.
+  - The field **should** be annotated as `REQUIRED`.
+  - The field **should** identify the [resource type][aep-123] that it
     references.
-- The comment for the `name` field **should** document the resource pattern.
+- The comment for the `path` field **should** document the resource pattern.
 - The request message **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in
   another AEP.
 
-**Note:** The `name` field in the request object corresponds to the `name`
-variable in the `google.api.http` annotation on the RPC. This causes the `name`
+**Note:** The `path` field in the request object corresponds to the `path`
+variable in the `google.api.http` annotation on the RPC. This causes the `path`
 field in the request to be populated based on the value in the URL when the
 REST/JSON interface is used.
 
@@ -118,8 +117,6 @@ metadata:
   `operationId` **should** be the singular form of the resource type's name.
 - The response content **must** be the resource itself. For example:
   `#/components/schemas/Book`
-  - The response **should** usually include the fully-populated resource unless
-    there is a reason to return a partial response (see AEP-157).
 - The URI **should** contain a variable for each individual ID in the resource
   hierarchy.
   - The path parameter for all resource IDs **must** be in the form
@@ -127,3 +124,7 @@ metadata:
     ID of parent resources **must** end with `Id`.
 
 {% endtabs %}
+
+<!-- prettier-ignore-start -->
+[aep-123]: ./0123.md
+<!-- prettier-ignore-end -->
