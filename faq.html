@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-133: Standard methods: Create</title>
+    <title>Frequently Asked Questions</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -20,8 +20,6 @@
     </script>
     <script type="text/javascript" src="/assets/js/global.js?v=5c797a5a"></script>
     
-<script type="text/javascript" src="/assets/js/syntax.js"></script>
-
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -146,8 +144,7 @@
     <div class="glue-page">
       
       <main role="main" id="page-content">
-        
-<nav id="aep-nav" class="docs-component-nav">
+        <nav id="aep-nav" class="docs-component-nav">
   <ul class="nav-list">
     <li class="nav-item nav-item-header">AEPs by Scope</li>
     <li class="nav-item">
@@ -248,7 +245,7 @@
             Custom operations
           </a>
         </li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/133">
             <span class="aep-id">133</span>
             Standard methods: Create
@@ -489,18 +486,10 @@
 <section id="jump-content">
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
-  <table id="aep-summary">
-    <tr><th colspan="2">Standard methods: Create</th></tr>
-    <tr><td>Slug</td><td>create</td></tr>
-    <tr><td>Number</td><td>133</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/133">aep.dev/133</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
-  </table>
-
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#what-is-the-difference-between-aepdev-and-googleaipdev">What is the difference between aep.dev and google.aip.dev?</a></li>
+</ul>
 </div>
 
   </section>
@@ -508,8 +497,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0133">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0133">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/pages/general/faq.md">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/pages/general/faq.md">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -526,30 +515,33 @@
         </a>
       </li>
       
-      <li class="glue-breadcrumbs__item" aria-level="2">
-        <a class="glue-breadcrumbs__link" href="/general">
-          General AEPs
-        </a>
-      </li>
-      
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Standard methods: Create
+        Frequently Asked Questions
       </li>
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
-  <h4 class="aep-id">create (AEP-133)</h4>
-  <h1 id="standard-methods-create">Standard methods: Create</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/38">this GitHub issue</a> for more
-information.</p>
+  <h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h2 id="what-is-the-difference-between-aepdev-and-googleaipdev">What is the difference between aep.dev and google.aip.dev?</h2>
+<p>As aep.dev is derived from <a href="https://google.aip.dev">google.aip.dev</a>, a lot of
+content will be familiar.</p>
+<p>However, aep.dev has significant philosophical differences:</p>
+<ul>
+<li>aep.dev prioritizes broadly applicable design guidance, while google.aip.dev
+  prioritizes design guidance this best for Google, such as guidance that is
+  backwards-compatible with existing decisions at the company.</li>
+<li>aep.dev is protocol-agonistic, and considers gRPC and HTTP + JSON as
+  first-class protocols for which examples and other content will be authored.</li>
+<li>google.aip.dev encourages forking the guidance, while aep.dev focuses on a
+  set of core specification that should not be forked, paired with a method to
+  add organization-specific guidance that does not contradict the
+  specification.</li>
+</ul>
+<p>aep.dev also has the advantage of hindsight, which makes it possible in some
+cases to provide better guidance than google.aip.dev. (One small example:
+renaming <code>page_size</code> to <code>max_page_size</code> for requests to paginated API methods.)</p>
+
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
@@ -558,7 +550,7 @@ information.</p>
   <span class="no-print">For details, see <a href="/licensing">content
   licensing</a>.</span>
 </footer>
-</section>
+  </section>
 
         </section>
       </main>
