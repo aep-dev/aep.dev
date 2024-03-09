@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5c797a5a">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5c797a5a">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6561d41c">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6561d41c">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=5c797a5a"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=6561d41c"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -494,13 +494,22 @@
     <tr><td>Slug</td><td>resources</td></tr>
     <tr><td>Number</td><td>121</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/121">aep.dev/121</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-01-27</td></tr>
+    <tr><td>Updated</td><td>2024-01-27</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#methods">Methods</a></li>
+<li><a href="#strong-consistency">Strong Consistency</a></li>
+<li><a href="#cyclic-references">Cyclic References</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -539,17 +548,152 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">resources (AEP-121)</h4>
   <h1 id="resource-oriented-design">Resource-oriented design</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/54">this GitHub issue</a> for more
-information.</p>
+<p>Resource-oriented design is a pattern for specifying <a href="https://en.wikipedia.org/wiki/Remote_procedure_call">RPC</a> APIs, based on the
+following high-level design principles:</p>
+<ul>
+<li>The fundamental building blocks of an API are individually-named <em>resources</em>
+  (nouns) and the relationships and hierarchy that exist between them.</li>
+<li>A small number of standard <em>methods</em> (verbs) provide the semantics for most
+  common operations. However, custom methods are available in situations where
+  the standard methods do not fit.</li>
+</ul>
+<p>Readers might notice similarities between these principles and some principles
+of <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>; resource-oriented design borrows many principles from REST, while
+also defining its own patterns where appropriate.</p>
+<h2 id="guidance">Guidance</h2>
+<p>When designing an API, consider the following:</p>
+<ul>
+<li>The resources (nouns) the API will provide.</li>
+<li>The relationships and hierarchies between those resources.</li>
+<li>The schema of each resource.</li>
+<li>The methods (verbs) each resource provides, relying as much as possible on
+  the standard verbs.</li>
+</ul>
+<h3 id="resources">Resources</h3>
+<p>A resource-oriented API <strong>must</strong> be modeled as a resource hierarchy, where each
+node is either a simple resource or a collection of resources.</p>
+<p>A <em>collection</em> contains resources of <em>the same type</em>. For example, a publisher
+has the collection of books that it publishes. A resource usually has fields,
+and resources may have any number of sub-resources (usually collections).</p>
+<p><strong>Note:</strong> While there is some conceptual alignment between storage systems and
+APIs, a service with a resource-oriented API is not necessarily a database, and
+has enormous flexibility in how it interprets resources and methods. API
+designers <strong>should not</strong> expect that their API will be reflective of their
+database schema. In fact, having an API that is identical to the underlying
+database schema is actually an anti-pattern, as it tightly couples the surface
+to the underlying system.</p>
+<h3 id="methods">Methods</h3>
+<p>Resource-oriented APIs emphasize resources (data model) over the methods
+performed on those resources (functionality). A typical resource-oriented API
+exposes a large number of resources with a small number of methods on each
+resource. The methods can be either the standard methods (<a href="/131">Get</a>, <a href="/132">List</a>,
+<a href="/133">Create</a>, <a href="/134">Update</a>, <a href="/135">Delete</a>), or <a href="/136">custom methods</a>.</p>
+<p>If the request to or the response from a standard method (or a custom method in
+the same <em>service</em>) <strong>is</strong> the resource or <strong>contains</strong> the resource, the
+resource schema for that resource across all methods <strong>must</strong> be the same.</p>
+<table>
+<thead>
+<tr>
+<th>Standard method</th>
+<th>Request</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create</td>
+<td>Contains the resource</td>
+<td>Is the resource</td>
+</tr>
+<tr>
+<td>Get</td>
+<td>None</td>
+<td>Is the resource</td>
+</tr>
+<tr>
+<td>Update</td>
+<td>Contains the resource</td>
+<td>Is the resource</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr>
+<td>List</td>
+<td>None</td>
+<td>Is the resource</td>
+</tr>
+</tbody>
+</table>
+<p><em>The table above describes each standard method's relationship to the resource,
+where "None" indicates that the resource neither <strong>is</strong> nor <strong>is contained</strong> in
+the request or the response</em></p>
+<p>A resource <strong>must</strong> support at minimum <a href="/131">Get</a>: clients must be able to
+validate the state of resources after performing a mutation such as <a href="/133">Create</a>,
+<a href="/134">Update</a>, or <a href="/135">Delete</a>.</p>
+<p>A resource <strong>must</strong> also support <a href="/132">List</a>, except for <a href="/156">singleton resources</a>
+where more than one resource is not possible.</p>
+<p><strong>Note:</strong> A custom method in resource-oriented design does <em>not</em> entail
+defining a new or custom HTTP verb. Custom methods use traditional HTTP verbs
+(usually <code>POST</code>) and define the custom verb in the URI.</p>
+<p>APIs <strong>should</strong> prefer standard methods over custom methods; the purpose of
+custom methods is to define functionality that does not cleanly map to any of
+the standard methods. Custom methods offer the same design freedom as
+traditional RPC APIs, which can be used to implement common programming
+patterns, such as database transactions, import and export, or data analysis.</p>
+<h3 id="strong-consistency">Strong Consistency</h3>
+<p>For methods that operate on the <a href="/111#management-plane">management plane</a>, the completion of those
+operations (either successful or with an error,
+<a href="/151">long-running</a> or synchronous) <strong>must</strong> mean that the
+state of the resource's existence and all user-settable values have reached a
+steady-state.</p>
+<p><a href="/203#output-only">Output only</a> values unrelated to the resource <a href="/216">state</a>
+<strong>should</strong> also have reached a steady-state.</p>
+<p>Examples include:</p>
+<ul>
+<li>Following a successful create that is is latest mutation on a resource, a get
+  request for a resource <strong>must</strong> return the resource.</li>
+<li>Following a successful update that is the latest mutation on a resource, a
+  get request for a resource <strong>must</strong> return the final values from the update
+  request.</li>
+<li>Following a successful delete that is the latest mutation on a resource, a
+  get request for a resource <strong>must</strong> return <code>NOT_FOUND</code> (or the resource with
+  the <code>DELETED</code> state value in the case of <a href="/164">soft delete</a>)</li>
+</ul>
+<p>Clients of resource-oriented APIs often need to orchestrate multiple operations
+in sequence (e.g. create resource A, create resource B which depends on A), and
+ensuring that resources immediately reflect steady user state after an
+operation is complete ensures clients can rely on method completion as a signal
+to begin the next operation.</p>
+<p><a href="/203#output-only">output only</a> fields ideally would follow the same guidelines, but as these
+fields can often represent a resources live state, it's sometimes necessary for
+these values to change after a successful mutation operation to reflect a state
+change.</p>
+<h3 id="cyclic-references">Cyclic References</h3>
+<p>The relationship between resources, such as parent-child or <a href="/122#fields-representing-another-resource">resource
+references</a>, <strong>must</strong> be representable via a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>.</p>
+<p>A cyclic relationship between resources increases the complexity of managing
+resources. Consider resources A and B that refer to each other. The process to
+create said resources are:</p>
+<ol>
+<li>create resource A without a reference to B. Retrieve id for resource A.</li>
+<li>create resource B with a reference to A. Retrieve id for resource B.</li>
+<li>update resource A with the reference to B.</li>
+</ol>
+<p>The delete operation may also become more complex, due to reasoning about which
+resource must be dereferenced first for a successful deletion.</p>
+<p>This requirement does not apply to relationships that are expressed via <a href="/203#output-only">output
+only</a> fields, as they do not require the user to specify the values and in
+turn do not increase resource management complexity.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-01-27</strong>: From from https://google.aip.dev/121</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
