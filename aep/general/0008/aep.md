@@ -3,8 +3,8 @@
 AEP stands for **API Enhancement Proposal**, which is a design document
 providing high-level, concise documentation for API design and development. The
 goal is for these documents to serve as the source of truth for API-related
-documentation and the way API teams discuss and come to consensus on
-API guidance.
+documentation and the way API teams discuss and come to consensus on API
+guidance.
 
 AEPs are most useful when they are clear and concise, and cover a single topic
 or inquiry well. In the same way that AEPs describe consistent patterns and
@@ -18,11 +18,11 @@ style for use in APIs, they also _follow_ consistent patterns and style.
 - AEPs **may** also cover what _not_ to do, but **should not** cover _only_
   anti-patterns.
 - If AEP guidance is conditional (e.g. a design pattern such as Jobs), the
-  guidance **must** clearly explain under what conditions the guidance should be
-  followed.
+  guidance **must** clearly explain under what conditions the guidance should
+  be followed.
 
-Guidance contained within an AEP **must** be beneficial to one or more
-types of clients or their authors, including but not limited to:
+Guidance contained within an AEP **must** be beneficial to one or more types of
+clients or their authors, including but not limited to:
 
 - Asset inventories which can be used to audit and analyze resources.
 - Command line interfaces for exploration and simple automation.
@@ -53,10 +53,10 @@ Examples of detriments include:
 
 - Introduction of a non-uniform pattern in a standard method such that all
   clients must introduce additional code without sufficient benefit (e.g. List
-  behaves like this *except* for resources that start with the name Foo).
-- Renames of well-established fields for minor enhancements in readability (e.g.
-  rename `expire_time` to `lapse_time` since `lapse` is a common term in my
-  service).
+  behaves like this _except_ for resources that start with the name Foo).
+- Renames of well-established fields for minor enhancements in readability
+  (e.g. rename `expire_time` to `lapse_time` since `lapse` is a common term in
+  my service).
 
 While the length of AEPs will necessarily vary based on the complexity of the
 question, most AEPs **should** be able to cover their content in roughly two
@@ -81,7 +81,6 @@ redirect_from:
   - /008
   - /0008
 ---
-
 ```
 
 Front matter for AEPs **must** include:
@@ -114,8 +113,8 @@ AEPs **should** then begin with an introduction (with no additional heading),
 followed by a `## Guidance` heading. If necessary, the AEP **may** include any
 of the following after the guidance, in the following order:
 
-- "Further reading" is a bulleted list of links to other AEPs that are useful to
-  fully understand the current AEP.
+- "Further reading" is a bulleted list of links to other AEPs that are useful
+  to fully understand the current AEP.
 - "Appendices" covering further explanation in the same AEP. These are
   relatively rare but are important in cases where an AEP requires a lot of
   justification for the decision. Often this is primarily an explanation of
@@ -161,12 +160,12 @@ The "history" section is optional, and documents events and context around a
 significant edit to an AEP. For example, explanation of rewrite would be
 included in this section
 
-While the changelog is a dotted list of one-line summaries of changes to an AEP,
-the history section should elaborate on significant events in a descriptive
-format.
+While the changelog is a dotted list of one-line summaries of changes to an
+AEP, the history section should elaborate on significant events in a
+descriptive format.
 
-The section **must not** be used to exhaustively enumerate all changes. This
-is what the changelog provides.
+The section **must not** be used to exhaustively enumerate all changes. This is
+what the changelog provides.
 
 ## Further reading
 
@@ -185,8 +184,8 @@ format:
 
 AEPs **should** attempt to follow this overall format if possible, but AEPs
 **may** deviate from it if necessary (in particular, if the AEP would be more
-difficult to understand, even for a reader already accustomed to reading AEPs in
-the usual format).
+difficult to understand, even for a reader already accustomed to reading AEPs
+in the usual format).
 
 **Note:** Except for the title, AEPs **must** only use the second heading level
 (`##`) and above. AEPs **should** only use the second and third heading levels
@@ -211,9 +210,9 @@ complete understanding, but **must not** contain guidance (and RFC-2119 terms
 ### Code examples
 
 API design examples in AEPs **should** be presented in both [OpenAPI][] and
-[protocol buffers][]. Examples
-**should** cover only enough syntax to explain the concept. When using RPCs in
-examples, a `library.api.http` annotation **should** be included.
+[protocol buffers][]. Examples **should** cover only enough syntax to explain
+the concept. When using RPCs in examples, a `library.api.http` annotation
+**should** be included.
 
 AEPs should use snake-case naming for parameters and properties (fields), for
 consistency across OpenAPI and protocol buffers, but other casing conventions
@@ -223,8 +222,8 @@ may be used as long as they are applied uniformly.
 
 When AEPs reference other AEPs, the prosaic text **must** use the format
 `AEP-XXXX` without zero-padding (e.g., `AEP-8`, not `AEP-0008`), and **must**
-link to the relevant AEP. AEP links **may** point to a particular section of the
-AEP if appropriate.
+link to the relevant AEP. AEP links **may** point to a particular section of
+the AEP if appropriate.
 
 **Important:** AEP links **must** use the relative path to the file in the
 repository (such as `./0008.md` for core AEPs, or `../0008.md` for AEPs in a
@@ -243,7 +242,6 @@ The beneficiaries of improved API design are users. These users interact with
 APIs via a variety of clients, depending on their use case as enumerated above.
 
 API guidance must in turn consider the impact broadly across these clients.
-
 
 ## Changelog
 
