@@ -169,9 +169,9 @@ List operations also implement a common request message pattern:
 
 - A `parent` field **must** be included unless the resource being listed is a
   top-level resource. It **should** be called `parent`.
-  - The field **should** be [annotated as required][aep-203].
-  - The field **should** identify the [resource type][] of the resource being
-    listed.
+  - The field **must** be [annotated as required][aep-203].
+  - The field **must** identify the [resource type][] of the resource being
+    listed with a `google.api.resource_reference` annotation.
 - The `max_page_size` and `page_token` fields, which support pagination,
   **must** be specified on all list request messages. For more information, see
   AEP-158.
