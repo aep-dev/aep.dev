@@ -1,32 +1,27 @@
 # Custom methods
 
 Resource oriented design (AEP-121) uses custom methods to provide a means to
-express actions that are difficult to model using only the standard
-methods. Custom methods are important because they provide a means for an API's
+express actions that are difficult to model using only the standard methods.
+Custom methods are important because they provide a means for an API's
 vocabulary to adhere to user intent.
 
 ## Guidance
 
 Custom methods **should** only be used for functionality that can not be
 expressed via standard methods; prefer standard methods if possible, due to
-their consistent semantics. (Of course, this only applies if the functionality
-in question actually conforms to the normal semantics; it is _not_ a good idea
-to contort things to endeavor to make the standard methods "sort of work".)
+their consistent semantics. However, APIs **should not** contort things to
+endeavor to make the standard methods "sort of work".
 
 While custom methods vary widely in how they are designed, many principles
 apply consistently:
 
-- The HTTP method for custom methods **should** usually be `POST`, unless the
-  custom method maps more strongly to another HTTP verb.
-  - Custom methods that serve as an alternative to or variant of a standard
-    method **should** generally follow all applicable guidance for that method.
-    For example, a protobuf custom method that is an alternative to `ListBooks`
-    **should** have a response where the first field looks like
-    `repeated Book books = 1;`.
+- The HTTP method for custom methods **should** be selected based on the
+  semantics described by [RFC 7231 section 4.3] and [RFC 5789] for `PATCH`. In
+  practice, the vast majority of custom methods **should** use `POST` or `GET`.
   - Custom methods that serve as an alternative to get or list methods (such as
     `Search`) **should** use `GET`, and require no request body. These methods
     **must** be idempotent and have no state changes or side effects (they
-    should be safe as defined in [RFC 7231][]).
+    should be safe as defined in [RFC 7231 section 4.2.1][]).
   - Custom methods **should not** use `PATCH` or `DELETE`.
 - The HTTP URI **must** use a `:` character followed by the custom verb
   (`:archive` in the above example), and the verb in the URI **must** match the
@@ -41,10 +36,10 @@ apply consistently:
   - The name **must not** contain prepositions ("for", "with", etc.).
 - The `body` clause in the `google.api.http` annotation **should** be `"*"`.
   - However, if using `GET` or `DELETE`, the `body` clause **must** be absent.
-- Custom methods **should** usually take a request message matching the RPC
-  name, with a `Request` suffix.
-- Custom methods **should** usually return a response message matching the RPC
-  name, with a `Response` suffix.
+- Custom methods **must** take a request message exactly matching the RPC name,
+  with a `Request` suffix. For example, `ArchiveBookRequest`.
+- Custom methods **should** return a response message exactly matching the RPC
+  name, with a `Response` suffix. For example, `ArchiveBookResponse`.
   - When operating on a specific resource, a custom method **may** return the
     resource itself.
 
@@ -52,14 +47,33 @@ apply consistently:
 
 {% sample 'library.oas.yaml', '/publishers/{publisherId}/books/{bookId}:archive' %}
 
-- The `operationId` **should** be a verb followed by a noun.
-  - The `operationId` **must not** contain prepositions ("for", "with", etc.).
+- The name of the RPC **should** be a verb followed by a noun.
+  - The name of the RPC **must not** contain prepositions ("for", "with",
+    etc.).
 
 {% endtabs %}
 
 **Note:** The pattern above shows a custom method that operates on a specific
 resource. Custom methods can be associated with resources, collections, or
 services.
+
+### Resource-based custom methods
+
+Custom methods **must** operate on a resource if the API can be modeled as
+such:
+
+{% tab proto %}
+
+{% sample 'library.proto', 'rpc ArchiveBook' %}
+
+- The parameter for the resource's path **must** be called `path`, and **must**
+  be the only variable in the URI path.
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 ### Collection-based custom methods
 
@@ -116,4 +130,8 @@ An exception to this is for rarely-used, fundamentally imperative operations,
 such as a `Move`, `Rename`, or `Restart` operation, for which there would not
 be an expectation of declarative support.
 
-[rfc 7231]: https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1
+<!-- prettier-ignore-start -->
+[rfc 5789]: https://datatracker.ietf.org/doc/html/rfc5789
+[rfc 7231 section 4.2.1]: https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1
+[rfc 7231 section 4.3]: https://datatracker.ietf.org/doc/html/rfc7231#section-4.3
+<!-- prettier-ignore-end -->
