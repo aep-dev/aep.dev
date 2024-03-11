@@ -31,11 +31,6 @@ Create methods are specified using the following pattern:
     **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
-- If the API is operating on the [management plane][], the operation should
-  have [strong consistency][]: the completion of a create operation **must**
-  mean that all user-settable values and the existence of the resource have
-  reached a steady-state and reading resource state returns a consistent
-  response.
 
 {% tab proto %}
 
@@ -52,7 +47,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 - The RPC's name **must** begin with the word `Create`. The remainder of the
   RPC name **should** be the singular form of the resource being created.
   - The request message **must** match the RPC name, with a `Request` suffix.
-- The collection's parent resource **should** be called `parent`, and
+- The collection's parent resource **must** be called `parent`, and
   **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
@@ -146,10 +141,6 @@ rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
 **Note:** OAS guidance not yet written
 
 {% endtabs %}
-
-**Important:** Declarative-friendly resources (AEP-128) **should** use
-long-running operations. The service **may** return an LRO that is already set
-to done if the request is effectively immediate.
 
 ### User-specified IDs
 
