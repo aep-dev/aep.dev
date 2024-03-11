@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-151: Long-running requests</title>
+    <title>AEP-151: Long-running operations</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=f5732369">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=f5732369">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5ffda9ca">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5ffda9ca">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=f5732369"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=5ffda9ca"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -239,7 +239,7 @@
       <li class="nav-item nav-item-active">
           <a href="/151">
             <span class="aep-id">151</span>
-            Long-running requests
+            Long-running operations
           </a>
         </li>
       <li class="nav-item">
@@ -490,11 +490,11 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Long-running requests</th></tr>
+    <tr><th colspan="2">Long-running operations</th></tr>
     <tr><td>Slug</td><td>long-running-operations</td></tr>
     <tr><td>Number</td><td>151</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/151">aep.dev/151</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
     <tr><td>Created</td><td>2019-07-25</td></tr>
     <tr><td>Updated</td><td>2019-07-25</td></tr>
   </table>
@@ -502,8 +502,8 @@
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#status-monitor-representation">Status monitor representation</a></li>
-<li><a href="#querying-a-status-monitor">Querying a status monitor</a></li>
+<li><a href="#operation-representation">Operation representation</a></li>
+<li><a href="#querying-an-operation">Querying an operation</a></li>
 <li><a href="#standard-methods">Standard methods</a></li>
 <li><a href="#parallel-requests">Parallel requests</a></li>
 <li><a href="#expiration">Expiration</a></li>
@@ -545,19 +545,14 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Long-running requests
+        Long-running operations
       </li>
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">long-running-operations (AEP-151)</h4>
-  <h1 id="long-running-requests">Long-running requests</h1>
+  <h1 id="long-running-operations">Long-running operations</h1>
 <p>Occasionally, a service may need to expose an operation that takes a
 significant amount of time to complete. In these situations, it is often a poor
 user experience to simply block while the task runs; rather, it is better to
@@ -568,69 +563,36 @@ or Java, or a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/G
 can be used to track progress and retrieve the result.</p>
 <h2 id="guidance">Guidance</h2>
 <p>Operations that might take a significant amount of time to complete <strong>should</strong>
-return a <code>202 Accepted</code> response along with an identifier that can be used to
-track the status of the request and ultimately retrieve the result.</p>
+return a <code>202 Accepted</code> response along with an <code>Operation</code> resource that can be
+used to track the status of the request and ultimately retrieve the result.</p>
 <p>Any single operation defined in an API surface <strong>must</strong> either <em>always</em> return
-<code>202 Accepted</code> along with a request identifier, or <em>never</em> do so. A service
-<strong>must not</strong> return a <code>200 OK</code> response with the result if it is "fast enough",
-and <code>202 Accepted</code> if it is not fast enough, because such behavior adds
-significant burdens for clients.</p>
+<code>202 Accepted</code> along with an <code>Operation</code>, or <em>never</em> do so. A service <strong>must
+not</strong> return a <code>200 OK</code> response with the result if it is "fast enough", and
+<code>202 Accepted</code> if it is not fast enough, because such behavior adds significant
+burdens for clients.</p>
 <p><strong>Note:</strong> User expectations can vary on what is considered "a significant
 amount of time" depending on what work is being done. A good rule of thumb is
 10 seconds.</p>
-<h3 id="status-monitor-representation">Status monitor representation</h3>
-<p>The response to a long-running request <strong>should</strong> be a "status monitor" having
-the following common format:</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nx">StatusMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The identifier for this status monitor.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// Whether the request is done.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">done</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// The result of the request.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// Only populated if the request is done and was successful.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">response</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// The error that arose from the request.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// Only populated if the request is done and was unsuccessful.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="kt">Error</span><span class="p">;</span><span class="w"></span>
-
-<span class="w">  </span><span class="c1">// Metadata associated with the request.</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// Populated throughout the life of the request, including after</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// it completes.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">metadata</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<ul>
-<li>If the <code>done</code> field is <code>true</code>, then one and exactly one of the <code>response</code> and
-  <code>error</code> fields <strong>must</strong> be populated.<ul>
-<li>If the <code>done</code> field is <code>false</code>, then the <code>response</code> and <code>error</code> fields
-  <strong>must not</strong> be populated.</li>
-</ul>
-</li>
-<li>The <code>response</code> and <code>metadata</code> fields <strong>may</strong> be any type that the service
-  determines to be appropriate, but <strong>must</strong> always be the same type for any
-  particular operation.<ul>
-<li>The <code>response</code> and <code>metadata</code> types <strong>should</strong> be defined in the same API
-  surface as the operation itself.</li>
-<li>The <code>response</code> and <code>metadata</code> types that need no data <strong>should</strong> use a
-  custom-defined empty struct rather than a common void or empty type, to
-  permit future extensibility.</li>
-</ul>
-</li>
-</ul>
-<h3 id="querying-a-status-monitor">Querying a status monitor</h3>
+<h3 id="operation-representation">Operation representation</h3>
+<p>The response to a long-running request <strong>must</strong> be an [<code>Operation</code>][].</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<p>Protocol buffer APIs <strong>must</strong> use the common component [<code>aep.api.Operation</code>][].</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p>OpenAPI services <strong>must</strong> use this [<code>JSON Schema Operation</code>][] schema.</p>
+</div>
+</div>
+<h3 id="querying-an-operation">Querying an operation</h3>
 <p>The service <strong>must</strong> provide an endpoint to query the status of the operation,
-which <strong>must</strong> accept the operation identifier and <strong>should not</strong> include other
+which <strong>must</strong> accept the operation path and <strong>should not</strong> include other
 parameters:</p>
-<div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/statusMonitors/{status_monitor}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
-<span class="na">Host</span><span class="o">:</span> <span class="l">library.googleapis.com</span>
+<div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/operations/{operation}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">library.example.com</span>
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
 </code></pre></div>
-<p>The endpoint <strong>must</strong> return a <code>StatusMonitor</code> as described above.</p>
+<p>The endpoint <strong>must</strong> return a <code>Operation</code> as described above.</p>
 <h3 id="standard-methods">Standard methods</h3>
-<p>APIs <strong>may</strong> return an <code>StatusMonitor</code> from the [<code>Create</code>][aip-133],
+<p>APIs <strong>may</strong> return an <code>Operation</code> from the [<code>Create</code>][aip-133],
 [<code>Update</code>][aip-134], or [<code>Delete</code>][aip-135] standard methods if appropriate. In
 this case, the <code>response</code> field <strong>must</strong> be the standard and expected response
 type for that standard method.</p>
@@ -650,9 +612,9 @@ but is not obligated to do so:</p>
   message explaining the situation.</li>
 </ul>
 <h3 id="expiration">Expiration</h3>
-<p>APIs <strong>may</strong> allow their status monitor resources to expire after sufficient
-time has elapsed after the request completed.</p>
-<p><strong>Note:</strong> A good rule of thumb for status monitor expiry is 30 days.</p>
+<p>APIs <strong>may</strong> allow their operation resources to expire after sufficient time
+has elapsed after the request completed.</p>
+<p><strong>Note:</strong> A good rule of thumb for operation expiry is 30 days.</p>
 <h3 id="errors">Errors</h3>
 <p>Errors that prevent a long-running request from <em>starting</em> <strong>must</strong> return an
 error response (<a href="/193">AEP-193</a>), similar to any other method.</p>
@@ -660,30 +622,30 @@ error response (<a href="/193">AEP-193</a>), similar to any other method.</p>
 metadata message. The errors themselves <strong>must</strong> still be represented with a
 canonical error object.</p>
 <h2 id="interface-definitions">Interface Definitions</h2>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
-<p>When using protocol buffers, the well-known type <code>google.longrunning.Operation</code>
-is used.</p>
-<p><strong>Note:</strong> For historical reasons, Google uses the term <code>Operation</code> to represent
-what this document describes as a <code>StatusMonitor</code>.</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<p>When using protocol buffers, the common component [<code>aep.api.Operation</code>][] is
+used.</p>
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Write a book.</span>
-<span class="k">rpc</span><span class="w"> </span><span class="n">WriteBook</span><span class="p">(</span><span class="n">WriteBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">google.longrunning.Operation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">rpc</span><span class="w"> </span><span class="n">WriteBook</span><span class="p">(</span><span class="n">WriteBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.Operation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books:write&quot;</span>
 <span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
 <span class="w">  </span><span class="p">};</span>
-<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.longrunning.operation_info</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.operation_info</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">response_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;WriteBookResponse&quot;</span>
 <span class="w">    </span><span class="n">metadata_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;WriteBookMetadata&quot;</span>
 <span class="w">  </span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div>
 <ul>
-<li>The response type <strong>must</strong> be <code>google.longrunning.Operation</code>. The <code>Operation</code>
-  proto definition <strong>must not</strong> be copied into individual APIs.<ul>
+<li>The response type <strong>must</strong> be <code>aep.api.Operation</code>. The <code>Operation</code> proto
+  definition <strong>should not</strong> be copied into individual APIs; prefer to use a
+  single copy (in monorepo code bases), or remote dependencies via a tool like
+  [Buf][buf.build].<ul>
 <li>The response <strong>must not</strong> be a streaming response.</li>
 </ul>
 </li>
-<li>The method <strong>must</strong> include a <code>google.longrunning.operation_info</code> annotation,
+<li>The method <strong>must</strong> include a <a href="https://github.com/aep-dev/aep/blob/main/proto/aep-api/aep/api/operations.proto"><code>aep.api.operation_info</code></a> annotation,
   which <strong>must</strong> define both response and metadata types.<ul>
 <li>The response and metadata types <strong>must</strong> be defined in the file where the
   RPC appears, or a file imported by that file.</li>
@@ -701,11 +663,13 @@ what this document describes as a <code>StatusMonitor</code>.</p>
 </ul>
 </li>
 <li>APIs with messages that return <code>Operation</code> <strong>must</strong> implement the
-  <a href="https://github.com/googleapis/api-common-protos/blob/master/google/longrunning/operations.proto"><code>Operations</code></a> service. Individual APIs <strong>must not</strong> define their own
-  interfaces for long-running operations to avoid inconsistency.</li>
+  <code>GetOperation</code> method of the <a href="https://github.com/aep-dev/aep/blob/main/proto/aep-api/aep/api/operations.proto"><code>Operations</code></a> service, and <strong>may</strong>
+  implement the other methods defined in that service. Individual APIs <strong>must
+  not</strong> define their own interfaces for long-running operations to avoid
+  inconsistency.</li>
 </ul>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
 <div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">/v1/resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">post</span><span class="p">:</span><span class="w"></span>
@@ -723,8 +687,8 @@ what this document describes as a <code>StatusMonitor</code>.</p>
 <li><code>202</code> <strong>must</strong> be the only success status code defined.</li>
 <li>The <code>202</code> response <strong>must</strong> define an <code>application/json</code> response body and no
   other response content types.</li>
-<li>The response body schema <strong>must</strong> be an object with <code>name</code>, <code>done</code>, and
-  <code>result</code> properties as described above for a StatusMonitor</li>
+<li>The response body schema <strong>must</strong> be an object with <code>path</code>, <code>done</code>, <code>error</code>,
+  and <code>response</code> properties as described above for an <code>Operation</code>.</li>
 <li>The response body schema <strong>may</strong> contain an object property named <code>metadata</code>
   to hold service-specific metadata associated with the operation, for example
   progress information and common metadata such as create time. The service
@@ -737,9 +701,9 @@ what this document describes as a <code>StatusMonitor</code>.</p>
   as an empty object schema. For a standard <code>Get/Create/Update</code> operation,
   <code>response</code> should be a representation of the resource.</li>
 <li>If a service has any long running operations, the service <strong>must</strong> define an
-  <code>StatusMonitor</code> resource with a <code>list</code> operation to retrieve a potentially
-  filtered list of status monitors and a <code>get</code> operation to retrieve a specific
-  status monitor by its <code>name</code>.</li>
+  <code>Operation</code> resource with a <code>list</code> operation to retrieve a potentially
+  filtered list of operations and a <code>get</code> operation to retrieve a specific
+  operation by its <code>path</code>.</li>
 </ul>
 </div>
 </div>
