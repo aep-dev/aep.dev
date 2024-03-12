@@ -37,8 +37,8 @@ rpc UpdateBook(UpdateBookRequest) returns (Book) {
     include any fields that were sent and included in the update mask unless
     they are input only (see AIP-203).
   - If the update RPC is [long-running](#long-running-update), the response
-    message **must** be a `google.longrunning.Operation` which resolves to the
-    resource itself.
+    message **must** be a `aep.api.Operation` which resolves to the resource
+    itself.
 - The method **should** support partial resource update, and the HTTP verb
   **should** be `PATCH`.
   - If the method will only ever support full resource replacement, then the
@@ -149,11 +149,11 @@ regular API request. In this situation, the API **should** use a long-running
 operation (AIP-151) instead:
 
 ```proto
-rpc UpdateBook(UpdateBookRequest) returns (google.longrunning.Operation) {
+rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
   option (google.api.http) = {
     patch: "/v1/{book.name=publishers/*/books/*}"
   };
-  option (google.longrunning.operation_info) = {
+  option (aep.api.operation_info) = {
     response_type: "Book"
     metadata_type: "OperationMetadata"
   };
@@ -219,7 +219,7 @@ In this situation, the resource **should** contain a `string etag` field:
 ```proto
 message Book {
   option (google.api.resource) = {
-    type: "library.googleapis.com/Book"
+    type: "library.example.com/Book"
     pattern: "publishers/{publisher}/books/{book}"
   };
 
