@@ -16,8 +16,6 @@ changes to the resources without causing side effects.
 
 Update methods are specified using the following pattern:
 
-{% tab proto %}
-
 - The RPC's name **must** begin with the word `Update`. The remainder of the
   RPC name **should** be the singular form of the resource's message name.
 - The request message **must** exactly match the RPC name, with a `Request`
@@ -31,6 +29,8 @@ Update methods are specified using the following pattern:
     resource itself.
 - The method **should** support partial resource update, and the HTTP verb
   **should** be `PATCH`.
+
+{% tab proto %}
 
 ```proto
 rpc UpdateBook(UpdateBookRequest) returns (Book) {
