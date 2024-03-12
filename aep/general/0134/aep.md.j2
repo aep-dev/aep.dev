@@ -154,6 +154,37 @@ If a rating were set on a book and the existing `PUT` request were executed, it
 would wipe out the book's rating. In essence, a `PUT` request unintentionally
 would wipe out data because the previous version did not know about it.
 
+### Long-running update
+
+Some resources take longer to update a resource than is reasonable for a
+regular API request. In this situation, the API **should** use a long-running
+operation (AIP-151) instead:
+
+- The response type **must** be set to the resource (what the return type would
+  be if the RPC was not long-running).
+
+{% tab proto %}
+
+```proto
+rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
+  option (google.api.http) = {
+    patch: "/v1/{book.name=publishers/*/books/*}"
+  };
+  option (aep.api.operation_info) = {
+    response_type: "Book"
+    metadata_type: "OperationMetadata"
+  };
+}
+```
+
+- Both the `response_type` and `metadata_type` fields **must** be specified.
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
+
 ### Create or update
 
 If the service uses client-assigned resource paths, `Update` methods **may**
