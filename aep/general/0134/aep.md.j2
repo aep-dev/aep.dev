@@ -12,65 +12,75 @@ representing that resource and return the resource.
 
 ## Guidance
 
-APIs **should** generally provide an update method for resources unless it is
-not valuable for users to do so. The purpose of the update method is to make
+APIs **should** provide an update method for resources unless it is not
+valuable for users to do so. The purpose of the update method is to make
 changes to the resources without causing side effects.
 
 Update methods are specified using the following pattern:
 
+{% tab proto %}
+
+- The RPC's name **must** begin with the word `Update`. The remainder of the
+  RPC name **should** be the singular form of the resource's message name.
+- The request message **must** exactly match the RPC name, with a `Request`
+  suffix.
+- The response message **must** be the resource itself.
+  - The response **should** include the fully-populated resource, and **must**
+    include any fields that were sent and included in the update mask unless
+    they are input only (see AIP-203).
+  - If the update RPC is [long-running](#long-running-update), the response
+    message **must** be an `Operation` for which the return type is the
+    resource itself.
+- The method **should** support partial resource update, and the HTTP verb
+  **should** be `PATCH`.
+
 ```proto
 rpc UpdateBook(UpdateBookRequest) returns (Book) {
   option (google.api.http) = {
-    patch: "/v1/{book.name=publishers/*/books/*}"
+    patch: "/v1/{book.path=publishers/*/books/*}"
     body: "book"
   };
   option (google.api.method_signature) = "book,update_mask";
 }
 ```
 
-- The RPC's name **must** begin with the word `Update`. The remainder of the
-  RPC name **should** be the singular form of the resource's message name.
-- The request message **must** match the RPC name, with a `Request` suffix.
-- The response message **must** be the resource itself. (There is no
-  `UpdateBookResponse`.)
-  - The response **should** include the fully-populated resource, and **must**
-    include any fields that were sent and included in the update mask unless
-    they are input only (see AIP-203).
-  - If the update RPC is [long-running](#long-running-update), the response
-    message **must** be a `aep.api.Operation` which resolves to the resource
-    itself.
-- The method **should** support partial resource update, and the HTTP verb
-  **should** be `PATCH`.
-  - If the method will only ever support full resource replacement, then the
-    HTTP verb **may** be `PUT`. However, this is strongly discouraged because
-    it becomes a backwards-incompatible change to add fields to the resource.
-- The resource's `name` field **should** map to the URI path.
-  - The `{resource}.name` field **should** be the only variable in the URI
+- The resource's `path` field **should** map to the URI path.
+  - The `{resource}.path` field **should** be the only variable in the URI
     path.
 - There **must** be a `body` key in the `google.api.http` annotation, and it
   **must** map to the resource field in the request message.
   - All remaining fields **should** map to URI query parameters.
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"{resource},update_mask"`.
-- If the API is operating on the [management plane][], the operation should
-  have [strong consistency][]: the completion of an update operation **must**
-  mean that all user-settable values and the existence of the resource have
-  reached a steady-state and reading resource state returns a consistent
-  response.
 
 **Note:** Unlike the other four standard methods, the URI path here references
-a nested field (`book.name`) in the example. If the resource field has a word
+a nested field (`book.path`) in the example. If the resource field has a word
 separator, `snake_case` is used.
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 ### Request message
 
 Update methods implement a common request message pattern:
 
+- The request message **must** contain a field for the resource.
+  - The name of this field **must** be the singular form of the resource's
+    name.
+- The request message **must not** contain any required fields other than those
+  described in this section, and **should not** contain other optional fields
+  except those described in this or another AIP.
+
+{% tab proto %}
+
 ```proto
 message UpdateBookRequest {
   // The book to update.
   //
-  // The book's `name` field is used to identify the book to update.
+  // The book's `path` field is used to identify the book to update.
   // Format: publishers/{publisher}/books/{book}
   Book book = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -79,11 +89,11 @@ message UpdateBookRequest {
 }
 ```
 
-- The request message **must** contain a field for the resource.
-  - The field **must** map to the `PATCH` body.
-  - The field **should** be [annotated as required][aip-203].
-  - A `name` field **must** be included in the resource message. It **should**
-    be called `name`.
+- The request message field for the resource **must** map to the `PATCH` body.
+- The request message field for the resource **should** be [annotated as
+  required][aip-203].
+  - A `path` field **must** be included in the resource message. It **should**
+    be called `path`.
   - The field **must** identify the [resource type][aip-123] of the resource
     being updated.
 - If partial resource update is supported, a field mask **must** be included.
@@ -97,9 +107,12 @@ message UpdateBookRequest {
     fields that are populated (have a non-empty value).
   - Update masks **must** support a special value `*`, meaning full replacement
     (the equivalent of `PUT`).
-- The request message **must not** contain any other required fields, and
-  **should not** contain other optional fields except those described in this
-  or another AIP.
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 ### Side effects
 
@@ -112,12 +125,13 @@ writable in update methods.
 
 ### PATCH and PUT
 
-**TL;DR:** Google APIs generally use the `PATCH` HTTP verb only, and do not
-support `PUT` requests.
+**TL;DR:** AEP-compliant APIs generally use the `PATCH` HTTP verb only, and do
+not support `PUT` requests.
 
-We standardize on `PATCH` because Google updates stable APIs in place with
-backwards-compatible improvements. It is often necessary to add a new field to
-an existing resource, but this becomes a breaking change when using `PUT`.
+We standardize on `PATCH` because many organizations update stable APIs in
+place with backwards-compatible improvements. It is often necessary to add a
+new field to an existing resource, but this becomes a breaking change when
+using `PUT`.
 
 To illustrate this, consider a `PUT` request to a `Book` resource:
 
@@ -126,7 +140,7 @@ To illustrate this, consider a `PUT` request to a `Book` resource:
     {"title": "Mary Poppins", "author": "P.L. Travers"}
 
 Next consider that the resource is later augmented with a new field (here we
-add `rating`):
+add `rating`, and use a protobuf example without loss of generality):
 
 ```proto
 message Book {
@@ -138,47 +152,24 @@ message Book {
 }
 ```
 
-If a rating is set on a book and the existing `PUT` request was executed, it
+If a rating were set on a book and the existing `PUT` request were executed, it
 would wipe out the book's rating. In essence, a `PUT` request unintentionally
-wiped out data because the previous version did not know about it.
-
-### Long-running update
-
-Some resources take longer to update a resource than is reasonable for a
-regular API request. In this situation, the API **should** use a long-running
-operation (AIP-151) instead:
-
-```proto
-rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
-  option (google.api.http) = {
-    patch: "/v1/{book.name=publishers/*/books/*}"
-  };
-  option (aep.api.operation_info) = {
-    response_type: "Book"
-    metadata_type: "OperationMetadata"
-  };
-}
-```
-
-- The response type **must** be set to the resource (what the return type would
-  be if the RPC was not long-running).
-- Both the `response_type` and `metadata_type` fields **must** be specified.
-
-**Note:** Declarative-friendly resources ([AIP-128][]) **should** use
-long-running update.
+would wipe out data because the previous version did not know about it.
 
 ### Create or update
 
-If the service uses client-assigned resource names, `Update` methods **may**
+If the service uses client-assigned resource paths, `Update` methods **may**
 expose a `bool allow_missing` field, which will cause the method to succeed in
 the event that the user attempts to update a resource that is not present (and
 will create the resource in the process):
+
+{% tab proto %}
 
 ```proto
 message UpdateBookRequest {
   // The book to update.
   //
-  // The book's `name` field is used to identify the book to be updated.
+  // The book's `path` field is used to identify the book to be updated.
   // Format: publishers/{publisher}/books/{book}
   Book book = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -190,6 +181,12 @@ message UpdateBookRequest {
   bool allow_missing = 3;
 }
 ```
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 More specifically, the `allow_missing` flag triggers the following behavior:
 
@@ -203,8 +200,7 @@ More specifically, the `allow_missing` flag triggers the following behavior:
   in the field mask are updated.
 
 The user **must** have the update permissions to call `Update` even with
-`allow_missing` set to `true`. For customers that want to prevent users from
-creating resources using the update method, IAM conditions **should** be used.
+`allow_missing` set to `true`.
 
 ### Etags
 
@@ -216,6 +212,8 @@ server-computed value representing the content of the resource.
 
 In this situation, the resource **should** contain a `string etag` field:
 
+{% tab proto %}
+
 ```proto
 message Book {
   option (google.api.resource) = {
@@ -223,9 +221,9 @@ message Book {
     pattern: "publishers/{publisher}/books/{book}"
   };
 
-  // The resource name of the book.
+  // The resource path of the book.
   // Format: publishers/{publisher}/books/{book}
-  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string path = 1 [(google.api.field_behavior) = IDENTIFIER];
 
   // The title of the book.
   // Example: "Mary Poppins"
@@ -240,6 +238,12 @@ message Book {
   string etag = 4;
 }
 ```
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 The `etag` field **may** be either [required][] or [optional][]. If it is set,
 then the request **must** succeed if and only if the provided etag matches the
@@ -258,12 +262,11 @@ This can happen in a few situations:
   are generally not useful to the customer on update requests.
 - A single resource sometimes represents an amalgamation of data from multiple
   underlying (and eventually consistent) data sources. In these situations, it
-  is impossible to return authoritative information on the fields that were not
-  changed.
+  may be infeasible to return authoritative information on the fields that were
+  not changed.
 
-In this situation, an API **may** return back only the fields that were
-updated, and omit the rest, and **should** document this behavior if they do
-so.
+In this situation, an API **may** return back only the fields that were updated
+and omit the rest. APIs that do this **must** document this behavior.
 
 ### Errors
 
@@ -274,6 +277,7 @@ In addition, if the user does have proper permission, but the requested
 resource does not exist, the service **must** error with `NOT_FOUND` (HTTP 404)
 unless `allow_missing` is set to `true`.
 
+<!-- prettier-ignore-start -->
 [aip-121]: ./0121.md
 [aip-128]: ./0128.md
 [aip-203]: ./0203.md
@@ -285,26 +289,4 @@ unless `allow_missing` is set to `true`.
 [strong consistency]: ./0121.md#strong-consistency
 [required]: ./0203.md#required
 [optional]: ./0203.md#optional
-
-## Changelog
-
-- **2023-08-26**: Adding consistency requirement.
-- **2023-07-17**: Make `update_mask` name guidance a **must**.
-- **2022-11-04**: Aggregated error guidance to AIP-193.
-- **2022-06-02**: Changed suffix descriptions to eliminate superfluous "-".
-- **2021-11-04**: Changed the permission check if `allow_missing` is set.
-- **2021-07-08**: Added error guidance for resource not found case.
-- **2021-03-05**: Changed the etag error from `FAILED_PRECONDITION` (which
-  becomes HTTP 400) to `ABORTED` (409).
-- **2020-10-06**: Added guidance for declarative-friendly resources.
-- **2020-10-06**: Added guidance for `allow_missing`.
-- **2020-08-14**: Added error guidance for permission denied cases.
-- **2020-06-08**: Added guidance on returning the full resource.
-- **2019-10-18**: Added guidance on annotations.
-- **2019-09-10**: Added a link to the long-running operations AIP
-  ([AIP-151][]).
-- **2019-08-01**: Changed the examples from "shelves" to "publishers", to
-  present a better example of resource ownership.
-- **2019-06-10**: Added guidance for long-running update.
-- **2019-05-29**: Added an explicit prohibition on arbitrary fields in standard
-  methods.
+<!-- prettier-ignore-end -->
