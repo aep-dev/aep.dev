@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-132: GET for collections</title>
+    <title>AEP-132: List</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=2d3772a4">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=2d3772a4">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=42bb5f6e">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=42bb5f6e">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=2d3772a4"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=42bb5f6e"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -233,7 +233,7 @@
       <li class="nav-item nav-item-active">
           <a href="/132">
             <span class="aep-id">132</span>
-            GET for collections
+            List
           </a>
         </li>
       <li class="nav-item">
@@ -490,7 +490,7 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">GET for collections</th></tr>
+    <tr><th colspan="2">List</th></tr>
     <tr><td>Slug</td><td>list</td></tr>
     <tr><td>Number</td><td>132</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/132">aep.dev/132</a></td></tr>
@@ -545,27 +545,29 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        GET for collections
+        List
       </li>
     </ol>
   </nav>
 </section>
   
   <h4 class="aep-id">list (AEP-132)</h4>
-  <h1 id="get-for-collections">GET for collections</h1>
+  <h1 id="list">List</h1>
 <p>In REST APIs, it is customary to make a <code>GET</code> request to a resource
 collection's URI (for example, <code>/v1/publishers/{publisher}/books</code>) in order to
-retrieve a list of the resources within that collection. These are sometimes
-colloquially called "list" operations.</p>
+retrieve a list of the resources within that collection.</p>
+<p>Resource-oriented design (<a href="/121">AEP-121</a>) honors this pattern through the <code>List</code>
+method. These RPCs accept the parent collection (and potentially some other
+parameters), and return a list of responses matching that input.</p>
 <h2 id="guidance">Guidance</h2>
-<p>APIs <strong>should</strong> generally provide a <code>GET</code> method for resource collections
-unless it is not valuable for users to do so. When the <code>GET</code> method is used on
-a URI ending in a resource collection, the result should be a list of
-resources. For more information about using the <code>GET</code> method on a URI ending
-with a discrete resource ID, see <a href="/131">AEP-131</a>.</p>
+<p>APIs <strong>should</strong> provide a <code>List</code> method for resource collections.The purpose of
+the <code>List</code> method is to return data from a finite collection (generally
+singular unless the operation supports <a href="./0159">reading across collections</a>).</p>
+<p>When the <code>GET</code> method is used on a URI ending in a resource collection, the
+result <strong>must</strong> be a list of resources.</p>
 <h3 id="requests">Requests</h3>
-<p>Collection <code>GET</code> operations <strong>must</strong> be made by sending a <code>GET</code> request to the
-resource collection's URI:</p>
+<p><code>List</code> operations <strong>must</strong> be made by sending a <code>GET</code> request to the resource
+collection's URI:</p>
 <div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/publishers/{publisher}/books</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
 <span class="na">Host</span><span class="o">:</span> <span class="l">library.googleapis.com</span>
 <span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
@@ -589,8 +591,8 @@ resource collection's URI:</p>
 </li>
 </ul>
 <h3 id="responses">Responses</h3>
-<p>Collection <code>GET</code> operations <strong>must</strong> return a page of results, with each
-individual result being a resource:</p>
+<p><code>List</code> operations <strong>must</strong> return a page of results, with each individual
+result being a resource:</p>
 <div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">    </span><span class="p">{</span><span class="w"></span>
@@ -667,8 +669,8 @@ more detail in <a href="/160">AEP-160</a>.</p>
 is always possible to add filtering later, but removing it is a breaking
 change.</p>
 <h3 id="soft-deleted-resources">Soft-deleted resources</h3>
-<p>Some APIs need to "[soft delete][aip-135]" resources, marking them as deleted
-or pending deletion (and optionally purging them later).</p>
+<p>Some APIs need to "<a href="./0164">soft-delete</a>" resources, marking them as deleted or
+pending deletion (and optionally purging them later).</p>
 <p>APIs that do this <strong>should not</strong> include deleted resources by default in list
 requests. APIs with soft deletion of a resource <strong>should</strong> include a
 <code>bool showDeleted</code> field in the list request that, if set, will cause
@@ -729,9 +731,9 @@ soft-deleted resources to be included.</p>
 <ul>
 <li>A <code>parent</code> field <strong>must</strong> be included unless the resource being listed is a
   top-level resource. It <strong>should</strong> be called <code>parent</code>.<ul>
-<li>The field <strong>should</strong> be [annotated as required][aip-203].</li>
-<li>The field <strong>should</strong> identify the [resource type][aip-123] of the resource
-  being listed.</li>
+<li>The field <strong>must</strong> be <a href="/203">annotated as required</a>.</li>
+<li>The field <strong>must</strong> identify the <a href="./0123">resource type</a> of the resource being
+  listed with a <code>google.api.resource_reference</code> annotation.</li>
 </ul>
 </li>
 <li>The <code>max_page_size</code> and <code>page_token</code> fields, which support pagination,
@@ -762,8 +764,7 @@ when the REST/JSON interface is used.</p>
 </ul>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
-<p>Collection <code>GET</code> operations <strong>must</strong> be specified with consistent OpenAPI
-metadata:</p>
+<p><code>List</code> operations <strong>must</strong> be specified with consistent OpenAPI metadata:</p>
 <div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
@@ -818,6 +819,8 @@ metadata:</p>
 </ul>
 </div>
 </div>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
