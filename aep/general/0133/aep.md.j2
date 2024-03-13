@@ -57,6 +57,10 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
   resource ID is not required.
+- If the API is operating on the [management plane][], the operation should have
+  [strong consistency][]: the completion of a create operation **must** mean
+  that all user-settable values and the existence of the resource have reached a
+  steady-state and reading resource state returns a consistent response.
 
 {% tab oas %}
 
@@ -234,4 +238,4 @@ path and use it in references from other resources.
 [field_behavior]: ./203.md
 [Declarative clients]: ./0009.md#declarative-clients
 [permission-denied]: ./0193.md#permission-denied
-[strongly consistent]: ./0121.md#strong-consistency
+[strong consistency]: ./0121.md#strong-consistency
