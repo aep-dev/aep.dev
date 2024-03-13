@@ -43,7 +43,7 @@ clients or their authors, including but not limited to:
 Examples of enhancements include:
 
 - Requiring new proto annotations that enable more descriptive interfaces on
-  clients (e.g. requiring `singular` and `plural` on a `library.api.resource`
+  clients (e.g. requiring `singular` and `plural` on a `google.api.resource`
   annotation).
 
 AEP guidance **must not** be a significant detriment to a client's usability or
@@ -211,7 +211,7 @@ complete understanding, but **must not** contain guidance (and RFC-2119 terms
 
 API design examples in AEPs **should** be presented in both [OpenAPI][] and
 [protocol buffers][]. Examples **should** cover only enough syntax to explain
-the concept. When using RPCs in examples, a `library.api.http` annotation
+the concept. When using RPCs in examples, a `google.api.http` annotation
 **should** be included.
 
 AEPs should use snake-case naming for parameters and properties (fields), for
