@@ -17,6 +17,11 @@ The Delete method **should** succeed if and only if a resource was present and
 was successfully deleted. If the resource did not exist, the method **should**
 send a `404 Not found` (`NOT_FOUND`) error.
 
+If the API is operating on the [Management Plane][], the method should have
+[strong consistency][]: the completion of a delete method **must** mean that
+the existence of the resource has reached a steady-state and reading resource
+state returns a consistent `404 Not found`(`NOT_FOUND`) response.
+
 ### Requests
 
 {% tab oas -%}
@@ -35,10 +40,6 @@ Delete methods are specified using the following pattern:
 - Delete methods **should** return `204 No Content` with no response body, or
   `202 Accepted` with a representation of the operation in the response body
   if the delete is [long-running](#long-running-delete).
-- If the API is operating on the [Management Plane][], the method should have
-  [strong consistency][]: the completion of a delete method **must** mean that
-  the existence of the resource has reached a steady-state and reading resource
-  state returns a consistent `404 Not found`response.
 
 {% tab proto -%}
 
@@ -69,10 +70,6 @@ rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"name"`. If an etag or force field are used, they **may** be
   included in the signature.
-- If the API is operating on the [Management Plane][], the method should have
-  [strong consistency][]: the completion of a delete method **must** mean that
-  the existence of the resource has reached a steady-state and reading resource
-  state returns a consistent `NOT_FOUND` response.
 
 Delete methods implement a common request pattern:
 
