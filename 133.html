@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=42bb5f6e">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=42bb5f6e">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=2fba2f14">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=2fba2f14">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=42bb5f6e"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=2fba2f14"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -494,13 +494,26 @@
     <tr><td>Slug</td><td>create</td></tr>
     <tr><td>Number</td><td>133</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/133">aep.dev/133</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2023-03-08</td></tr>
+    <tr><td>Updated</td><td>2023-03-08</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#request-message">Request message</a></li>
+<li><a href="#long-running-create">Long-running create</a></li>
+<li><a href="#user-specified-ids">User-specified IDs</a></li>
+<li><a href="#errors">Errors</a></li>
+</ul>
+</li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#requiring-user-specified-ids">Requiring user-specified ids</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
   </section>
@@ -539,17 +552,223 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">create (AEP-133)</h4>
   <h1 id="create">Create</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/38">this GitHub issue</a> for more
-information.</p>
+<p>In REST APIs, it is customary to make a <code>POST</code> request to a collection's URI
+(for example, <code>/v1/publishers/{publisher}/books</code>) in order to create a new
+resource within that collection.</p>
+<p>Resource-oriented design (<a href="/121">AEP-121</a>) honors this pattern through the <code>Create</code>
+method. These RPCs accept the parent collection and the resource to create (and
+potentially some other parameters), and return the created resource.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>should</strong> provide a create method for resources unless it is
+not valuable for users to do so. The purpose of the create method is to create
+a new resource in an already-existing collection.</p>
+<p>Create methods are specified using the following pattern:</p>
+<ul>
+<li>The response <strong>must</strong> be the resource itself. There is no separate response
+  schema.<ul>
+<li>The response <strong>should</strong> include the fully-populated resource, and <strong>must</strong>
+  include any fields that were provided unless they are input only (see
+  <a href="/203">AEP-203</a>).</li>
+<li>If the create RPC is <a href="#long-running-create">long-running</a>, the response
+  message <strong>must</strong> be an <code>Operation</code> for which the type of the <code>response</code>
+  field is the resource itself.</li>
+</ul>
+</li>
+<li>The HTTP verb <strong>must</strong> be <code>POST</code>.</li>
+<li>The collection where the resource is being added <strong>should</strong> map to the URI
+  path.<ul>
+<li>The collection's parent resource <strong>should</strong> be called <code>parent</code>, and
+  <strong>should</strong> be the only variable in the URI path.</li>
+<li>The collection identifier (<code>books</code> in the above example) <strong>must</strong> be a
+  literal string.</li>
+</ul>
+</li>
+</ul>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">CreateBook</span><span class="p">(</span><span class="n">CreateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;parent,book&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The RPC's name <strong>must</strong> begin with the word <code>Create</code>. The remainder of the
+  RPC name <strong>should</strong> be the singular form of the resource being created.<ul>
+<li>The request message <strong>must</strong> match the RPC name, with a <code>Request</code> suffix.</li>
+</ul>
+</li>
+<li>The collection's parent resource <strong>must</strong> be called <code>parent</code>, and
+  <strong>should</strong> be the only variable in the URI path.<ul>
+<li>The collection identifier (<code>books</code> in the above example) <strong>must</strong> be a
+  literal string.</li>
+</ul>
+</li>
+<li>There <strong>must</strong> be a <code>body</code> key in the <code>google.api.http</code> annotation, and it
+  <strong>must</strong> map to the resource field in the request message.<ul>
+<li>All remaining fields <strong>should</strong> map to URI query parameters.</li>
+</ul>
+</li>
+<li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation,
+  with a value of <code>"parent,{resource},id"</code>, or "<code>"parent,{resource}"</code> if the
+  resource ID is not required.</li>
+<li>If the API is operating on the <a href="/111#management-plane">management plane</a>, the operation should have
+  <a href="/121#strong-consistency">strong consistency</a>: the completion of a create operation <strong>must</strong> mean
+  that all user-settable values and the existence of the resource have reached a
+  steady-state and reading resource state returns a consistent response.</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS guidance not yet written</p>
+</div>
+</div>
+<h3 id="request-message">Request message</h3>
+<p>Create methods implement a common request message pattern:</p>
+<ul>
+<li>An <code>id</code> field <strong>must</strong> be included for management plane resources, and
+  <strong>should</strong> be included for data plane resources.</li>
+<li>The resource field <strong>must</strong> be included and <strong>must</strong> map to the POST body.</li>
+<li>The request message <strong>must not</strong> contain any other required fields and
+  <strong>should not</strong> contain other optional fields except those described in this
+  or another AEP.</li>
+</ul>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">CreateBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The parent resource where this book will be created.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">child_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.example.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// The ID to use for the book, which will become the final component of</span>
+<span class="w">  </span><span class="c1">// the book&#39;s resource path.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// This value should be 4-63 characters, and valid characters</span>
+<span class="w">  </span><span class="c1">// are /[a-z][0-9]-/.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The book to create.</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>A <code>parent</code> field <strong>must</strong> be included unless the resource being created is a
+  top-level resource. It <strong>should</strong> be called <code>parent</code>.<ul>
+<li>The field <strong>should</strong> be <a href="/203">annotated as <code>REQUIRED</code></a>.</li>
+<li>The field <strong>must</strong> identify the <a href="/123">resource type</a> of the resource
+  being created.</li>
+</ul>
+</li>
+</ul>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS guidance not yet written</p>
+</div>
+</div>
+<h3 id="long-running-create">Long-running create</h3>
+<p>Some resources take longer to create a resource than is reasonable for a
+regular API request. In this situation, the API <strong>should</strong> use a long-running
+operation (<a href="/151">AEP-151</a>) instead:</p>
+<ul>
+<li>The response type <strong>must</strong> be set to the resource (what the return type would
+  be if the RPC was not long-running).</li>
+</ul>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">CreateBook</span><span class="p">(</span><span class="n">CreateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.Operation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.operation_info</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">response_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;Book&quot;</span>
+<span class="w">    </span><span class="n">metadata_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;OperationMetadata&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Both the <code>response_type</code> and <code>metadata_type</code> fields <strong>must</strong> be specified.</li>
+</ul>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS guidance not yet written</p>
+</div>
+</div>
+<h3 id="user-specified-ids">User-specified IDs</h3>
+<p>An API <strong>must</strong> allow a user to specify the ID component of a resource (the
+last segment of the resource path) on creation if the API is operating on the
+<a href="/111#management-plane">management plane</a>.</p>
+<p>On the <a href="/111#data-plane">data plane</a>, an API <strong>should</strong> allow a user to specify the ID.
+Exceptional cases should have the following behavior:</p>
+<ul>
+<li>The data plane resource allows identical records without a need to
+  disambiguate between the two (e.g. rows in a table with no primary key).</li>
+<li>The data plane resource will not be exposed in <a href="/9#declarative-clients">Declarative clients</a>.</li>
+</ul>
+<p>An API <strong>may</strong> allow the <code>id</code> field to be optional, and give the resource a
+system-generated ID if one is not specified.</p>
+<p>For example:</p>
+<div class="highlight language-None"><pre><span></span><code>// Using user-specified IDs.
+publishers/lacroix/books/les-miserables
+
+// Using system-generated IDs.
+publishers/012345678-abcd-cdef/books/12341234-5678-abcd
+</code></pre></div>
+<ul>
+<li>The <code>id</code> field <strong>must</strong> exist on the request message, not the resource
+  itself.<ul>
+<li>The field <strong>may</strong> be required or optional. If it is required, it <strong>should</strong>
+  include the corresponding annotation.</li>
+</ul>
+</li>
+<li>The <code>path</code> field on the resource <strong>must</strong> be ignored.</li>
+<li>The documentation <strong>should</strong> explain what the acceptable format is, and the
+  format <strong>should</strong> follow the guidance for resource path formatting in
+  <a href="/122">AEP-122</a>.</li>
+<li>If a user tries to create a resource with an ID that would result in a
+  duplicate resource path, the service <strong>must</strong> error with <code>ALREADY_EXISTS</code>.<ul>
+<li>However, if the user making the call does not have permission to see the
+  duplicate resource, the service <strong>must</strong> error with <code>PERMISSION_DENIED</code>
+  instead.</li>
+</ul>
+</li>
+</ul>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Protocol buffers</label><div class="tabbed-content">
+<ul>
+<li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation on
+  the RPC, with a value of <code>"parent,{resource},id"</code> if the resource being
+  created is not a top-level resource, or with a value of <code>"{resource},id"</code> if
+  the resource being created is a top-level resource.</li>
+</ul>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS guidance not yet written</p>
+</div>
+</div>
+<p><strong>Note:</strong> For REST APIs, the user-specified ID field, <code>id</code>, is provided as a
+query parameters on the request URI.</p>
+<h3 id="errors">Errors</h3>
+<p>See <a href="/193">errors</a>, in particular <a href="/193#permission-denied">when to use PERMISSION_DENIED and NOT_FOUND
+errors</a>.</p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>For ensuring idempotency in <code>Create</code> methods, see <a href="/155">AEP-155</a>.</li>
+<li>For naming resources involving Unicode, see <a href="/210">AEP-210</a>.</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="requiring-user-specified-ids">Requiring user-specified ids</h3>
+<p><a href="/9#declarative-clients">Declarative clients</a> use the resource ID as a way to identify a resource for
+applying updates and for conflict resolution. The lack of a user-specified ID
+means a client is unable to find the resource unless they store the identifier
+locally, and can result in re-creating the resource. This in turn has a
+downstream effect on all resources that reference it, forcing them to update to
+the ID of the newly-created resource.</p>
+<p>Having a user-specified ID also means the client can precalculate the resource
+path and use it in references from other resources.</p>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
