@@ -16,17 +16,17 @@ changes to the resources without causing side effects.
 
 Update methods are specified using the following pattern:
 
-- The RPC's name **must** begin with the word `Update`. The remainder of the
-  RPC name **should** be the singular form of the resource's message name.
-- The request message **must** exactly match the RPC name, with a `Request`
-  suffix.
-- The response message **must** be the resource itself.
+- The method's name **must** begin with the word `Update`. The remainder of the
+  method name **should** be the singular form of the resource's name.
+- The request schema's name **must** exactly match the RPC name, with a
+  `Request` suffix.
+- The response schema **must** be the resource itself.
   - The response **should** include the fully-populated resource, and **must**
     include any fields that were sent and included in the update mask unless
     they are input only (see AEP-203).
   - If the update RPC is [long-running](#long-running-update), the response
-    message **must** be an `Operation` for which the return type is the
-    resource itself.
+    **must** be an `Operation` for which the return type is the resource
+    itself.
 - The method **should** support partial resource update, and the HTTP verb
   **should** be `PATCH`.
 
@@ -61,14 +61,14 @@ separator, `snake_case` is used.
 
 {% endtabs %}
 
-### Request message
+### Request schema
 
-Update methods implement a common request message pattern:
+Update methods implement a common request pattern:
 
-- The request message **must** contain a field for the resource.
+- The request **must** contain a field for the resource.
   - The name of this field **must** be the singular form of the resource's
     name.
-- The request message **must not** contain any required fields other than those
+- The request **must not** contain any required fields other than those
   described in this section, and **should not** contain other optional fields
   except those described in this or another AEP.
 
@@ -159,7 +159,7 @@ regular API request. In this situation, the API **should** use a long-running
 operation (AIP-151) instead:
 
 - The response type **must** be set to the resource (what the return type would
-  be if the RPC was not long-running).
+  be if the method were not long-running).
 
 {% tab proto %}
 
