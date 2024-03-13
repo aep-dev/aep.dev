@@ -90,8 +90,6 @@ message UpdateBookRequest {
 - The request message field for the resource **must** map to the `PATCH` body.
 - The request message field for the resource **should** be [annotated as
   required][aep-203].
-  - A `path` field **must** be included in the resource message. It **should**
-    be called `path`.
   - The field **must** identify the [resource type][aep-123] of the resource
     being updated.
 - If partial resource update is supported, a field mask **must** be included.
