@@ -3,7 +3,7 @@
 Customers often want to provide the time that a given resource or resource
 attribute is no longer useful or valid (e.g. a rotating security key). Currently
 we recommend that customers do this by specifying an exact "expiration time"
-into a `google.protobuf.Timestamp expire_time` field; however, this adds
+into a `Timestamp expire_time` field; however, this adds
 additional strain on the user when they want to specify a relative time offset
 until expiration rather than a specific time until expiration.
 
@@ -29,9 +29,6 @@ library.
 
 ### Example
 
-{% tab oas %}
-OAS example not provided yet
-
 {% tab proto %}
 ```proto
 message ExpiringResource {
@@ -48,6 +45,9 @@ message ExpiringResource {
   }
 }
 ```
+{% tab oas %}
+**Note:**  OAS content not yet written.
+
 {% endtabs %}
 
 ## Rationale
