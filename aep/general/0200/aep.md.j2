@@ -29,6 +29,8 @@ the errors as precedent of a "previously approved API".
 The comment should also include an explanation of what violates standards and
 why it is necessary. For example:
 
+{% tab proto %}
+
 ```proto
 message DailyMaintenanceWindow {
   // Time within the maintenance window to start the maintenance operations.
@@ -45,6 +47,11 @@ message DailyMaintenanceWindow {
   string duration = 3;
 }
 ```
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 **Important:** APIs should only be considered to be precedent-setting if they
 are in beta or GA.
@@ -63,6 +70,8 @@ However, others who might otherwise copy that API should be made aware that
 this is contra-standard and not something to cite as precedent when launching
 new APIs.
 
+{% tab proto %}
+
 ```proto
 // ...
 message Book {
@@ -80,6 +89,11 @@ message Author {
   google.protobuf.Timestamp creation_time = 1;
 }
 ```
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
 
 ### Pre-existing functionality
 
