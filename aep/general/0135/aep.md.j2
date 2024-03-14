@@ -38,8 +38,8 @@ Delete methods are specified using the following pattern:
   **should not** include optional fields in the query string unless described
   in another AEP.
 - Delete methods **should** return `204 No Content` with no response body, or
-  `202 Accepted` with a representation of the operation in the response body
-  if the delete is [long-running](#long-running-delete).
+  `202 Accepted` with a representation of the operation in the response body if
+  the delete is [long-running](#long-running-delete).
 
 {% tab proto -%}
 
@@ -48,9 +48,9 @@ Delete methods are specified using the following pattern:
 ```proto
 rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
   option (google.api.http) = {
-    delete: "/v1/{name=publishers/*/books/*}"
+    delete: "/v1/{path=publishers/*/books/*}"
   };
-  option (google.api.method_signature) = "name";
+  option (google.api.method_signature) = "path";
 }
 ```
 
@@ -59,16 +59,16 @@ rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
 - The request message **must** match the RPC name, with a `Request` suffix.
 - The response message **should** be `google.protobuf.Empty`.
   - If the delete RPC is [long-running](#long-running-delete), the response
-    message **must** be a `library.longrunning.Operation` which resolves to the
-    correct response.
-- The request message field receiving the resource name **should** map to the
+    message **must** be a `aep.api.Operation` which resolves to the correct
+    response.
+- The request message field receiving the resource path **should** map to the
   URI path.
-  - This field **should** be called `name`.
-  - The `name` field **should** be the only variable in the URI path. All
+  - This field **should** be called `path`.
+  - The `path` field **should** be the only variable in the URI path. All
     remaining parameters **should** map to URI query parameters.
 - There **must not** be a `body` key in the `google.api.http` annotation.
 - There **should** be exactly one `google.api.method_signature` annotation,
-  with a value of `"name"`. If an etag or force field are used, they **may** be
+  with a value of `"path"`. If an etag or force field are used, they **may** be
   included in the signature.
 
 Delete methods implement a common request pattern:
@@ -121,11 +121,11 @@ instead: [AEP-151][aep-151].
 {% tab proto -%}
 
 ```proto
-rpc DeleteBook(DeleteBookRequest) returns (library.longrunning.Operation) {
+rpc DeleteBook(DeleteBookRequest) returns (aep.api.Operation) {
   option (google.api.http) = {
-    delete: "/v1/{name=publishers/*/books/*}"
+    delete: "/v1/{path=publishers/*/books/*}"
   };
-  option (library.longrunning.operation_info) = {
+  option (aep.api.operation_info) = {
     response_type: "google.protobuf.Empty"
     metadata_type: "OperationMetadata"
   };
@@ -162,9 +162,9 @@ The API **must** fail with a `409 Conflict` error if the `force` field is
 
 ```proto
 message DeletePublisherRequest {
-  // The name of the publisher to delete.
+  // The path of the publisher to delete.
   // Format: publishers/{publisher}
-  string name = 1 [
+  string path = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
       type: "library.example.com/Publisher"
