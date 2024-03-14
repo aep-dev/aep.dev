@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://example.com/product.schema.json
+$id: https://aep.dev/common-components/json_schema/decimal
 title: Decimal
 description: |
   Represents a decimal number in a form similar to scientific notation.
@@ -10,12 +10,11 @@ description: |
   33.5 million  === {"significand": 335,  "exponent": 5}
   11/8 (1.375)  === {"significand": 1375, "exponent": -3}
 
-  Note that the range of a Decmial exceeds that of a JSON `number` (double),
+  Note that the range of a Decimal exceeds that of a JSON `number` (double),
   as well as that of a `decimal64`.
 type: object
 required:
   - significand
-  - exponent
 additionalProperties: false
 properties:
   significand:
@@ -37,3 +36,16 @@ properties:
       the decmial point.
     type: integer
     format: int32
+examples:
+  - value_equals_17:
+      significand: 17
+      exponent: 0
+  - 'value_equals_-0.005':
+      significand: -5
+      exponent: -3
+  - 'value_equals_33.5_million':
+      significand: 335
+      exponent: 5
+  - 'value_equals_11/8(1.375)':
+      significand: 1375
+      exponent: -3

@@ -4,9 +4,9 @@ The `Money` type represents an amount of money in a specified currency.
 
 ## Schema
 
-A `Money` has two fields:
+A `Money` has two properties:
 
-- The `currency_code` field is a string containing a currency code.
+- The `currency_code` property is a string containing a currency code.
 
   The three-letter currency codes defined in the ISO 4217 standard are always
   supported.
@@ -21,7 +21,7 @@ A `Money` has two fields:
   - "X-BTC" - Potential API-defined extension for Bitcoin.
   - "X-.RBX" - Potential API-defined extension for the virtual currency Robux
 
-- The `quantity` field is a field of type [`Decimal`][], representing the
+- The `quantity` property is of type [`Decimal`][], representing the
   quantity of currency.
 
 ## Examples

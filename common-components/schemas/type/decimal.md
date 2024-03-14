@@ -8,28 +8,28 @@ point representation in order to avoid precision errors.
 A `Decimal` represents a decimal number in a form similar to scientific
 notation.
 
-It has two fields:
+It has two properties:
 
-- The `significand` field is a 64-bit integer representing the significant
+- The `significand` property is a 64-bit integer representing the significant
   digits of the number.
-- The `exponent` field is a 32-bit integer represesnting the position of the
-  deicmal point within the value of the `significand` field; it is the power of
+- The `exponent` property is a 32-bit integer representing the position of the
+  deicmal point within the value of the `significand` property; it is the power of
   ten to which `significand` should be raised.
 
   When the exponent is `0`, the value of the `Decimal` is simply the value of
   `significand`.
 
-  When the exponent is greater than 0, represents the number of trailing zeroes
+  When the exponent is greater than `0`, the value represents the number of trailing zeroes
   after the significant digits.
 
-  When the exponent is less than 0, represents how many of the significant
+  When the exponent is less than `0`, the value represents how many significant
   digits (and implicit leading zeroes, as needed) come after the decimal point.
 
 The general formula for converting a `Decimal` to its numeric value is
-`significant * 10^exponent`, where `*` represents multplication and `^`
+`significant * 10^exponent`, where `*` represents multiplication and `^`
 represents exponentiation.
 
-Note: The range of a Decmial exceeds that of a JSON `number` (double), as well
+Note: The range of a `Decimal` exceeds that of a JSON `number` (double), as well
 as that of a `decimal64`.
 
 ## Examples

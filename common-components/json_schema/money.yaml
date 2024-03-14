@@ -1,5 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://example.com/product.schema.json
+$id: https://aep.dev/common-components/json_schema/money
 title: Money
 description: |
   Represents an amount of money with its currency type.
@@ -33,4 +33,14 @@ properties:
     type: string
   quantity:
     description: The quantity of currency.
-    $ref: decimal.yaml#/definitions/Decimal
+    $ref: decimal#
+examples:
+  - 'value_equals_$5_USD':
+      currency_code: 'USD'
+      quantity:
+        significand: 5
+  - 'value_equals_1.5 Bitcoin':
+      currency_code: 'X-BTC'
+      quantity:
+        significand: 15
+        exponent: -1
