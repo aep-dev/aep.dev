@@ -20,7 +20,7 @@ explicitly documented in the API.
 If an API has usability concerns or violates API standards, and the present
 design should receive additional scrutiny before being carried through to the
 Beta version, there **must** be an internal comment linking to this document
-using its descriptive link ([aip.dev/beta-blocker]()) to ensure that the design
+using its descriptive link ([aep.dev/beta-blocker]()) to ensure that the design
 is corrected before the API is released to Beta.
 
 The comment **must** also indicate what kind of change should be made for Beta.
@@ -29,13 +29,11 @@ For example:
 ```proto
 message InputConfig {
   // Parameters for input.
-  // (-- aip.dev/beta-blocker: Convert well-known parameters into explicit
+  // (-- aep.dev/beta-blocker: Convert well-known parameters into explicit
   //     fields before the Beta launch. --)
   map<string, string> parameters = 1;
 }
 ```
 
 If an exception to API standards _does_ need to be carried through to Beta and
-GA, see [AIP-200][].
-
-[aip-200]: ./0200.md
+GA, see AEP-200.
