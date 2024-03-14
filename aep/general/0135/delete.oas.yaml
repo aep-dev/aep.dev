@@ -1,0 +1,34 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:
+    parameters:
+      - $ref: '#/components/parameters/PublisherId'
+      - $ref: '#/components/parameters/BookId'
+    delete:
+      operationId: deleteBook
+      description: Delete a single book.
+      responses:
+        '204':
+          description: Book was deleted
+        '404':
+          description: Not found
+components:
+  parameters:
+    PublisherId:
+      name: publisherId
+      in: path
+      description: The id of the book publisher.
+      required: true
+      schema:
+        type: string
+    BookId:
+      name: bookId
+      in: path
+      description: The id of the book.
+      required: true
+      schema:
+        type: string

@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}:
+    parameters:
+      - $ref: '#/components/parameters/PublisherId'
+    delete:
+      operationId: deletePublisher
+      description: Delete a publisher.
+      parameters:
+        - in: query
+          name: force
+          description: |
+            If set to true, any books from this publisher will also be deleted.
+            (Otherwise, the request will only work if the publisher has no books.)
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '204':
+          description: Publisher was deleted
+        '404':
+          description: Not found
+        '409':
+          description: |
+            Delete request failed because publisher has child resource and the
+            `force` parameter was set or defaulted to `false`.
+components:
+  parameters:
+    PublisherId:
+      name: publisherId
+      in: path
+      description: The id of the book publisher.
+      required: true
+      schema:
+        type: string
