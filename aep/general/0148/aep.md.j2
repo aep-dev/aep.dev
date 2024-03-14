@@ -55,47 +55,50 @@ family name is not placed last in many cultures.
 
 ### Timestamps
 
+See AEP-213 for more information about common components for `Timestamp` and
+`Duration`.
+
 #### create_time
 
-The output only `google.protobuf.Timestamp create_time` field **must**
-represent the timestamp when the resource was created. This **may** be either
-the time creation was initiated or the time it was completed.
-[Declarative-friendly resources][] **should** include this field.
+The output only `Timestamp create_time` field **must** represent the timestamp
+when the resource was created. This **may** be either the time creation was
+initiated or the time it was completed. [Declarative-friendly resources][]
+**should** include this field.
 
 #### update_time
 
-The output only `google.protobuf.Timestamp update_time` field **must**
-represent the timestamp when the resource was most recently updated. Any change
-to the resource made by users **must** refresh this value; changes to a
-resource made internally by the service **may** refresh this value.
-[Declarative-friendly resources][] **should** include this field.
+The output only `Timestamp update_time` field **must** represent the timestamp
+when the resource was most recently updated. Any change to the resource made by
+users **must** refresh this value; changes to a resource made internally by the
+service **may** refresh this value. [Declarative-friendly resources][]
+**should** include this field.
 
 #### delete_time
 
-The output only `google.protobuf.Timestamp delete_time` field **must**
-represent the timestamp that a resource was soft deleted. This **may**
-correspond to either the time when the user requested deletion, or when the
-service successfully soft deleted the resource. If a resource is not soft
-deleted, the `delete_time` field **must** be empty.
+The output only `Timestamp delete_time` field **must** represent the timestamp
+that a resource was soft deleted. This **may** correspond to either the time
+when the user requested deletion, or when the service successfully soft deleted
+the resource. If a resource is not soft deleted, the `delete_time` field
+**must** be empty.
 
 Resources that support soft delete (AEP-164) **should** provide this field.
 
 #### expire_time
 
-The `google.protobuf.Timestamp expire_time` field **should** represent the time
-that a given resource or resource attribute is no longer useful or valid (e.g.
-a rotating security key). It **may** be used for similar forms of expiration as
-described in AEP-214.
+The `Timestamp expire_time` field **should** represent the time that a given
+resource or resource attribute is no longer useful or valid (e.g. a rotating
+security key). It **may** be used for similar forms of expiration as described
+in AEP-214.
 
 Services **may** provide an `expire_time` value that is inexact, but the
 resource **must not** expire before that time.
 
 #### purge_time
 
-The `google.protobuf.Timestamp purge_time` field **should** represent the time
-when a soft deleted resource will be purged from the system (see AEP-164). It
-**may** be used for similar forms of expiration as described in AEP-214.
-Resources that support soft delete **should** include this field.
+The `Timestamp purge_time` field **should** represent the time when a soft
+deleted resource will be purged from the system (see AEP-164). It **may** be
+used for similar forms of expiration as described in AEP-214. Resources that
+support soft delete **should** include this field.
 
 Services **may** provide a `purge_time` value that is inexact, but the resource
 **must not** be purged from the system before that time.
