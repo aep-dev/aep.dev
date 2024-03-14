@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=9a291c3e">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=9a291c3e">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5d5cc45e">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5d5cc45e">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=9a291c3e"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=5d5cc45e"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -494,13 +494,25 @@
     <tr><td>Slug</td><td>update</td></tr>
     <tr><td>Number</td><td>134</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/134">aep.dev/134</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
     <tr><td>Created</td><td>2023-01-22</td></tr>
     <tr><td>Updated</td><td>2023-01-22</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#request-schema">Request schema</a></li>
+<li><a href="#side-effects">Side effects</a></li>
+<li><a href="#patch-and-put">PATCH and PUT</a></li>
+<li><a href="#long-running-update">Long-running update</a></li>
+<li><a href="#create-or-update">Create or update</a></li>
+<li><a href="#etags">Etags</a></li>
+<li><a href="#expensive-fields">Expensive fields</a></li>
+<li><a href="#errors">Errors</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
   </section>
@@ -539,17 +551,281 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">update (AEP-134)</h4>
   <h1 id="update">Update</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/39">this GitHub issue</a> for more
-information.</p>
+<p>In REST APIs, it is customary to make a <code>PATCH</code> or <code>PUT</code> request to a
+resource's URI (for example, <code>/v1/publishers/{publisher}/books/{book}</code>) in
+order to update that resource.</p>
+<p>Resource-oriented design (<a href="/121">AEP-121</a>) honors this pattern through the <code>Update</code>
+method (which mirrors the REST <code>PATCH</code> behavior). These methods accept the URI
+representing that resource and return the resource.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>should</strong> provide an update method for resources unless it is not
+valuable for users to do so. The purpose of the update method is to make
+changes to the resources without causing side effects.</p>
+<p>Update methods are specified using the following pattern:</p>
+<ul>
+<li>The method's name <strong>must</strong> begin with the word <code>Update</code>. The remainder of the
+  method name <strong>should</strong> be the singular form of the resource's name.</li>
+<li>The request schema's name <strong>must</strong> exactly match the RPC name, with a
+  <code>Request</code> suffix.</li>
+<li>The response schema <strong>must</strong> be the resource itself.<ul>
+<li>The response <strong>should</strong> include the fully-populated resource, and <strong>must</strong>
+  include any fields that were sent and included in the update mask unless
+  they are input only (see <a href="/203">AEP-203</a>).</li>
+<li>If the update RPC is <a href="#long-running-update">long-running</a>, the response
+  <strong>must</strong> be an <code>Operation</code> for which the return type is the resource
+  itself.</li>
+</ul>
+</li>
+<li>The method <strong>should</strong> support partial resource update, and the HTTP verb
+  <strong>should</strong> be <code>PATCH</code>.</li>
+</ul>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">UpdateBook</span><span class="p">(</span><span class="n">UpdateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">patch</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{book.path=publishers/*/books/*}&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;book,update_mask&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The resource's <code>path</code> field <strong>should</strong> map to the URI path.<ul>
+<li>The <code>{resource}.path</code> field <strong>should</strong> be the only variable in the URI
+  path.</li>
+</ul>
+</li>
+<li>There <strong>must</strong> be a <code>body</code> key in the <code>google.api.http</code> annotation, and it
+  <strong>must</strong> map to the resource field in the request message.<ul>
+<li>All remaining fields <strong>should</strong> map to URI query parameters.</li>
+</ul>
+</li>
+<li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation,
+  with a value of <code>"{resource},update_mask"</code>.</li>
+</ul>
+<p><strong>Note:</strong> Unlike the other four standard methods, the URI path here references
+a nested field (<code>book.path</code>) in the example. If the resource field has a word
+separator, <code>snake_case</code> is used.</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<h3 id="request-schema">Request schema</h3>
+<p>Update methods implement a common request pattern:</p>
+<ul>
+<li>The request <strong>must</strong> contain a field for the resource.<ul>
+<li>The name of this field <strong>must</strong> be the singular form of the resource's
+  name.</li>
+</ul>
+</li>
+<li>The request <strong>must not</strong> contain any required fields other than those
+  described in this section, and <strong>should not</strong> contain other optional fields
+  except those described in this or another AEP.</li>
+</ul>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">UpdateBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The book to update.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// The book&#39;s `path` field is used to identify the book to update.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The list of fields to update.</span>
+<span class="w">  </span><span class="n">google.protobuf.FieldMask</span><span class="w"> </span><span class="na">update_mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The request message field for the resource <strong>must</strong> map to the <code>PATCH</code> body.</li>
+<li>The request message field for the resource <strong>should</strong> be <a href="/203">annotated as
+  required</a>.<ul>
+<li>The field <strong>must</strong> identify the <a href="/123">resource type</a> of the resource
+  being updated.</li>
+</ul>
+</li>
+<li>If partial resource update is supported, a field mask <strong>must</strong> be included.
+  It <strong>must</strong> be of type <code>google.protobuf.FieldMask</code>, and it <strong>must</strong> be called
+  <code>update_mask</code>.<ul>
+<li>The fields used in the field mask correspond to the resource being updated
+  (not the request message).</li>
+<li>The field <strong>may</strong> be required or optional. If it is required, it <strong>must</strong>
+  include the corresponding annotation. If optional, the service <strong>must</strong>
+  treat an omitted field mask as an implied field mask equivalent to all
+  fields that are populated (have a non-empty value).</li>
+<li>Update masks <strong>must</strong> support a special value <code>*</code>, meaning full replacement
+  (the equivalent of <code>PUT</code>).</li>
+</ul>
+</li>
+</ul>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<h3 id="side-effects">Side effects</h3>
+<p>In general, update methods are intended to update the data within the resource.
+Update methods <strong>should not</strong> trigger other side effects. Instead, side effects
+<strong>should</strong> be triggered by custom methods.</p>
+<p>In particular, this entails that <a href="/216">state fields</a> <strong>must not</strong> be directly
+writable in update methods.</p>
+<h3 id="patch-and-put">PATCH and PUT</h3>
+<p><strong>TL;DR:</strong> AEP-compliant APIs generally use the <code>PATCH</code> HTTP verb only, and do
+not support <code>PUT</code> requests.</p>
+<p>We standardize on <code>PATCH</code> because many organizations update stable APIs in
+place with backwards-compatible improvements. It is often necessary to add a
+new field to an existing resource, but this becomes a breaking change when
+using <code>PUT</code>.</p>
+<p>To illustrate this, consider a <code>PUT</code> request to a <code>Book</code> resource:</p>
+<pre><code>  PUT /v1/publishers/123/books/456
+
+  {"title": "Mary Poppins", "author": "P.L. Travers"}
+</code></pre>
+<p>Next consider that the resource is later augmented with a new field (here we
+add <code>rating</code>, and use a protobuf example without loss of generality):</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Subsequently added to v1 in place...</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">rating</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If a rating were set on a book and the existing <code>PUT</code> request were executed, it
+would wipe out the book's rating. In essence, a <code>PUT</code> request unintentionally
+would wipe out data because the previous version did not know about it.</p>
+<h3 id="long-running-update">Long-running update</h3>
+<p>Some resources take longer to update a resource than is reasonable for a
+regular API request. In this situation, the API <strong>should</strong> use a long-running
+operation (AIP-151) instead:</p>
+<ul>
+<li>The response type <strong>must</strong> be set to the resource (what the return type would
+  be if the method were not long-running).</li>
+</ul>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">UpdateBook</span><span class="p">(</span><span class="n">UpdateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.Operation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">patch</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{book.name=publishers/*/books/*}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.operation_info</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">response_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;Book&quot;</span>
+<span class="w">    </span><span class="n">metadata_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;OperationMetadata&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Both the <code>response_type</code> and <code>metadata_type</code> fields <strong>must</strong> be specified.</li>
+</ul>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<h3 id="create-or-update">Create or update</h3>
+<p>If the service uses client-assigned resource paths, <code>Update</code> methods <strong>may</strong>
+expose a <code>bool allow_missing</code> field, which will cause the method to succeed in
+the event that the user attempts to update a resource that is not present (and
+will create the resource in the process):</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">UpdateBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The book to update.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// The book&#39;s `path` field is used to identify the book to be updated.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The list of fields to be updated.</span>
+<span class="w">  </span><span class="n">google.protobuf.FieldMask</span><span class="w"> </span><span class="na">update_mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// If set to true, and the book is not found, a new book will be created.</span>
+<span class="w">  </span><span class="c1">// In this situation, `update_mask` is ignored.</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">allow_missing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<p>More specifically, the <code>allow_missing</code> flag triggers the following behavior:</p>
+<ul>
+<li>If the method call is on a resource that does not exist, the resource is
+  created. All fields are applied regardless of any provided field mask.<ul>
+<li>However, if any required fields are missing or fields have invalid values,
+  an <code>INVALID_ARGUMENT</code> error is returned.</li>
+</ul>
+</li>
+<li>If the method call is on a resource that already exists, and all fields
+  match, the existing resource is returned unchanged.</li>
+<li>If the method call is on a resource that already exists, only fields declared
+  in the field mask are updated.</li>
+</ul>
+<p>The user <strong>must</strong> have the update permissions to call <code>Update</code> even with
+<code>allow_missing</code> set to <code>true</code>.</p>
+<h3 id="etags">Etags</h3>
+<p>An API may sometimes need to allow users to send update requests which are
+guaranteed to be made against the most current data (a common use case for this
+is to detect and avoid race conditions). Resources which need to enable this do
+so by including a <code>string etag</code> field, which contains an opaque,
+server-computed value representing the content of the resource.</p>
+<p>In this situation, the resource <strong>should</strong> contain a <code>string etag</code> field:</p>
+<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.example.com/Book&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;publishers/{publisher}/books/{book}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// The resource path of the book.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IDENTIFIER</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The title of the book.</span>
+<span class="w">  </span><span class="c1">// Example: &quot;Mary Poppins&quot;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// The author of the book.</span>
+<span class="w">  </span><span class="c1">// Example: &quot;P.L. Travers&quot;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// The etag for this book.</span>
+<span class="w">  </span><span class="c1">// If this is provided on update, it must match the server&#39;s etag.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">etag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<p>The <code>etag</code> field <strong>may</strong> be either <a href="/203#required">required</a> or <a href="/203#optional">optional</a>. If it is set,
+then the request <strong>must</strong> succeed if and only if the provided etag matches the
+server-computed value, and <strong>must</strong> fail with an <code>ABORTED</code> error otherwise. The
+<code>update_mask</code> field in the request does not affect the behavior of the <code>etag</code>
+field, as it is not a field <em>being</em> updated.</p>
+<h3 id="expensive-fields">Expensive fields</h3>
+<p>APIs sometimes encounter situations where some fields on a resource are
+expensive or impossible to reliably return.</p>
+<p>This can happen in a few situations:</p>
+<ul>
+<li>A resource may have some fields that are very expensive to compute, and that
+  are generally not useful to the customer on update requests.</li>
+<li>A single resource sometimes represents an amalgamation of data from multiple
+  underlying (and eventually consistent) data sources. In these situations, it
+  may be infeasible to return authoritative information on the fields that were
+  not changed.</li>
+</ul>
+<p>In this situation, an API <strong>may</strong> return back only the fields that were updated
+and omit the rest. APIs that do this <strong>must</strong> document this behavior.</p>
+<h3 id="errors">Errors</h3>
+<p>See <a href="/193">errors</a>, in particular <a href="/193#permission-denied">when to use PERMISSION_DENIED and NOT_FOUND
+errors</a>.</p>
+<p>In addition, if the user does have proper permission, but the requested
+resource does not exist, the service <strong>must</strong> error with <code>NOT_FOUND</code> (HTTP 404)
+unless <code>allow_missing</code> is set to <code>true</code>.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
