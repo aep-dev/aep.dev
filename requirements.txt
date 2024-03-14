@@ -1,1 +1,1 @@
-aep-site-generator==0.9.1
+aep-site-generator==0.9.2

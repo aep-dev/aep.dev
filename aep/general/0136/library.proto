@@ -23,7 +23,7 @@ service Library {
   // Archives the given book.
   rpc ArchiveBook(ArchiveBookRequest) returns (ArchiveBookResponse) {
     option (google.api.http) = {
-      post: "/v1/{name=publishers/*/books/*}:archive"
+      post: "/v1/{path=publishers/*/books/*}:archive"
       body: "*"
     };
   }
@@ -31,7 +31,7 @@ service Library {
   // Sorts the books from this publisher.
   rpc SortBooks(SortBooksRequest) returns (SortBooksResponse) {
     option (google.api.http) = {
-      post: "/v1/{publisher=publishers/*}/books:sort"
+      post: "/v1/{parent=publishers/*}/books:sort"
       body: "*"
     };
   }
@@ -39,8 +39,8 @@ service Library {
 
 // Request message to archive a book.
 message ArchiveBookRequest {
-  // The name of the book to retrieve.
-  string name = 1 [
+  // The path of the book to retrieve.
+  string path = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
       type: "library.googleapis.com/Book"
@@ -59,8 +59,8 @@ message ArchiveBookResponse {
 
 // Request message to sort a collection of books.
 message SortBooksRequest {
-  // The name of the publisher to sort books for.
-  string publisher = 1 [
+  // The path of the publisher to sort books for.
+  string parent = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
       type: "library.googleapis.com/Publisher"
@@ -81,9 +81,9 @@ message Book {
     pattern: "publishers/{publisher}/books/{book}"
   };
 
-  // The name of the book.
+  // The path of the book.
   // Format: publishers/{publisher}/books/{book}
-  string name = 1;
+  string path = 1;
 
   // The ISBN (International Standard Book Number) for this book.
   string isbn = 2;

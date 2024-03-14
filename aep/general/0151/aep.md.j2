@@ -1,4 +1,4 @@
-# Long-running requests
+# Long-running operations
 
 Occasionally, a service may need to expose an operation that takes a
 significant amount of time to complete. In these situations, it is often a poor
@@ -13,77 +13,50 @@ can be used to track progress and retrieve the result.
 ## Guidance
 
 Operations that might take a significant amount of time to complete **should**
-return a `202 Accepted` response along with an identifier that can be used to
-track the status of the request and ultimately retrieve the result.
+return a `202 Accepted` response along with an `Operation` resource that can be
+used to track the status of the request and ultimately retrieve the result.
 
 Any single operation defined in an API surface **must** either _always_ return
-`202 Accepted` along with a request identifier, or _never_ do so. A service
-**must not** return a `200 OK` response with the result if it is "fast enough",
-and `202 Accepted` if it is not fast enough, because such behavior adds
-significant burdens for clients.
+`202 Accepted` along with an `Operation`, or _never_ do so. A service **must
+not** return a `200 OK` response with the result if it is "fast enough", and
+`202 Accepted` if it is not fast enough, because such behavior adds significant
+burdens for clients.
 
 **Note:** User expectations can vary on what is considered "a significant
 amount of time" depending on what work is being done. A good rule of thumb is
 10 seconds.
 
-### Status monitor representation
+### Operation representation
 
-The response to a long-running request **should** be a "status monitor" having
-the following common format:
+The response to a long-running request **must** be an [`Operation`][].
 
-```typescript
-interface StatusMonitor {
-  // The identifier for this status monitor.
-  id: string;
+{% tab proto %}
 
-  // Whether the request is done.
-  done: boolean;
+Protocol buffer APIs **must** use the common component [`aep.api.Operation`][].
 
-  // The result of the request.
-  // Only populated if the request is done and was successful.
-  response: any;
+{% tab oas %}
 
-  // The error that arose from the request.
-  // Only populated if the request is done and was unsuccessful.
-  error: Error;
+OpenAPI services **must** use this [`JSON Schema Operation`][] schema.
 
-  // Metadata associated with the request.
-  // Populated throughout the life of the request, including after
-  // it completes.
-  metadata: any;
-}
-```
+{% endtabs %}
 
-- If the `done` field is `true`, then one and exactly one of the `response` and
-  `error` fields **must** be populated.
-  - If the `done` field is `false`, then the `response` and `error` fields
-    **must not** be populated.
-- The `response` and `metadata` fields **may** be any type that the service
-  determines to be appropriate, but **must** always be the same type for any
-  particular operation.
-  - The `response` and `metadata` types **should** be defined in the same API
-    surface as the operation itself.
-  - The `response` and `metadata` types that need no data **should** use a
-    custom-defined empty struct rather than a common void or empty type, to
-    permit future extensibility.
-
-### Querying a status monitor
+### Querying an operation
 
 The service **must** provide an endpoint to query the status of the operation,
-which **must** accept the operation identifier and **should not** include other
+which **must** accept the operation path and **should not** include other
 parameters:
 
 ```http
-GET /v1/statusMonitors/{status_monitor} HTTP/2
-Host: library.googleapis.com
+GET /v1/operations/{operation} HTTP/2
+Host: library.example.com
 Accept: application/json
 ```
 
-The endpoint **must** return a `StatusMonitor` as described above.
+The endpoint **must** return a `Operation` as described above.
 
 ### Standard methods
 
-APIs **may** return an `StatusMonitor` from the [`Create`][aip-133],
+APIs **may** return an `Operation` from the [`Create`][aip-133],
 [`Update`][aip-134], or [`Delete`][aip-135] standard methods if appropriate. In
 this case, the `response` field **must** be the standard and expected response
 type for that standard method.
@@ -107,10 +80,10 @@ but is not obligated to do so:
 
 ### Expiration
 
-APIs **may** allow their status monitor resources to expire after sufficient
-time has elapsed after the request completed.
+APIs **may** allow their operation resources to expire after sufficient time
+has elapsed after the request completed.
 
-**Note:** A good rule of thumb for status monitor expiry is 30 days.
+**Note:** A good rule of thumb for operation expiry is 30 days.
 
 ### Errors
 
@@ -125,18 +98,17 @@ canonical error object.
 
 {% tab proto %}
 
-When using protocol buffers, the well-known type `google.longrunning.Operation`
-is used.
-
-**Note:** For historical reasons, Google uses the term `Operation` to represent
-what this document describes as a `StatusMonitor`.
+When using protocol buffers, the common component [`aep.api.Operation`][] is
+used.
 
 {% sample 'lro.proto', 'rpc WriteBook' %}
 
-- The response type **must** be `google.longrunning.Operation`. The `Operation`
-  proto definition **must not** be copied into individual APIs.
+- The response type **must** be `aep.api.Operation`. The `Operation` proto
+  definition **should not** be copied into individual APIs; prefer to use a
+  single copy (in monorepo code bases), or remote dependencies via a tool like
+  [Buf][buf.build].
   - The response **must not** be a streaming response.
-- The method **must** include a `google.longrunning.operation_info` annotation,
+- The method **must** include a [`aep.api.operation_info`][lro] annotation,
   which **must** define both response and metadata types.
   - The response and metadata types **must** be defined in the file where the
     RPC appears, or a file imported by that file.
@@ -152,8 +124,10 @@ what this document describes as a `StatusMonitor`.
     metadata will _never_ be needed. If metadata might be added in the future,
     define an empty message for the RPC metadata and use that.
 - APIs with messages that return `Operation` **must** implement the
-  [`Operations`][lro] service. Individual APIs **must not** define their own
-  interfaces for long-running operations to avoid inconsistency.
+  `GetOperation` method of the [`Operations`][lro] service, and **may**
+  implement the other methods defined in that service. Individual APIs **must
+  not** define their own interfaces for long-running operations to avoid
+  inconsistency.
 
 {% tab oas %}
 
@@ -162,8 +136,8 @@ what this document describes as a `StatusMonitor`.
 - `202` **must** be the only success status code defined.
 - The `202` response **must** define an `application/json` response body and no
   other response content types.
-- The response body schema **must** be an object with `name`, `done`, and
-  `result` properties as described above for a StatusMonitor
+- The response body schema **must** be an object with `path`, `done`, `error`,
+  and `response` properties as described above for an `Operation`.
 - The response body schema **may** contain an object property named `metadata`
   to hold service-specific metadata associated with the operation, for example
   progress information and common metadata such as create time. The service
@@ -176,15 +150,18 @@ what this document describes as a `StatusMonitor`.
   as an empty object schema. For a standard `Get/Create/Update` operation,
   `response` should be a representation of the resource.
 - If a service has any long running operations, the service **must** define an
-  `StatusMonitor` resource with a `list` operation to retrieve a potentially
-  filtered list of status monitors and a `get` operation to retrieve a specific
-  status monitor by its `name`.
+  `Operation` resource with a `list` operation to retrieve a potentially
+  filtered list of operations and a `get` operation to retrieve a specific
+  operation by its `path`.
 
 {% endtabs %}
 
 <!-- prettier-ignore-start -->
 [google.rpc.Status]: https://github.com/googleapis/api-common-protos/blob/master/google/rpc/S.proto
-[lro]: https://github.com/googleapis/api-common-protos/blob/master/google/longrunning/operations.proto
+[lro]: https://github.com/aep-dev/aep/blob/main/proto/aep-api/aep/api/operations.proto
 [node.js promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
 [future]: https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future
+[`Operation`]: https://github.com/aep-dev/aep/blob/main/schemas/api/operation.md
+[`aep.api.Operation`]: https://buf.build/aep/api/docs/main:aep.api#aep.api.Operation
+[`JSON Schema Operation`]: https://github.com/aep-dev/aep/blob/main/json_schema/api/operation.yaml
 <!-- prettier-ignore-end -->

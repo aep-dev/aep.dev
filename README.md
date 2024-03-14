@@ -1,4 +1,4 @@
-# API Extension Proposals
+# API Enhancement Proposals
 
 **NOTE**: this repository currently has a significant amount of outdated
 content. Active development and discussion is occuring in

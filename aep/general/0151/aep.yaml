@@ -1,9 +1,10 @@
 ---
 id: 151
-state: reviewing
+state: approved
 slug: long-running-operations
 created: 2019-07-25
+updated: 2024-03-08
 placement:
-  category: standard-methods
+  category: design-patterns
   order: 70
 redirect_from: '/lro'

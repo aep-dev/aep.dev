@@ -14,19 +14,19 @@
 
 syntax = "proto3";
 
+import "aep/api/operations.proto";
 import "google/api/annotations.proto";
 import "google/api/resource.proto";
-import "google/longrunning/operations.proto";
 import "google/protobuf/timestamp.proto";
 
 service Library {
   // Write a book.
-  rpc WriteBook(WriteBookRequest) returns (google.longrunning.Operation) {
+  rpc WriteBook(WriteBookRequest) returns (aep.api.Operation) {
     option (google.api.http) = {
       post: "/v1/{parent=publishers/*}/books:write"
       body: "*"
     };
-    option (google.longrunning.operation_info) = {
+    option (aep.api.operation_info) = {
       response_type: "WriteBookResponse"
       metadata_type: "WriteBookMetadata"
     };

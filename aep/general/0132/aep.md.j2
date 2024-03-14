@@ -1,22 +1,26 @@
-# GET for collections
+# List
 
 In REST APIs, it is customary to make a `GET` request to a resource
 collection's URI (for example, `/v1/publishers/{publisher}/books`) in order to
-retrieve a list of the resources within that collection. These are sometimes
-colloquially called "list" operations.
+retrieve a list of the resources within that collection.
+
+Resource-oriented design (AEP-121) honors this pattern through the `List`
+method. These RPCs accept the parent collection (and potentially some other
+parameters), and return a list of responses matching that input.
 
 ## Guidance
 
-APIs **should** generally provide a `GET` method for resource collections
-unless it is not valuable for users to do so. When the `GET` method is used on
-a URI ending in a resource collection, the result should be a list of
-resources. For more information about using the `GET` method on a URI ending
-with a discrete resource ID, see AEP-131.
+APIs **should** provide a `List` method for resource collections.The purpose of
+the `List` method is to return data from a finite collection (generally
+singular unless the operation supports [reading across collections][]).
+
+When the `GET` method is used on a URI ending in a resource collection, the
+result **must** be a list of resources.
 
 ### Requests
 
-Collection `GET` operations **must** be made by sending a `GET` request to the
-resource collection's URI:
+`List` operations **must** be made by sending a `GET` request to the resource
+collection's URI:
 
 ```http
 GET /v1/publishers/{publisher}/books HTTP/2
@@ -37,8 +41,8 @@ Accept: application/json
 
 ### Responses
 
-Collection `GET` operations **must** return a page of results, with each
-individual result being a resource:
+`List` operations **must** return a page of results, with each individual
+result being a resource:
 
 ```json
 {
@@ -126,8 +130,8 @@ change.
 
 ### Soft-deleted resources
 
-Some APIs need to "[soft delete][aip-135]" resources, marking them as deleted
-or pending deletion (and optionally purging them later).
+Some APIs need to "[soft-delete][]" resources, marking them as deleted or
+pending deletion (and optionally purging them later).
 
 APIs that do this **should not** include deleted resources by default in list
 requests. APIs with soft deletion of a resource **should** include a
@@ -165,9 +169,9 @@ List operations also implement a common request message pattern:
 
 - A `parent` field **must** be included unless the resource being listed is a
   top-level resource. It **should** be called `parent`.
-  - The field **should** be [annotated as required][aip-203].
-  - The field **should** identify the [resource type][aip-123] of the resource
-    being listed.
+  - The field **must** be [annotated as required][aep-203].
+  - The field **must** identify the [resource type][] of the resource being
+    listed with a `google.api.resource_reference` annotation.
 - The `max_page_size` and `page_token` fields, which support pagination,
   **must** be specified on all list request messages. For more information, see
   AEP-158.
@@ -188,8 +192,7 @@ when the REST/JSON interface is used.
 
 {% tab oas %}
 
-Collection `GET` operations **must** be specified with consistent OpenAPI
-metadata:
+`List` operations **must** be specified with consistent OpenAPI metadata:
 
 {% sample 'list.oas.yaml', 'paths' %}
 
@@ -206,3 +209,10 @@ metadata:
     ID of parent resources **must** end with `Id`.
 
 {% endtabs %}
+
+<!-- prettier-ignore-start -->
+[reading across collections]: ./0159
+[soft-delete]: ./0164
+[resource type]: ./0123
+[aep-203]: ./0203
+<!-- prettier-ignore-end -->
