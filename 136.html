@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-136: Custom operations</title>
+    <title>AEP-136: Custom methods</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5d5cc45e">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5d5cc45e">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5e7a4214">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5e7a4214">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=5d5cc45e"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=5e7a4214"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -239,7 +239,7 @@
       <li class="nav-item nav-item-active">
           <a href="/136">
             <span class="aep-id">136</span>
-            Custom operations
+            Custom methods
           </a>
         </li>
       <li class="nav-item">
@@ -490,7 +490,7 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Custom operations</th></tr>
+    <tr><th colspan="2">Custom methods</th></tr>
     <tr><td>Slug</td><td>custom-methods</td></tr>
     <tr><td>Number</td><td>136</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/136">aep.dev/136</a></td></tr>
@@ -502,8 +502,9 @@
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
 <li><a href="#guidance">Guidance</a><ul>
-<li><a href="#collection-based-custom-operations">Collection-based custom operations</a></li>
-<li><a href="#stateless-operations">Stateless operations</a></li>
+<li><a href="#resource-based-custom-methods">Resource-based custom methods</a></li>
+<li><a href="#collection-based-custom-methods">Collection-based custom methods</a></li>
+<li><a href="#stateless-methods">Stateless methods</a></li>
 <li><a href="#declarative-friendly-resources">Declarative-friendly resources</a></li>
 </ul>
 </li>
@@ -541,32 +542,48 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Custom operations
+        Custom methods
       </li>
     </ol>
   </nav>
 </section>
   
   <h4 class="aep-id">custom-methods (AEP-136)</h4>
-  <h1 id="custom-operations">Custom operations</h1>
-<p>Services use custom operations to provide a means to express arbitrary actions
-that are difficult to model using only the standard operations. Custom
-operations are important because they provide a means for an API's vocabulary
-to adhere to user intent.</p>
+  <h1 id="custom-methods">Custom methods</h1>
+<p>Resource oriented design (<a href="/121">AEP-121</a>) uses custom methods to provide a means to
+express actions that are difficult to model using only the standard methods.
+Custom methods are important because they provide a means for an API's
+vocabulary to adhere to user intent.</p>
 <h2 id="guidance">Guidance</h2>
-<p>Custom operations <strong>should</strong> only be used for functionality that can not be
-easily expressed via standard operations; prefer standard operations if
-possible, due to their consistent semantics. (Of course, this only applies if
-the functionality in question actually conforms to the normal semantics; it is
-<em>not</em> a good idea to contort things to endeavor to make the standard operations
-"sort of work".)</p>
-<p>While custom operations vary widely in how they are designed, many principles
+<p>Custom methods <strong>should</strong> only be used for functionality that can not be
+expressed via standard methods; prefer standard methods if possible, due to
+their consistent semantics. However, APIs <strong>should not</strong> contort things to
+endeavor to make the standard methods "sort of work".</p>
+<p>While custom methods vary widely in how they are designed, many principles
 apply consistently:</p>
+<ul>
+<li>The HTTP method for custom methods <strong>should</strong> be selected based on the
+  semantics described by <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.3">RFC 7231 section 4.3</a> and <a href="https://datatracker.ietf.org/doc/html/rfc5789">RFC 5789</a> for <code>PATCH</code>. In
+  practice, the vast majority of custom methods <strong>should</strong> use <code>POST</code> or <code>GET</code>.<ul>
+<li>Custom methods that serve as an alternative to get or list methods (such as
+  <code>Search</code>) <strong>should</strong> use <code>GET</code>, and require no request body. These methods
+  <strong>must</strong> be idempotent and have no state changes or side effects (they
+  should be safe as defined in <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1">RFC 7231 section 4.2.1</a>).</li>
+<li>Custom methods <strong>should not</strong> use <code>PATCH</code> or <code>DELETE</code>.</li>
+</ul>
+</li>
+<li>The HTTP URI <strong>must</strong> use a <code>:</code> character followed by the custom verb
+  (<code>:archive</code> in the above example), and the verb in the URI <strong>must</strong> match the
+  verb in the name of the RPC.<ul>
+<li>If word separation is required, <code>camelCase</code> <strong>must</strong> be used.</li>
+</ul>
+</li>
+</ul>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Archives the given book.</span>
 <span class="k">rpc</span><span class="w"> </span><span class="n">ArchiveBook</span><span class="p">(</span><span class="n">ArchiveBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">ArchiveBookResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{name=publishers/*/books/*}:archive&quot;</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{path=publishers/*/books/*}:archive&quot;</span>
 <span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
 <span class="w">  </span><span class="p">};</span>
 <span class="p">}</span>
@@ -576,29 +593,14 @@ apply consistently:</p>
 <li>The name <strong>must not</strong> contain prepositions ("for", "with", etc.).</li>
 </ul>
 </li>
-<li>The HTTP method for custom operations <strong>should</strong> usually be <code>POST</code>, unless
-  the custom method maps more strongly to another HTTP verb.<ul>
-<li>Custom operations that serve as an alternative to get or list operations
-  (such as <code>Search</code>) <strong>should</strong> use <code>GET</code>. These operations <strong>must</strong> be
-  idempotent and have no state changes or side effects (they should be safe
-  as defined in <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1">RFC 7231</a>).</li>
-<li>Custom operations <strong>should not</strong> use <code>PATCH</code> or <code>DELETE</code>.</li>
-</ul>
-</li>
-<li>The HTTP URI <strong>must</strong> use a <code>:</code> character followed by the custom verb
-  (<code>:archive</code> in the above example), and the verb in the URI <strong>must</strong> match the
-  verb in the name of the RPC.<ul>
-<li>If word separation is required, <code>camelCase</code> <strong>must</strong> be used.</li>
-</ul>
-</li>
 <li>The <code>body</code> clause in the <code>google.api.http</code> annotation <strong>should</strong> be <code>"*"</code>.<ul>
 <li>However, if using <code>GET</code> or <code>DELETE</code>, the <code>body</code> clause <strong>must</strong> be absent.</li>
 </ul>
 </li>
-<li>Custom operations <strong>should</strong> usually take a request message matching the RPC
-  name, with a -<code>Request</code> suffix.</li>
-<li>Custom operations <strong>should</strong> usually return a response message matching the
-  RPC name, with a -<code>Response</code> suffix.<ul>
+<li>Custom methods <strong>must</strong> take a request message exactly matching the RPC name,
+  with a <code>Request</code> suffix. For example, <code>ArchiveBookRequest</code>.</li>
+<li>Custom methods <strong>should</strong> return a response message exactly matching the RPC
+  name, with a <code>Response</code> suffix. For example, <code>ArchiveBookResponse</code>.<ul>
 <li>When operating on a specific resource, a custom method <strong>may</strong> return the
   resource itself.</li>
 </ul>
@@ -641,45 +643,52 @@ apply consistently:</p>
 <span class="w">                  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The location of the archived book.</span><span class="w"></span>
 </code></pre></div>
 <ul>
-<li>The <code>operationId</code> <strong>should</strong> be a verb followed by a noun.<ul>
-<li>The <code>operationId</code> <strong>must not</strong> contain prepositions ("for", "with", etc.).</li>
-</ul>
-</li>
-<li>The HTTP method for custom operations <strong>should</strong> usually be <code>POST</code>, unless
-  the custom method maps more strongly to another HTTP verb.<ul>
-<li>Custom operations that serve as an alternative to get or list operations
-  (such as <code>Search</code>) <strong>should</strong> use <code>GET</code>, and require no request body. These
-  operations <strong>must</strong> be idempotent and have no state changes or side effects
-  (they should be safe as defined in <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.1">RFC 7231</a>).</li>
-<li>Custom operations <strong>should not</strong> use <code>PATCH</code> or <code>DELETE</code>.</li>
-</ul>
-</li>
-<li>The HTTP URI <strong>must</strong> use a <code>:</code> character followed by the custom verb
-  (<code>:archive</code> in the above example), and the verb in the URI <strong>must</strong> match the
-  verb in the <code>operationId</code>.<ul>
-<li>If word separation is required, <code>camelCase</code> <strong>must</strong> be used.</li>
+<li>The name of the RPC <strong>should</strong> be a verb followed by a noun.<ul>
+<li>The name of the RPC <strong>must not</strong> contain prepositions ("for", "with",
+  etc.).</li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <p><strong>Note:</strong> The pattern above shows a custom method that operates on a specific
-resource. Custom operations can be associated with resources, collections, or
+resource. Custom methods can be associated with resources, collections, or
 services.</p>
-<h3 id="collection-based-custom-operations">Collection-based custom operations</h3>
-<p>While most custom operations operate on a single resource, some custom
-operations <strong>may</strong> operate on a collection instead:</p>
+<h3 id="resource-based-custom-methods">Resource-based custom methods</h3>
+<p>Custom methods <strong>must</strong> operate on a resource if the API can be modeled as
+such:</p>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Archives the given book.</span>
+<span class="k">rpc</span><span class="w"> </span><span class="n">ArchiveBook</span><span class="p">(</span><span class="n">ArchiveBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">ArchiveBookResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{path=publishers/*/books/*}:archive&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The parameter for the resource's path <strong>must</strong> be called <code>path</code>, and <strong>must</strong>
+  be the only variable in the URI path.</li>
+</ul>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS example not yet written.</p>
+</div>
+</div>
+<h3 id="collection-based-custom-methods">Collection-based custom methods</h3>
+<p>While most custom methods operate on a single resource, some custom methods
+<strong>may</strong> operate on a collection instead:</p>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Sorts the books from this publisher.</span>
 <span class="k">rpc</span><span class="w"> </span><span class="n">SortBooks</span><span class="p">(</span><span class="n">SortBooksRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">SortBooksResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{publisher=publishers/*}/books:sort&quot;</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books:sort&quot;</span>
 <span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
 <span class="w">  </span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
 <div class="highlight language-yaml"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books:sort</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">post</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sortBooks</span><span class="w"></span>
@@ -700,15 +709,14 @@ operations <strong>may</strong> operate on a collection instead:</p>
 </div>
 <ul>
 <li>If the collection has a parent, the field name in the request message
-  <strong>should</strong> be the target resource's singular noun (<code>publisher</code> in the above
-  example). If word separators are necessary, <code>snake_case</code> <strong>must</strong> be used.</li>
+  <strong>should</strong> be <code>parent</code>.</li>
 <li>The collection key (<code>books</code> in the above example) <strong>must</strong> be literal.</li>
 </ul>
-<h3 id="stateless-operations">Stateless operations</h3>
-<p>Some custom operations are not attached to resources at all. These operations
-are generally <em>stateless</em>: they accept a request and return a response, and
-have no permanent effect on data within the API.</p>
-<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
+<h3 id="stateless-methods">Stateless methods</h3>
+<p>Some custom methods are not attached to resources at all. These methods are
+generally <em>stateless</em>: they accept a request and return a response, and have no
+permanent effect on data within the API.</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Translates the provided text from one language to another.</span>
 <span class="k">rpc</span><span class="w"> </span><span class="n">TranslateText</span><span class="p">(</span><span class="n">TranslateTextRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">TranslateTextResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
@@ -718,7 +726,7 @@ have no permanent effect on data within the API.</p>
 <span class="p">}</span>
 </code></pre></div>
 </div>
-<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">OpenAPI 3.0</label><div class="tabbed-content">
 <div class="highlight language-yaml"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">/projects/{projectId}:translateText</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">post</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">translateText</span><span class="w"></span>
@@ -774,16 +782,18 @@ have no permanent effect on data within the API.</p>
 <li>The URI <strong>should</strong> place both the verb and noun after the <code>:</code> separator
   (avoid a "faux collection key" in the URI in this case, as there is no
   collection). For example, <code>:translateText</code> is preferable to <code>text:translate</code>.</li>
-<li>Stateless operations <strong>must</strong> use <code>POST</code> if they involve billing.</li>
+<li>Stateless methods <strong>must</strong> use <code>POST</code> if they involve billing.</li>
 </ul>
 <h3 id="declarative-friendly-resources">Declarative-friendly resources</h3>
-<p>Declarative-friendly resources usually <strong>should not</strong> employ custom operations
-(except specific declarative-friendly custom operations discussed in other
-AEPs), because declarative-friendly tools are unable to automatically determine
-what to do with them.</p>
+<p>Declarative-friendly resources usually <strong>should not</strong> employ custom methods
+(except specific declarative-friendly custom methods discussed in other AEPs),
+because declarative-friendly tools are unable to automatically determine what
+to do with them.</p>
 <p>An exception to this is for rarely-used, fundamentally imperative operations,
 such as a <code>Move</code>, <code>Rename</code>, or <code>Restart</code> operation, for which there would not
 be an expectation of declarative support.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
