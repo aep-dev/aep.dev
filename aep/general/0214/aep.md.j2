@@ -18,7 +18,7 @@ library.
     `Timestamp` field called `expire_time`.
 2.  APIs wishing to allow a relative expiration time must define a `oneof`
     called `expiration` (or `{something}_expiration`) containing both the
-    `expire_time` field and a separate [`google.protobuf.Duration`][duration]
+    `expire_time` field and a separate `Duration`
     field called `ttl`, the latter marked as input only.
 3.  APIs **must** always return the expiration time in the `expire_time` field
     and leave the `ttl` field blank when retrieving the resource.
