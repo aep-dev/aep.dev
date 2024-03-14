@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=bd1d88e1">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=bd1d88e1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=95f8ff0a">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=95f8ff0a">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=bd1d88e1"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=95f8ff0a"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -495,12 +495,21 @@
     <tr><td>Number</td><td>214</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/214">aep.dev/214</a></td></tr>
     <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>Created</td><td>2024-03-14</td></tr>
+    <tr><td>Updated</td><td>2024-03-14</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#alternatives-considered">Alternatives considered</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
   </section>
@@ -547,9 +556,69 @@
 </p>
   <h4 class="aep-id">resource-expiration (AEP-214)</h4>
   <h1 id="resource-expiration">Resource expiration</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/19">this GitHub issue</a> for more
-information.</p>
+<p>Customers often want to provide the time that a given resource or resource
+attribute is no longer useful or valid (e.g. a rotating security key). Currently
+we recommend that customers do this by specifying an exact "expiration time"
+into a <code>Timestamp expire_time</code> field; however, this adds
+additional strain on the user when they want to specify a relative time offset
+until expiration rather than a specific time until expiration.</p>
+<p>Furthermore, the world understands the concept of a "time-to-live", often
+abbreviated to TTL, but the typical format of this field (an integer, measured
+in seconds) results in a sub-par experience when using an auto-generated client
+library.</p>
+<h2 id="guidance">Guidance</h2>
+<ol>
+<li>APIs wishing to convey an expiration <strong>must</strong> rely on a
+    <code>Timestamp</code> field called <code>expire_time</code>.</li>
+<li>APIs wishing to allow a relative expiration time must define a <code>oneof</code>
+    called <code>expiration</code> (or <code>{something}_expiration</code>) containing both the
+    <code>expire_time</code> field and a separate <code>Duration</code>
+    field called <code>ttl</code>, the latter marked as input only.</li>
+<li>APIs <strong>must</strong> always return the expiration time in the <code>expire_time</code> field
+    and leave the <code>ttl</code> field blank when retrieving the resource.</li>
+<li>APIs that rely on the specific semantics of a "time to live" (e.g., DNS
+    which must represent the TTL as an integer) <strong>may</strong> use an <code>int64 ttl</code>
+    field (and <strong>should</strong> provide an <a href="/200">aep.dev/not-precedent</a> comment
+    in this case).</li>
+</ol>
+<h3 id="example">Example</h3>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">ExpiringResource</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// google.api.resource and other annotations and fields</span>
+
+<span class="w">  </span><span class="k">oneof</span><span class="w"> </span><span class="n">expiration</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Timestamp in UTC of when this resource is considered expired.</span>
+<span class="w">    </span><span class="c1">// This is *always* provided on output, regardless of what was sent</span>
+<span class="w">    </span><span class="c1">// on input.</span>
+<span class="w">    </span><span class="n">google.protobuf.Timestamp</span><span class="w"> </span><span class="na">expire_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Input only. The TTL for this resource.</span>
+<span class="w">    </span><span class="n">google.protobuf.Duration</span><span class="w"> </span><span class="na">ttl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INPUT_ONLY</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong>  OAS content not yet written.</p>
+</div>
+</div>
+<h2 id="rationale">Rationale</h2>
+<h3 id="alternatives-considered">Alternatives considered</h3>
+<h4 id="a-new-standard-field-called-ttl">A new standard field called <code>ttl</code></h4>
+<p>We considered allowing a standard field called <code>ttl</code> as an alternative way of
+defining the expiration, however doing so would require that API services
+continually update the field, like a clock counting down. This could
+potentially cause problems with the read-modify-write lifecycle where a
+resource is being processed for some time, and effectively has its life
+extended as a result of that processing time.</p>
+<h4 id="always-use-expire_time">Always use <code>expire_time</code></h4>
+<p>This is the current state of the world with a few exceptions. In this scenario,
+we could potentially push the computation of <code>now + ttl = expire_time</code> into
+client libraries; however, this leads to a somewhat frustrating experience in
+the command-line and using REST/JSON. Leaving things as they are is typically
+the default, but it seems many customers want the ability to define relative
+expiration times as it is quite a bit easier and removes questions of time
+zones, stale clocks, and other silly mistakes.</p>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
