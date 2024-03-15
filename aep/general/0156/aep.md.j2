@@ -1,12 +1,3 @@
----
-id: 156
-state: approved
-created: 2019-05-12
-placement:
-  category: resource-design
-  order: 70
----
-
 # Singleton resources
 
 APIs sometimes need to represent a resource where exactly one instance of the
@@ -21,6 +12,7 @@ per parent.
 
 For example:
 
+{% tab proto %}
 ```proto
 message Config {
   option (google.api.resource) = {
@@ -49,29 +41,33 @@ rpc UpdateConfig(UpdateConfigRequest) returns (Config) {
 }
 ```
 
+{% endtabs %}
+
 - Singleton resources **must not** have a user-provided or system-generated ID;
-  their [resource name][aip-122] includes the name of their parent followed by
+  their [resource name][aep-122] includes the name of their parent followed by
   one static-segment.
   - Example: `users/1234/config`
 - Singleton resources are always singular.
   - Example: `users/1234/thing`
 - Singleton resources **may** parent other resources.
-- Singleton resources **must not** define the [`Create`][aip-133] or
-  [`Delete`][aip-135] standard methods. The singleton is implicitly created or
+- Singleton resources **must not** define the [`Create`][aep-133] or
+  [`Delete`][aep-135] standard methods. The singleton is implicitly created or
   deleted when its parent is created or deleted.
-- Singleton resources **should** define the [`Get`][aip-131] and
-  [`Update`][aip-134] methods, and **may** define custom methods as
+- Singleton resources **should** define the [`Get`][aep-131] and
+  [`Update`][aep-134] methods, and **may** define custom methods as
   appropriate.
-  - However, singleton resources **must not** define the [`Update`][aip-134]
-    method if all fields on the resource are [output only][aip-203].
-- Singleton resources **may** define the [`List`][aip-132] method, but **must**
-  implement it according to [AIP-159][aip-159]. See the example below.
+  - However, singleton resources **must not** define the [`Update`][aep-134]
+    method if all fields on the resource are [output only][aep-203].
+- Singleton resources **may** define the [`List`][aep-132] method, but **must**
+  implement it according to [AEP-159][aep-159]. See the example below.
   - The trailing segment in the path pattern that typically represents the
     collection **should** be the `plural` form of the Singleton resource e.g.
     `/v1/{parent=users/*}/configs`.
   - If a parent resource ID is provided instead of the hyphen `-` as per
-    AIP-159, then the service **should** return a collection of one Singleton
+    [AEP-159][aep-159], then the service **should** return a collection of one Singleton
     resource corresponding to the specified parent resource.
+
+{% tab proto %}
 
 ```proto
 rpc ListConfigs(ListConfigsRequest) returns (ListConfigsResponse) {
@@ -94,6 +90,9 @@ message ListConfigsRequest {
   // other standard pagination fields...
 }
 ```
+
+{% endtabs %}
+
 ## Rationale
 
 ### Support for Standard List
@@ -102,24 +101,18 @@ While Singleton resources are not directly part of a collection themselves, they
 can be viewed as part of their parent's collection. The one-to-one relationship
 of parent-to-singleton means that for every one parent there is one singleton
 instance, naturally enabling some collection-based methods when combined with
-the pattern of [Reading Across Collections][aip-159]. The Singleton can present
+the pattern of [Reading Across Collections][aep-159]. The Singleton can present
 as a collection to the API consumer as it is indirectly one based on its parent.
 Furthermore, presenting the Singleton resource as a pseudo-collection in such
 methods enables future expansion to a real collection, should a Singleton be
 found lacking.
 
-## Changelog
 
-- **2023-08-10:** Add Standard `List` support.
-- **2023-07-26:** Clarified that read-only singletons should not have `Update`.
-- **2021-11-02:** Added an example message and state parent eligibility.
-- **2021-01-14:** Changed example from `settings` to `config` for clarity.
-
-[aip-122]: ./0122.md
-[aip-131]: ./0131.md
-[aip-132]: ./0132.md
-[aip-133]: ./0133.md
-[aip-134]: ./0134.md
-[aip-135]: ./0135.md
-[aip-159]: ./0159.md
-[aip-203]: ./0203.md#output-only
+[aep-122]: ./0122.md
+[aep-131]: ./0131.md
+[aep-132]: ./0132.md
+[aep-133]: ./0133.md
+[aep-134]: ./0134.md
+[aep-135]: ./0135.md
+[aep-159]: ./0159.md
+[aep-203]: ./0203.md#output-only
