@@ -16,7 +16,7 @@ For example:
 ```proto
 message Config {
   option (google.api.resource) = {
-    type: "api.googleapis.com/Config"
+    type: "api.example.com/Config"
     pattern: "users/{user}/config"
   };
 
@@ -139,7 +139,7 @@ message ListConfigsRequest {
   // Note: Specifying an actual user id will return a collection of one config.
   // Use GetConfig instead.
   string parent = 1 [
-    (google.api.resource_reference).child_type = "api.googleapis.com/Config"];
+    (google.api.resource_reference).child_type = "api.example.com/Config"];
 
   // other standard pagination fields...
 }
