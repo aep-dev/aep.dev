@@ -41,6 +41,60 @@ rpc UpdateConfig(UpdateConfigRequest) returns (Config) {
 }
 ```
 
+{% tab oas %}
+
+```yaml
+components:
+  schemas:
+    Config:
+      type: object
+      properties:
+        name:
+          type: string
+        # additional properties...
+      required:
+        - name
+  parameters:
+    user:
+      in: path
+      name: user
+      required: true
+      schema:
+        type: string
+```
+
+The `Config` singleton would have the following methods:
+
+```yaml
+paths:
+  users/{user}/config:
+    get:
+      operationId: getUserConfig
+      parameters:
+      - $ref: '#/components/parameters/user'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+    patch:
+      operationId: updateUserConfig
+      parameters:
+      - $ref: '#/components/parameters/user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+```
+
 {% endtabs %}
 
 - Singleton resources **must not** have a user-provided or system-generated ID;
@@ -89,6 +143,32 @@ message ListConfigsRequest {
 
   // other standard pagination fields...
 }
+```
+
+{% tab oas %}
+
+```yaml
+components:
+  schemas:
+    UserConfigCollection:
+      type: object
+      properties:
+        configs:
+          type: array
+          items:
+            '$ref': '#/components/schemas/Config'
+
+paths:
+  users/-/configs:
+    get:
+      operationId: listUserConfigs
+      # standard pagination parameters...
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConfigCollection'
 ```
 
 {% endtabs %}
