@@ -21,6 +21,11 @@ resource.
 
 {% sample 'multiple_many_to_one.proto', 'message Book' %}
 
+{% tab oas %}
+
+{% sample 'multiple_many_to_one.oas.yaml', 'format' %}
+
+
 {% endtabs %}
 
 When listing resources with multiple associations in this way, the RPC **must**
@@ -47,6 +52,10 @@ described for repeated fields in [AEP-144][].
 
 {% sample 'many_to_many_repeated.proto', 'message Book' %}
 
+{% tab oas %}
+
+{% sample 'many_to_many_repeated.oas.yaml', 'format' %}
+
 {% endtabs %}
 
 **Note:** See [AEP-144][] for more information on repeated fields, including
@@ -59,6 +68,10 @@ relationship using a sub-resource with two one-to-many associations.
 {% tab proto %}
 
 {% sample 'many_to_many_subresource.proto', 'message BookAuthor' %}
+
+{% tab oas %}
+
+{% sample 'many_to_many_subresource.oas.yaml', 'format' %}
 
 {% endtabs %}
 
