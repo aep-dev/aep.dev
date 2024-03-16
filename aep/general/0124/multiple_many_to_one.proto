@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "google/api/resource.proto";
+
+message Book {
+  // The resource name pattern for Book indicates that Publisher is the
+  // canonical parent.
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  // The resource name for the book.
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+
+  // The resource name for the book's author.
+  string author = 2 [(google.api.resource_reference) = {
+    type: "library.googleapis.com/Author"
+  }];
+}

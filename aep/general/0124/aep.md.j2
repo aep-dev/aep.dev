@@ -1,5 +1,74 @@
 # Resource association
 
-**Note:** This AEP has not yet been adopted. See
-[this GitHub issue](https://github.com/aep-dev/aep.dev/issues/57) for more
-information.
+APIs sometimes have resource hierarchies that can not be cleanly expressed in
+the usual tree structure. For example, a resource may have a many-to-one
+relationship with two other resource types instead of just one. Alternatively,
+a resource may have a many-to-many relationship with another resource type.
+
+## Guidance
+
+A resource **must** have at most one canonical parent, and `List` requests
+**must not** require two distinct "parents" to work.
+
+### Multiple many-to-one associations
+
+If a resource has a many-to-one relationship with multiple resource types, it
+**must** choose at most one of them to be the canonical parent. The resource
+**may** be associated with other resources through other fields on the
+resource.
+
+{% tab proto %}
+
+{% sample 'multiple_many_to_one.proto', 'message Book' %}
+
+{% endtabs %}
+
+When listing resources with multiple associations in this way, the RPC **must**
+treat the `string parent` field as required as discussed in [AEP-132][], and
+**must not** add additional required arguments. The RPC **should** include a
+`string filter` field that allows users to filter by other resource
+associations as discussed in [AEP-160][].
+
+**Note:** Resource reference fields **must** accept the same resource name
+format that is used in the `name` field of the referenced resource.
+
+### Many-to-many associations
+
+Many-to-many associations are less common in APIs than they are in relational
+databases, in part because they are more difficult to model and present over
+network interfaces.
+
+An API **may** contain many-to-many relationships, and **should** use a
+repeated field containing a list of resource names, following the principles
+described for repeated fields in [AEP-144][].
+
+
+{% tab proto %}
+
+{% sample 'many_to_many_repeated.proto', 'message Book' %}
+
+{% endtabs %}
+
+**Note:** See [AEP-144][] for more information on repeated fields, including
+how to handle common issues such as atomic changes.
+
+If the use of a repeated field is too restrictive, or if more metadata is
+required along with the association, an API **may** model a many-to-many
+relationship using a sub-resource with two one-to-many associations.
+
+{% tab proto %}
+
+{% sample 'many_to_many_subresource.proto', 'message BookAuthor' %}
+
+{% endtabs %}
+
+**Note:** Using subresources to model an association between resources is only
+recommended if additional metadata is required in the relationship, or if the
+restrictions around the use of a repeated field preclude the use of that
+approach.
+
+<!-- prettier-ignore-start -->
+[aep-132]: ./0132.md
+[aep-144]: ./0144.md
+[aep-160]: ./0160.md
+<!-- prettier-ignore-end -->
