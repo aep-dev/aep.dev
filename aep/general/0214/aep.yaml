@@ -1,7 +1,7 @@
 ---
 id: 214
 state: reviewing
-slug: resource-expiration
+slug: expiration
 created: 2024-03-14
 placement:
   category: design-patterns
