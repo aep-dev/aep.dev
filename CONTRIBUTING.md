@@ -110,6 +110,13 @@ We use [prettier][4] to format Markdown, JavaScript, and (most) HTML, in order
 to ensure a consistent style throughout our source. You can add prettier as a
 plugin in most development environments.
 
+Once it is installed, you can fix formatting by running the following in the
+root aep.dev directory:
+
+```sh
+prettier -w .
+```
+
 [1]: https://pages.github.com/
 [2]: https://github.com/aep-dev/site-generator
 [3]: https://docker.com/
