@@ -9,4 +9,4 @@ placement:
 js_scripts:
   - /assets/js/graphviz/viz.js
   - /assets/js/graphviz/lite.render.js
-  - /assets/js/aip/aip-graphviz.js
+  - /assets/js/aep/aep-graphviz.js
