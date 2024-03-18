@@ -13,12 +13,15 @@ Standard fields **should** be used to describe their corresponding concept, and
 
 #### path
 
-Every resource **must** have a `string path` field, used for the [resource path](/resource-paths), which **should** be the first field in the resource.
+Every resource **must** have a `string path` field, used for the
+[resource path](/resource-paths), which **should** be the first field in the
+resource.
 
 #### parent
 
 The `string parent` field refers to the resource name of the parent of a
-collection, and **should** be used in most [`List`](/list) and [`Create`](/create) requests.
+collection, and **must** be used in [`List`](/list) and [`Create`](/create)
+requests except for top-level resources.
 
 ### Names
 
@@ -26,7 +29,6 @@ collection, and **should** be used in most [`List`](/list) and [`Create`](/creat
 
 The `string display_name` field **must** be a mutable, user-settable field
 where the user can provide a human-readable name to be used in user interfaces.
-[Declarative-friendly resources][] **should** include this field.
 
 Display names **should not** have uniqueness requirements, and **should** be
 limited to <= 63 characters.
@@ -139,11 +141,6 @@ also have strict governance of their semantics. For such fields, presenting an
 equally standardized API surface is important. This enables development of
 improved API consumer tools and documentation, as well as a more unified user
 experience across the platform.
-
-## History
-
-Before 2023-07, `purge_time` for soft-deleted resources was also called
-`expire_time`. `purge_time` was introduced to reduce user confusion.
 
 <!-- prettier-ignore -->
 [declarative-friendly resources]: ./0128.md#resources
