@@ -1,17 +1,17 @@
-# Beta-blocking changes
+# beta-blocking changes
 
-APIs often release an Alpha version of their API in order to get early feedback
+APIs often release an alpha version of their API in order to get early feedback
 from customers. This API is provisional and can change many times before the
-important feedback is incorporated and the API is made stable for Beta.
+important feedback is incorporated and the API is made stable for beta.
 
-Since the purpose of Alpha is to gather feedback, the API does not need to be
+Since the purpose of alpha is to gather feedback, the API does not need to be
 perfect yet, and it's not strictly necessary for API authors to address every
 usability concern or address every point in the API standards. Often, API
 authors and API reviewers will not agree on the best design, and the best way
 to find out is by having users try out the API.
 
 However, once the feedback has been collected and the API is going to be
-promoted to Beta, usability concerns and style issues do need to be addressed.
+promoted to beta, usability concerns and style issues do need to be addressed.
 In order to ensure that these issues are not forgotten, they should be
 explicitly documented in the API.
 
@@ -19,11 +19,11 @@ explicitly documented in the API.
 
 If an API has usability concerns or violates API standards, and the present
 design should receive additional scrutiny before being carried through to the
-Beta version, there **must** be an internal comment linking to this document
+beta version, there **must** be an internal comment linking to this document
 using its descriptive link ([aep.dev/beta-blocker]()) to ensure that the design
-is corrected before the API is released to Beta.
+is corrected before the API is released to beta.
 
-The comment **must** also indicate what kind of change should be made for Beta.
+The comment **must** also indicate what kind of change should be made for beta.
 For example:
 
 {% tab proto %}
@@ -32,7 +32,7 @@ For example:
 message InputConfig {
   // Parameters for input.
   // (-- aep.dev/beta-blocker: Convert well-known parameters into explicit
-  //     fields before the Beta launch. --)
+  //     fields before the beta launch. --)
   map<string, string> parameters = 1;
 }
 ```
@@ -43,5 +43,5 @@ message InputConfig {
 
 {% endtabs %}
 
-If an exception to API standards _does_ need to be carried through to Beta and
+If an exception to API standards _does_ need to be carried through to beta and
 GA, see AEP-200.
