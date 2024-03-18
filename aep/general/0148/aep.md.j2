@@ -55,23 +55,21 @@ family name is not placed last in many cultures.
 
 ### Timestamps
 
-See AEP-213 for more information about common components for `Timestamp` and
+See [common components](/common-components) for more information about `Timestamp` and
 `Duration`.
 
 #### create_time
 
 The output only `Timestamp create_time` field **must** represent the timestamp
 when the resource was created. This **may** be either the time creation was
-initiated or the time it was completed. [Declarative-friendly resources][]
-**should** include this field.
+initiated or the time it was completed.
 
 #### update_time
 
 The output only `Timestamp update_time` field **must** represent the timestamp
 when the resource was most recently updated. Any change to the resource made by
 users **must** refresh this value; changes to a resource made internally by the
-service **may** refresh this value. [Declarative-friendly resources][]
-**should** include this field.
+service **may** refresh this value.
 
 #### delete_time
 
@@ -81,14 +79,13 @@ when the user requested deletion, or when the service successfully soft deleted
 the resource. If a resource is not soft deleted, the `delete_time` field
 **must** be empty.
 
-Resources that support soft delete (AEP-164) **should** provide this field.
+Resources that support [soft delete](/soft-delete) **should** provide this field.
 
 #### expire_time
 
 The `Timestamp expire_time` field **should** represent the time that a given
 resource or resource attribute is no longer useful or valid (e.g. a rotating
-security key). It **may** be used for similar forms of expiration as described
-in AEP-214.
+security key). It **may** be used for [expiration](/resource-expiration).
 
 Services **may** provide an `expire_time` value that is inexact, but the
 resource **must not** expire before that time.
@@ -113,14 +110,14 @@ A field that represents an IP address **must** comply with the following:
 - use the name `ip_address` or end with the suffix `_ip_address` e.g.
   `resolved_ip_address`
 - specify the IP address version format via one of the supported formats
-  `IPV4`, `IPV6`, or if it can be either, `IPV4_OR_IPV6` (see AEP-202)
+  `IPV4`, `IPV6`, or if it can be either, `IPV4_OR_IPV6` (see [fields](/fields)).
 
 #### uid
 
 The output only `string uid` field refers to a system-assigned unique
 identifier for a resource. When provided, this field **must** be a [UUID4][]
 and **must** specify this format via the `UUID4` format extension (see
-AEP-202). [Declarative-friendly resources][] **should** include this field.
+[fields](/fields)).
 
 ## Further reading
 
