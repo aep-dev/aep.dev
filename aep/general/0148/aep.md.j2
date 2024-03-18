@@ -85,8 +85,7 @@ Resources that support soft delete (AEP-164) **should** provide this field.
 
 The `Timestamp expire_time` field **should** represent the time that a given
 resource or resource attribute is no longer useful or valid (e.g. a rotating
-security key). It **may** be used for similar forms of expiration as described
-in AEP-214.
+security key). It **may** be used for [expiration](/resource-expiration).
 
 Services **may** provide an `expire_time` value that is inexact, but the
 resource **must not** expire before that time.
