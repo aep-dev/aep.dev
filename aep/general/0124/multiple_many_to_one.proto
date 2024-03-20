@@ -11,7 +11,7 @@ message Book {
   };
 
   // The resource name for the book.
-  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string path = 1 [(google.api.field_behavior) = IDENTIFIER];
 
   // The resource name for the book's author.
   string author = 2 [(google.api.resource_reference) = {
