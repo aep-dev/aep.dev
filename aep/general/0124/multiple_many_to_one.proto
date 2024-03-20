@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/api/resource.proto";
 
 message Book {
-  // The resource name pattern for Book indicates that Publisher is the
+  // The resource path pattern for Book indicates that Publisher is the
   // canonical parent.
   option (google.api.resource) = {
     type: "library.googleapis.com/Book"
