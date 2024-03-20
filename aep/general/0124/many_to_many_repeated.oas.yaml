@@ -8,10 +8,10 @@ components:
     Book:
       description: A representation of a single book.
       properties:
-        name:
+        path:
           type: string
           description: |
-            The name of the book.
+            The path of the book.
             Format: publishers/{publisher}/books/{book}
         authors:
           type: array
