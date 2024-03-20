@@ -8,10 +8,10 @@ components:
     BookAuthor:
       description: A representation of a book being written by an author.
       properties:
-        name:
+        path:
           type: string
           description: |
-            The name of the book.
+            The path of the book.
             Format: publishers/{publisher}/books/{book}
         authors:
           type: string
