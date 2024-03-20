@@ -11,10 +11,10 @@ message BookAuthor {
     pattern: "publishers/{publisher}/books/{book}/authors/{book_author}"
   };
 
-  // The resource name for the book-author association.
-  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  // The resource path for the book-author association.
+  string path = 1 [(google.api.field_behavior) = IDENTIFIER];
 
-  // The resource name for the author.
+  // The resource path for the author.
   string author = 2 [(google.api.resource_reference) = {
     type: "library.googleapis.com/Author"
   }];
