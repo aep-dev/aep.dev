@@ -10,7 +10,7 @@ message Book {
     pattern: "publishers/{publisher}/books/{book}"
   };
 
-  // The resource name for the book.
+  // The resource path for the book.
   string path = 1 [(google.api.field_behavior) = IDENTIFIER];
 
   // The resource name for the book's author.
