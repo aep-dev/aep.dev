@@ -1,0 +1,20 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+components:
+  schema:
+    Book:
+      description: A representation of a single book.
+      properties:
+        path:
+          type: string
+          description: |
+            The path of the book.
+            Format: publishers/{publisher}/books/{book}
+        authors:
+          type: array
+          items:
+            type: string
+          description: The author or authors of the book.

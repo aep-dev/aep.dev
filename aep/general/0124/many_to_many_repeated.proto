@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  string path = 1 [(google.api.field_behavior) = IDENTIFIER];
+
+  // The resource paths for the book's authors.
+  repeated string authors = 2 [(google.api.resource_reference) = {
+    type: "library.googleapis.com/Author"
+  }];
+}
