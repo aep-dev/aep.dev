@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-131: Get</title>
+    <title>AEP-156: Singleton resources</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -217,7 +217,7 @@
             Resource association
           </a>
         </li>
-      <li class="nav-item">
+      <li class="nav-item nav-item-active">
           <a href="/156">
             <span class="aep-id">156</span>
             Singleton resources
@@ -230,7 +230,7 @@
           </a>
         </li>
       <li class="nav-item"><b>Standard Methods</b></li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/131">
             <span class="aep-id">131</span>
             Get
@@ -496,24 +496,22 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Get</th></tr>
-    <tr><td>Slug</td><td>get</td></tr>
-    <tr><td>Number</td><td>131</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/131">aep.dev/131</a></td></tr>
+    <tr><th colspan="2">Singleton resources</th></tr>
+    <tr><td>Slug</td><td>singletons</td></tr>
+    <tr><td>Number</td><td>156</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/156">aep.dev/156</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2019-01-22</td></tr>
-    <tr><td>Updated</td><td>2019-01-22</td></tr>
+    <tr><td>Created</td><td>2024-03-15</td></tr>
+    <tr><td>Updated</td><td>2024-03-15</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
     <div class="toc"><span class="toctitle">Contents</span><ul>
-<li><a href="#guidance">Guidance</a><ul>
-<li><a href="#requests">Requests</a></li>
-<li><a href="#responses">Responses</a></li>
-<li><a href="#errors">Errors</a></li>
+<li><a href="#guidance">Guidance</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#support-for-standard-list">Support for Standard List</a></li>
 </ul>
 </li>
-<li><a href="#interface-definitions">Interface Definitions</a></li>
 </ul>
 </div>
 
@@ -522,8 +520,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0131">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0131">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0156">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0156">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -548,160 +546,188 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Get
+        Singleton resources
       </li>
     </ol>
   </nav>
 </section>
   
-  <h4 class="aep-id">get (AEP-131)</h4>
-  <h1 id="get">Get</h1>
-<p>In REST APIs, it is customary to make a <code>GET</code> request to a resource's URI (for
-example, <code>/v1/publishers/{publisher}/books/{book}</code>) in order to retrieve that
-resource.</p>
-<p>Resource-oriented design (<a href="/121">AEP-121</a>) honors this pattern through the <code>Get</code>
-method. These RPCs accept the URI representing that resource and return the
-resource.</p>
+  <h4 class="aep-id">singletons (AEP-156)</h4>
+  <h1 id="singleton-resources">Singleton resources</h1>
+<p>APIs sometimes need to represent a resource where exactly one instance of the
+resource always exists within any given parent. A common use case for this is
+for a config object.</p>
 <h2 id="guidance">Guidance</h2>
-<ul>
-<li>APIs <strong>must</strong> provide a get method for resources. The purpose of the get method
-is to return data from a single resource.</li>
-<li>Some resources take longer to be retrieved than is reasonable for a regular API request. In this situation, the API should use a <a href="/long-running-operations">long-running operation</a>.</li>
-</ul>
-<h3 id="requests">Requests</h3>
-<p><code>Get</code> operations <strong>must</strong> be made by sending a <code>GET</code> request to the resource's
-URI:</p>
-<div class="highlight language-http"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/v1/publishers/{publisher}/books/{book}</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">2</span>
-<span class="na">Host</span><span class="o">:</span> <span class="l">library.example.com</span>
-<span class="na">Accept</span><span class="o">:</span> <span class="l">application/json</span>
-</code></pre></div>
-<ul>
-<li>The HTTP method <strong>must</strong> be <code>GET</code>.<ul>
-<li>The request <strong>must</strong> be safe and <strong>must not</strong> have side effects.</li>
-</ul>
-</li>
-<li>There <strong>must not</strong> be a request body.<ul>
-<li>If a <code>GET</code> request contains a body, the body <strong>must</strong> be ignored, and
-  <strong>must not</strong> cause an error.</li>
-</ul>
-</li>
-<li>The request <strong>must not</strong> require any fields in the query string. The request
-  <strong>should not</strong> include optional fields in the query string unless described
-  in another AEP.</li>
-</ul>
-<h3 id="responses">Responses</h3>
-<p>Single-resource <code>GET</code> operations <strong>must</strong> return the resource itself, without
-any additional wrapping:</p>
-<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;publishers/lacroix/books/les-mis&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;isbn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-037-540317-0&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Les Misérables&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Victor Hugo&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">  </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">9.6</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>The response <strong>should</strong> usually include the fully-populated resource unless
-there is a reason to return a partial response (see <a href="/157">AEP-157</a>).</p>
-<h3 id="errors">Errors</h3>
-<p>If the user does not have sufficient permission to know that the resource
-exists, the service <strong>should</strong> reply with an HTTP 404 error, regardless of
-whether or not the resource exists. Permission <strong>must</strong> be checked prior to
-checking if the resource exists.</p>
-<p>If the user has sufficient permission to know that the resource exists, but is
-unable to access it, the service <strong>should</strong> reply with an HTTP 403 error.</p>
-<p>If the user does have proper permission, but the requested resource does not
-exist, the service <strong>must</strong> reply with an HTTP 404 error.</p>
-<h2 id="interface-definitions">Interface Definitions</h2>
+<p>An API <strong>may</strong> define <em>singleton resources</em>. A singleton resource <strong>must</strong>
+always exist by virtue of the existence of its parent, with one and exactly one
+per parent.</p>
+<p>For example:</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
-<p>Get operations are specified using the following pattern:</p>
-<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Get a single book.</span>
-<span class="k">rpc</span><span class="w"> </span><span class="n">GetBook</span><span class="p">(</span><span class="n">GetBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">get</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{path=publishers/*/books/*}&quot;</span>
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;api.example.com/Config&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;users/{user}/config&quot;</span>
 <span class="w">  </span><span class="p">};</span>
-<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;path&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// additional fields including name</span>
 <span class="p">}</span>
 </code></pre></div>
-<ul>
-<li>The RPC's name <strong>must</strong> begin with the word <code>Get</code>. The remainder of the RPC
-  name <strong>should</strong> be the singular form of the resource's message name.</li>
-<li>The request message <strong>must</strong> match the RPC name, with a <code>Request</code> suffix.</li>
-<li>The response message <strong>must</strong> be the resource itself. (There is no
-  <code>GetBookResponse</code>.)</li>
-<li>The HTTP verb <strong>must</strong> be <code>GET</code>.</li>
-<li>The URI <strong>should</strong> contain a single variable field corresponding to the
-  resource path.<ul>
-<li>This field <strong>should</strong> be called <code>path</code>.</li>
-<li>The URI <strong>should</strong> have a variable corresponding to this field.</li>
-<li>The <code>path</code> field <strong>should</strong> be the only variable in the URI path. All
-  remaining parameters <strong>should</strong> map to URI query parameters.</li>
-</ul>
-</li>
-<li>There <strong>must not</strong> be a <code>body</code> key in the <code>google.api.http</code> annotation.</li>
-<li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation,
-  with a value of <code>"path"</code>.</li>
-</ul>
-<p>Get operations also implement a common request message pattern:</p>
-<div class="highlight language-proto"><pre><span></span><code><span class="c1">// Request message to get a single book.</span>
-<span class="kd">message</span><span class="w"> </span><span class="nc">GetBookRequest</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="c1">// The path of the book to retrieve.</span>
-<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
-<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
-<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/Book&quot;</span>
-<span class="w">    </span><span class="p">}];</span>
+<p>The <code>Config</code> singleton would have the following RPCs:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">GetConfig</span><span class="p">(</span><span class="n">GetConfigRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">get</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{name=users/*/config}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">rpc</span><span class="w"> </span><span class="n">UpdateConfig</span><span class="p">(</span><span class="n">UpdateConfigRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">patch</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{config.name=users/*/config}&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;config&quot;</span>
+<span class="w">  </span><span class="p">};</span>
 <span class="p">}</span>
 </code></pre></div>
-<ul>
-<li>A resource path field <strong>must</strong> be included. It <strong>should</strong> be called <code>path</code>.<ul>
-<li>The field <strong>should</strong> be annotated as <code>REQUIRED</code>.</li>
-<li>The field <strong>should</strong> identify the <a href="/123">resource type</a> that it
-  references.</li>
-</ul>
-</li>
-<li>The comment for the <code>path</code> field <strong>should</strong> document the resource pattern.</li>
-<li>The request message <strong>must not</strong> contain any other required fields, and
-  <strong>should not</strong> contain other optional fields except those described in
-  another AEP.</li>
-</ul>
-<p><strong>Note:</strong> The <code>path</code> field in the request object corresponds to the <code>path</code>
-variable in the <code>google.api.http</code> annotation on the RPC. This causes the <code>path</code>
-field in the request to be populated based on the value in the URL when the
-REST/JSON interface is used.</p>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
-<p>Single-resource <code>GET</code> operations <strong>must</strong> be specified with consistent OpenAPI
-metadata:</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">components</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">schemas</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">Config</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span><span class="w"></span>
+<span class="w">      </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">        </span><span class="c1"># additional properties...</span><span class="w"></span>
+<span class="w">      </span><span class="nt">required</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="w"></span>
+<span class="w">  </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">user</span><span class="w"></span>
+<span class="w">      </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+</code></pre></div>
+<p>The <code>Config</code> singleton would have the following methods:</p>
 <div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books/{bookId}</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">users/{user}/config</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">get</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">getBook</span><span class="w"></span>
-<span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get a single book.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">getUserConfig</span><span class="w"></span>
+<span class="w">      </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/parameters/user&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">responses</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">200</span><span class="p">:</span><span class="w"></span>
-<span class="w">          </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OK</span><span class="w"></span>
+<span class="w">        </span><span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
 <span class="w">              </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
-<span class="w">                </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Book&#39;</span><span class="w"></span>
+<span class="w">                </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Config&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">patch</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updateUserConfig</span><span class="w"></span>
+<span class="w">      </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/parameters/user&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requestBody</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Config&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">responses</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Config&#39;</span><span class="w"></span>
 </code></pre></div>
+</div>
+</div>
 <ul>
-<li>The <code>operationId</code> <strong>must</strong> begin with the word <code>get</code>. The remainder of the
-  <code>operationId</code> <strong>should</strong> be the singular form of the resource type's name.</li>
-<li>The response content <strong>must</strong> be the resource itself. For example:
-  <code>#/components/schemas/Book</code></li>
-<li>The URI <strong>should</strong> contain a variable for each individual ID in the resource
-  hierarchy.<ul>
-<li>The path parameter for all resource IDs <strong>must</strong> be in the form
-  <code>{resourceName}Id</code> (such as <code>bookId</code>), and path parameters representing the
-  ID of parent resources <strong>must</strong> end with <code>Id</code>.</li>
+<li>Singleton resources <strong>must not</strong> have a user-provided or system-generated ID;
+  their <a href="/122">resource name</a> includes the name of their parent followed by
+  one static-segment.<ul>
+<li>Example: <code>users/1234/config</code></li>
+</ul>
+</li>
+<li>Singleton resources are always singular.<ul>
+<li>Example: <code>users/1234/thing</code></li>
+</ul>
+</li>
+<li>Singleton resources <strong>may</strong> parent other resources.</li>
+<li>Singleton resources <strong>must not</strong> define the <a href="/133"><code>Create</code></a> or
+  <a href="/135"><code>Delete</code></a> standard methods. The singleton is implicitly created or
+  deleted when its parent is created or deleted.</li>
+<li>Singleton resources <strong>should</strong> define the <a href="/131"><code>Get</code></a> and
+  <a href="/134"><code>Update</code></a> methods, and <strong>may</strong> define custom methods as
+  appropriate.<ul>
+<li>However, singleton resources <strong>must not</strong> define the <a href="/134"><code>Update</code></a>
+  method if all fields on the resource are <a href="/203">output only</a>.</li>
+</ul>
+</li>
+<li>Singleton resources <strong>may</strong> define the <a href="/132"><code>List</code></a> method, but <strong>must</strong>
+  implement it according to <a href="/159">AEP-159</a>. See the example below.<ul>
+<li>The trailing segment in the path pattern that typically represents the
+  collection <strong>should</strong> be the <code>plural</code> form of the Singleton resource e.g.
+  <code>/v1/{parent=users/*}/configs</code>.</li>
+<li>If a parent resource ID is provided instead of the hyphen <code>-</code> as per
+  <a href="/159">AEP-159</a>, then the service <strong>should</strong> return a collection of one Singleton
+  resource corresponding to the specified parent resource.</li>
 </ul>
 </li>
 </ul>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">ListConfigs</span><span class="p">(</span><span class="n">ListConfigsRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">ListConfigsResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">get</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=users/*}/configs&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">ListConfigsRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// To list all configs, use `-` as the user id.</span>
+<span class="w">  </span><span class="c1">// Formats:</span>
+<span class="w">  </span><span class="c1">// * `users/-`</span>
+<span class="w">  </span><span class="c1">// * `users/{user}`</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// Note: Specifying an actual user id will return a collection of one config.</span>
+<span class="w">  </span><span class="c1">// Use GetConfig instead.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="o">.</span><span class="na">child_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;api.example.com/Config&quot;</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// other standard pagination fields...</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">components</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">schemas</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">UserConfigCollection</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span><span class="w"></span>
+<span class="w">      </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">configs</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">          </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="s">&#39;$ref&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Config&#39;</span><span class="w"></span>
+
+<span class="nt">paths</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">users/-/configs</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">get</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">listUserConfigs</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># standard pagination parameters...</span><span class="w"></span>
+<span class="w">      </span><span class="nt">responses</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/UserConfigCollection&#39;</span><span class="w"></span>
+</code></pre></div>
 </div>
 </div>
-<!-- prettier-ignore-start -->
-<!-- prettier-ignore-end -->
+<h2 id="rationale">Rationale</h2>
+<h3 id="support-for-standard-list">Support for Standard List</h3>
+<p>While Singleton resources are not directly part of a collection themselves, they
+can be viewed as part of their parent's collection. The one-to-one relationship
+of parent-to-singleton means that for every one parent there is one singleton
+instance, naturally enabling some collection-based methods when combined with
+the pattern of <a href="/159">Reading Across Collections</a>. The Singleton can present
+as a collection to the API consumer as it is indirectly one based on its parent.
+Furthermore, presenting the Singleton resource as a pseudo-collection in such
+methods enables future expansion to a real collection, should a Singleton be
+found lacking.</p>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
