@@ -1,6 +1,6 @@
 # HTTP and gRPC Transcoding
 
-APIs that follow [resource-oriented design][aip-121] are defined using
+APIs that follow [resource-oriented design][resources] are defined using
 [RPCs][rpc], but the resource-oriented design framework allows them to also be
 presented as APIs that largely follow REST/JSON conventions. This is important
 in order to help developers use their existing knowledge: over 80% of the
@@ -56,18 +56,18 @@ message CreateBookRequest {
 - The first key (`post` in this example) corresponds to the HTTP method. RPCs
   **may** use `get`, `post`, `patch`, or `delete`.
   - RPCs **must** use the prescribed HTTP verb for each standard method, as
-    discussed in [AIP-131][], [AIP-132][], [AIP-133][], [AIP-134][], and
-    [AIP-135][]
+    discussed in [Get][/get], [List][/list], [Create][/create], [Update][/update], and
+    [Delete][/delete]
   - RPCs **should** use the prescribed HTTP verb for custom methods, as
-    discussed in [AIP-136][].
+    discussed in [Custom Methods][/custom-methods].
   - RPCs **should not** use `put` or `custom`.
 - The corresponding value represents the URI.
   - URIs **must** use the `{foo=bar/*}` syntax to represent a variable that
     should be populated in the request proto. When extracting a [resource
-    name][aip-122], the variable **must** include the entire resource name, not
+    name][resource-paths], the variable **must** include the entire resource name, not
     just the ID component.
   - URIs **may** use nested fields for their variable names. (Additionally,
-    AIP-134 mandates this for `Update` requests.)
+    AEP-134 mandates this for `Update` requests.)
   - URIs **must** use the `*` character to represent ID components, which
     matches all URI-safe characters except for `/`. URIs **may** use `**` as
     the final segment of a URI if matching `/` is required.
@@ -77,9 +77,9 @@ message CreateBookRequest {
   as defined by protocol buffers' canonical [JSON encoding][].
   - RPCs **must not** define a `body` at all for RPCs that use the `GET` or
     `DELETE` HTTP verbs.
-  - RPCs **must** use the prescribed `body` for Create ([AIP-133][]) and Update
-    ([AIP-134][]) requests.
-  - RPCs **should** use the prescribed `body` for custom methods ([AIP-136][]).
+  - RPCs **must** use the prescribed `body` for Create ([Create][/create]) and Update
+    ([AEP-134][update]) requests.
+  - RPCs **should** use the prescribed `body` for custom methods ([Custom Methods][/custom-methods]).
   - The `body` **must not** contain a nested field (or use the `.` character),
   - The `body` **must not** be the same as a URI parameter.
   - The `body` **must not** be a `repeated` field.
@@ -118,23 +118,15 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 - The `body` clause **must** be identical in the top-level annotation and each
   additional binding.
 
-## Changelog
-
-- **2022-08-18**: Added the comment that query string parameter names are
-  in camelCase.
-- **2021-01-06**: Added clarification around `body` and nested fields.
-- **2019-09-23**: Added a statement about request body encoding, and guidance
-  discouraging `json_name`.
-
 <!-- prettier-ignore-start -->
-[aip-121]: ./0121.md
-[aip-122]: ./0122.md
-[aip-131]: ./0131.md
-[aip-132]: ./0132.md
-[aip-133]: ./0133.md
-[aip-134]: ./0134.md
-[aip-135]: ./0135.md
-[aip-136]: ./0136.md
+[resources]: ./0121.md
+[resource-paths]: ./0122.md
+[get]: ./0131.md
+[list]: ./0132.md
+[create]: ./0133.md
+[update]: ./0134.md
+[delete]: ./0135.md
+[custom-methods]: ./0136.md
 [json encoding]: https://developers.google.com/protocol-buffers/docs/proto3#json
 [rpc]: https://en.wikipedia.org/wiki/Remote_procedure_call
 <!-- prettier-ignore-end -->
