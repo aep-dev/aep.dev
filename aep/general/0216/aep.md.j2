@@ -18,10 +18,10 @@ for the HTTP and gRPC statuses).
 
 ### Enum values
 
-Ideally, Google APIs use the same terminology throughout when expressing the
-same semantic concepts. There are usually many words available to express a
-given state, but our customers often use multiple APIs together, and it is
-easier for them when our terms are consistent.
+Ideally, APIs use the same terminology throughout when expressing the same
+semantic concepts. There are usually many words available to express a given
+state, but our customers often use multiple APIs together, and it is easier for
+them when our terms are consistent.
 
 At a high level:
 
@@ -44,7 +44,8 @@ case for why it is necessary.
 ### Output only
 
 The field referencing the `State` enum in a resource **should** behave and be
-documented as "Output only", in accordance with [AIP-203](./0203.md).
+documented as "Output only", in accordance with
+[field behavior documentation](./field-behavior-documentation).
 
 APIs **should not** allow a `State` enum to be directly updated through an
 "update" method (or directly set through the "create" method), and **should**
@@ -69,7 +70,7 @@ field. The method definition should look like the following:
 // different state (including `PUBLISHED`) returns an error.
 rpc PublishBook(PublishBookRequest) returns (Book) {
   option (google.api.http) = {
-    post: "/v1/{name=publishers/*/books/*}:publish"
+    post: "/v1/{path=publishers/*/books/*}:publish"
     body: "*"
   };
 }
@@ -79,18 +80,18 @@ rpc PublishBook(PublishBookRequest) returns (Book) {
   the resource's message name.
 - The request message **must** match the RPC name, with a `Request` suffix.
 - The response message **should** be the resource itself.
-  - If the RPC is [long-running][], the response message **should** be a
-    `google.longrunning.Operation` which resolves to the resource itself.
+  - If the RPC is [long-running](./lro), the response message **should** be an
+    `aep.api.Operation` which resolves to the resource itself.
 - The HTTP verb **must** be `POST`.
 - The HTTP URI **must** use a `:` character followed by the custom verb
   (`:publish` in the above example), and the verb in the URI **must** match the
   verb in the name of the RPC.
   - If word separation is required, `camelCase` **must** be used.
 - The `body` clause in the `google.api.http` annotation **must** be `"*"`.
-- The request message field receiving the resource name **should** map to the
+- The request message field receiving the resource path **should** map to the
   URI path.
-  - This field **should** be called `name`.
-  - The `name` field **should** be the only variable in the URI path. All
+  - This field **should** be called `path`.
+  - The `path` field **should** be the only variable in the URI path. All
     remaining parameters **should** map to URI query parameters.
 - If the state transition is not allowed, the service **must** error with
   `FAILED_PRECONDITION` (HTTP 400).
@@ -99,17 +100,17 @@ The request message should look like this:
 
 ```proto
 message PublishBookRequest {
-  // The name of the book to publish.
+  // The path of the book to publish.
   // Format: publishers/{publisher}/books/{book}
-  string name = 1 [
+  string path = 1 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      type: "library.googleapis.com/Book"
+      type: "library.example.com/Book"
     }];
 }
 ```
 
-- A resource name field **must** be included. It **should** be called `name`.
+- A resource path field **must** be included. It **should** be called `path`.
 - The comment for the field **should** document the resource pattern.
 - Other fields **may** be included.
 
@@ -216,17 +217,4 @@ necessary.
 
 ## Further reading
 
-- For information on enums generally, see [AIP-126][].
-
-## Changelog
-
-- **2022-06-02:** Changed suffix descriptions to eliminate superfluous "-".
-- **2020-10-20**: Added guidance on prefixing enum values with enum name.
-- **2020-09-02**: Clarified that states are not directly set on create either.
-- **2019-12-05**: Changed guidance on state transition methods, downgrading
-  **must** to **should** on the response type.
-- **2019-08-16**: Added guidance for state transition methods.
-- **2019-07-18**: Added explicit guidance on the unspecified value.
-
-[aip-126]: ./0126.md
-[long-running]: ./0151.md
+- For information on enums generally, see [enumerations](./enumerations).
