@@ -11,16 +11,20 @@ custom error handling code.
 Services **must** clearly distinguish successful responses from error
 responses.
 
+The structure of the error response **must** be consistent across all APIs of
+the service. You **should** use the error response structure below which comes
+from the Problem Details for HTTP APIs [RFC 9457].
+
 ### Structure
 
 An error response **should** contain the following fields:
 
 | Name     | Type    | Required | Description                                                                                                                                                                                                                      |
 | -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type     | string  | Y        | A unique identifier for the type of problem detected.                                                                                                                                                                            |
+| type     | string  | Y        | A URI reference [URI] that identifies the problem type. If the type URI is a locator (e.g., those with an "http" or "https" scheme), dereferencing it SHOULD provide human-readable documentation for the problem type.          |
 | status   | integer |          | The HTTP status code that best describes the type of problem detected.                                                                                                                                                           |
-| title    | string  |          | A human-readable description of the problem. Messages are likely to be logged in plain text and should not include information about a specific occurrence. Information about specific occurrences should be part of `metadata`. |
-| detail   | string  |          | A human-readable explanation specific to this occurrence of the problem.                                                                                                                                                         |
+| title    | string  |          | A human-readable description of the problem. Messages are likely to be logged in plain text and **must not** include information about a specific occurrence nor any sensitive data like PII. Information about specific occurrences should be part of `metadata`. |
+| detail   | string  |          | A human-readable explanation specific to this occurrence of the problem. This **may** contain PII and **should not** be logged.                                                                                                                                                        |
 | instance | string  |          | A unique identifier for the specific occurrence of the problem.                                                                                                                                                                  |
 
 An error response may contain additional fields appropriate for a specific
@@ -40,8 +44,10 @@ information or ask questions to help resolve the issue.
 The error detail field
 
 - is a developer-facing, human-readable "debug message"
-- is presented in the service's native language
 - both explains the error and offers an actionable resolution to it
+
+All human-readable error details returned by the service must use the same
+language.
 
 A JSON representation of an error response might look like the following:
 
@@ -67,6 +73,10 @@ Services **must** return a [`google.rpc.Status`][Status] message when an API
 error occurs, and **must** use the canonical error codes defined in
 [`google.rpc.Code`][Code]. More information about the particular codes is
 available in the [gRPC status code documentation][].
+
+The error response structure defined above **should** be returned in the
+`details` field of the Status message. Services **should** use the
+[`aep.api.ProblemDetails`](<!-- Add link here -->) to define this field.
 
 {% endtabs %}
 
@@ -139,7 +149,7 @@ does not exist, the service **must** error with `NOT_FOUND` (HTTP 404).
 
 ## Changelog
 
-- **2024-03-21**: From from https://google.aip.dev/193
+- **2024-03-21**: Adopt from https://google.aip.dev/193
 
 <!-- prettier-ignore-start -->
 [RFC 9457]: https://datatracker.ietf.org/doc/html/rfc9457
@@ -147,4 +157,5 @@ does not exist, the service **must** error with `NOT_FOUND` (HTTP 404).
 [Code]: https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
 [Status]: https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto
 [long-running operations]: ./0151.md
+[URI]: https://datatracker.ietf.org/doc/html/rfc3986
 <!-- prettier-ignore-end -->
