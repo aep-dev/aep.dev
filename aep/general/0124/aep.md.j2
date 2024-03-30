@@ -1,5 +1,85 @@
 # Resource association
 
-**Note:** This AEP has not yet been adopted. See
-[this GitHub issue](https://github.com/aep-dev/aep.dev/issues/57) for more
-information.
+APIs sometimes have resource relationships that can not be cleanly expressed in
+a hierarchical structure. For example, a resource may have a many-to-one
+relationship with two other resource types instead of just one. Alternatively,
+a resource may have a many-to-many relationship with another resource type.
+
+## Guidance
+
+A resource **must** have at most one canonical parent, and `List` requests
+**must not** require two distinct "parents".
+
+### Multiple many-to-one associations
+
+If a resource has a many-to-one relationship with multiple resource types, it
+**must** choose at most one of them to be the parent. The resource
+**may** be associated with other resources through other fields on the
+resource.
+
+{% tab proto %}
+
+{% sample 'multiple_many_to_one.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample 'multiple_many_to_one.oas.yaml', 'Book' %}
+
+{% endtabs %}
+
+When listing resources with multiple associations in this way, the RPC **must**
+treat the `string parent` field as required as discussed in [list](/list), and
+**must not** add additional required arguments. The RPC **should** include a
+`string filter` field that allows users to filter by other resource
+associations as discussed in [filtering](/filtering).
+
+**Note:** Resource reference fields **must** accept the [resource path](/resource-path) of the referenced resource.
+
+### Many-to-many associations
+
+Many-to-many associations are less common in APIs than they are in relational
+databases, in part because they are more difficult to model and present over
+network interfaces.
+
+An API **may** contain many-to-many relationships, and **should** use a
+repeated field containing a list of resource paths, following the principles
+described for repeated fields in [arrays][/arrays].
+
+
+{% tab proto %}
+
+{% sample 'many_to_many_repeated.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample 'many_to_many_repeated.oas.yaml', 'Book' %}
+
+{% endtabs %}
+
+**Note:** See [arrays](/arrays) for more information on repeated fields, including
+how to handle common issues such as atomic changes.
+
+If the use of a repeated field is too restrictive, or if more metadata is
+required along with the association, an API **may** model a many-to-many
+relationship using a sub-resource with two one-to-many associations.
+
+{% tab proto %}
+
+{% sample 'many_to_many_subresource.proto', 'message BookAuthor' %}
+
+{% tab oas %}
+
+{% sample 'many_to_many_subresource.oas.yaml', 'BookAuthor' %}
+
+{% endtabs %}
+
+**Note:** Using subresources to model an association between resources is only
+recommended if additional metadata is required in the relationship, or if the
+restrictions around the use of a repeated field preclude the use of that
+approach.
+
+<!-- prettier-ignore-start -->
+[aep-132]: ./0132.md
+[aep-144]: ./0144.md
+[aep-160]: ./0160.md
+<!-- prettier-ignore-end -->
