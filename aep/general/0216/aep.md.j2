@@ -63,6 +63,23 @@ responsible for transitioning a state field from one enum value to another. As
 part of the transition, other fields may also change, e.g. an `update_time`
 field. The method definition should look like the following:
 
+- The name of the method **should** be a verb followed by the singular form of
+  the resource's message name.
+- The HTTP verb **must** be `POST`.
+- The HTTP URI **must** use a `:` character followed by the custom verb
+  (`:publish` in the above example), and the verb in the URI **must** match the
+  verb in the name of the RPC.
+  - If word separation is required, `camelCase` **must** be used.
+
+Request messages should follow standard custom method guidance, including that
+for custom methods on resources, including:
+
+- A resource path field **must** be included. It **should** be called `path`.
+- The comment for the field **should** document the resource pattern.
+- Other fields **may** be included.
+
+{% tab proto %}
+
 ```proto
 // Publishes a book.
 // The `state` of the book after publishing is `PUBLISHED`.
@@ -76,17 +93,10 @@ rpc PublishBook(PublishBookRequest) returns (Book) {
 }
 ```
 
-- The name of the method **should** be a verb followed by the singular form of
-  the resource's message name.
 - The request message **must** match the RPC name, with a `Request` suffix.
 - The response message **should** be the resource itself.
   - If the RPC is [long-running](./lro), the response message **should** be an
     `aep.api.Operation` which resolves to the resource itself.
-- The HTTP verb **must** be `POST`.
-- The HTTP URI **must** use a `:` character followed by the custom verb
-  (`:publish` in the above example), and the verb in the URI **must** match the
-  verb in the name of the RPC.
-  - If word separation is required, `camelCase` **must** be used.
 - The `body` clause in the `google.api.http` annotation **must** be `"*"`.
 - The request message field receiving the resource path **should** map to the
   URI path.
@@ -110,9 +120,11 @@ message PublishBookRequest {
 }
 ```
 
-- A resource path field **must** be included. It **should** be called `path`.
-- The comment for the field **should** document the resource pattern.
-- Other fields **may** be included.
+{% tab oas %}
+
+**Note:** OAS content not yet written.
+
+{% endtab %}
 
 ## Additional Guidance
 
