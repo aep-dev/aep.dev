@@ -97,7 +97,7 @@ variable = "{", literal, "}";
 
 Where `literal` matches the regex `[a-z][a-z0-9\-]*[a-z0-9]`.
 
-- Patterns **must** match the possible [resource paths][resource-paths] of the
+- Patterns **must** match the possible [paths](/paths) of the
   resource.
 - Pattern variables (the segments within braces) **must** match the singular of
   the resource whose id is being matched by that value.
@@ -126,7 +126,6 @@ kebab-case. This is to enforce better consistency in the representation of
 various multipart strings, as collection identifiers use kebab case.
 
 <!-- prettier-ignore-start -->
-[resource-paths]: /resource-paths
 [API Group]: https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-groups
 [nested collections]: ./0122.md#collection-identifiers
 [Object]: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#types-kinds
