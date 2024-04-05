@@ -58,11 +58,12 @@ progression through a lifecycle.
 
 ### State transition methods
 
-State transition methods are a special type of custom method that are
-responsible for transitioning a state field from one enum value to another. As
-part of the transition, other fields may also change, e.g. an `update_time`
-field. In addition to the general guidance for custom methods on resources, the
-following guidance applies for method definitions:
+State transition methods are a special type of
+[custom method](./custom-methods) that are responsible for transitioning a
+state field from one enum value to another. As part of the transition, other
+fields may also change, e.g. an `update_time` field. In addition to the general
+guidance for custom methods on resources, the following guidance applies for
+method definitions:
 
 - The name of the method **should** be a verb followed by the singular form of
   the resource's message name.
