@@ -61,18 +61,15 @@ progression through a lifecycle.
 State transition methods are a special type of custom method that are
 responsible for transitioning a state field from one enum value to another. As
 part of the transition, other fields may also change, e.g. an `update_time`
-field. The method definition should look like the following:
+field. In addition to the general guidance for custom methods on resources, the
+following guidance applies for method definitions:
 
 - The name of the method **should** be a verb followed by the singular form of
   the resource's message name.
 - The HTTP verb **must** be `POST`.
-- The HTTP URI **must** use a `:` character followed by the custom verb
-  (`:publish` in the above example), and the verb in the URI **must** match the
-  verb in the name of the RPC.
-  - If word separation is required, `camelCase` **must** be used.
 
-Request messages should follow standard custom method guidance, including that
-for custom methods on resources, including:
+In addition to the general guidance for custom methods on resources, the
+following guidance applies for request definitions:
 
 - A resource path field **must** be included. It **should** be called `path`.
 - The comment for the field **should** document the resource pattern.
