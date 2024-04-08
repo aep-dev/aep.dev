@@ -1,5 +1,147 @@
 # Standard fields
 
-**Note:** This AEP has not yet been adopted. See
-[this GitHub issue](https://github.com/aep-dev/aep.dev/issues/28) for more
-information.
+Certain concepts are common throughout any corpus of APIs. In these situations,
+it is useful to have a standard field name and behavior that is used
+consistently to communicate that concept.
+
+## Guidance
+
+Standard fields **should** be used to describe their corresponding concept, and
+**should not** be used for any other purpose.
+
+### Resource paths and IDs
+
+#### path
+
+Every resource **must** have a `string path` field, used for the
+[resource path](/resource-paths), which **should** be the first field in the
+resource.
+
+#### parent
+
+The `string parent` field refers to the resource name of the parent of a
+collection, and **must** be used in [`List`](/list) and [`Create`](/create)
+requests except for top-level resources.
+
+### Names
+
+#### display_name
+
+The `string display_name` field **should** be a mutable, user-settable field
+where the user can provide a human-readable name to be used in user interfaces.
+
+Display names **should not** have uniqueness requirements, and **should** be
+limited to <= 63 characters.
+
+**Note:** The `_name` suffix **should not** be used to describe other types of
+names unless otherwise covered in this AEP.
+
+#### title
+
+The `string title` field **should** be the official name of an entity, such as
+a company's name. This is a more formal variant of `string display_name`.
+
+#### given_name
+
+The `string given_name` field **must** refer to a human or animal's given name.
+Resources **must not** use `first_name` for this concept, because the given
+name is not placed first in many cultures.
+
+#### family_name
+
+The `string family_name` field **must** refer to a human or animal's family
+name. Resources **must not** use `last_name` for this concept, because the
+family name is not placed last in many cultures.
+
+### Timestamps
+
+See [common components](/common-components) for more information about `Timestamp` and
+`Duration`.
+
+#### create_time
+
+The output only `Timestamp create_time` field **must** represent the timestamp
+when the resource was created. This **may** be either the time creation was
+initiated or the time it was completed.
+
+#### update_time
+
+The output only `Timestamp update_time` field **must** represent the timestamp
+when the resource was most recently updated. Any change to the resource made by
+users **must** refresh this value; changes to a resource made internally by the
+service **may** refresh this value.
+
+#### delete_time
+
+The output only `Timestamp delete_time` field **must** represent the timestamp
+that a resource was soft deleted. This **may** correspond to either the time
+when the user requested deletion, or when the service successfully soft deleted
+the resource. If a resource is not soft deleted, the `delete_time` field
+**must** be empty.
+
+Resources that support [soft delete](/soft-delete) **should** provide this field.
+
+#### expire_time
+
+The `Timestamp expire_time` field **should** represent the time that a given
+resource or resource attribute is no longer useful or valid (e.g. a rotating
+security key). It **may** be used for [expiration](/resource-expiration).
+
+Services **may** provide an `expire_time` value that is inexact, but the
+resource **must not** expire before that time.
+
+#### purge_time
+
+The `Timestamp purge_time` field **should** represent the time when a soft
+deleted resource will be purged from the system (see AEP-164). It **may** be
+used for similar forms of expiration as described in AEP-214. Resources that
+support soft delete **should** include this field.
+
+Services **may** provide a `purge_time` value that is inexact, but the resource
+**must not** be purged from the system before that time.
+
+### Well known string fields
+
+#### IP address
+
+A field that represents an IP address **must** comply with the following:
+
+- use type `string`
+- use the name `ip_address` or end with the suffix `_ip_address` e.g.
+  `resolved_ip_address`
+- specify the IP address version format via one of the supported formats
+  `IPV4`, `IPV6`, or if it can be either, `IPV4_OR_IPV6` (see [fields](/fields)).
+
+#### uid
+
+The output only `string uid` field refers to a system-assigned unique
+identifier for a resource. When provided, this field **must** be a [UUID4][]
+and **must** specify this format via the `UUID4` format extension (see
+[fields](/fields)).
+
+## Further reading
+
+- For standardized codes, see AEP-143.
+- For the `etag` field, see AEP-154.
+- For the `request_id` field, see AEP-155.
+- For the `filter` field, see AEP-160.
+- For fields related to resource revisions, see AEP-162.
+- For the `validate_only` field, see AEP-163.
+- For fields related to soft delete and undelete, see AEP-164.
+
+## Rationale
+
+### Well known string fields
+
+Some fields represent very well defined concepts or artifacts that sometimes
+also have strict governance of their semantics. For such fields, presenting an
+equally standardized API surface is important. This enables development of
+improved API consumer tools and documentation, as well as a more unified user
+experience across the platform.
+
+<!-- prettier-ignore -->
+[declarative-friendly resources]: ./0128.md#resources
+[kubernetes limits]:
+  https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/#syntax-and-character-set
+[uuid4]:
+  https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)
