@@ -64,6 +64,26 @@ GET https://library.exampleapis.com/v1/publishers/-/books/{book}
   `publishers/123/books/456`, _not_ `publishers/-/books/456`.
 - The resource ID **must** be unique within parent collections.
 
+### Reading across collections with different path patterns
+
+Sometimes, a resource may have multiple possible path patterns. This typically
+happens when a resource, or one of its ancestors, may have more than one
+possible parent resource (including having no parent).
+
+For example, `Book` might have the following path patterns:
+
+- `publishers/{publisher}/books/{book}` for books with a publisher
+- `books/{book}` for self-published books
+
+In this case, APIs **may** allow users to read across _all_ collections of
+books by using the `-` wildcard character:
+
+`GET /v1/-/books`
+
+Here, `-` is not a wildcard for a resource ID within a specific collection.
+Rather, it is a wildcard for the entire path pattern. This allows users to
+retrieve a book regardless of its resource ancestry.
+
 ## Further reading
 
 - For partial failures due to unreachable resources, see [unreachable
