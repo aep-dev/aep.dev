@@ -8,7 +8,7 @@ what collection it is in.
 
 APIs **may** support reading resources across multiple collections by allowing
 users to specify a `-` (the hyphen or dash character) as a wildcard character
-in a standard [`List`][aip-132] method:
+in a standard [`List`](./list) method:
 
 ```
 GET /v1/publishers/-/books?filter=...
@@ -27,24 +27,24 @@ GET /v1/publishers/-/books?filter=...
 - Cross-parent requests **should not** support `order_by`. If they do, the
   field **must** document that it is best effort. This is because cross-parent
   requests introduce ambiguity around ordering, especially if there is
-  difficulty reaching a parent (see [AIP-217][]).
+  difficulty reaching a parent (see [unreachable resources]).
 
 **Important:** If listing across multiple collections introduces the
 possibility of partial failures due to unreachable parents (such as when
 listing across locations), the method **must** indicate this following the
-guidance in [AIP-217][].
+guidance in [unreachable resources].
 
 ### Unique resource lookup
 
 Sometimes, a resource within a sub-collection has an identifier that is unique
 across parent collections. In this case, it may be useful to allow a
-[`Get`][aip-131] method to retrieve that resource without knowing which parent
+[`Get`](./get) method to retrieve that resource without knowing which parent
 collection contains it. In such cases, APIs **may** allow users to specify the
 wildcard collection ID `-` (the hyphen or dash character) to represent any
 parent collection:
 
 ```
-GET https://example.googleapis.com/v1/publishers/-/books/{book}
+GET https://library.exampleapis.com/v1/publishers/-/books/{book}
 ```
 
 - The URI pattern **must** still be specified with `*` and permit the
@@ -59,14 +59,11 @@ GET https://example.googleapis.com/v1/publishers/-/books/{book}
 
 ## Further reading
 
-- For partial failures due to unreachable resources, see [AIP-217][].
+- For partial failures due to unreachable resources, see [unreachable
+  resources].
 
-[aip-131]: ./0131.md
-[aip-132]: ./0132.md
-[aip-217]: ./0217.md
+<!-- prettier-ignore-start -->
 
-## Changelog
+[unreachable resources]: ./unreachable-resources
 
-- **2019-08-26**: Added a reference to guidance for unreachable resources.
-- **2019-08-01**: Changed the examples from "shelves" to "publishers", to
-  present a better example of resource ownership.
+<!-- prettier-ignore-end -->
