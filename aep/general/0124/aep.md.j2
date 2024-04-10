@@ -13,9 +13,8 @@ A resource **must** have at most one canonical parent, and `List` requests
 ### Multiple many-to-one associations
 
 If a resource has a many-to-one relationship with multiple resource types, it
-**must** choose at most one of them to be the parent. The resource
-**may** be associated with other resources through other fields on the
-resource.
+**must** choose at most one of them to be the parent. The resource **may** be
+associated with other resources through other fields on the resource.
 
 {% tab proto %}
 
@@ -33,7 +32,8 @@ treat the `string parent` field as required as discussed in [list](/list), and
 `string filter` field that allows users to filter by other resource
 associations as discussed in [filtering](/filtering).
 
-**Note:** Resource reference fields **must** accept the [resource path](/resource-path) of the referenced resource.
+**Note:** Resource reference fields **must** accept the
+[resource path](/resource-path) of the referenced resource.
 
 ### Many-to-many associations
 
@@ -45,7 +45,6 @@ An API **may** contain many-to-many relationships, and **should** use a
 repeated field containing a list of resource paths, following the principles
 described for repeated fields in [arrays][/arrays].
 
-
 {% tab proto %}
 
 {% sample 'many_to_many_repeated.proto', 'message Book' %}
@@ -56,8 +55,8 @@ described for repeated fields in [arrays][/arrays].
 
 {% endtabs %}
 
-**Note:** See [arrays](/arrays) for more information on repeated fields, including
-how to handle common issues such as atomic changes.
+**Note:** See [arrays](/arrays) for more information on repeated fields,
+including how to handle common issues such as atomic changes.
 
 If the use of a repeated field is too restrictive, or if more metadata is
 required along with the association, an API **may** model a many-to-many
@@ -77,6 +76,49 @@ relationship using a sub-resource with two one-to-many associations.
 recommended if additional metadata is required in the relationship, or if the
 restrictions around the use of a repeated field preclude the use of that
 approach.
+
+### Embedded resources
+
+Resource references as described use string references rather than embedding
+one resource inside another because embedding resources can lead to a number of
+issues. Retrieving resources with arbitrarily deep nesting may require multiple
+serial internal RPCs, leading to complex service dependencies latency and
+reliability issues.
+
+However, sometimes dereferencing resource references is useful, or even
+necessary. For example, an API may wish to allow filtering of a resource based
+on a field of a resource it references. In other cases, it may be much cheaper
+and/or faster for the server to perform the dereferencing than for the client
+to make multiple serial requests.
+
+In these cases, an alternative resource association pattern **may** be used,
+where the resource reference field is not a string, but is instead the
+referenced resource itself.
+
+The default behavior **should** be to populate only the `path` field of the
+referenced resource, making it equivalent to a string-based resource reference.
+Additional fields **may** be included based on the request: for example, if the
+request includes a [view or read mask](./partial-responses) that specifies that
+additional fields should be included, or if the request contains a filter that
+specifies fields other than `path` within the referenced resource.
+
+APIs **must** always fully document their behavior with embedded resources,
+even if the only supported behavior is populating only the `path` field.
+
+**Note:** There is no need for the _referenced_ resource to define a
+`PATH_ONLY` [view](./partial-responses) corresponding to the default behavior
+of populating only the `path` field. This is because a resource should not have
+to define a view enum simply because another resource references it.
+
+{% tab proto %}
+
+{% sample 'embedded_resource.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample 'embedded_resource.oas.yaml', 'Book' %}
+
+{% endtabs %}
 
 <!-- prettier-ignore-start -->
 [aep-132]: ./0132.md
