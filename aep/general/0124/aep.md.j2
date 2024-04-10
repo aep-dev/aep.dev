@@ -103,7 +103,10 @@ additional fields should be included, or if the request contains a filter that
 specifies fields other than `path` within the referenced resource.
 
 APIs **must** always fully document their behavior with embedded resources,
-even if the only supported behavior is populating only the `path` field.
+even if the only supported behavior is populating only the `path` field. If the
+referenced resource itself contains embedded resources, the API **must**
+include clear documentation about the depth to which embedded resources may be
+dereferenced.
 
 **Note:** There is no need for the _referenced_ resource to define a
 `PATH_ONLY` [view](./partial-responses) corresponding to the default behavior

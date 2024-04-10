@@ -20,4 +20,6 @@ components:
 
             By default, only the `path` field of the author is populated.
             However, the full author can be retrieved by specifying the
-            FULL_WITH_AUTHOR view.
+            FULL_WITH_AUTHOR view. This **will not** dereference resource
+            references within the author, such as `Author.pen_names`; only
+            the `path` subfield of these fields will be populated.
