@@ -24,6 +24,7 @@ contributing to this repository.
 - [ ] Ensure that your PR
       [references AEPs](https://aep.dev/style-guide#referencing-aeps)
       correctly.
+- [ ] [My code has been formatted](https://aep.dev/contributing#formatting) (usually `prettier -w .`)
 
 ### Additional checklist for a new AEP
 
