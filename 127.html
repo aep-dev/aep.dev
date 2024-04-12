@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=f947644e">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=f947644e">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=39366e9a">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=39366e9a">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=f947644e"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=39366e9a"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -500,13 +500,19 @@
     <tr><td>Slug</td><td>transcoding</td></tr>
     <tr><td>Number</td><td>127</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/127">aep.dev/127</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-03-26</td></tr>
+    <tr><td>Updated</td><td>2024-03-26</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#http-method-and-path">HTTP method and path</a></li>
+<li><a href="#multiple-uri-bindings">Multiple URI bindings</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
   </section>
@@ -545,17 +551,125 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">transcoding (AEP-127)</h4>
   <h1 id="http-and-grpc-transcoding">HTTP and gRPC Transcoding</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/51">this GitHub issue</a> for more
-information.</p>
+<p>APIs that follow [resource-oriented design][resources] are defined using
+<a href="https://en.wikipedia.org/wiki/Remote_procedure_call">RPCs</a>, but the resource-oriented design framework allows them to also be
+presented as APIs that largely follow REST/JSON conventions. This is important
+in order to help developers use their existing knowledge: over 80% of the
+public APIs available follow most REST conventions, and developers are
+accustomed to that pattern.</p>
+<h2 id="guidance">Guidance</h2>
+<p>Protobuf APIs <strong>must</strong> provide HTTP definitions for each RPC that they define, except
+for bi-directional streaming RPCs, which can not be natively supported using
+HTTP/1.1. When providing a bi-directional streaming method, an API <strong>should</strong>
+also offer an alternative method that does not rely on bi-directional
+streaming.</p>
+<h3 id="http-method-and-path">HTTP method and path</h3>
+<p>When using protocol buffers, each RPC <strong>must</strong> define the HTTP method and path
+using the <a href="https://buf.build/googleapis/googleapis/docs/main:google.api#google.api.Http"><code>google.api.http</code></a> annotation:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">CreateBook</span><span class="p">(</span><span class="n">CreateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">CreateBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The publisher who will publish this book.</span>
+<span class="w">  </span><span class="c1">// When using HTTP/JSON, this field is automatically populated based</span>
+<span class="w">  </span><span class="c1">// on the URI, because of the `{parent=publishers/*}` syntax.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">child_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.example.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// The book to create.</span>
+<span class="w">  </span><span class="c1">// When using HTTP/JSON, this field is populated based on the HTTP body,</span>
+<span class="w">  </span><span class="c1">// because of the `body: &quot;book&quot;` syntax.</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The user-specified ID for the book.</span>
+<span class="w">  </span><span class="c1">// When using HTTP/JSON, this field is populated based on a query string</span>
+<span class="w">  </span><span class="c1">// argument, such as `?bookId=foo`. This is the fallback for fields that</span>
+<span class="w">  </span><span class="c1">// are not included in either the URI or the body.</span>
+<span class="w">  </span><span class="c1">// Note that clients use camelCase format to communicate the field names</span>
+<span class="w">  </span><span class="c1">// to the service.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">book_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The first key (<code>post</code> in this example) corresponds to the HTTP method. RPCs
+  <strong>may</strong> use <code>get</code>, <code>post</code>, <code>patch</code>, or <code>delete</code>.<ul>
+<li>RPCs <strong>must</strong> use the prescribed HTTP verb for each standard method, as
+  discussed in <a href="/get">Get</a>, <a href="/list">List</a>, <a href="/create">Create</a>, <a href="/update">Update</a>, and
+  <a href="/delete">Delete</a></li>
+<li>RPCs <strong>should</strong> use the prescribed HTTP verb for custom methods, as
+  discussed in <a href="/custom-methods">Custom Methods</a>.</li>
+<li>RPCs <strong>should not</strong> use <code>put</code> or <code>custom</code>.</li>
+</ul>
+</li>
+<li>The corresponding value represents the URI.<ul>
+<li>URIs <strong>must</strong> use the <code>{foo=bar/*}</code> syntax to represent a variable that
+  should be populated in the request proto. When extracting a <a href="/resource-paths">resource
+  name</a>, the variable <strong>must</strong> include the entire resource name, not
+  just the ID component.</li>
+<li>URIs <strong>may</strong> use nested fields for their variable names. (Additionally,
+  <a href="/134">AEP-134</a> mandates this for <code>Update</code> requests.)</li>
+<li>URIs <strong>must</strong> use the <code>*</code> character to represent ID components, which
+  matches all URI-safe characters except for <code>/</code>. URIs <strong>may</strong> use <code>**</code> as
+  the final segment of a URI if matching <code>/</code> is required.</li>
+</ul>
+</li>
+<li>The <code>body</code> key defines which single top-level field in the request will be
+  sent as the HTTP body. If the body is <code>*</code>, then this indicates that the
+  request object itself is the HTTP body. The request body is encoded as JSON
+  as defined by protocol buffers' canonical <a href="https://developers.google.com/protocol-buffers/docs/proto3#json">JSON encoding</a>.<ul>
+<li>RPCs <strong>must not</strong> define a <code>body</code> at all for RPCs that use the <code>GET</code> or
+  <code>DELETE</code> HTTP verbs.</li>
+<li>RPCs <strong>must</strong> use the prescribed <code>body</code> for Create (<a href="/create">Create</a>) and Update
+  (<a href="/update">AEP-134</a>) requests.</li>
+<li>RPCs <strong>should</strong> use the prescribed <code>body</code> for custom methods (<a href="custom-methods">Custom Methods</a>).</li>
+<li>The <code>body</code> <strong>must not</strong> contain a nested field (or use the <code>.</code> character),</li>
+<li>The <code>body</code> <strong>must not</strong> be the same as a URI parameter.</li>
+<li>The <code>body</code> <strong>must not</strong> be a <code>repeated</code> field.</li>
+<li>Fields <strong>should not</strong> use the <code>json_name</code> annotation to alter the field
+  name in JSON, unless doing so for backwards-compatibility reasons.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note:</strong> Bi-directional streaming RPCs should not include a <code>google.api.http</code>
+annotation at all. If feasible, the service <strong>should</strong> provide non-streaming
+equivalent RPCs.</p>
+<h3 id="multiple-uri-bindings">Multiple URI bindings</h3>
+<p>Occasionally, an RPC needs to correspond to more than one URI:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">CreateBook</span><span class="p">(</span><span class="n">CreateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">    </span><span class="n">additional_bindings</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=authors/*}/books&quot;</span>
+<span class="w">      </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">additional_bindings</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/books&quot;</span>
+<span class="w">      </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>RPCs <strong>may</strong> define any number of additional bindings. The structure is
+  identical to the <code>google.api.http</code> annotation (in fact, it is a recursive
+  reference).</li>
+<li>RPCs <strong>must not</strong> define an additional binding within an additional binding.</li>
+<li>The <code>body</code> clause <strong>must</strong> be identical in the top-level annotation and each
+  additional binding.</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
