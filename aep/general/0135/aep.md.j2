@@ -20,30 +20,19 @@ send a `404 Not found` (`NOT_FOUND`) error.
 If the API is operating on the [Management Plane][], the method should have
 [strong consistency][]: the completion of a delete method **must** mean that
 the existence of the resource has reached a steady-state and reading resource
-state returns a consistent `404 Not found`(`NOT_FOUND`) response.
-
-### Requests
-
-{% tab oas -%}
+state returns a consistent `404 Not found` (`NOT_FOUND`) response.
 
 Delete methods are specified using the following pattern:
 
-{% sample 'delete.oas.yaml', 'paths' %}
+- The method's name **must** begin with the word `Delete`. The remainder of the
+  method name **should** be the singular form of the resource's name.
+- The request schema name **must** exactly match the method name, with a
+  `Request` suffix.
+- The response message **should** be an empty object.
+  - If the delete method is [long-running](#long-running-delete), the response
+    schema **must** be an `Operation` which resolves to the correct response.
 
-- The HTTP verb **must** be `DELETE`.
-- There **must not** be a request body in API description.
-- If a delete request contains a body, the body **must** be ignored, and **must
-  not** cause an error (this is required by [RFC 9110][])
-- The request **must not** require any fields in the query string. The request
-  **should not** include optional fields in the query string unless described
-  in another AEP.
-- Delete methods **should** return `204 No Content` with no response body, or
-  `202 Accepted` with a representation of the operation in the response body if
-  the delete is [long-running](#long-running-delete).
-
-{% tab proto -%}
-
-Delete methods are specified using the following pattern:
+{% tab proto %}
 
 ```proto
 rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
@@ -54,9 +43,6 @@ rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
 }
 ```
 
-- The RPC's name **must** begin with the word `Delete`. The remainder of the
-  RPC name **should** be the singular form of the resource's message name.
-- The request message **must** match the RPC name, with a `Request` suffix.
 - The response message **should** be `google.protobuf.Empty`.
   - If the delete RPC is [long-running](#long-running-delete), the response
     message **must** be a `aep.api.Operation` which resolves to the correct
@@ -71,7 +57,29 @@ rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
   with a value of `"path"`. If an etag or force field are used, they **may** be
   included in the signature.
 
+{% tab oas %}
+
+{% sample 'delete.oas.yaml', 'paths' %}
+
+- The response body **should** be omitted.
+- The HTTP response code **should** be `204 No Content` if the delete was
+  successful.
+
+{% endtabs %}
+
+### Requests
+
 Delete methods implement a common request pattern:
+
+- The HTTP verb **must** be `DELETE`.
+- There **must not** be a request body.
+- If a delete request contains a body, the body **must** be ignored, and **must
+  not** cause an error (this is required by [RFC 9110][])
+- The request **must not** require any fields in the query string. The request
+  **should not** include optional fields in the query string unless described
+  in another AEP.
+
+{% tab proto -%}
 
 ```proto
 message DeleteBookRequest {
@@ -94,6 +102,14 @@ message DeleteBookRequest {
   **should not** contain other optional fields except those described in this
   or another AEP.
 
+{% tab oas -%}
+
+{% sample 'delete.oas.yaml', 'paths' %}
+
+- Delete methods **should** return `204 No Content` with no response body, or
+  `202 Accepted` with a representation of the operation in the response body if
+  the delete is [long-running](#long-running-delete).
+
 {% endtabs %}
 
 ### Soft delete
@@ -107,16 +123,9 @@ Some resources take longer to delete than is reasonable for a regular API
 request. In this situation, the API **should** use a long-running operation
 instead: [AEP-151][aep-151].
 
-{% tab oas -%}
-
-{% sample 'long_running_delete.oas.yaml', 'paths' %}
-
-- The response status code should be `202 Accepted` if the request was accepted
-  for later processing. When the request is processed it could still fail.
 - The `response` field of the response body **must** be an empty object to be
   consistent with the appropriate return type if the method was not
   long-running.
-- Both the `response_type` and `metadata_type` fields **must** be specified.
 
 {% tab proto -%}
 
@@ -138,6 +147,14 @@ rpc DeleteBook(DeleteBookRequest) returns (aep.api.Operation) {
 - Both the `response_type` and `metadata_type` fields **must** be specified
   (even if they are `google.protobuf.Empty`).
 
+{% tab oas -%}
+
+{% sample 'long_running_delete.oas.yaml', 'paths' %}
+
+- The response status code should be `202 Accepted` if the request was accepted
+  for later processing. When the request is processed it could still fail.
+- Both the `response_type` and `metadata_type` fields **must** be specified.
+
 {% endtabs %}
 
 ### Cascading delete
@@ -150,13 +167,6 @@ reconstructing wiped-out child resources may be quite difficult.
 If an API allows deletion of a resource that may have child resources, the API
 **must** provide a `bool force` field on the request, which the user sets to
 explicitly opt in to a cascading delete.
-
-{% tab oas -%}
-
-{% sample 'cascading_delete.oas.yaml', 'paths' %}
-
-The API **must** fail with a `409 Conflict` error if the `force` field is
-`false` (or unset) and child resources are present.
 
 {% tab proto -%}
 
@@ -178,6 +188,13 @@ message DeletePublisherRequest {
 
 The API **must** fail with a `FAILED_PRECONDITION` error if the `force` field
 is `false` (or unset) and child resources are present.
+
+{% tab oas -%}
+
+{% sample 'cascading_delete.oas.yaml', 'paths' %}
+
+The API **must** fail with a `409 Conflict` error if the `force` field is
+`false` (or unset) and child resources are present.
 
 {% endtabs %}
 
