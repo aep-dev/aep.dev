@@ -19,13 +19,13 @@ from the Problem Details for HTTP APIs [RFC 9457].
 
 An error response **should** contain the following fields:
 
-| Name     | Type    | Required | Description                                                                                                                                                                                                                      |
-| -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type     | string  | Y        | A URI reference [URI] that identifies the problem type. If the type URI is a locator (e.g., those with an "http" or "https" scheme), dereferencing it SHOULD provide human-readable documentation for the problem type.          |
-| status   | integer |          | The HTTP status code that best describes the type of problem detected.                                                                                                                                                           |
+| Name     | Type    | Required | Description                                                                                                                                                                                                                                                        |
+| -------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| type     | string  | Y        | A URI reference [URI] that identifies the problem type. If the type URI is a locator (e.g., those with an "http" or "https" scheme), dereferencing it SHOULD provide human-readable documentation for the problem type.                                            |
+| status   | integer |          | The HTTP status code that best describes the type of problem detected.                                                                                                                                                                                             |
 | title    | string  |          | A human-readable description of the problem. Messages are likely to be logged in plain text and **must not** include information about a specific occurrence nor any sensitive data like PII. Information about specific occurrences should be part of `metadata`. |
-| detail   | string  |          | A human-readable explanation specific to this occurrence of the problem. This **may** contain PII and **should not** be logged.                                                                                                                                                        |
-| instance | string  |          | A unique identifier for the specific occurrence of the problem.                                                                                                                                                                  |
+| detail   | string  |          | A human-readable explanation specific to this occurrence of the problem. This **may** contain PII and **should not** be logged.                                                                                                                                    |
+| instance | string  |          | A unique identifier for the specific occurrence of the problem.                                                                                                                                                                                                    |
 
 An error response may contain additional fields appropriate for a specific
 error type.
@@ -43,8 +43,10 @@ information or ask questions to help resolve the issue.
 
 The error detail field
 
-- is a developer-facing, human-readable "debug message"
-- both explains the error and offers an actionable resolution to it
+- is a developer-facing, human-readable "debug message".
+- both explains the error and offers an actionable resolution to it.
+- value may significantly change over time for the same error, and should not
+  be string-matched by any clients to determine the error.
 
 All human-readable error details returned by the service must use the same
 language.
@@ -76,7 +78,8 @@ available in the [gRPC status code documentation][].
 
 The error response structure defined above **should** be returned in the
 `details` field of the Status message. Services **should** use the
-[`aep.api.ProblemDetails`](<!-- Add link here -->) to define this field.
+[`aep.api.ProblemDetails`](https://buf.build/aep/api/docs/main:aep.api#aep.api.ProblemDetails)
+to define this field.
 
 {% endtabs %}
 
