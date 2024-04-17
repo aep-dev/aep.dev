@@ -7,17 +7,17 @@ behavior (for example, to optimize client library signatures).
 
 ## Guidance
 
-APIs use the `google.api.field_behavior` annotation to describe well-understood
+APIs use the `aep.api.field_behavior` annotation to describe well-understood
 field behavior, such as a field being required or immutable.
 
 ```proto
 // The audio data to be recognized.
-RecognitionAudio audio = 2 [(google.api.field_behavior) = REQUIRED];
+RecognitionAudio audio = 2 [(aep.api.field_behavior) = REQUIRED];
 ```
 
-- APIs **must** apply the `google.api.field_behavior` annotation on every field
+- APIs **must** apply the `aep.api.field_behavior` annotation on every field
   on a message or sub-message used in a request.
-- The annotation **must** include any [google.api.FieldBehavior][] values that
+- The annotation **must** include any google.api.FieldBehavior values that
   accurately describe the behavior of the field.
   - `FIELD_BEHAVIOR_UNSPECIFIED` **must not** be used.
 - APIs **must** at minimum use one of `REQUIRED`, `OPTIONAL`, or `OUTPUT_ONLY`.
@@ -35,7 +35,7 @@ document this behavior for clients.
 
 ### field behavior of nested messages
 
-`google.api.field_behavior` annotations on a nested message are independent of
+`aep.api.field_behavior` annotations on a nested message are independent of
 the annotations of the parent.
 
 For example, a nested message can have a field behavior of `REQUIRED` while the
@@ -43,11 +43,11 @@ parent field can be `OPTIONAL`:
 
 ```proto
 message Title {
-  string text = 1 [(google.api.field_behavior) = REQUIRED];
+  string text = 1 [(aep.api.field_behavior) = REQUIRED];
 }
 
 message Slide {
-  Title title = 1 [(google.api.field_behavior) = OPTIONAL];
+  Title title = 1 [(aep.api.field_behavior) = OPTIONAL];
 }
 ```
 
@@ -64,7 +64,7 @@ not** be attached to any other field (see [fields representing resource names]).
 The `IDENTIFIER` value conveys that the field is not accepted as input (i.e.
 `OUTPUT_ONLY`) in the context of a create method, while also being considered
 `IMMUTABLE` and accepted as input for mutation methods that accept the
-resource as the primary input e.g. [Standard Update][aip-134].
+resource as the primary input e.g. [Standard Update](./standard-methods).
 
 This annotation **must not** be applied to references to other resources within
 a message.
@@ -147,9 +147,9 @@ A field **should** only be described as required if _either_:
 
 - It is a field on a resource that a user provides somewhere as input. In this
   case, the resource is only valid if a "truthy" value is _stored_.
-  - When [creating][aip-133] the resource, a value **must** be provided for the
+  - When [creating](./standard-methods) the resource, a value **must** be provided for the
     field on the create request.
-  - When [updating][aip-134] the resource, the user **may** omit the field
+  - When [updating](./standard-methods) the resource, the user **may** omit the field
     provided that the field is also absent from the field mask, indicating no
     change to the field (otherwise it **must** be provided).
 - It is a field on a request message (a message that is an argument to an RPC,
@@ -190,10 +190,10 @@ A resource with an unordered list **may** return the list in a stable order, or
 
 ## Backwards compatibility
 
-Adding or changing `google.api.field_behavior` values can represent a semantic
+Adding or changing `aep.api.field_behavior` values can represent a semantic
 change in the API that is perceived as incompatible for existing clients. The
 following are examples of backwards incompatible changes with
-`google.api.field_behavior`:
+`aep.api.field_behavior`:
 
 * Adding `REQUIRED` to an existing field previously considered `OPTIONAL`
 (implicitly or otherwise)
@@ -253,7 +253,7 @@ behavior when initially authoring of the API.
 Modifying field behavior after initial authoring can result in
 backwards-incompatible changes in clients. For example, making an optional field
 required results in backwards-incompatible changes in the method signature of an
-RPC or a resource in a [Declarative client][]. See the
+RPC or a resource in a Declarative client. See the
 [Backwards compatibility](#backwards-compatibility) section for more detailed
 compatibility guidance.
 
@@ -269,23 +269,8 @@ compatibility guidance.
 The benefits of requiring field_behavior at the time that the API is authored
 surpass the costs to clients and API users of not doing so.
 
-[aip-133]: ./0133.md
-[aip-134]: ./0134.md
-[aip-180]: ./0180.md
-[google.api.FieldBehavior]: https://github.com/googleapis/googleapis/blob/master/google/api/field_behavior.proto#L49
-[Declarative client]: ./0009.md#declarative-clients
-[fields representing resource names]: ./0122.md#fields-representing-resource-names
+[fields representing resource names]: ./resource-paths#fields-representing-resource-names
 
 ## Changelog
 
-- **2023-09-14**: Clarify that nested behavior and parent behavior are
-  independent.
-- **2023-08-25**: Add guidance on `IDENTIFIER`.
-- **2023-07-20**: Describe compatibility guidance with new section.
-- **2023-05-24**: Clarify that `IMMUTABLE` does not imply input nor required.
-- **2023-05-10**: Added guidance to require the annotation.
-- **2020-12-15**: Added guidance for `UNORDERED_LIST`.
-- **2020-05-27**: Clarify behavior when receiving an immutable field in an
-  update.
-- **2019-12-05**: Added guidance on output only fields in field masks.
-- **2019-06-18**: Use the machine-readable annotation, not comments.
+- **2024-04-17**: Added initial guidance.
