@@ -103,7 +103,7 @@ additional fields should be included, or if the request contains a filter that
 specifies fields other than `path` within the referenced resource.
 
 Fields other than `path` in embedded resource references **must** be treated as
-[OUTPUT_ONLY](./field-behavior); mutating API methods **must not** allow
+[output-only](./field-behavior); mutating API methods **must not** allow
 creating or mutation of embedded resources. For example, if a `Book` resource
 has an embedded resource reference to `Author`, the `UpdateBook` method **must
 not** allow updating any fields of the `Author` resource other than
