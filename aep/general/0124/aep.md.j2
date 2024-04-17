@@ -102,6 +102,14 @@ request includes a [view or read mask](./partial-responses) that specifies that
 additional fields should be included, or if the request contains a filter that
 specifies fields other than `path` within the referenced resource.
 
+Fields other than `path` in embedded resource references **must** be treated as
+[OUTPUT_ONLY](./field-behavior); mutating API methods **must not** allow
+creating or mutation of embedded resources. For example, if a `Book` resource
+has an embedded resource reference to `Author`, the `UpdateBook` method **must
+not** allow updating any fields of the `Author` resource other than
+`Author.path` (which updates the reference itself, rather than the referenced
+resource).
+
 APIs **must** always fully document their behavior with embedded resources,
 even if the only supported behavior is populating only the `path` field. If the
 referenced resource itself contains embedded resources, the API **must**
