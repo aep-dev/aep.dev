@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US" class="glue-flexbox">
   <head>
-    <title>AEP-233: Batch methods: Create</title>
+    <title>AEP-130: Methods</title>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,maximum-scale=2">
@@ -230,7 +230,7 @@
           </a>
         </li>
       <li class="nav-item"><b>Standard Methods</b></li>
-      <li class="nav-item">
+      <li class="nav-item nav-item-active">
           <a href="/130">
             <span class="aep-id">130</span>
             Methods
@@ -426,7 +426,7 @@
             Batch methods: Get
           </a>
         </li>
-      <li class="nav-item nav-item-active">
+      <li class="nav-item">
           <a href="/233">
             <span class="aep-id">233</span>
             Batch methods: Create
@@ -502,17 +502,25 @@
           
 <aside id="aep-sidebar" class="docs-component-sidebar">
   <table id="aep-summary">
-    <tr><th colspan="2">Batch methods: Create</th></tr>
-    <tr><td>Slug</td><td>batch-create</td></tr>
-    <tr><td>Number</td><td>233</td></tr>
-    <tr><td>Permalink</td><td><a href="https://aep.dev/233">aep.dev/233</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><th colspan="2">Methods</th></tr>
+    <tr><td>Slug</td><td>methods</td></tr>
+    <tr><td>Number</td><td>130</td></tr>
+    <tr><td>Permalink</td><td><a href="https://aep.dev/130">aep.dev/130</a></td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-04-09</td></tr>
+    <tr><td>Updated</td><td>2024-04-09</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#categories-of-methods">Categories of Methods</a></li>
+<li><a href="#choosing-a-method-category">Choosing a method category</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a></li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -520,8 +528,8 @@
   <section class="docs-component-sidebar-actions">
     <ul>
       <li><a href="https://github.com/aep-dev/aep.dev/issues/">File Bug</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/0233">View source</a></li>
-      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/0233">Edit this page</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/blob/master/aep/general/130">View source</a></li>
+      <li><a href="https://github.com/aep-dev/aep.dev/edit/master/aep/general/130">Edit this page</a></li>
     </ul>
   </section>
 </aside>
@@ -546,22 +554,191 @@
       
       <li class="glue-breadcrumbs__item glue-breadcrumbs__item--active"
           aria-level="3">
-        Batch methods: Create
+        Methods
       </li>
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
-  <h4 class="aep-id">batch-create (AEP-233)</h4>
-  <h1 id="batch-methods-create">Batch methods: Create</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/43">this GitHub issue</a> for more
-information.</p>
+  
+  <h4 class="aep-id">methods (AEP-130)</h4>
+  <h1 id="methods">Methods</h1>
+<p>An API is composed of one or more methods, which represent a specific operation
+that a service can perform on behalf of the consumer.</p>
+<h2 id="guidance">Guidance</h2>
+<h3 id="categories-of-methods">Categories of Methods</h3>
+<p>The following enumerates multiple categories of methods that exist, often
+grouped up under some object (e.g. collection or resource) that the method
+operates upon.</p>
+<table>
+<thead>
+<tr>
+<th>Category Name</th>
+<th>Related AIPs</th>
+<th>[Declarative client][] integration</th>
+<th>CLI / UI integration</th>
+<th>SDK integration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Standard Methods</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Standard collection methods</strong>: operate on a collection of resources (List or Create).</td>
+<td><a href="/resources">resources</a>, <a href="/list">list</a>, <a href="/create">create</a></td>
+<td>automatable</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Standard resource methods</strong>: fetch or mutate a single resource (Get, Update, Delete).</td>
+<td><a href="/resources">resources</a>, <a href="/get">get</a>, <a href="/update">update</a>, <a href="/delete">delete</a></td>
+<td>automatable</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Batch resource methods</strong>: fetch or mutate multiple resources in a collection by name.</td>
+<td><a href="/batch-get">batch-get</a>, <a href="/batch-create">batch-create</a>, <a href="/batch-update">batch-update</a>, <a href="/batch-delete">batch-delete</a></td>
+<td>may be used to optimize queries</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Aggregated list methods</strong>: fetch or mutate multiple resources of the same type across multiple collections.</td>
+<td><a href="/reading-across-collections">reading-across-collections</a></td>
+<td>not useful nor automatable</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><em>Custom Fetch Methods</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Custom collection fetch methods</strong>: fetch information across a collection that cannot be expressed via a standard method.</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Custom resource fetch methods</strong>: fetch information for a single resource that cannot be expressed via a standard method.</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><em>Custom Mutation Methods</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Backing up a resource</strong>: storing a copy of a resource at a particular point in time.</td>
+<td><a href="/resource-revisions">resource-revisions</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Restoring a resource</strong>: setting a resource to a version from a particular point in time.</td>
+<td><a href="/resource-revisions">resource-revisions</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Renaming a resource</strong>: modify the resource's name or id while preserving configuration and data.</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Custom collection mutation methods</strong>: perform an imperative operation referencing a collection that may mutate one or more resources within that collection in fashion that cannot be easily achieved by standard methods (e.g. state transitions).</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><strong>Custom resource mutation methods</strong>: perform an imperative operation on a resource that may mutate it in a way a standard method cannot (e.g. state transitions).</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><em>Misc Custom Methods</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Stateless Methods</strong>: a method that has no permanent effect on any data within the API (e.g. translating text)</td>
+<td><a href="/custom-methods">custom-methods</a></td>
+<td>unused or handwritten</td>
+<td>automatable</td>
+<td>automatable</td>
+</tr>
+<tr>
+<td><em>None of the above</em></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Streaming methods</strong>: methods that communicate via client, server, or bi-directional streams.</td>
+<td></td>
+<td>handwritten</td>
+<td>handwritten</td>
+<td>automatable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="choosing-a-method-category">Choosing a method category</h3>
+<p>While designing a method, API authors should choose from the defined categories
+in the following order:</p>
+<ol>
+<li>Standard methods (on collections and resources)</li>
+<li>Standard batch or aggregate methods</li>
+<li>Custom methods (on collections, resources, or stateless)</li>
+<li>Streaming methods</li>
+</ol>
+<h2 id="rationale">Rationale</h2>
+<p>Resource-oriented standard and custom methods are recommended first, as they can
+be expressed in the widest variety of clients (Declarative clients, CLIs, UIs, and so on), and
+offer the most uniform experience that allows users to apply their knowledge of
+one API to another.</p>
+<p>If a standard method is unsuitable, then custom methods (that are mounted to a
+resource or collection) offer a lesser, but still valuable level of consistency,
+helping the user reason about the scope of the action and the object whose
+configuration is read to inform that action. Although mutative custom methods
+are not uniform enough to have an automated integration with exclusively
+resource-oriented clients such as <a href="/9#declarative-clients">Declarative clients</a>, they are still a pattern that
+can be easily recognized by CLIs, UIs, and SDKs.</p>
+<p>If one cannot express their APIs in a resource-oriented fashion at all, then the
+operation falls in a category where the lack of uniformity makes it difficult
+for any client aside from SDKs to model the operation. This category is
+preferred last due to the fact that a user cannot rely on their knowledge of
+similar APIs, as well as the issue that integration with many clients will
+likely have to be hand-written.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-04-10</strong>: Imported from https://aip.dev/130.</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
