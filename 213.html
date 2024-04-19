@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=39416858">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=39416858">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=e7e56c7f">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=e7e56c7f">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=39416858"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=e7e56c7f"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,7 +512,16 @@
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a></li>
+<li><a href="#existing-common-components">Existing common components</a><ul>
+<li><a href="#api-design-patterns">API design patterns</a></li>
+<li><a href="#common-types">Common types</a></li>
+</ul>
+</li>
+<li><a href="#libraries-for-common-types">Libraries for common types</a></li>
+<li><a href="#appendix-adding-to-common-components">Appendix: Adding to common components</a></li>
+</ul>
 </div>
 
   </section>
@@ -559,9 +568,182 @@
 </p>
   <h4 class="aep-id">common-components (AEP-213)</h4>
   <h1 id="common-components">Common components</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/52">this GitHub issue</a> for more
-information.</p>
+<p>In general, APIs should be designed to be self-contained. APIs generally need
+to be able to move forward independently of one another, and mutual
+dependencies can cause downstream APIs to be forced into taking major version
+changes or even lead to dependency conflicts.</p>
+<p>However, there are also cases where common structures are valuable, especially
+where a concept is well-known and it is sufficiently clear that it will not
+change. Having a single representation of these common structures is valuable
+because it avoids disrepancies between APIs in things like how dates or
+monetary values are represented. It also enables shared libraries for common
+operations, such as basic arithmetic on monetary values.</p>
+<p>Common components serve this use case.</p>
+<h2 id="guidance">Guidance</h2>
+<p>The public representation of APIs <strong>should</strong> be self-contained (for protocol
+buffers, this means that all API protos used by the API originate in the same
+proto <code>package</code>), except for common components, which <strong>may</strong> be used freely in
+any API.</p>
+<p>An API <strong>must not</strong> define a set of API-specific common components which live
+outside of its versioning structure. This prevents independent movement of
+particular versions and also causes problems for client libraries in many
+languages that compile protobuf messages into classes.</p>
+<p>An API <strong>should not</strong> define alternative representations of any of the existing
+common components described below, even within its versioning structure.</p>
+<h2 id="existing-common-components">Existing common components</h2>
+<p>The common components, which public-facing APIs <strong>may</strong> safely depend on, are
+defined canonically in the <a href="https://github.com/aep-dev/aep">AEP common components</a> repository. These include
+READMEs with canonical definitions for each component, and -- when applicable
+-- implementations of these definitions, in both JSON Schema and protobuf
+formats. The protobufs are also published to the Buf Schema Sepository at
+<a href="https://buf.build/aep"><code>buf.build/aep</code></a>, and the JSON schemas are published to the <a href="https://www.schemastore.org/json/">JSON Schema
+Store</a> with names beginning with <code>aep-</code>, for example <code>aep-type-money</code> or
+<code>aep-longrunning-operation</code>.</p>
+<p>While the <a href="https://github.com/aep-dev/aep">AEP common components</a> repository is canonical and takes
+precedence over this list, some of the common components defined there include
+representations of the following concepts:</p>
+<h3 id="api-design-patterns">API design patterns</h3>
+<ul>
+<li><code>Operation</code>: Represents the status of a long-running request (see <a href="/151">AEP-151</a> for
+  details).</li>
+</ul>
+<h4 id="grpc-specific-api-design-patterns">gRPC-specific API design patterns</h4>
+<p><strong>Note:</strong> These common components apply to protobuf APIs only.</p>
+<ul>
+<li>
+<p><a href="https://github.com/googleapis/googleapis/tree/master/google/api"><code>google.api.*</code></a> (but <em>not</em> subpackages of <code>google.api</code>): Annotations
+  useful for gRPC/JSON transcoding, supported by frameworks including .NET 7.</p>
+</li>
+<li>
+<p><a href="https://github.com/googleapis/googleapis/tree/master/google/rpc"><code>google.rpc.*</code></a>: A small number of components related to gRPC
+  request/response status and errors.</p>
+</li>
+</ul>
+<h3 id="common-types">Common types</h3>
+<p>This section provides examples for the sake of illustration; it may not be
+exhaustive. The <a href="https://github.com/aep-dev/aep">AEP common components</a> repo is canonical.</p>
+<p><strong>Note:</strong> Some of these types are not yet defined, but are expected to be
+adopted based on their existence in <code>google.type</code>, which has historically had a
+very high barrier to entry.</p>
+<h4 id="general-common-types">General common types</h4>
+<ul>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/color.md"><code>Color</code></a>: RGB or RGBA colors.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/decimal.md"><code>Decimal</code></a>: Decimal numbers.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/fraction.md"><code>Fraction</code></a>: A numeric fraction.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/lat_lng.md"><code>LatLng</code></a>: Geographic coordinates.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/money.md"><code>Money</code></a>: An amount of money in a given currency.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/phone_number.md"><code>PhoneNumber</code></a>: A phone number in most countries.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/postal_address.md"><code>PostalAddress</code></a>: Postal addresses in most countries.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/quaternion.md"><code>Quaternion</code></a>: A geometric quaternion.</p>
+</li>
+</ul>
+<h4 id="date-and-time-related-types">Date- and time-related types</h4>
+<ul>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/date.md"><code>Date</code></a>: A calendar date, with no time or time zone component.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/date_time.md"><code>DateTime</code></a>: A calendar date and wall-clock time, with optional
+  time zone or UTC offset information.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/day_of_week.md"><code>DayOfWeek</code></a>: An enumeration representing the day of the week.</p>
+</li>
+<li>
+<p><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto"><code>Duration</code></a>: A duration with nanosecond-level precision.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/interval.md"><code>Interval</code></a>: An interval between two timestamps.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/month.md"><code>Month</code></a>: An enumeration representing the Gregorian month.</p>
+</li>
+<li>
+<p><a href="https://github.com/aep-dev/aep/tree/master/schemas/type/time_of_day.md"><code>TimeOfDay</code></a>: Wall-clock time, with no date or time zone
+  component.</p>
+</li>
+<li>
+<p><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto"><code>Timestamp</code></a>: A timestamp with nanosecond-level precision.</p>
+</li>
+</ul>
+<h5 id="protobuf-well-known-types">Protobuf well-known types</h5>
+<p><strong>Note:</strong> These common components apply to protobuf APIs only.</p>
+<p>The <a href="https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf"><code>google.protobuf</code></a> package is shipped with protocol buffers
+itself, rather than with API tooling. The Well-Known Types defined in this
+package should always be used when appropriate, and the <a href="https://github.com/aep-dev/aep">AEP common
+components</a> repo does not define any protos for these types, even when it
+defines a corresponding JSON Schema. These include:</p>
+<ul>
+<li><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto"><code>google.protobuf.Duration</code></a>: Durations, with nanosecond-level
+  precision. The protobuf runtime provides helper functions to convert to and
+  from language-native duration objects where applicable (such as Python's
+  <a href="https://docs.python.org/3/library/datetime.html#datetime.timedelta"><code>timedelta</code></a>).</li>
+<li><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto"><code>google.protobuf.Timestamp</code></a>: Timestamps, with nanosecond-level
+  precision. The protobuf runtime provides helper functions in most languages
+  to convert to and from language-native timestamp objects (such as Python's
+  <a href="https://docs.python.org/3/library/datetime.html#datetime.datetime"><code>datetime</code></a>).</li>
+</ul>
+<p><code>google.protobuf</code> also provides some useful components that correspond to JSON
+primitives (and so have no representation at all in the <a href="https://github.com/aep-dev/aep">AEP common
+components</a> repo), namely:</p>
+<ul>
+<li><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto"><code>google.protobuf.Value</code></a>: An arbitrary JSON value. The protobuf
+  runtime provides helper functions in most languages to convert <code>Value</code>
+  objects to and from JSON.</li>
+<li><a href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/struct.proto"><code>google.protobuf.Struct</code></a>: JSON-like structures (a dictionary of
+  primitives, lists, and other dictionaries). The protobuf runtime provides
+  helper functions in most languages to convert <code>Struct</code> objects to and from
+  JSON.</li>
+</ul>
+<p><code>google.protobuf.Struct</code> and <code>google.protobuf.Value</code> are designated common
+components by this AEP; proto-based APIs <strong>should</strong> use them when representing
+arbitrary JSON-like structures.</p>
+<h2 id="libraries-for-common-types">Libraries for common types</h2>
+<p>For the common components in the <code>aep.type</code> namespace, which represent common
+data types, the <a href="https://github.com/aep-dev/aep">AEP common components</a> repo may contain canonical libraries
+in a number of languages. These libraries are designed to be idiomatic in a
+given language, and should feel similar to using the language's standard
+libraries. They should provide basic functionality like adding two <code>Money</code>
+values, or determining if one <code>Date</code> comes before another.</p>
+<p>When a language already has a standard library representation of a common type
+(such as Python's <code>datetime</code> for the <code>Timestamp</code> type), there may instead be a
+library for converting the JSON or protobuf representation to the standard
+library representation.</p>
+<p>If a library you want does not exist, and you want to contribute one, please
+<a href="https://github.com/aep-dev/aep/issues">open an issue</a> on the <a href="https://github.com/aep-dev/aep">AEP common components</a> repository in GitHub.</p>
+<h2 id="appendix-adding-to-common-components">Appendix: Adding to common components</h2>
+<p>Occasionally, it may be useful to add protos to these packages or to add to the
+list of common components. In order to do this, <a href="https://github.com/aep-dev/aep/issues">open an issue</a> on the <a href="https://github.com/aep-dev/aep">AEP
+common components</a> repository in GitHub.</p>
+<p>However, some general guidelines are worth noting for this:</p>
+<ul>
+<li>Schemas <strong>should</strong> only be granted common component status if it is certain
+  that they will never change (at all -- even in ways that would normally be
+  considered backwards compatible). Common components are not versioned, and it
+  must be the case that API creators and consumers can rely on the component to
+  be a complete and accurate representation indefinitely.</li>
+<li>Schemas must be applicable to a significant number of APIs for consideration
+  as common components.</li>
+<li>Even after a common component is added, APIs using local versions <strong>must</strong>
+  continue to do so until they go to the next major version.</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
