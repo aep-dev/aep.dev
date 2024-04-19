@@ -86,10 +86,16 @@ serial internal RPCs, leading to complex service dependencies, latency, and
 reliability issues.
 
 However, sometimes dereferencing resource references is useful, or even
-necessary. For example, an API may wish to allow filtering of a resource based
-on a field of a resource it references. In other cases, it may be much cheaper
-and/or faster for the server to perform the dereferencing than for the client
-to make multiple serial requests.
+necessary.
+
+For example, an API may wish to allow filtering of a resource based on a field
+of a resource it references. This can be necessary in order to satisfy a query
+expressing something like "list books written by authors who were born before
+1950", where the author's birth date is a field on the `Author` resource
+referenced by the `Book` resource.
+
+In other cases, it may be much cheaper and/or faster for the server to perform
+the dereferencing than for the client to make multiple serial requests.
 
 In these cases, an alternative resource association pattern **may** be used,
 where the resource reference field is not a string, but is instead the
