@@ -1,8 +1,8 @@
 # Filtering
 
-Often, when listing resources (using a list method as defined in [AIP-132][] or
-something reasonably similar), it is desirable to filter over the collection
-and only return results that the user is interested in.
+Often, when listing resources (using a [list](./list) method or something
+reasonably similar), it is desirable to filter over the collection and only
+return results that the user is interested in.
 
 It is tempting to define a structure to handle the precise filtering needs for
 each API. However, filtering requirements evolve frequently, and therefore it
@@ -35,7 +35,7 @@ only be used on certain fields and/or with certain API methods).
 
 ### Limitations
 
-An API may support only a subset of the CEL language, and/or to support
+An API **may** support only a subset of the CEL language, and/or to support
 filtering on a subset of the fields of a resource. APIs **must** clearly
 document any such limitations.
 
@@ -49,7 +49,6 @@ violate requirements set forth in this document, and a non-compliant filter
 query **must** error with `INVALID_ARGUMENT`.
 
 <!-- prettier-ignore-start -->
-[aip-132]: ./0132.md
 [cel]: https://github.com/google/cel-spec
 [CEL language definition]: https://github.com/google/cel-spec/blob/master/doc/langdef.md
 <!-- prettier-ignore-end -->
