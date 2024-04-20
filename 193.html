@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=e7e56c7f">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=e7e56c7f">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=0e696003">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=0e696003">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=e7e56c7f"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=0e696003"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -401,6 +401,12 @@
             Resource Revisions
           </a>
         </li>
+      <li class="nav-item nav-item-active">
+          <a href="/193">
+            <span class="aep-id">193</span>
+            Errors
+          </a>
+        </li>
       <li class="nav-item">
           <a href="/214">
             <span class="aep-id">214</span>
@@ -506,13 +512,23 @@
     <tr><td>Slug</td><td>errors</td></tr>
     <tr><td>Number</td><td>193</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/193">aep.dev/193</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-03-21</td></tr>
+    <tr><td>Updated</td><td>2024-03-21</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#partial-errors">Partial errors</a></li>
+<li><a href="#permission-denied">Permission Denied</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a></li>
+<li><a href="#further-reading">Further reading</a></li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -551,17 +567,165 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">errors (AEP-193)</h4>
   <h1 id="errors">Errors</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/48">this GitHub issue</a> for more
-information.</p>
+<p>Effective error communication is an important part of designing simple and
+intuitive APIs. Services returning standardized error responses enable API
+clients to construct centralized common error handling logic. This common logic
+simplifies API client applications and eliminates the need for cumbersome
+custom error handling code.</p>
+<h2 id="guidance">Guidance</h2>
+<p>Services <strong>must</strong> clearly distinguish successful responses from error
+responses.</p>
+<p>The structure of the error response <strong>must</strong> be consistent across all APIs of
+the service. You <strong>should</strong> use the error response structure below which comes
+from the Problem Details for HTTP APIs <a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457</a>.</p>
+<h3 id="structure">Structure</h3>
+<p>An error response <strong>should</strong> contain the following fields:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Y</td>
+<td>A URI reference <a href="https://datatracker.ietf.org/doc/html/rfc3986">URI</a> that identifies the problem type. If the type URI is a locator (e.g., those with an "http" or "https" scheme), dereferencing it SHOULD provide human-readable documentation for the problem type.</td>
+</tr>
+<tr>
+<td>status</td>
+<td>integer</td>
+<td></td>
+<td>The HTTP status code that best describes the type of problem detected.</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td></td>
+<td>A human-readable description of the problem. Messages are likely to be logged in plain text and <strong>must not</strong> include information about a specific occurrence nor any sensitive data like PII. Information about specific occurrences should be part of <code>metadata</code>.</td>
+</tr>
+<tr>
+<td>detail</td>
+<td>string</td>
+<td></td>
+<td>A human-readable explanation specific to this occurrence of the problem. This <strong>may</strong> contain PII and <strong>should not</strong> be logged.</td>
+</tr>
+<tr>
+<td>instance</td>
+<td>string</td>
+<td></td>
+<td>A unique identifier for the specific occurrence of the problem.</td>
+</tr>
+</tbody>
+</table>
+<p>An error response may contain additional fields appropriate for a specific
+error type.</p>
+<p>The error title and detail fields <strong>should</strong> help a reasonably technical user
+<em>understand</em> and <em>resolve</em> the issue, and <strong>should not</strong> assume that the user
+is an expert in your particular API. Additionally, the error title and detail
+<strong>must not</strong> assume that the user will know anything about its underlying
+implementation.</p>
+<p>The error detail <strong>should</strong> be brief but actionable. Any extra information
+<strong>should</strong> be provided in additional properties. If even more information is
+necessary, you <strong>should</strong> provide a link where a reader can get more
+information or ask questions to help resolve the issue.</p>
+<p>The error detail field</p>
+<ul>
+<li>is a developer-facing, human-readable "debug message".</li>
+<li>both explains the error and offers an actionable resolution to it.</li>
+<li>value may significantly change over time for the same error, and should not
+  be string-matched by any clients to determine the error.</li>
+</ul>
+<p>All human-readable error details returned by the service must use the same
+language.</p>
+<p>A JSON representation of an error response might look like the following:</p>
+<p><a name="sample"></a></p>
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;RESOURCE_EXHAUSTED&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">429</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Too Many Requests&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The zone &#39;us-east1-a&#39; does not have enough resources available to fulfill the request. Try a different zone, or try again later.&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;instance&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7934df3e-4b63-429b-b0f5-b8d350ec165e&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">OpenAPI 3.0</label><div class="tabbed-content">
+<p>The media-type for an error response should be "application/problem+json".</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Protocol buffers</label><div class="tabbed-content">
+<p>Services <strong>must</strong> return a <a href="https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto"><code>google.rpc.Status</code></a> message when an API
+error occurs, and <strong>must</strong> use the canonical error codes defined in
+<a href="https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto"><code>google.rpc.Code</code></a>. More information about the particular codes is
+available in the <a href="https://github.com/grpc/grpc/blob/master/doc/statuscodes.md">gRPC status code documentation</a>.</p>
+<p>The error response structure defined above <strong>should</strong> be returned in the
+<code>details</code> field of the Status message. Services <strong>should</strong> use the
+<a href="https://buf.build/aep/api/docs/main:aep.api#aep.api.ProblemDetails"><code>aep.api.ProblemDetails</code></a>
+to define this field.</p>
+</div>
+</div>
+<h4 id="dynamic-variables">Dynamic variables</h4>
+<p>The best, actionable error detail includes dynamic segments. These variable
+parts of the message are specific to a particular request. Consider the
+following example:</p>
+<blockquote>
+<p>The Book, "The Great Gatsby", is unavailable at the Library, "Garfield East".
+It is expected to be available again on 2199-05-13.</p>
+</blockquote>
+<p>The preceding error detail is made actionable by the context, both that
+originates from the request, the title of the Book and the name of the Library,
+and by the information that is known only by the service, i.e. the expected
+return date of the Book.</p>
+<p>All dynamic variables found in error detail <strong>must</strong> also be present as
+additional properties of the error response</p>
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">bookTitle</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;The</span><span class="nv"> </span><span class="s">Great</span><span class="nv"> </span><span class="s">Gatsby&#39;</span><span class="w"></span>
+<span class="nt">library</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Garfield</span><span class="nv"> </span><span class="s">East&#39;</span><span class="w"></span>
+<span class="nt">expectedReturnDate</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2199-05-13&#39;</span><span class="w"></span>
+</code></pre></div>
+<p>Once present for a particular error type, additional properties <strong>must</strong>
+continue to be included in the the error response to be backwards compatible,
+even if the value for a particular property is empty.</p>
+<h4 id="localization">Localization</h4>
+<p>The title and detail fields <strong>should</strong> be presented in the service's native
+language. If a localized detail is required, it may be included as an
+additional property in the error response, and <strong>should</strong> be named
+<code>localizedDetail</code>.</p>
+<h3 id="partial-errors">Partial errors</h3>
+<p>APIs <strong>should not</strong> support partial errors. Partial errors add significant
+complexity for users, because they usually sidestep the use of error codes, or
+move those error codes into the response message, where the user must write
+specialized error handling logic to address the problem.</p>
+<p>However, occasionally partial errors are necessary, particularly in bulk
+operations where it would be hostile to users to fail an entire large request
+because of a problem with a single entry.</p>
+<p>Methods that require partial errors <strong>should</strong> use <a href="/151">long-running operations</a>,
+and the method <strong>should</strong> put partial failure information in the metadata
+message. The errors themselves <strong>must</strong> still be represented as an error object
+as described in this AEP.</p>
+<h3 id="permission-denied">Permission Denied</h3>
+<p>If the user does not have permission to access the resource or parent,
+regardless of whether or not it exists, the service <strong>must</strong> error with
+<code>PERMISSION_DENIED</code> (HTTP 403). Permission <strong>must</strong> be checked prior to
+checking if the resource or parent exists.</p>
+<p>If the user does have proper permission, but the requested resource or parent
+does not exist, the service <strong>must</strong> error with <code>NOT_FOUND</code> (HTTP 404).</p>
+<h2 id="rationale">Rationale</h2>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc9457">RFC 9457 Problem Details for HTTP APIs</a></li>
+<li>For which error codes to retry, see <a href="https://aep.dev/194">AEP-194</a>.</li>
+</ul>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-03-21</strong>: Adopt from https://google.aip.dev/193</li>
+</ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
