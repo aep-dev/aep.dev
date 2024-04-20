@@ -13,8 +13,8 @@ both a secure API surface and a consistent user experience. An operation
 authorization.
 
 If a request can not pass the authorization check for any reason, the service
-**should** error with `403 Forbidden`, and the corresponding error message
-**should** look like: "Permission `{p}` denied on resource `{r}` (or it might
+**must** error with `403 Forbidden`, and the corresponding error message
+**must** look like: "Permission `{p}` denied on resource `{r}` (or it might
 not exist)." This avoids leaking resource existence.
 
 If it is not possible to determine authorization for a resource because the
@@ -28,22 +28,20 @@ A service could encounter a situation where it has two different operations
 with two different permissions, either of which would reveal the existence of a
 resource if called, but a user only has permission to call one of them.
 
-In this situation, the service **should** still only check for authorization
-applicable to the operation being called, and **should not** try to "help out"
-by checking for related authorization that would provide permission to reveal
-existence, because such algorithms are complicated to implement correctly and
-prone to accidental leaks.
+In this situation, the service **must** only check for authorization applicable
+to the operation being called, rather than check for related authorization that
+would provide permission to reveal existence. Such algorithms are complicated to
+implement correctly and prone to accidental leaks.
 
-For example, posit a scenario where:
+For example, consider a scenario where:
 
 - A resource exists within a given collection that a user is unable to read.
 - The user _does_ have the ability to create other resources, and the
   collection uses user-specified IDs (meaning that a failure because of a
   duplicate ID would reveal existance).
 
-In this situation, the get or create methods **should** still only check
-_their_ permissions when determining what error to return, and not one
-another's.
+In this situation, the get or create methods **must** still only check _their_
+permissions when determining what error to return, and not one another's.
 
 ## Rationale
 
