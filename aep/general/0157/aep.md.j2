@@ -27,6 +27,16 @@ Field masks **should not** be specified in the
 - An API **may** allow read masks with non-terminal repeated fields (unlike
   update masks), but is not obligated to do so.
 
+  **Warning:** There is a known conflict between this guidance and the
+  documentation of `FieldMask` itself:
+  [google/protobuf/field_mask.proto](https://github.com/protocolbuffers/protobuf/blob/5e84a6169cf0f9716c9285c95c860bcb355dbdc1/src/google/protobuf/field_mask.proto#L85-L86)
+  states that
+  `A repeated field is not allowed except at the last position of a paths string.`
+  As such, official libraries (such as `Merge` for FieldMasks) may not support
+  wildcards without additional work. Track the issue
+  [here](https://github.com/protocolbuffers/protobuf/issues/8547#issuecomment-2005180068).
+  Consider using the view enumeration pattern described below instead instead.
+
 **Note:** Changing the default value of the field mask parameter is a
 [breaking change](../0180.md#semantic-changes).
 
