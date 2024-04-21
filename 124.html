@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=0e696003">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=0e696003">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=dc620129">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=dc620129">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=0e696003"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=dc620129"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -522,6 +522,7 @@
 <li><a href="#guidance">Guidance</a><ul>
 <li><a href="#multiple-many-to-one-associations">Multiple many-to-one associations</a></li>
 <li><a href="#many-to-many-associations">Many-to-many associations</a></li>
+<li><a href="#embedded-resources">Embedded resources</a></li>
 </ul>
 </li>
 </ul>
@@ -575,9 +576,8 @@ a resource may have a many-to-many relationship with another resource type.</p>
 <strong>must not</strong> require two distinct "parents".</p>
 <h3 id="multiple-many-to-one-associations">Multiple many-to-one associations</h3>
 <p>If a resource has a many-to-one relationship with multiple resource types, it
-<strong>must</strong> choose at most one of them to be the parent. The resource
-<strong>may</strong> be associated with other resources through other fields on the
-resource.</p>
+<strong>must</strong> choose at most one of them to be the parent. The resource <strong>may</strong> be
+associated with other resources through other fields on the resource.</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// The resource path pattern for Book indicates that Publisher is the</span>
@@ -617,7 +617,8 @@ treat the <code>string parent</code> field as required as discussed in <a href="
 <strong>must not</strong> add additional required arguments. The RPC <strong>should</strong> include a
 <code>string filter</code> field that allows users to filter by other resource
 associations as discussed in <a href="/filtering">filtering</a>.</p>
-<p><strong>Note:</strong> Resource reference fields <strong>must</strong> accept the <a href="/resource-path">resource path</a> of the referenced resource.</p>
+<p><strong>Note:</strong> Resource reference fields <strong>must</strong> accept the
+<a href="/resource-path">resource path</a> of the referenced resource.</p>
 <h3 id="many-to-many-associations">Many-to-many associations</h3>
 <p>Many-to-many associations are less common in APIs than they are in relational
 databases, in part because they are more difficult to model and present over
@@ -658,8 +659,8 @@ described for repeated fields in [arrays][/arrays].</p>
 </code></pre></div>
 </div>
 </div>
-<p><strong>Note:</strong> See <a href="/arrays">arrays</a> for more information on repeated fields, including
-how to handle common issues such as atomic changes.</p>
+<p><strong>Note:</strong> See <a href="/arrays">arrays</a> for more information on repeated fields,
+including how to handle common issues such as atomic changes.</p>
 <p>If the use of a repeated field is too restrictive, or if more metadata is
 required along with the association, an API <strong>may</strong> model a many-to-many
 relationship using a sub-resource with two one-to-many associations.</p>
@@ -705,6 +706,105 @@ relationship using a sub-resource with two one-to-many associations.</p>
 recommended if additional metadata is required in the relationship, or if the
 restrictions around the use of a repeated field preclude the use of that
 approach.</p>
+<h3 id="embedded-resources">Embedded resources</h3>
+<p>Resource references as described use string references rather than embedding
+one resource inside another because embedding resources can lead to a number of
+issues. Retrieving resources with arbitrarily deep nesting may require multiple
+serial internal RPCs, leading to complex service dependencies, latency, and
+reliability issues.</p>
+<p>However, sometimes dereferencing resource references is useful, or even
+necessary.</p>
+<p>For example, an API may wish to allow filtering of a resource based on a field
+of a resource it references. This can be necessary in order to satisfy a query
+expressing something like "list books written by authors who were born before
+1950", where the author's birth date is a field on the <code>Author</code> resource
+referenced by the <code>Book</code> resource.</p>
+<p>In other cases, it may be much cheaper and/or faster for the server to perform
+the dereferencing than for the client to make multiple serial requests.</p>
+<p>In these cases, an alternative resource association pattern <strong>may</strong> be used,
+where the resource reference field is not a string, but is instead the
+referenced resource itself.</p>
+<p>The default behavior <strong>should</strong> be to populate only the <code>path</code> field of the
+referenced resource, making it equivalent to a string-based resource reference.
+Additional fields <strong>may</strong> be included based on the request: for example, if the
+request includes a <a href="./partial-responses">view or read mask</a> that specifies that
+additional fields should be included, or if the request contains a filter that
+specifies fields other than <code>path</code> within the referenced resource.</p>
+<p>Fields other than <code>path</code> in embedded resource references <strong>must</strong> be treated as
+<a href="./field-behavior">output-only</a>; mutating API methods <strong>must not</strong> allow
+creating or mutation of embedded resources. For example, if a <code>Book</code> resource
+has an embedded resource reference to <code>Author</code>, the <code>UpdateBook</code> method <strong>must
+not</strong> allow updating any fields of the <code>Author</code> resource other than
+<code>Author.path</code> (which updates the reference itself, rather than the referenced
+resource).</p>
+<p>APIs <strong>must</strong> always fully document their behavior with embedded resources,
+even if the only supported behavior is populating only the <code>path</code> field. If the
+referenced resource itself contains embedded resources, the API <strong>must</strong>
+include clear documentation about the depth to which embedded resources may be
+dereferenced.</p>
+<p><strong>Note:</strong> There is no need for the <em>referenced</em> resource to define a
+<code>PATH_ONLY</code> <a href="./partial-responses">view</a> corresponding to the default behavior
+of populating only the <code>path</code> field. This is because a resource should not have
+to define a view enum simply because another resource references it.</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The resource path pattern for Book indicates that Publisher is the</span>
+<span class="w">  </span><span class="c1">// canonical parent.</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/Book&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;publishers/{publisher}/books/{book}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// The resource path for the book.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IDENTIFIER</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The resource path of the book&#39;s author.</span>
+<span class="w">  </span><span class="c1">//</span>
+<span class="w">  </span><span class="c1">// By default, only the `path` field of the author is populated.</span>
+<span class="w">  </span><span class="c1">// However, the full author can be retrieved by specifying the </span>
+<span class="w">  </span><span class="c1">// FULL_WITH_AUTHOR view. This **will not** dereference resource</span>
+<span class="w">  </span><span class="c1">// references within the author, such as `Author.pen_names`; only</span>
+<span class="w">  </span><span class="c1">// the `path` subfield of these fields will be populated.</span>
+<span class="w">  </span><span class="n">Author</span><span class="w"> </span><span class="na">author</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/Author&quot;</span>
+<span class="w">  </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// Different views of a book.</span>
+<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The default view.</span>
+<span class="w">    </span><span class="na">VIEW_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Includes all fields, but does not derefefence the author.</span>
+<span class="w">    </span><span class="na">FULL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Includes all fields and also fully populates author.</span>
+<span class="w">    </span><span class="na">FULL_WITH_AUTHOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">Book</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A representation of a single book.</span><span class="w"></span>
+<span class="w">  </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">        </span><span class="no">The path of the book.</span><span class="w"></span>
+<span class="w">        </span><span class="no">Format: publishers/{publisher}/books/{book}</span><span class="w"></span>
+<span class="w">    </span><span class="nt">author</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Author&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">        </span><span class="no">The author or authors of the book.</span><span class="w"></span>
+
+<span class="w">        </span><span class="no">By default, only the `path` field of the author is populated.</span><span class="w"></span>
+<span class="w">        </span><span class="no">However, the full author can be retrieved by specifying the</span><span class="w"></span>
+<span class="w">        </span><span class="no">FULL_WITH_AUTHOR view. This **will not** dereference resource</span><span class="w"></span>
+<span class="w">        </span><span class="no">references within the author, such as `Author.pen_names`; only</span><span class="w"></span>
+<span class="w">        </span><span class="no">the `path` subfield of these fields will be populated.</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
 <!-- prettier-ignore-start -->
 <!-- prettier-ignore-end -->
   <footer>
