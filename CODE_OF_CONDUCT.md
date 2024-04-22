@@ -1,64 +1,32 @@
-## CNCF Community Code of Conduct v1.3
+## Community Code of Conduct
 
-Other languages available:
-
-- [Arabic/العربية](code-of-conduct-languages/ar.md)
-- [Bulgarian/Български](code-of-conduct-languages/bg.md)
-- [Chinese/中文](code-of-conduct-languages/zh.md)
-- [Czech/Česky](code-of-conduct-languages/cs.md)
-- [Farsi/فارسی](code-of-conduct-languages/fa.md)
-- [French/Français](code-of-conduct-languages/fr.md)
-- [German/Deutsch](code-of-conduct-languages/de.md)
-- [Hindi/हिन्दी](code-of-conduct-languages/hi.md)
-- [Indonesian/Bahasa Indonesia](code-of-conduct-languages/id.md)
-- [Italian/Italiano](code-of-conduct-languages/it.md)
-- [Japanese/日本語](code-of-conduct-languages/ja.md)
-- [Korean/한국어](code-of-conduct-languages/ko.md)
-- [Polish/Polski](code-of-conduct-languages/pl.md)
-- [Portuguese/Português](code-of-conduct-languages/pt.md)
-- [Russian/Русский](code-of-conduct-languages/ru.md)
-- [Spanish/Español](code-of-conduct-languages/es.md)
-- [Turkish/Türkçe](code-of-conduct-languages/tr.md)
-- [Ukrainian/Українська](code-of-conduct-languages/uk.md)
-- [Vietnamese/Tiếng Việt](code-of-conduct-languages/vi.md)
-
-### Community Code of Conduct
-
-As contributors, maintainers, and participants in the CNCF community, and in
-the interest of fostering an open and welcoming community, we pledge to respect
-all people who participate or contribute through reporting issues, posting
-feature requests, updating documentation, submitting pull requests or patches,
+As contributors, maintainers, and participants in our community, and in the
+interest of fostering an open and welcoming community, we pledge to respect all
+people who participate or contribute through reporting issues, posting feature
+requests, updating documentation, submitting pull requests or patches,
 attending conferences or events, or engaging in other community or project
 activities.
 
-We are committed to making participation in the CNCF community a
-harassment-free experience for everyone, regardless of age, body size, caste,
-disability, ethnicity, level of experience, family status, gender, gender
-identity and expression, marital status, military or veteran status,
-nationality, personal appearance, race, religion, sexual orientation,
-socioeconomic status, tribe, or any other dimension of diversity.
+We are committed to making participation in our community a harassment-free
+experience for everyone, regardless of age, body size, caste, disability,
+ethnicity, level of experience, family status, gender, gender identity and
+expression, marital status, military or veteran status, nationality, personal
+appearance, race, religion, sexual orientation, socioeconomic status, tribe, or
+any other dimension of diversity.
 
 ## Scope
 
 This code of conduct applies:
 
 - within project and community spaces,
-- in other spaces when an individual CNCF community participant's words or
-  actions are directed at or are about a CNCF project, the CNCF community, or
-  another CNCF community participant.
-
-### CNCF Events
-
-CNCF events that are produced by the Linux Foundation with professional events
-staff are governed by the Linux Foundation
-[Events Code of Conduct](https://events.linuxfoundation.org/code-of-conduct/)
-available on the event page. This is designed to be used in conjunction with
-the CNCF Code of Conduct.
+- in other spaces when an individual community participant's words or actions
+  are directed at or are about a project, our community, or another community
+  participant.
 
 ## Our Standards
 
-The CNCF Community is open, inclusive and respectful. Every member of our
-community has the right to have their identity respected.
+Our Community is open, inclusive and respectful. Every member of our community
+has the right to have their identity respected.
 
 Examples of behavior that contributes to a positive environment include but are
 not limited to:
@@ -99,29 +67,14 @@ Project maintainers have the right and responsibility to remove, edit, or
 reject comments, commits, code, wiki edits, issues, and other contributions
 that are not aligned to this Code of Conduct. By adopting this Code of Conduct,
 project maintainers commit themselves to fairly and consistently applying these
-principles to every aspect of managing a CNCF project. Project maintainers who
-do not follow or enforce the Code of Conduct may be temporarily or permanently
+principles to every aspect of managing a project. Project maintainers who do
+not follow or enforce the Code of Conduct may be temporarily or permanently
 removed from the project team.
 
 ## Reporting
 
-For incidents occurring in the Kubernetes community, contact the
-[Kubernetes Code of Conduct Committee](https://git.k8s.io/community/committee-code-of-conduct)
-via <conduct@kubernetes.io>. You can expect a response within three business
-days.
-
-For other projects, or for incidents that are project-agnostic or impact
-multiple CNCF projects, please contact the
-[CNCF Code of Conduct Committee](https://www.cncf.io/conduct/committee/) via
-<conduct@cncf.io>. Alternatively, you can contact any of the individual members
-of the [CNCF Code of Conduct Committee](https://www.cncf.io/conduct/committee/)
-to submit your report. For more detailed instructions on how to submit a
-report, including how to submit a report anonymously, please see our
-[Incident Resolution Procedures](https://github.com/cncf/foundation/blob/main/code-of-conduct/coc-incident-resolution-procedures.md).
-You can expect a response within three business days.
-
-For incidents occurring at CNCF event that is produced by the Linux Foundation,
-please contact <eventconduct@cncf.io>.
+For incidents occurring in our community, please contact any of the individual
+maintainers of the GitHub organization or Slack workspace.
 
 ## Enforcement
 
@@ -129,19 +82,12 @@ Upon review and investigation of a reported incident, the CoC response team
 that has jurisdiction will determine what action is appropriate based on this
 Code of Conduct and its related documentation.
 
-For information about which Code of Conduct incidents are handled by project
-leadership, which incidents are handled by the CNCF Code of Conduct Committee,
-and which incidents are handled by the Linux Foundation (including its events
-team), see our
-[Jurisdiction Policy](https://github.com/cncf/foundation/blob/main/code-of-conduct/coc-committee-jurisdiction-policy.md).
-
-## Amendments
-
-Consistent with the CNCF Charter, any substantive changes to this Code of
-Conduct must be approved by the Technical Oversight Committee.
-
 ## Acknowledgements
 
-This Code of Conduct is adapted from the Contributor Covenant
+This code of conduct is based on and consistent with the [CNCF Community Code
+of Conduct v1.3], which is adapted from the Contributor Covenant
 (http://contributor-covenant.org), version 2.0 available at
 http://contributor-covenant.org/version/2/0/code_of_conduct/
+
+[CNCF Community Code of Conduct v1.3]:
+  https://github.com/cncf/foundation/blob/main/code-of-conduct.md
