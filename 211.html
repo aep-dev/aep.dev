@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=dc620129">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=dc620129">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=7f3d7e4e">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=7f3d7e4e">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=dc620129"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=7f3d7e4e"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -576,8 +576,8 @@ both a secure API surface and a consistent user experience. An operation
 <strong>may</strong> require multiple permissions or preconditions in order to grant
 authorization.</p>
 <p>If a request can not pass the authorization check for any reason, the service
-<strong>should</strong> error with <code>403 Forbidden</code>, and the corresponding error message
-<strong>should</strong> look like: "Permission <code>{p}</code> denied on resource <code>{r}</code> (or it might
+<strong>must</strong> error with <code>403 Forbidden</code>, and the corresponding error message
+<strong>must</strong> look like: "Permission <code>{p}</code> denied on resource <code>{r}</code> (or it might
 not exist)." This avoids leaking resource existence.</p>
 <p>If it is not possible to determine authorization for a resource because the
 resource does not exist, the service <strong>should</strong> check authorization to read
@@ -587,21 +587,19 @@ authorization check passes.</p>
 <p>A service could encounter a situation where it has two different operations
 with two different permissions, either of which would reveal the existence of a
 resource if called, but a user only has permission to call one of them.</p>
-<p>In this situation, the service <strong>should</strong> still only check for authorization
-applicable to the operation being called, and <strong>should not</strong> try to "help out"
-by checking for related authorization that would provide permission to reveal
-existence, because such algorithms are complicated to implement correctly and
-prone to accidental leaks.</p>
-<p>For example, posit a scenario where:</p>
+<p>In this situation, the service <strong>must</strong> only check for authorization applicable
+to the operation being called, rather than check for related authorization that
+would provide permission to reveal existence. Such algorithms are complicated to
+implement correctly and prone to accidental leaks.</p>
+<p>For example, consider a scenario where:</p>
 <ul>
 <li>A resource exists within a given collection that a user is unable to read.</li>
 <li>The user <em>does</em> have the ability to create other resources, and the
   collection uses user-specified IDs (meaning that a failure because of a
   duplicate ID would reveal existance).</li>
 </ul>
-<p>In this situation, the get or create methods <strong>should</strong> still only check
-<em>their</em> permissions when determining what error to return, and not one
-another's.</p>
+<p>In this situation, the get or create methods <strong>must</strong> still only check <em>their</em>
+permissions when determining what error to return, and not one another's.</p>
 <h2 id="rationale">Rationale</h2>
 <p><a href="https://tools.ietf.org/html/rfc7231#section-6.5.3">RFC 7231 §6.5.3</a> states that services are permitted to use <code>404 Not Found</code>
 in lieu of <code>403 Forbidden</code> in situations where the service does not want to
