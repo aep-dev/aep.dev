@@ -16,9 +16,9 @@ rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
 }
 ```
 
-- The RPC's name **must** begin with `BatchGet`. The remainder of the RPC name
+- The method's name **must** begin with `BatchGet`. The remainder of the method name
   **should** be the plural form of the resource being retrieved.
-- The request and response messages **must** match the RPC name, with
+- The request and responses **must** match the method name, with
   `Request` and `Response` suffixes.
 - The HTTP verb **must** be `GET`.
 - The HTTP URI **must** end with `:batchGet`.
@@ -28,11 +28,11 @@ rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
 - There **must not** be a body key in the `google.api.http` annotation.
 - The operation **must** be atomic: it **must** fail for all resources or
   succeed for all resources (no partial success). For situations requiring
-  partial failures, `List` ([AIP-132][]) methods **should** be used.
+  partial failures, `List` ([AEP-132]) methods **should** be used.
   - If the operation covers multiple locations and at least one location is
     down, the operation **must** fail.
 
-### Request message
+### Request
 
 The request for a batch get method **should** be specified with the following
 pattern:
@@ -45,7 +45,7 @@ message BatchGetBooksRequest {
   // must match this field.
   string parent = 1 [
     (google.api.resource_reference) = {
-      child_type: "library.googleapis.com/Book"
+      child_type: "library.com/Book"
     }];
 
   // The names of the books to retrieve.
@@ -54,7 +54,7 @@ message BatchGetBooksRequest {
   repeated string names = 2 [
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = {
-      type: "library.googleapis.com/Book"
+      type: "library.com/Book"
     }];
 }
 ```
@@ -65,32 +65,32 @@ message BatchGetBooksRequest {
   the parent collection in the name of any resource being retrieved does not
   match, the request **must** fail.
   - This field **should** be required if only 1 parent per request is allowed.
-  - The field **should** identify the [resource type][aip-122-parent] that it
+  - The field **should** identify the [resource type][aep-122-parent] that it
     references.
   - The comment for the field **should** document the resource pattern.
-- The request message **must** include a repeated field which accepts the
+- The request **must** include a repeated field which accepts the
   resource names specifying the resources to retrieve. The field **should** be
   named `names`.
   - If no resource names are provided, the API **should** error with
     `INVALID_ARGUMENT`.
   - The field **should** be required.
-  - The field **should** identify the [resource type][aip-122-names] that it
+  - The field **should** identify the [resource type][aep-122-names] that it
     references.
   - The comment for the field **should** document the resource pattern.
 - Other fields besides `name` **may** be "hoisted" from the [standard Get
   request][request-message]. There is no way to allow for these fields to
   accept different values for different resources; if this is needed, use the
-  [alternative request message form](#nested-request-objects).
+  [alternative request form](#nested-request-objects).
 - Batch get **should not** support pagination because transactionality across
   API calls would be extremely difficult to implement or enforce, and the
   request defines the exact scope of the response anyway.
-- The request message **must not** contain any other required fields, and
+- The request **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in this
-  or another AIP.
+  or another AEP.
 - The comment above the `names` field **should** document the maximum number of
   requests allowed.
 
-### Response message
+### Response
 
 The response for a batch get method **should** be specified with the following
 pattern:
@@ -102,21 +102,21 @@ message BatchGetBooksResponse {
 }
 ```
 
-- The response message **must** include one repeated field corresponding to the
+- The response **must** include one repeated field corresponding to the
   resources being retrieved.
 - The order of books in the response **must** be the same as the names in the
   request.
 
-[aip-122-names]: ./0122.md#fields-representing-resource-names
-[aip-122-parent]: ./0122.md#fields-representing-a-resources-parent
+[aep-122-names]: ./0122.md#fields-representing-resource-names
+[aep-122-parent]: ./0122.md#fields-representing-a-resources-parent
 [request-message]: ./0131.md#request-message
 
 ### Nested request objects
 
-If the [standard Get request message][request-message] contains a field besides
+If the [standard Get request][request-message] contains a field besides
 the resource name that needs to be different between different resources being
 requested, the batch message **may** alternatively hold a `repeated` field of
-the [standard Get request message][request-message]. This is generally
+the [standard Get request][request-message]. This is generally
 discouraged unless your use case really requires it.
 
 The request for a batch get method using this approach **should** be specified
@@ -126,11 +126,11 @@ with the following pattern:
 message BatchGetBooksRequest {
   // The parent resource shared by all books being retrieved.
   // Format: publishers/{publisher}
-  // If this is set, the parent field in the GetBookRequest messages
+  // If this is set, the parent field in the GetBookRequests
   // must either be empty or match this field.
   string parent = 1 [
     (google.api.resource_reference) = {
-      child_type: "library.googleapis.com/Book"
+      child_type: "library.com/Book"
     }];
 
   // The requests specifying the books to retrieve.
@@ -144,11 +144,11 @@ message BatchGetBooksRequest {
   parent collection in the name of any resource being retrieved does not match,
   the request **must** fail.
   - This field **should** be required if only 1 parent per request is allowed.
-  - The field **should** identify the [resource type][aip-122-parent] that it
+  - The field **should** identify the [resource type][aep-122-parent] that it
     references.
   - The comment for the field **should** document the resource pattern.
-- The request message **must** include a repeated field which accepts the
-  request messages specifying the resources to retrieve, as specified for
+- The request **must** include a repeated field which accepts the
+  requests specifying the resources to retrieve, as specified for
   [standard Get methods][request-message]. The field **should** be named
   `requests`.
   - The field **should** be required.
@@ -160,13 +160,13 @@ message BatchGetBooksRequest {
 - Batch get **should not** support pagination because transactionality across
   API calls would be extremely difficult to implement or enforce, and the
   request defines the exact scope of the response anyway.
-- The request message **must not** contain any other required fields, and
+- The request **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in this
-  or another AIP.
+  or another AEP.
 - The comment above the `requests` field **should** document the maximum number
   of requests allowed.
 
-[aip-132]: https://aip.dev/132
+[aep-132]: https://aep.dev/132
 
 ## Changelog
 
@@ -175,7 +175,7 @@ message BatchGetBooksRequest {
 - **2020-08-27**: Removed parent recommendations for top-level resources.
 - **2020-03-24**: Clarified behavior if no resource names are sent.
 - **2019-09-11**: Changed the primary recommendation to specify a repeated
-  string instead of a repeated standard Get request message. Moved the original
+  string instead of a repeated standard Get request. Moved the original
   recommendation into its own section.
 - **2019-08-01**: Changed the examples from "shelves" to "publishers", to
   present a better example of resource ownership.
