@@ -1,5 +1,54 @@
 # Filtering
 
-**Note:** This AEP has not yet been adopted. See
-[this GitHub issue](https://github.com/aep-dev/aep.dev/issues/14) for more
-information.
+Often, when listing resources (using a [List](./list) method or something
+reasonably similar), it is desirable to filter over the collection and only
+return results that the user is interested in.
+
+It is tempting to define a structure to handle the precise filtering needs for
+each API. However, filtering requirements evolve frequently, and therefore it
+is prudent to use a string field with a well-defined syntax. This allows
+updates to be able to be made transparently, without waiting for UI or client
+updates.
+
+## Guidance
+
+APIs **may** use [CEL][] to provide filtering to users on `List` methods (or
+similar methods to query a collection, such as `Search`). If they choose to do
+so, they **should** follow the common specification for filters discussed here.
+The syntax is formally defined in the [CEL language definition][].
+
+When employing filtering, a request message **should** have exactly one
+filtering field, `string filter`. THe value of this field **must** be a Boolean
+CEL expression.
+
+For example, given the resources
+`[{name: "dog" legs: 4}, {name: "cat" legs: 4}, {name: "fish" legs: 0}]`, the
+filter string `legs == 4` would result in only the "dog" and "cat" resources
+being returned by the method.
+
+### Functions
+
+APIs **may** use CEL's function call syntax in order to support API-specific
+extensions. An API **must** document any specific functions it supports,
+including any limitations on their usage (for example, if a given function can
+only be used on certain fields and/or with certain API methods).
+
+### Limitations
+
+An API **may** support only a subset of the CEL language, and/or to support
+filtering on a subset of the fields of a resource. APIs **must** clearly
+document any such limitations.
+
+A service **may** specify further structure or limitations for filter queries,
+above what is defined here. For example, a service may support the logical
+operators defined by CEL, but only permit a certain number of them (to avoid
+"queries of death" or other performance concerns).
+
+Further structure or limitations **must** be clearly documented, **must not**
+violate requirements set forth in this document, and a non-compliant filter
+query **must** error with `INVALID_ARGUMENT`.
+
+<!-- prettier-ignore-start -->
+[cel]: https://github.com/google/cel-spec
+[CEL language definition]: https://github.com/google/cel-spec/blob/master/doc/langdef.md
+<!-- prettier-ignore-end -->
