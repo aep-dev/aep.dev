@@ -6,7 +6,7 @@ provides this functionality.
 
 ## Guidance
 
-APIs **may** support Batch Get using the following pattern:
+APIs **may** support batch get using the following pattern:
 
 {% tab proto -%}
 
@@ -26,7 +26,7 @@ rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
 
 - The method's name **must** begin with `BatchGet`. The remainder of the method
   name **should** be the plural form of the resource being retrieved.
-- The request and responses **must** match the method name, with `Request` and
+- The request and response schemas **must** match the method name, with `Request` and
   `Response` suffixes.
 - The HTTP verb **must** be `GET`.
 - The HTTP URI **must** end with `:batchGet`.
@@ -36,7 +36,7 @@ rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
 - There **must not** be a body key in the `google.api.http` annotation.
 - The operation **must** be atomic: it **must** fail for all resources or
   succeed for all resources (no partial success). For situations requiring
-  partial failures, `List` ([AEP-132]) methods **should** be used.
+  partial failures, `List` (AEP-132) methods **should** be used.
   - If the operation covers multiple locations and at least one location is
     down, the operation **must** fail.
 
