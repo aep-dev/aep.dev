@@ -6,34 +6,17 @@ provides this functionality.
 
 ## Guidance
 
-APIs **may** support batch get using the following pattern:
-
-{% tab proto -%}
-
-```proto
-rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
-  option (google.api.http) = {
-    get: "/v1/{parent=publishers/*}/books:batchGet"
-  };
-}
-```
-
-{% tab oas %}
-
-{% sample 'batchget.oas.yaml', 'paths' %}
-
-{% endtabs %}
+APIs **may** support batch get to retrieve a consistent set of resources.
 
 - The method's name **must** begin with `BatchGet`. The remainder of the method
   name **should** be the plural form of the resource being retrieved.
-- The request and response schemas **must** match the method name, with `Request` and
-  `Response` suffixes.
 - The HTTP verb **must** be `GET`.
 - The HTTP URI **must** end with `:batchGet`.
 - The URI path **should** represent the collection for the resource, matching
   the collection used for simple CRUD operations. If the operation spans
   parents, a dash (`-`) **may** be accepted as a wildcard.
-- There **must not** be a body key in the `google.api.http` annotation.
+- There **must not** be a request body.
+  - If a GET request contains a body, the body **must** be ignored, and **must not** cause an error.
 - The operation **must** be atomic: it **must** fail for all resources or
   succeed for all resources (no partial success). For situations requiring
   partial failures, `List` (AEP-132) methods **should** be used.
@@ -48,6 +31,12 @@ pattern:
 {% tab proto -%}
 
 ```proto
+rpc BatchGetBooks(BatchGetBooksRequest) returns (BatchGetBooksResponse) {
+  option (google.api.http) = {
+    get: "/v1/{parent=publishers/*}/books:batchGet"
+  };
+}
+
 message BatchGetBooksRequest {
   // The parent resource shared by all books being retrieved.
   // Format: publishers/{publisher}
@@ -69,6 +58,8 @@ message BatchGetBooksRequest {
 }
 ```
 
+- The request and response schemas **must** match the method name, with `Request` and
+  `Response` suffixes.
 - A `parent` field **should** be included, unless the resource being retrieved
   is a top-level resource, to facilitate inclusion in the URI as well to permit
   a single permissions check. If a caller sets this field, and the parent
@@ -87,43 +78,39 @@ message BatchGetBooksRequest {
   - The field **should** identify the [resource type][aep-122-paths] that it
     references.
   - The comment for the field **should** document the resource pattern.
-- Other fields besides `path` **may** be "hoisted" from the [standard Get
-  request][request-message]. There is no way to allow for these fields to
-  accept different values for different resources; if this is needed, use the
-  [alternative request form](#nested-request-objects).
-- Batch get **should not** support pagination because transactionality across
-  API calls would be extremely difficult to implement or enforce, and the
-  request defines the exact scope of the response anyway.
-- The request **must not** contain any other required fields, and **should
-  not** contain other optional fields except those described in this or another
-  AEP.
-- The comment above the `paths` field **should** document the maximum number of
-  paths allowed.
+  - The comment for the field **should** document the maximum number of
+    paths allowed.
+- There **must not** be a body key in the `google.api.http` annotation.
 
 {% tab oas %}
+
+{% sample 'batchget.oas.yaml', 'paths' %}
 
 - The request **must** include a query parameter which accepts an array of
   resource paths specifying the resources to retrieve. The parameter **should**
   be named `paths`.
   - If no resource paths are provided, the API **should** error with status
     code `400 Bad Request`.
+  - If the collection in the path of any resource does not match the collection
+    of the request URL, the request **must** fail.
   - The parameter **should** be required.
-  - The parameter description **should** identify the [resource type][aep-122-paths] that
-    it references.
-  - The parameter description **should** document the resource pattern.
-- Other parameters besides `paths` **may** be "hoisted" from the [standard Get
-  request][request-message].
-- The request **must not** contain any other required parameters, and **should
-  not** contain other optional parameters except those described in this or
-  another AEP.
-- The `paths` parameter **should** document the maximum number of values
-  allowed in the array.
+  - The parameter description **should** identify the [resource type][aep-122-paths]
+    that it references.
+  - The parameter `description` **should** document the pattern for path values.
+  - The parameter `schema` **should** include a `maxItems` attribute to specify
+    the maximum number of paths allowed.
+- The method definition **must not** have a `requestBody` defined.
 
 {% endtabs %}
 
+- Other parameters besides `paths` **may** be "hoisted" from the [standard Get
+  request][get-request].
 - Batch get **should not** support pagination because transactionality across
   API calls would be extremely difficult to implement or enforce, and the
   request defines the exact scope of the response anyway.
+- The request **must not** contain any other required parameters, and **should
+  not** contain other optional parameters except those described in this or
+  another AEP.
 
 ### Response
 
@@ -163,4 +150,4 @@ message BatchGetBooksResponse {
 [aep-122-paths]: ./0122.md#fields-representing-resource-paths
 [aep-122-parent]: ./0122.md#fields-representing-a-resources-parent
 [aep-132]: https://aep.dev/132
-[request-message]: ./0131.md#request-message
+[get-request]: ./0131.md#get-request
