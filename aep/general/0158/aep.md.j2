@@ -50,6 +50,9 @@ message ListBooksResponse {
 }
 ```
 
+- The field containing pagination results **should** be the first field in
+  the message and have a field number of `1`.
+
 {% tab oas %}
 
 **Note:** OAS example not yet written.
@@ -57,31 +60,30 @@ message ListBooksResponse {
 {% endtabs %}
 
 - Request messages for collections **should** define an integer (`int32` for
-protobuf) `page_size` field, allowing users to specify the maximum number of
+protobuf) `max_page_size` field, allowing users to specify the maximum number of
 results to return.
-  - If the user does not specify `page_size` (or specifies `0`), the API
+  - If the user does not specify `max_page_size` (or specifies `0`), the API
     chooses an appropriate default, which the API **should** document. The API
     **must not** return an error.
-  - If the user specifies `page_size` greater than the maximum permitted by the
+  - If the user specifies `max_page_size` greater than the maximum permitted by the
     API, the API **should** coerce down to the maximum permitted page size.
-  - If the user specifies a negative value for `page_size`, the API **must**
+  - If the user specifies a negative value for `max_page_size`, the API **must**
     send an `INVALID_ARGUMENT` error.
   - The API **may** return fewer results than the number requested (including
     zero results), even if not at the end of the collection.
 - Request schemas for collections **should** define a `string page_token`
   field, allowing users to advance to the next page in the collection.
   - The `page_token` field **must not** be required.
-  - If the user changes the `page_size` in a request for subsequent pages, the
+  - If the user changes the `max_page_size` in a request for subsequent pages, the
     service **must** honor the new page size.
-  - The user is expected to keep all other arguments to the RPC the same; if
+  - The user is expected to keep all other arguments to the method the same; if
     any arguments are different, the API **should** send an `INVALID_ARGUMENT`
     error.
 - The response **must not** be a streaming response.
-- Response messages for collections **should** define a
+- Response messages for collections **must** define a
   `string next_page_token` field, providing the user with a page token that may
   be used to retrieve the next page.
-  - The field containing pagination results **should** be the first field in
-    the message and have a field number of `1`. It **should** be a repeated
+  - The field containing pagination results **must** be a repeated
     field containing a list of resources constituting a single page of results.
   - If the end of the collection has been reached, the `next_page_token` field
     **must** be empty. This is the _only_ way to communicate
@@ -146,9 +148,9 @@ used. It is not necessary to document this behavior.
 **Note:** While a reasonable time may vary between APIs, a good rule of thumb
 is three days.
 
-## Backwards compatibility
+### Backwards compatibility
 
-Adding pagination to an existing RPC is a backwards-incompatible change. This
+Adding pagination to an existing method is a backwards-incompatible change. This
 may seem strange; adding fields to proto messages is generally backwards
 compatible. However, this change is _behaviorally_ incompatible.
 
