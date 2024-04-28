@@ -1,24 +1,36 @@
 # Array fields
 
-Representing lists of data in an API is trickier than it often appears. Users
-often need to modify lists in place, and longer data series within a single
-resource pose a challenge for pagination.
+Within API, methods that operate on schemas containing arrays require
+consideration on the strategies for updating elements within the list.
+
+For larger arrays of resources, consider [pagination][/pagination].
 
 ## Guidance
 
 Resources **may** use array fields where appropriate.
 
-```typescript
-interface Book {
-  // The resource name for the book.
-  name: string;
+{% tab proto %}
 
-  // The authors of the book.
-  authors: string[];
+```proto
+message Book {
+  option (google.api.resource) = {
+    type: "library.googleapis.com/Book"
+    pattern: "publishers/{publisher}/books/{book}"
+  };
+
+  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+
+  repeated string authors = 2;
 }
 ```
 
-- Array fields **must** use a plural field name.
+{% tab oas %}
+
+**Note:** OAS guidance not yet written
+
+{% endtabs %}
+
+- Array fields **should** use a plural field name.
   - If the English singular and plural words are identical ("moose", "info"),
     the dictionary word **must** be used rather than attempting to coin a new
     plural form.
@@ -28,7 +40,7 @@ interface Book {
   - If an array data can not be bounded (in other words, if there is a chance
     that the array will be too large to be reasonably returned in a single
     request), the API **should** use a sub-resource instead.
-- Array fields **must not** represent the body of another resource inline.
+- Array fields **should not** represent the body of another resource inline.
   Instead, the field **should** be a array of strings providing the resource
   names of the associated resources.
 
