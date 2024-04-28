@@ -8,7 +8,7 @@ be paginated.
 
 ## Guidance
 
-RPCs returning collections of data **must** provide pagination _at the outset_,
+Methods returning collections of data **must** provide pagination _at the outset_,
 as it is a [backwards-incompatible change](#backwards-compatibility) to add
 pagination to an existing method.
 
@@ -29,7 +29,7 @@ message ListBooksRequest {
   // this value.
   // If unspecified, at most 50 books will be returned.
   // The maximum value is 1000; values above 1000 will be coerced to 1000.
-  int32 page_size = 2;
+  int32 max_page_size = 2;
 
   // A page token, received from a previous `ListBooks` call.
   // Provide this to retrieve the subsequent page.
@@ -68,7 +68,7 @@ results to return.
     send an `INVALID_ARGUMENT` error.
   - The API **may** return fewer results than the number requested (including
     zero results), even if not at the end of the collection.
-- Request messages for collections **should** define a `string page_token`
+- Request schemas for collections **should** define a `string page_token`
   field, allowing users to advance to the next page in the collection.
   - The `page_token` field **must not** be required.
   - If the user changes the `page_size` in a request for subsequent pages, the
