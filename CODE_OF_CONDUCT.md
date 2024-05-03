@@ -78,9 +78,9 @@ maintainers of the GitHub organization or Slack workspace.
 
 ## Enforcement
 
-Upon review and investigation of a reported incident, the AEP maintainers
-that has jurisdiction will determine what action is appropriate based on this
-Code of Conduct and its related documentation.
+Upon review and investigation of a reported incident, the AEP maintainers that
+has jurisdiction will determine what action is appropriate based on this Code
+of Conduct and its related documentation.
 
 ## Acknowledgements
 
