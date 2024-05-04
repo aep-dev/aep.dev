@@ -213,7 +213,7 @@ fully constructed by the user on create. Such fields are typically assigned
 `OUTPUT_ONLY` field behavior. They are, however, also often consumed as the
 primary identifier in scenarios where the resource itself is the primary
 request payload. Such fields could _not_ be considered `OUTPUT_ONLY`.
-Furthermore, in mutation requests, like Standard Update, the resource name as
+Furthermore, in mutation requests, like Standard Update, the resource path as
 the primary identifier cannot be changed in place. Such fields are typically
 assigned `IMMUTABLE` field behavior. These conflicting and context-dependent
 field behaviors meant that a new value was necessary to single out and convey
