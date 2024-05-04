@@ -4,18 +4,11 @@ A consistent file and directory structure, while making minimal difference
 technically, makes API surface definitions easier for users and reviewers to
 read.
 
-## Guidance
-
-**Note:** The following guidance applies to APIs defined in protocol buffers.
-While the spirit of this guidance applies
-to APIs defined using other specification languages or formats, some of the
-particular recommendations might be irrelevant.
-
-### Syntax
+## Syntax
 
 APIs defined in protocol buffers **must** use `proto3` syntax.
 
-### Single package
+## Single package
 
 APIs defined in protocol buffers **must** define each individual API in a
 single package, which **must** end in a version component. For example:
@@ -30,14 +23,13 @@ APIs **must** reside in a directory that matches the protocol buffer
 `package` directive. For example, the package above dictates that the directory
 be `example/cloud/translation/v3`.
 
-### File names
+## File names
 
 It is often useful to divide API definitions into multiple files. File names
 **must** use `snake_case`.
 
 APIs **should** have an obvious "entry" file, generally named after the API
-itself. An API with a small number of discrete services (Google Cloud Pub/Sub's
-`Publisher` and `Subscriber` is a good example) **may** have a separate entry
+itself. An API with a small number of discrete services **may** have a separate entry
 file per service.
 
 APIs with only one file **should** use a filename corresponding to the name of
@@ -55,7 +47,7 @@ called `import.proto` may be problematic in Python.
 bizarre imports in client libraries. Filenames such as `v3.proto` or
 `v1beta1.proto` are prohibited.
 
-### File layout
+## File layout
 
 Individual files **should** place higher level and more important definitions
 before lower level and less important definitions.
@@ -78,42 +70,3 @@ these **should** be separated by a blank line:
   corresponding response message (if any).
 - Any remaining `message` definitions.
 - Any top-level `enum` definitions.
-
-### Packaging annotations
-
-Protocol buffers ships with annotations to declare the package or namespace
-(depending on the vocabulary of the target language) of the generated files.
-For example, setting `go_package` or `csharp_namespace` will override the
-inferred package name.
-
-When defining APIs, the following rules apply:
-
-- Java
-  - The `java_package` annotation **must** be set. The correct value is usually
-    the proto package with the appropriate TLD prefixed. Example:
-    `com.company.example.v1`.
-  - The `java_multiple_files` annotation **must** be set to `true`.
-  - The `java_outer_classname` annotation **must** be set, and **should** be
-    set to the name of the proto filename, in `PascalCase`, with `Proto`
-    appended. Example: `LibraryProto`.
-- Other languages
-  - Package or namespace directives for other languages **must** be set either
-    in every file in the proto package, or none of them. If they are set, the
-    values **must** be identical in every file.
-  - If any part of the protobuf package is a compound name (such as
-    accessapproval), C#, Ruby and PHP options **must** be specified in order
-    to take account of the word breaks using PascalCase (UpperCamelCase).
-    Example:
-    ```proto
-    option csharp_namespace = "Company.Cloud.AccessApproval.V1";
-    option php_namespace = "Company\\Cloud\\AccessApproval\\V1";
-    option ruby_package = "Company::Cloud::AccessApproval::V1";
-    ```
-
-All packaging annotations **should** be specified in alphabetical order of
-name.
-
-**Important:** While languages other than Java have sensible defaults for APIs
-which don't include compound names, be aware that _adding_ this annotation
-(with a value not equivalent to the default) constitutes a breaking change in
-that language. When releasing protos, be sure that omissions are intentional.
