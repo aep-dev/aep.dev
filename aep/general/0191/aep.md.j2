@@ -6,8 +6,8 @@ read.
 
 ## Guidance
 
-**Note:** The following guidance applies to APIs defined in protocol buffers,
-such as those used throughout Google. While the spirit of this guidance applies
+**Note:** The following guidance applies to APIs defined in protocol buffers.
+While the spirit of this guidance applies
 to APIs defined using other specification languages or formats, some of the
 particular recommendations might be irrelevant.
 
@@ -23,12 +23,12 @@ single package, which **must** end in a version component. For example:
 ```proto
 syntax = "proto3";
 
-package google.cloud.translation.v3;
+package example.cloud.translation.v3;
 ```
 
-Google APIs **must** reside in a directory that matches the protocol buffer
+APIs **must** reside in a directory that matches the protocol buffer
 `package` directive. For example, the package above dictates that the directory
-be `google/cloud/translation/v3`.
+be `example/cloud/translation/v3`.
 
 ### File names
 
@@ -91,7 +91,7 @@ When defining APIs, the following rules apply:
 - Java
   - The `java_package` annotation **must** be set. The correct value is usually
     the proto package with the appropriate TLD prefixed. Example:
-    `com.google.example.v1`.
+    `com.company.example.v1`.
   - The `java_multiple_files` annotation **must** be set to `true`.
   - The `java_outer_classname` annotation **must** be set, and **should** be
     set to the name of the proto filename, in `PascalCase`, with `Proto`
@@ -105,9 +105,9 @@ When defining APIs, the following rules apply:
     to take account of the word breaks using PascalCase (UpperCamelCase).
     Example:
     ```proto
-    option csharp_namespace = "Google.Cloud.AccessApproval.V1";
-    option php_namespace = "Google\\Cloud\\AccessApproval\\V1";
-    option ruby_package = "Google::Cloud::AccessApproval::V1";
+    option csharp_namespace = "Company.Cloud.AccessApproval.V1";
+    option php_namespace = "Company\\Cloud\\AccessApproval\\V1";
+    option ruby_package = "Company::Cloud::AccessApproval::V1";
     ```
 
 All packaging annotations **should** be specified in alphabetical order of
@@ -117,9 +117,3 @@ name.
 which don't include compound names, be aware that _adding_ this annotation
 (with a value not equivalent to the default) constitutes a breaking change in
 that language. When releasing protos, be sure that omissions are intentional.
-
-## Changelog
-
-- **2023-02-24**: Added guidance on protobuf syntax.
-- **2022-10-18**: Added guidance on Ruby/PHP/C# options.
-- **2019-11-18**: Added guidance on the packaging annotations.
