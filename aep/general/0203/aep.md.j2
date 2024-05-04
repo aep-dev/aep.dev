@@ -143,8 +143,7 @@ a non-empty value) on the request.
 
 A field **should** only be described as required if _either_:
 
-- It is a field on a resource that a user provides somewhere as input. In this
-  case, the resource is only valid if a "truthy" value is _stored_.
+- It is a field on a resource that a user provides somewhere as input.
   - When [creating](./standard-methods) the resource, a value **must** be
     provided for the field on the create request.
   - When [updating](./standard-methods) the resource, the user **may** omit the
