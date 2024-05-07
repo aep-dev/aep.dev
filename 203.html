@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=5bd0d966">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=5bd0d966">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=884dcc24">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=884dcc24">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=5bd0d966"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=884dcc24"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,13 +512,36 @@
     <tr><td>Slug</td><td>field-behavior-documentation</td></tr>
     <tr><td>Number</td><td>203</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/203">aep.dev/203</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-04-17</td></tr>
+    <tr><td>Updated</td><td>2024-04-17</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#field-behavior-of-nested-messages">field behavior of nested messages</a></li>
+</ul>
+</li>
+<li><a href="#vocabulary">Vocabulary</a><ul>
+<li><a href="#identifier">Identifier</a></li>
+<li><a href="#immutable">Immutable</a></li>
+<li><a href="#input-only">Input only</a></li>
+<li><a href="#optional">Optional</a></li>
+<li><a href="#output-only">Output only</a></li>
+<li><a href="#required">Required</a></li>
+<li><a href="#unordered-list">Unordered List</a></li>
+</ul>
+</li>
+<li><a href="#backwards-compatibility">Backwards compatibility</a></li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#identifier-field-behavior">Identifier field behavior</a></li>
+<li><a href="#required-set-of-annotations">Required set of annotations</a></li>
+<li><a href="#requiring-field-behavior">Requiring field behavior</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -557,17 +580,212 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">field-behavior-documentation (AEP-203)</h4>
   <h1 id="field-behavior-documentation">Field behavior documentation</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/29">this GitHub issue</a> for more
-information.</p>
+<p>When defining fields in protocol buffers, it is customary to explain to users
+certain aspects of the field's behavior (such as whether it is required or
+optional). Additionally, it can be useful for other tools to understand this
+behavior (for example, to optimize client library signatures).</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs use the <code>aep.api.field_behavior</code> annotation to describe well-understood
+field behavior, such as a field being required or immutable.</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="c1">// The audio data to be recognized.</span>
+<span class="n">RecognitionAudio</span><span class="w"> </span><span class="na">audio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">aep.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+</code></pre></div>
+<ul>
+<li>APIs <strong>must</strong> apply the <code>aep.api.field_behavior</code> annotation on every field on
+  a message or sub-message used in a request.</li>
+<li>The annotation <strong>must</strong> include any google.api.FieldBehavior values that
+  accurately describe the behavior of the field.<ul>
+<li><code>FIELD_BEHAVIOR_UNSPECIFIED</code> <strong>must not</strong> be used.</li>
+</ul>
+</li>
+<li>APIs <strong>must</strong> at minimum use one of <code>REQUIRED</code>, <code>OPTIONAL</code>, or <code>OUTPUT_ONLY</code>.</li>
+</ul>
+<p><strong>Warning:</strong> Although <code>field_behavior</code> does not impact proto-level behavior,
+many clients (e.g. CLIs and SDKs) rely on them to generate code. Thoroughly
+review and consider which values are relevant when adding a new field.</p>
+<p><strong>Note:</strong> The vocabulary given in this document is for <em>descriptive</em> purposes
+only, and does not itself add any validation. The purpose is to consistently
+document this behavior for clients.</p>
+<h3 id="field-behavior-of-nested-messages">field behavior of nested messages</h3>
+<p><code>aep.api.field_behavior</code> annotations on a nested message are independent of the
+annotations of the parent.</p>
+<p>For example, a nested message can have a field behavior of <code>REQUIRED</code> while the
+parent field can be <code>OPTIONAL</code>:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Title</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">aep.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Slide</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Title</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">aep.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OPTIONAL</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In the case above, if a <code>title</code> is specified, the <code>text</code> field is required.</p>
+<h2 id="vocabulary">Vocabulary</h2>
+<h3 id="identifier">Identifier</h3>
+<p>The use of <code>IDENTIFIER</code> indicates that a field within a resource message is
+used to identify the resource. It <strong>must</strong> be attached to the <code>path</code> field and
+<strong>must not</strong> be attached to any other field (see <a href="./resource-paths#fields-representing-resource-paths">fields representing resource
+paths</a>).</p>
+<p>The <code>IDENTIFIER</code> value conveys that the field is not accepted as input (i.e.
+<code>OUTPUT_ONLY</code>) in the context of a create method, while also being considered
+<code>IMMUTABLE</code> and accepted as input for mutation methods that accept the resource
+as the primary input e.g. <a href="./standard-methods">Standard Update</a>.</p>
+<p>This annotation <strong>must not</strong> be applied to references to other resources within
+a message.</p>
+<h3 id="immutable">Immutable</h3>
+<p>The use of <code>IMMUTABLE</code> indicates that a field on a resource cannot be changed
+after it's creation. This can apply to either fields that are input or outputs,
+required or optional.</p>
+<p>When a service receives an immutable field in an update request (or similar),
+even if included in the update mask, the service <strong>should</strong> ignore the field if
+the value matches, but <strong>should</strong> error with <code>INVALID_ARGUMENT</code> if a change is
+requested.</p>
+<p>Potential use cases for immutable fields (this is not an exhaustive list) are:</p>
+<ul>
+<li>Attributes of resources that are not modifiable for the lifetime of the
+  application (e.g. a disk type).</li>
+</ul>
+<p><strong>Note:</strong> Fields which are "conditionally immutable" <strong>must not</strong> be given the
+immutable annotation.</p>
+<h3 id="input-only">Input only</h3>
+<p>The use of <code>INPUT_ONLY</code> indicates that the field is provided in requests and
+that the corresponding field will not be included in output.</p>
+<p>Additionally, a field <strong>should</strong> only be described as input only if it is a
+field in a resource message or a field of a message included within a resource
+message. Notably, fields in request messages (a message which only ever acts as
+an argument to an RPC, with a name usually ending in <code>Request</code>) <strong>should not</strong>
+be described as input only because this is already implied.</p>
+<p>Potential use cases for input only fields (this is not an exhaustive list) are:</p>
+<ul>
+<li>The <code>ttl</code> field as described in <a href="/214">AEP-214</a>.</li>
+</ul>
+<p><strong>Warning:</strong> Input only fields are rare and should be considered carefully
+before use.</p>
+<h3 id="optional">Optional</h3>
+<p>The use of <code>OPTIONAL</code> indicates that a field is not required.</p>
+<p>A field <strong>may</strong> be described as optional if it is a field on a request message
+(a message that is an argument to an RPC, usually ending in <code>Request</code>), or a
+field on a submessage.</p>
+<h3 id="output-only">Output only</h3>
+<p>The use of <code>OUTPUT_ONLY</code> indicates that the field is provided in responses, but
+that including the field in a message in a request does nothing (the server
+<strong>must</strong> clear out any value in this field and <strong>must not</strong> throw an error as a
+result of the presence of a value in this field on input). Similarly, services
+<strong>must</strong> ignore the presence of output only fields in update field masks (see:
+<a href="/161">AEP-161</a>).</p>
+<p>Additionally, a field <strong>should</strong> only be described as output only if it is a
+field in a resource message, or a field of a message farther down the tree.
+Notably, fields in response messages (a message which only ever acts as a
+return value to an RPC, usually ending in <code>Response</code>) <strong>should not</strong> be
+described as output only because this is already implied.</p>
+<p>Output only fields <strong>may</strong> be set to empty values if appropriate to the API.</p>
+<p>Potential use cases for output only fields (this is not an exhaustive list)
+are:</p>
+<ul>
+<li>Create or update timestamps.</li>
+<li>Derived or structured information based on original user input.</li>
+<li>Properties of a resource assigned by the service which can not be altered.</li>
+</ul>
+<h3 id="required">Required</h3>
+<p>The use of <code>REQUIRED</code> indicates that the field <strong>must</strong> be present (and set to
+a non-empty value) on the request.</p>
+<p>A field <strong>should</strong> only be described as required if <em>either</em>:</p>
+<ul>
+<li>It is a field on a resource that a user provides somewhere as input.<ul>
+<li>When <a href="./standard-methods">creating</a> the resource, a value <strong>must</strong> be
+  provided for the field on the create request.</li>
+<li>When <a href="./standard-methods">updating</a> the resource, the user <strong>may</strong> omit the
+  field provided that the field is also absent from the field mask,
+  indicating no change to the field (otherwise it <strong>must</strong> be provided).</li>
+</ul>
+</li>
+<li>It is a field on a request message (a message that is an argument to an RPC,
+  with a name usually ending in <code>Request</code>). In this case, a value <strong>must</strong> be
+  provided as part of the request, and failure to do so <strong>must</strong> cause an error
+  (usually <code>INVALID_ARGUMENT</code>).</li>
+</ul>
+<p>Fields <strong>should not</strong> be described as required in order to signify:</p>
+<ul>
+<li>A field which will always be present in a response.</li>
+<li>A field which is conditionally required in some situations.</li>
+<li>A field on any message (including messages that are resources) which is never
+  used as user input.</li>
+</ul>
+<p><strong>Note:</strong> In most cases, empty values (such as <code>false</code> for booleans, <code>0</code> for
+integers, or the unspecified value for enums) are indistinguishable from unset
+values, and therefore setting a required field to a falsy value yields an
+error. A corollary to this is that a required boolean must be set to <code>true</code>.</p>
+<h3 id="unordered-list">Unordered List</h3>
+<p>The use of <code>UNORDERED_LIST</code> on a repeated field of a resource indicates that
+the service does not guarantee the order of the items in the list.</p>
+<p>A field <strong>should</strong> be described as an unordered list if the service does not
+guarantee that the order of the elements in the list will match the order that
+the user sent, including a situation where the service will sort the list on
+the user's behalf.</p>
+<h2 id="backwards-compatibility">Backwards compatibility</h2>
+<p>Adding or changing <code>aep.api.field_behavior</code> values can represent a semantic
+change in the API that is perceived as incompatible for existing clients. The
+following are examples of backwards incompatible changes with
+<code>aep.api.field_behavior</code>:</p>
+<ul>
+<li>Adding <code>REQUIRED</code> to an existing field previously considered <code>OPTIONAL</code>
+  (implicitly or otherwise)</li>
+<li>Adding a new field annotated as <code>REQUIRED</code> to an existing request message</li>
+<li>Adding <code>OUTPUT_ONLY</code> to an existing field previously accepted as input</li>
+<li>Adding <code>INPUT_ONLY</code> to an existing field previously emitted as output</li>
+<li>Adding <code>IMMUTABLE</code> to an existing field previously considered mutable</li>
+<li>Removing <code>OUTPUT_ONLY</code> from an existing field previously ignored as input</li>
+<li>Removing <code>IDENTIFIER</code> from an existing field.</li>
+</ul>
+<p>There are some changes that <em>are</em> backwards compatible, which are as follows:</p>
+<ul>
+<li>Adding <code>OPTIONAL</code> to an existing field</li>
+<li>Adding <code>IDENTIFIER</code> to an existing <code>path</code> field</li>
+<li>Changing from <code>REQUIRED</code> to <code>OPTIONAL</code> on an existing field</li>
+<li>Changing from <code>OUTPUT_ONLY</code> and/or <code>IMMUTABLE</code> to <code>IDENTIFIER</code> on an existing
+  field</li>
+<li>Removing <code>REQUIRED</code> from an existing field</li>
+<li>Removing <code>INPUT_ONLY</code> from an existing field previously excluded in responses</li>
+<li>Removing <code>IMMUTABLE</code> from an existing field previously considered immutable</li>
+</ul>
+<h2 id="rationale">Rationale</h2>
+<h3 id="identifier-field-behavior">Identifier field behavior</h3>
+<p>Resource paths, the primary identifiers for any compliant resource, are never
+fully constructed by the user on create. Such fields are typically assigned
+<code>OUTPUT_ONLY</code> field behavior. They are, however, also often consumed as the
+primary identifier in scenarios where the resource itself is the primary
+request payload. Such fields could <em>not</em> be considered <code>OUTPUT_ONLY</code>.
+Furthermore, in mutation requests, like Standard Update, the resource path as
+the primary identifier cannot be changed in place. Such fields are typically
+assigned <code>IMMUTABLE</code> field behavior. These conflicting and context-dependent
+field behaviors meant that a new value was necessary to single out and convey
+the behavior of the resource path field.</p>
+<h3 id="required-set-of-annotations">Required set of annotations</h3>
+<p>A field used in a request message must be either an input or an output.</p>
+<p>In the case of an output, the <code>OUTPUT_ONLY</code> annotation is sufficient.</p>
+<p>In the case of an input, a field is either required or optional, and therefore
+should have at least the <code>REQUIRED</code> or <code>OPTIONAL</code> annotation, respectively.
+Only providing <code>INPUT_ONLY</code> does not convey the necessity of the field, so
+specifying either <code>REQUIRED</code> or <code>OPTIONAL</code> is still necessary.</p>
+<h3 id="requiring-field-behavior">Requiring field behavior</h3>
+<p>By including the field behavior annotation for each field, the overall behavior
+that the resource exhibits is more clearly defined. Clearly defined field
+behavior improves programmatic clients and user understanding.</p>
+<p>Requiring the annotation also forces the API author to explicitly consider the
+behavior when initially authoring of the API.</p>
+<p>Modifying field behavior after initial authoring can result in
+backwards-incompatible changes in clients. For example, making an optional
+field required results in backwards-incompatible changes in the method
+signature of an RPC or a resource in a Declarative client. See the
+<a href="#backwards-compatibility">Backwards compatibility</a> section for more detailed
+compatibility guidance.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-04-17</strong>: Added initial guidance.</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
