@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=884dcc24">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=884dcc24">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=09ce16c7">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=09ce16c7">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=884dcc24"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=09ce16c7"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,13 +512,20 @@
     <tr><td>Slug</td><td>partial-responses</td></tr>
     <tr><td>Number</td><td>157</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/157">aep.dev/157</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
     <tr><td>Created</td><td>2023-01-22</td></tr>
     <tr><td>Updated</td><td>2023-01-22</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#field-masks-parameter">Field masks parameter</a></li>
+<li><a href="#view-enumeration">View enumeration</a></li>
+<li><a href="#read-masks-as-a-request-field">Read masks as a request field</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
   </section>
@@ -557,17 +564,92 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">partial-responses (AEP-157)</h4>
   <h1 id="partial-responses">Partial responses</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/11">this GitHub issue</a> for more
-information.</p>
+<p>Sometimes, a resource can be either large or expensive to compute, and the API
+needs to give the user control over which fields it sends back.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>may</strong> support partial responses in one of two ways:</p>
+<h3 id="field-masks-parameter">Field masks parameter</h3>
+<p>Field masks (<code>google.protobuf.FieldMask</code>) can be used for granting the user
+fine-grained control over what fields are returned. An API <strong>should</strong> support
+the mask in a side channel. For example, the parameter can be specified either
+using an HTTP query parameter, an HTTP header, or a <a href="https://grpc.io/docs/what-is-grpc/core-concepts/#metadata">gRPC metadata entry</a>.</p>
+<p>Field masks <strong>should not</strong> be specified in the
+<a href="/157#read-masks-as-a-request-field">request</a>.</p>
+<ul>
+<li>The value of the field mask parameter <strong>must</strong> be a
+  <code>google.protobuf.FieldMask</code>.</li>
+<li>The field mask parameter <strong>must</strong> be optional:<ul>
+<li>An explicit value of <code>"*"</code> <strong>should</strong> be supported, and <strong>must</strong> return all
+  fields.</li>
+<li>If the field mask parameter is omitted, it <strong>must</strong> default to <code>"*"</code>,
+  unless otherwise documented.</li>
+</ul>
+</li>
+<li>
+<p>An API <strong>may</strong> allow read masks with non-terminal repeated fields (unlike
+  update masks), but is not obligated to do so.</p>
+<p><strong>Warning:</strong> There is a known conflict between this guidance and the
+documentation of <code>FieldMask</code> itself:
+<a href="https://github.com/protocolbuffers/protobuf/blob/5e84a6169cf0f9716c9285c95c860bcb355dbdc1/src/google/protobuf/field_mask.proto#L85-L86">google/protobuf/field_mask.proto</a>
+states that
+<code>A repeated field is not allowed except at the last position of a paths string.</code>
+As such, official libraries (such as <code>Merge</code> for FieldMasks) may not support
+wildcards without additional work. Track the issue
+<a href="https://github.com/protocolbuffers/protobuf/issues/8547#issuecomment-2005180068">here</a>.
+Consider using the view enumeration pattern described below instead instead.</p>
+</li>
+</ul>
+<p><strong>Note:</strong> Changing the default value of the field mask parameter is a
+<a href="./backwards-compatibility#semantic-changes">breaking change</a>.</p>
+<h3 id="view-enumeration">View enumeration</h3>
+<p>Alternatively, an API <strong>may</strong> support partial responses with view enums. View
+enums are useful for situations where an API only wants to expose a small
+number of permutations to the user:</p>
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">enum</span><span class="w"> </span><span class="n">BookView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The default / unset value.</span>
+<span class="w">  </span><span class="c1">// The API will default to the BASIC view.</span>
+<span class="w">  </span><span class="na">BOOK_VIEW_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Include basic metadata about the book, but not the full contents.</span>
+<span class="w">  </span><span class="c1">// This is the default value (for both ListBooks and GetBook).</span>
+<span class="w">  </span><span class="na">BOOK_VIEW_BASIC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Include everything.</span>
+<span class="w">  </span><span class="na">BOOK_VIEW_FULL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The enum <strong>should</strong> be specified as a <code>view</code> field on the request message.</li>
+<li>The enum <strong>should</strong> be named something ending in <code>-View</code></li>
+<li>The enum <strong>should</strong> at minimum have values named <code>BASIC</code> and <code>FULL</code> (although
+  it <strong>may</strong> have values other than these).</li>
+<li>The <code>UNSPECIFIED</code> value <strong>must</strong> be valid (not an error), and the API
+  <strong>must</strong> document what the unspecified value will do.<ul>
+<li>For List RPCs, the effective default value <strong>should</strong> be <code>BASIC</code>.</li>
+<li>For Get RPCs, the effective default value <strong>should</strong> be either <code>BASIC</code> or
+  <code>FULL</code>.</li>
+</ul>
+</li>
+<li>The enum <strong>should</strong> be defined at the top level of the proto file (as it is
+  likely to be needed in multiple requests, e.g. both <code>Get</code> and <code>List</code>). See
+  <a href="./enumerations">enumerations</a> for more guidance on top-level enumerations.</li>
+<li>
+<p>APIs <strong>may</strong> add fields to a given view over time. APIs <strong>must not</strong> remove a
+  field from a given view (this is a breaking change).</p>
+<p><strong>Note:</strong> If a service requires (or might require) multiple views with
+overlapping but distinct values, there is a potential for a namespace
+conflict. In this situation, the service <strong>should</strong> nest the view enum within
+the individual resource.</p>
+</li>
+</ul>
+<h3 id="read-masks-as-a-request-field">Read masks as a request field</h3>
+<p><strong>Warning:</strong> Read masks as a single field on the request message, for example:
+<code>google.protobuf.FieldMask read_mask</code> are <strong>DEPRECATED</strong>.</p>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
