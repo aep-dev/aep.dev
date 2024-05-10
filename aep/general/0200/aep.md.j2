@@ -21,10 +21,15 @@ each exception so that historical wisdom is not lost.
 
 ## Guidance
 
-If an API violates the AEP standards for any reason, there **must** be an
-internal comment linking to this document using its descriptive link
-([aep.dev/not-precedent]()) to ensure others do not copy the violations or cite
-the errors as precedent of a "previously approved API".
+If an API violates "**should**" or "**should not**" AEP guidance for any
+reason, there **must** be an internal comment linking to this document using
+its descriptive link ([aep.dev/not-precedent]()) to ensure others do not copy
+the violations or cite the errors as precedent of a "previously approved API".
+
+**Important:** APIs **must not** violate guidance specified with "**must**" or
+"**must not**", even with a link to this AEP. Tools such as documentation
+generators and client generators **may** assume full compliance with "**must**"
+and "**must not**" guidance.
 
 The comment should also include an explanation of what violates standards and
 why it is necessary. For example:
@@ -47,6 +52,7 @@ message DailyMaintenanceWindow {
   string duration = 3;
 }
 ```
+
 {% tab oas %}
 
 **Note:** OAS example not yet written.
@@ -63,8 +69,8 @@ to users to break the existing pattern only for the sake of adhering to the
 global standard.
 
 For example, if all of an API's resources use `creation_time` (instead of the
-standard field `create_time` described in AEP-142), a new resource in that
-API should continue to follow the local pattern.
+standard field `create_time` described in AEP-142), a new resource in that API
+should continue to follow the local pattern.
 
 However, others who might otherwise copy that API should be made aware that
 this is contra-standard and not something to cite as precedent when launching
@@ -89,6 +95,7 @@ message Author {
   google.protobuf.Timestamp creation_time = 1;
 }
 ```
+
 {% tab oas %}
 
 **Note:** OAS example not yet written.
