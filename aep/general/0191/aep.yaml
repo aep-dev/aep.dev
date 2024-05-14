@@ -1,7 +1,7 @@
 ---
 id: 191
-state: reviewing
+state: approved
 slug: file-and-directory-structure
-created: 2023-01-22
+created: 2024-05-04
 placement:
-  category: best-practices
+  category: protobuf
