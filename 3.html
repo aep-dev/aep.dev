@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=25f9e8b0">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=25f9e8b0">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6cbbf792">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6cbbf792">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=25f9e8b0"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=6cbbf792"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -534,6 +534,7 @@
 <li><a href="#api-service">API Service</a></li>
 <li><a href="#consumer">Consumer</a></li>
 <li><a href="#declarative-clients">Declarative Clients</a></li>
+<li><a href="#schema">Schema</a></li>
 <li><a href="#user">User</a></li>
 <li><a href="#network-api">Network API</a></li>
 </ul>
@@ -647,6 +648,10 @@ client set fields as read-only and diligently preserve those values.</p>
 <li>Ordering of these imperative actions.</li>
 </ul>
 <p><a href="https://www.terraform.io/">Terraform</a> is an example of such a client.</p>
+<h3 id="schema">Schema</h3>
+<p>A schema describes the structure of the request or response of an <a href="#api-method">API
+method</a>, or a <a href="#api-resource">resource</a>. It refers both to an
+OpenAPI schema as well as a protobuf message.</p>
 <h3 id="user">User</h3>
 <p>A human being which is using an API directly, such as with cURL. This term is
 defined to differentiate usage in the AIPs between a human <em>user</em> and a
