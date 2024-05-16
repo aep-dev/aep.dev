@@ -18,7 +18,7 @@ message Book {
     pattern: "publishers/{publisher}/books/{book}"
   };
 
-  string name = 1 [(google.api.field_behavior) = IDENTIFIER];
+  string path = 1 [(google.api.field_behavior) = IDENTIFIER];
 
   repeated string authors = 2;
 }
@@ -40,9 +40,6 @@ message Book {
   - If an array data can not be bounded (in other words, if there is a chance
     that the array will be too large to be reasonably returned in a single
     request), the API **should** use a sub-resource instead.
-- Array fields **should not** represent the body of another resource inline.
-  Instead, the field **should** be a array of strings providing the resource
-  names of the associated resources.
 
 **Note:** This document uses the term "array" to refer to a field on a resource
 that is a list of elements that have the same type. Some languages and IDLs use
