@@ -14,12 +14,12 @@ APIs **may** support batch get to retrieve a consistent set of resources.
 - The HTTP URI **must** end with `:batchGet`.
 - The URI path **should** represent the collection for the resource, matching
   the collection used for simple CRUD operations. If the operation spans
-  parents, a dash (`-`) **may** be accepted as a wildcard.
+  parents, a [wilcard](./reading-across-collections) **may** be accepted.
 - There **must not** be a request body.
   - If a GET request contains a body, the body **must** be ignored, and **must not** cause an error.
 - The operation **must** be atomic: it **must** fail for all resources or
   succeed for all resources (no partial success). For situations requiring
-  partial failures, `List` (AEP-132) methods **should** be used.
+  partial failures, [`List`](./list) methods **should** be used.
   - If the operation covers multiple locations and at least one location is
     down, the operation **must** fail.
 
@@ -75,7 +75,7 @@ message BatchGetBooksRequest {
   - If no resource paths are provided, the API **should** error with
     `INVALID_ARGUMENT`.
   - The field **should** be required.
-  - The field **should** identify the [resource type][aep-122-paths] that it
+  - The field **should** identify the [resource type](./paths) that it
     references.
   - The comment for the field **should** document the resource pattern.
   - The comment for the field **should** document the maximum number of
