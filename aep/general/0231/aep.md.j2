@@ -16,7 +16,8 @@ APIs **may** support batch get to retrieve a consistent set of resources.
   the collection used for simple CRUD operations. If the operation spans
   parents, a [wilcard](./reading-across-collections) **may** be accepted.
 - There **must not** be a request body.
-  - If a GET request contains a body, the body **must** be ignored, and **must not** cause an error.
+  - If a GET request contains a body, the body **must** be ignored, and **must
+    not** cause an error.
 - The operation **must** be atomic: it **must** fail for all resources or
   succeed for all resources (no partial success). For situations requiring
   partial failures, [`List`](./list) methods **should** be used.
@@ -58,8 +59,8 @@ message BatchGetBooksRequest {
 }
 ```
 
-- The request and response schemas **must** match the method name, with `Request` and
-  `Response` suffixes.
+- The request and response schemas **must** match the method name, with
+  `Request` and `Response` suffixes.
 - A `parent` field **should** be included, unless the resource being retrieved
   is a top-level resource, to facilitate inclusion in the URI as well to permit
   a single permissions check. If a caller sets this field, and the parent
@@ -78,8 +79,8 @@ message BatchGetBooksRequest {
   - The field **should** identify the [resource type](./paths) that it
     references.
   - The comment for the field **should** document the resource pattern.
-  - The comment for the field **should** document the maximum number of
-    paths allowed.
+  - The comment for the field **should** document the maximum number of paths
+    allowed.
 - There **must not** be a body key in the `google.api.http` annotation.
 
 {% tab oas %}
@@ -94,9 +95,10 @@ message BatchGetBooksRequest {
   - If the collection in the path of any resource does not match the collection
     of the request URL, the request **must** fail.
   - The parameter **should** be required.
-  - The parameter description **should** identify the [resource type][aep-122-paths]
-    that it references.
-  - The parameter `description` **should** document the pattern for path values.
+  - The parameter description **should** identify the [resource
+    type][aep-122-paths] that it references.
+  - The parameter `description` **should** document the pattern for path
+    values.
   - The parameter `schema` **should** include a `maxItems` attribute to specify
     the maximum number of paths allowed.
 - The method definition **must not** have a `requestBody` defined.
@@ -131,8 +133,34 @@ message BatchGetBooksResponse {
 
 {% tab oas %}
 
-- The response schema **must** be an array with each item containing one of the
-  requested resources.
+- The response schema **must** be `type: object` with a single array property
+  with each item containing one of the requested resources.
+
+```json
+{
+  "results": [
+    {
+      "name": "publishers/lacroix/books/les-mis",
+      "isbn": "978-037-540317-0",
+      "title": "Les Misérables",
+      "authors": ["Victor Hugo"],
+      "rating": 9.6
+    },
+    {
+      "name": "publishers/lacroix/books/hunchback-of-notre-dame",
+      "isbn": "978-140-274575-1",
+      "title": "The Hunchback of Notre Dame",
+      "authors": ["Victor Hugo"],
+      "rating": 9.3
+    }
+  ]
+}
+```
+
+- The array of resources **must** be named `results` and contain resources with
+  no additional wrapping.
+- There must not be a `nextPageToken` field as batch get operations are not
+  pageable.
 
 {% endtabs %}
 
@@ -144,6 +172,7 @@ message BatchGetBooksResponse {
 - **2024-04-22:** Adopt from Google AIP https://google.aip.dev/231 with the
   following changes:
   - Dropped the "nested requests" pattern.
+  - Changed the response schema to an object with `results` array property.
 
 <!-- Links -->
 
