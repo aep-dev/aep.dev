@@ -18,7 +18,7 @@ following channels of communication are available:
 
 - [The #aep channel in the CNCF Slack](https://cloud-native.slack.com/archives/C04TX46UCTV).
   Sign up at https://slack.cncf.io.
-- [The AEP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar?cid=N2UzNWRkM2RmMTk0YTMyZjRmYTdjMDNhMzQ1NGUyNGJhMzY1MWU2ZjU2ODI0OGVmZTFkZGYxZTM0YTdiZWU5ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t).
+- [The AEP Google Calendar, to view any upcoming meetings](https://calendar.google.com/calendar/u/0/embed?src=7e35dd3df194a32f4fa7c03a3454e24ba3651e6f568248efe1ddf1e34a7bee9e@group.calendar.google.com&ctz=America/Los_Angeles)
   - A weekly project meeting is held, which anyone interested is welcome to
     attend!
 
