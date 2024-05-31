@@ -14,9 +14,6 @@ in a standard [`List`](./list) method:
 GET /v1/publishers/-/books?filter=...
 ```
 
-- The URI pattern **must** still be specified with `*` and permit the
-  collection to be specified; a URI pattern **must not** hard-code the `-`
-  character.
 - The method **must** explicitly document that this behavior is supported.
 - The resources provided in the response **must** use the canonical name of the
   resource, with the actual parent collection identifiers (instead of `-`).
@@ -33,6 +30,14 @@ GET /v1/publishers/-/books?filter=...
 possibility of partial failures due to unreachable parents (such as when
 listing across locations), the method **must** indicate this following the
 guidance in [unreachable resources].
+
+{% tab proto %}
+
+- The URI pattern in the `google.api.http` annotation **must** still be
+  specified with `*` and permit the collection to be specified; a URI pattern
+  **must not** hard-code the `-` character.
+
+{% endtabs %}
 
 ### Unique resource lookup
 
