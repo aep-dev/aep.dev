@@ -6,8 +6,14 @@ name and type information by specifying constraints or validation rules.
 
 ## Guidance
 
-Annotating a field with `buf.validate.field` is only necessary when a field
-consistently follows a set pattern.
+If a field follows a set pattern, it **should** be annotated with a `buf.validate.field` annotation.
+
+If a field has a `buf.validate.field` annotation, that annotation **must** be included on all requests and responses.
+
+If a field has a `buf.validate.field`, any values that do not follow the `buf.validate.field` annotation must return an error.
+
+If a field has a `buf.validate.field`, an API **must** return an error if it attempts to return a value that does not follow the annotation.
+
 
 #### Backwards compatibility
 
