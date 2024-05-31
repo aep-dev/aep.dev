@@ -104,15 +104,15 @@ Existing fields and messages **must not** have their type changed, even if the
 new type is wire-compatible, because type changes alter generated code in a
 breaking way.
 
-### Changing resource names
+### Changing resource paths
 
-A resource **must not** change its [name][aep-122].
+A resource **must not** change its [path][aep-122].
 
 Unlike most breaking changes, this affects major versions as well: in order for
 a client to expect to use v2.0 access a resource that was created in v1.0 or
 vice versa, the same resource name **must** be used in both versions.
 
-More subtly, the set of valid resource names **should not** change either, for
+More subtly, the set of valid resource paths **should not** change either, for
 the following reasons:
 
 - If resource name formats become more restrictive, a request that would
