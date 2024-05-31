@@ -76,13 +76,27 @@ For example, `Book` might have the following path patterns:
 - `books/{book}` for self-published books
 
 In this case, APIs **may** allow users to read across _all_ collections of
-books by using the `-` wildcard character:
+books by using the `--` global wildcard sequence:
 
-`GET /v1/-/books`
+`GET /v1/--/books`
 
-Here, `-` is not a wildcard for a resource ID within a specific collection.
+Here, `--` is not a wildcard for a resource ID within a specific collection.
 Rather, it is a wildcard for the entire path pattern. This allows users to
 retrieve a book regardless of its resource ancestry.
+
+This pattern may also be used to search all subcollections of a specific
+collection. For example, a `Playlist` resource might have the following path
+patterns:
+
+- `games/{game}/users/{user}/playlists/{playlist}` for playlists created by a
+  user within a game
+- `games/{game}/zones/{zone}/playlists/{playlist}` for playlists specific to a
+  game zone
+
+A client could read across all collections of both zone and user playlists
+_within_ game `123` with:
+
+`GET /v1/games/123/--/playlists`
 
 ## Further reading
 
