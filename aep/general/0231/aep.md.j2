@@ -9,10 +9,10 @@ provides this functionality.
 APIs **may** support batch get to retrieve a consistent set of resources.
 
 - The method's name **must** begin with `BatchGet`. The remainder of the method
-  name **should** be the plural form of the resource being retrieved.
+  name **must** be the plural form of the resource being retrieved.
 - The HTTP verb **must** be `GET`.
 - The HTTP URI **must** end with `:batchGet`.
-- The URI path **should** represent the collection for the resource, matching
+- The URI path **must** represent the collection for the resource, matching
   the collection used for simple CRUD operations. If the operation spans
   parents, a [wilcard](./reading-across-collections) **may** be accepted.
 - There **must not** be a request body.
