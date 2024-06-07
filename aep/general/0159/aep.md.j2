@@ -52,9 +52,11 @@ parent collection:
 GET https://library.exampleapis.com/v1/publishers/-/books/{book}
 ```
 
-- The URI pattern **must** still be specified with `*` and permit the
-  collection to be specified; a URI pattern **must not** hard-code the `-`
-  character.
+- The URI pattern **should** still be specified with a variable and permit the
+  collection to be specified; a URI pattern **should not** hard-code the `-`
+  character. Having a separate route for the wildcard case can lead to
+  ambiguous or undefined routing behavior (unless the variable pattern excludes
+  the string `"-"`)
 - The method **must** explicitly document that this behavior is supported.
 - The resource name in the response **must** use the canonical name of the
   resource, with actual parent collection identifiers (instead of `-`). For
