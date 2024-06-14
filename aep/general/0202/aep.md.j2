@@ -34,13 +34,6 @@ as Java does with [UUID][java uuid]. Most have specific structural requirements
 that are validated by the service, so conveying the format to the user ahead of
 time is critical to their experience.
 
-#### Why discourage primitive equality comparisons?
-
-The text representations of the supported formats have many nuances and
-transforming the value into a canonical representation is non-trivial. As such,
-aligning implementations between each consumer and each service without any
-issue is infeasiable.
-
 #### Why document value normalizations?
 
 While primitive comparison is not recommended for any of the supported formats,
