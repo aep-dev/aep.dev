@@ -15,7 +15,14 @@ where necessary. There are several approaches to this depending on how generic
 the field needs to be; in general, APIs **should** attempt to introduce the
 "least generic" approach that is able to satisfy the use case.
 
-### Oneof
+For example, an API **should not** use a completely generic field (such as
+`google.protobuf.Struct` in protobuf APIs) when the value of the field must
+correspond to one of a known number of schemas. Instead, the API **should** use
+a `oneof` to represent the known schemas.
+
+### Generic fields in protobuf APIs
+
+#### Oneof
 
 A `oneof` **may** be used to introduce a type union: the user or API is able to
 specify one of the fields inside the `oneof`. Additionally, a `oneof` **may**
@@ -36,7 +43,7 @@ oneofs".
 non-breaking change, but moving existing fields into or out of a `oneof` is
 breaking (it creates a backwards-incompatible change in Go protobuf stubs).
 
-### Maps
+#### Maps
 
 Maps **may** be used in situations where many values _of the same type_ are
 needed, but the keys are unknown or user-determined.
@@ -47,7 +54,7 @@ sometimes be suited to a situation where many objects of the same type are
 needed, with different behavior based on the names of their keys (for example,
 using keys as environment names).
 
-### Struct
+#### Struct
 
 The [`google.protobuf.Struct`][struct] object **may** be used to represent
 arbitrary nested JSON. Keys can be strings, and values can be floats, strings,
@@ -65,7 +72,7 @@ If a API needs to reason about the _schema_ of a `Struct`, it **should** use
 [JSONSchema][] for this purpose. Because JSONSchema is itself JSON, a valid
 JSONSchema document can itself be stored in a `Struct`.
 
-### Any
+#### Any
 
 The [`google.protobuf.Any`][any] object can be used to send an arbitrary
 serialized protocol buffer and a type definition.
@@ -78,6 +85,10 @@ which is an often-unfamiliar process.
 
 Because of this, `Any` **should not** be used unless other options are
 infeasible.
+
+### Generic fields in OAS APIs
+
+**Note:** OAS-specific guidance not yet written.
 
 <!-- prettier-ignore-start -->
 [any]: https://github.com/protocolbuffers/protobuf/tree/master/src/google/protobuf/any.proto
