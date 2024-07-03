@@ -29,14 +29,24 @@ they are appropriately descriptive and of suitable length.
 
 ### Case
 
-Field definitions in protobuf files **must** use `lower_snake_case` names.
-These names are mapped to an appropriate naming convention in JSON and in
-generated code.
+{% tab proto %} Field definitions in protobuf files **must** use
+`lower_snake_case` names. These names are mapped to an appropriate naming
+convention in JSON and in generated code.
 
-Additionally, each word in the field **must not** begin with a number, because
-it creates ambiguity when converting between snake case and camel case.
-Similarly, fields **must not** contain leading, trailing, or adjacent
-underscores.
+{% tab oas %}
+
+Field definitions in OAS schemas **must** use `camelCase` names.
+
+{% endtabs %}
+
+**Note:** Examples throughout this AEP use `snake_case`. This should not be
+taken to mean that this guidance is protobuf-specific. Any guidance not in a
+protobuf tab applies to all APIs, with `snake_case` examples converted to
+`camelCase` for OAS APIs.
+
+Each word in a field name **must not** begin with a number, because it creates
+ambiguity when converting between snake case and camel case. Similarly, fields
+**must not** contain leading, trailing, or adjacent underscores.
 
 ### Uniformity
 
@@ -45,18 +55,16 @@ different names for different concepts wherever possible. This includes names
 across multiple APIs, in particular if those APIs are likely to be used
 together.
 
-### Repeated fields
+### Arrays / Repeated fields
 
-Repeated fields **must** use the proper plural form, such as `books` or
-`authors`. On the other hand, non-repeated fields **should** use the singular
-form such as `book` or `author`. This implies that resource names **should**
-use the singular form as well, since the field name should follow the resource
-name (e.g., use `repeated Book books`, **not** `Books books = 1`).
+Arrays (in OAS) and repeated fields (in protobuf) **must** use the proper
+plural form, such as `books` or `authors`. On the other hand, singular fields
+**should** use the singular form such as `book` or `author`.
 
 ### Prepositions
 
 Field names **should not** include prepositions (such as "with", "for", "at",
-"by", etc). For example:
+"by", etc.). For example:
 
 - `error_reason` (**not** `reason_for_error`)
 - `author` (**not** `written_by`)
@@ -107,10 +115,18 @@ are an exception to this rule. For example, `is_new` (**not** `new`).
 
 ### String vs. bytes
 
+{% tab proto %}
+
 When using `bytes`, the contents of the field are base64-encoded when using
-JSON on the wire. Services **should** use `bytes` when there is a need to send
+JSON on the wire. APIs **should** use `bytes` when there is a need to send
 binary contents over the wire, and **should not** ask the user to manually
 base64-encode a field into a `string` field.
+
+{% tab oas %}
+
+**Note:** OAS guidance not yet written.
+
+{% endtabs %}
 
 ### URIs
 
@@ -127,8 +143,8 @@ API in that language.
 
 ### Conflicts
 
-Messages **should not** include a field with the same name as the enclosing
-message (ignoring case transformations). This causes conflicts when generating
+Schemas **should not** include a field with the same name as the enclosing
+schema (ignoring case transformations). This causes conflicts when generating
 code in some languages.
 
 ### Display names
