@@ -24,8 +24,8 @@ including adjectives that always apply and add little cognitive value. For
 example, a `proxy_settings` field might be as helpful as
 `shared_proxy_settings` if there is no unshared variant.
 
-**Important:** Field names often appear in generated client surfaces. Ensure they
-are appropriately descriptive and of suitable length.
+**Important:** Field names often appear in generated client surfaces. Ensure
+they are appropriately descriptive and of suitable length.
 
 ### Case
 
@@ -84,11 +84,10 @@ For uniformity, field names that contain both a noun and an adjective
 
 ### Verbs
 
-Field names **must not** be named to reflect an intent or action. They
-**must not** be verbs. Rather, because the field defines the *desired
-value* for mutations, e.g. Create and Update, and the *current value*
-for reads, e.g.  Get and List, the name **must** be a noun. It defines
-what is so, not what to do.
+Field names **must not** be named to reflect an intent or action. They **must
+not** be verbs. Rather, because the field defines the _desired value_ for
+mutations, e.g. Create and Update, and the _current value_ for reads, e.g. Get
+and List, the name **must** be a noun. It defines what is so, not what to do.
 
 - `collected_items` (**not** `collect_items`)
 - `disabled` (**not** `disable`)
@@ -146,4 +145,5 @@ field **should not** have a uniqueness requirement.
 
 - For naming resource fields, see [paths](./paths).
 - For naming fields representing quantities, see [quantities](./quantities).
-- For naming fields representing time, see [time-and-duration](./time-and-duration).
+- For naming fields representing time, see
+  [time-and-duration](./time-and-duration).
