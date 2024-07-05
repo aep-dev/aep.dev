@@ -17,6 +17,10 @@
 #   This script runs a "development server" from Docker.
 # -----------------------------------------------------------------------------
 
+# capture the first argument as the port, defaulting to 4000
+PORT=${1:-4000}
+shift
+
 # Build the image (if and only if it is not already built).
 if [[ "$(docker images -q aep-site 2> /dev/null)" == "" ]]; then
   docker build -t aep-site .
@@ -27,8 +31,8 @@ fi
 
 # Run the image.
 docker run --rm \
-  -p 4000:4000/tcp -p 4000:4000/udp \
+  -p "${PORT}:4000/tcp" -p "${PORT}:4000/udp" \
   -p 35729:35729/tcp -p 35729:35729/udp \
-  --mount type=bind,source=`pwd`,destination=/code/,readonly \
+  --mount "type=bind,source=$(pwd),destination=/code/,readonly" \
   aep-site \
   "$@"
