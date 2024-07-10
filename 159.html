@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6cbbf792">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6cbbf792">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=9d0d34df">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=9d0d34df">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=6cbbf792"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=9d0d34df"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,13 +512,20 @@
     <tr><td>Slug</td><td>reading-across-collections</td></tr>
     <tr><td>Number</td><td>159</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/159">aep.dev/159</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-04-10</td></tr>
+    <tr><td>Updated</td><td>2024-04-10</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#unique-resource-lookup">Unique resource lookup</a></li>
+<li><a href="#reading-across-collections-with-different-path-patterns">Reading across collections with different path patterns</a></li>
+</ul>
+</li>
+<li><a href="#further-reading">Further reading</a></li>
+</ul>
 </div>
 
   </section>
@@ -557,17 +564,100 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">reading-across-collections (AEP-159)</h4>
   <h1 id="reading-across-collections">Reading across collections</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/13">this GitHub issue</a> for more
-information.</p>
+<p>Sometimes, it is useful for a user to be able to retrieve resources across
+multiple collections, or retrieve a single resource without needing to know
+what collection it is in.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>may</strong> support reading resources across multiple collections by allowing
+users to specify a <code>-</code> (the hyphen or dash character) as a wildcard character
+in a standard <a href="./list"><code>List</code></a> method:</p>
+<div class="highlight language-None"><pre><span></span><code>GET /v1/publishers/-/books?filter=...
+</code></pre></div>
+<ul>
+<li>The method <strong>must</strong> explicitly document that this behavior is supported.</li>
+<li>The resources provided in the response <strong>must</strong> use the canonical name of the
+  resource, with the actual parent collection identifiers (instead of <code>-</code>).</li>
+<li>Services <strong>may</strong> support reading across collections on <code>List</code> requests
+  regardless of whether the identifiers of the child resources are guaranteed
+  to be unique. However, services <strong>must not</strong> support reading across
+  collections on <code>Get</code> requests if the child resources might have a collision.</li>
+<li>Cross-parent requests <strong>should not</strong> support <code>order_by</code>. If they do, the
+  field <strong>must</strong> document that it is best effort. This is because cross-parent
+  requests introduce ambiguity around ordering, especially if there is
+  difficulty reaching a parent (see <a href="./unreachable-resources">unreachable resources</a>).</li>
+</ul>
+<p><strong>Important:</strong> If listing across multiple collections introduces the
+possibility of partial failures due to unreachable parents (such as when
+listing across locations), the method <strong>must</strong> indicate this following the
+guidance in <a href="./unreachable-resources">unreachable resources</a>.</p>
+<div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<ul>
+<li>The URI pattern in the <code>google.api.http</code> annotation <strong>must</strong> still be
+  specified with <code>*</code> and permit the collection to be specified; a URI pattern
+  <strong>must not</strong> hard-code the <code>-</code> character.</li>
+</ul>
+</div>
+</div>
+<h3 id="unique-resource-lookup">Unique resource lookup</h3>
+<p>Sometimes, a resource within a sub-collection has an identifier that is unique
+across parent collections. In this case, it may be useful to allow a
+<a href="./get"><code>Get</code></a> method to retrieve that resource without knowing which parent
+collection contains it. In such cases, APIs <strong>may</strong> allow users to specify the
+wildcard collection ID <code>-</code> (the hyphen or dash character) to represent any
+parent collection:</p>
+<div class="highlight language-None"><pre><span></span><code>GET https://library.exampleapis.com/v1/publishers/-/books/{book}
+</code></pre></div>
+<ul>
+<li>The URI pattern <strong>should</strong> still be specified with a variable and permit the
+  collection to be specified; a URI pattern <strong>should not</strong> hard-code the <code>-</code>
+  character. Having a separate route for the wildcard case can lead to
+  ambiguous or undefined routing behavior (unless the variable pattern excludes
+  the string <code>"-"</code>)</li>
+<li>The method <strong>must</strong> explicitly document that this behavior is supported.</li>
+<li>The resource name in the response <strong>must</strong> use the canonical name of the
+  resource, with actual parent collection identifiers (instead of <code>-</code>). For
+  example, the request above returns a resource with a name like
+  <code>publishers/123/books/456</code>, <em>not</em> <code>publishers/-/books/456</code>.</li>
+<li>The resource ID <strong>must</strong> be unique within parent collections.</li>
+</ul>
+<h3 id="reading-across-collections-with-different-path-patterns">Reading across collections with different path patterns</h3>
+<p>Sometimes, a resource may have multiple possible path patterns. This typically
+happens when a resource, or one of its ancestors, may have more than one
+possible parent resource (including having no parent).</p>
+<p>For example, <code>Book</code> might have the following path patterns:</p>
+<ul>
+<li><code>publishers/{publisher}/books/{book}</code> for books with a publisher</li>
+<li><code>books/{book}</code> for self-published books</li>
+</ul>
+<p>In this case, APIs <strong>may</strong> allow users to read across <em>all</em> collections of
+books by using the <code>--</code> global wildcard sequence:</p>
+<p><code>GET /v1/--/books</code></p>
+<p>Here, <code>--</code> is not a wildcard for a resource ID within a specific collection.
+Rather, it is a wildcard for the entire path pattern. This allows users to
+retrieve a book regardless of its resource ancestry.</p>
+<p>This pattern may also be used to search all subcollections of a specific
+collection. For example, a <code>Playlist</code> resource might have the following path
+patterns:</p>
+<ul>
+<li><code>games/{game}/users/{user}/playlists/{playlist}</code> for playlists created by a
+  user within a game</li>
+<li><code>games/{game}/zones/{zone}/playlists/{playlist}</code> for playlists specific to a
+  game zone</li>
+</ul>
+<p>A client could read across all collections of both zone and user playlists
+<em>within</em> game <code>123</code> with:</p>
+<p><code>GET /v1/games/123/--/playlists</code></p>
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li>For partial failures due to unreachable resources, see <a href="./unreachable-resources">unreachable
+  resources</a>.</li>
+</ul>
+<!-- prettier-ignore-start -->
+
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons

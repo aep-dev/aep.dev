@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6cbbf792">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6cbbf792">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=9d0d34df">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=9d0d34df">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=6cbbf792"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=9d0d34df"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -513,8 +513,8 @@
     <tr><td>Number</td><td>144</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/144">aep.dev/144</a></td></tr>
     <tr><td>State</td><td>Approved</td></tr>
-    <tr><td>Created</td><td>2020-03-19</td></tr>
-    <tr><td>Updated</td><td>2020-03-19</td></tr>
+    <tr><td>Created</td><td>2024-04-27</td></tr>
+    <tr><td>Updated</td><td>2024-04-27</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
@@ -566,21 +566,30 @@
   
   <h4 class="aep-id">arrays (AEP-144)</h4>
   <h1 id="array-fields">Array fields</h1>
-<p>Representing lists of data in an API is trickier than it often appears. Users
-often need to modify lists in place, and longer data series within a single
-resource pose a challenge for pagination.</p>
+<p>Within API, methods that operate on schemas containing arrays require
+consideration on the strategies for updating elements within the list.</p>
+<p>For larger arrays of resources, consider [pagination][/pagination].</p>
 <h2 id="guidance">Guidance</h2>
 <p>Resources <strong>may</strong> use array fields where appropriate.</p>
-<div class="highlight language-typescript"><pre><span></span><code><span class="kd">interface</span><span class="w"> </span><span class="nx">Book</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="c1">// The resource name for the book.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span><span class="w"></span>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.resource</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/Book&quot;</span>
+<span class="w">    </span><span class="n">pattern</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;publishers/{publisher}/books/{book}&quot;</span>
+<span class="w">  </span><span class="p">};</span>
 
-<span class="w">  </span><span class="c1">// The authors of the book.</span><span class="w"></span>
-<span class="w">  </span><span class="nx">authors</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IDENTIFIER</span><span class="p">];</span>
+
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p><strong>Note:</strong> OAS guidance not yet written</p>
+</div>
+</div>
 <ul>
-<li>Array fields <strong>must</strong> use a plural field name.<ul>
+<li>Array fields <strong>should</strong> use a plural field name.<ul>
 <li>If the English singular and plural words are identical ("moose", "info"),
   the dictionary word <strong>must</strong> be used rather than attempting to coin a new
   plural form.</li>
@@ -594,9 +603,6 @@ resource pose a challenge for pagination.</p>
   request), the API <strong>should</strong> use a sub-resource instead.</li>
 </ul>
 </li>
-<li>Array fields <strong>must not</strong> represent the body of another resource inline.
-  Instead, the field <strong>should</strong> be a array of strings providing the resource
-  names of the associated resources.</li>
 </ul>
 <p><strong>Note:</strong> This document uses the term "array" to refer to a field on a resource
 that is a list of elements that have the same type. Some languages and IDLs use
@@ -630,7 +636,7 @@ consider using a subresource instead.</p>
 (meaning that order does not matter, duplicate values are not meaningful, and
 non-comparable values such as <code>null</code> or <code>NaN</code> are not used), the API <strong>should</strong>
 define custom methods using the verbs <code>Add</code> and <code>Remove</code>:</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Add an author to a book.</span>
 <span class="k">rpc</span><span class="w"> </span><span class="n">AddAuthor</span><span class="p">(</span><span class="n">AddAuthorRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
@@ -676,7 +682,7 @@ define custom methods using the verbs <code>Add</code> and <code>Remove</code>:<
   with <code>NOT_FOUND</code> if appropriate.</li>
 </ul>
 </div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
 <div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="s">&#39;/publishers/{publisherId}/books/{bookId}:addAuthor&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">post</span><span class="p">:</span><span class="w"></span>
@@ -748,7 +754,7 @@ define custom methods using the verbs <code>Add</code> and <code>Remove</code>:<
 <p><strong>Note:</strong> If both of these strategies are too restrictive, consider using a
 subresource instead.</p>
 <h4 id="request-structure">Request Structure</h4>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// The request structure for the AddAuthor operation.</span>
 <span class="kd">message</span><span class="w"> </span><span class="nc">AddAuthorRequest</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// The name of the book to add an author to.</span>
@@ -791,7 +797,7 @@ subresource instead.</p>
   or another AEP.</li>
 </ul>
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
 <div class="highlight language-yaml"><pre><span></span><code><span class="nt">requestBody</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
