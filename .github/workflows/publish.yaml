@@ -20,8 +20,8 @@ jobs:
       - name: Build the static site.
         run: aep-site-gen . out
       - name: Publish the static site to GitHub Pages.
-        uses: jamesives/github-pages-deploy-action@releases/v4-init
+        uses: jamesives/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: out
+          branch: gh-pages
+          folder: out
