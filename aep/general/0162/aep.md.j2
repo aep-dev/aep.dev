@@ -16,7 +16,7 @@ to the version of an API as a whole.
 
 ## Guidance
 
-APIs **may** store a revision history for a resource. Examples of when it is
+APIs **may** expose a revision history for a resource. Examples of when it is
 useful include:
 
 - When it is valuable to expose older revisions of a resource via an API. This
@@ -25,8 +25,8 @@ useful include:
 - Other resources depend on different revisions of a resource.
 - There is a need to represent the change of a resource over time.
 
-APIs implementing resources with a revision **should** abstract resource
-revisions as nested collection of the resource. Sometimes, the revisions
+APIs implementing resources with revisions **should** abstract resource
+revisions as a subresource of the resource. Sometimes, the revisions
 collection can be a top level collection. Exceptions include:
 
 - If resource revisions are meant to have longer lifespan than the parent
@@ -91,7 +91,7 @@ message BookRevision {
 
 - The resource revision **must** contain a field with a message type of the
   parent resource, with a field name of `snapshot`.
-    - The value of `snapshot` **must** be the configuration of the parent
+    - The value of `snapshot` **must** be the original resource
       at the point in time the revision was created.
 - The resource revision **must** contain a `create_time` field (see [AIP-142][]).
 - The resource revision **may** contain a repeated field `alternate_ids`, which would
@@ -102,7 +102,7 @@ message BookRevision {
 Depending on the resource, different APIs may have different strategies for
 creating a new revision. Specifically examples of strategies include:
 
-- Creating a revision when there is a change to the parent resource
+- Creating a revision when there is a change to the resource
 - Creating a revision when important system state changes
 - Creating a revision when specifically requested
 
@@ -118,7 +118,7 @@ When referring to specific revision of a resource, the subcollection name
 publishers/123/books/les-miserables/revisions/c7cfa2a8
 ```
 
-### Server-specified Aliases
+### Server-specified aliases
 
 Services **may** reserve specific IDs to be [aliases][alias] (e.g.
 `latest`). These are read-only and managed by the service.
@@ -132,7 +132,7 @@ revision. The content of `publishers/{publisher_id}/books/{book_id}/revisions/la
 and `publishers/{publisher_id}/books/{book_id}` can differ, as the latest revision may
 be different from the current state of the resource.
 
-### User-Specified Aliases
+### User-specified aliases
 
 APIs **may** provide a mechanism for users to assign an [alias][] ID to an
 existing revision with a custom method "alias":
@@ -216,7 +216,7 @@ message AliasBookRevisionRequest {
   - The field **must** be [annotated as required][aip-203].
   - The field **must** identify the [resource type][aip-123] that it
     references.
-- The request message **must** have a `alias_id` field:
+- The request message **must** have a `alias` field:
   - The field **must** be [annotated as required][aip-203].
 - If the user calls the method with an existing `alias_id`, the request **must**
   succeed and the alias will be updated to refer to the provided revision. This
@@ -325,9 +325,9 @@ Any standard methods **must** implement the corresponding AIPs (AIP-131,
 AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:
 
 - List methods: By default, revisions in the list response **must** be ordered
-  in reverse chronological order. User can supply `order_by` to override the
+  in reverse chronological order. APIs **may** support the [`order_by`](./list#ordering) field to override the
   default behavior.
-- If the revision supports aliasing, a delete method with the resource name
+- If the revision supports aliasing, a delete method with the resource path
   of the alias (e.g. `revisions/1.0.2`) **must** remove the alias instead of
   deleting the resource.
 
@@ -335,16 +335,17 @@ As revisions are nested under the resource, also see [cascading delete][].
 
 ## Rationale
 
-### Abstract revisions as nested collection
+### Revisions as nested collections
 
-Revisions being resources under nested collection make revisions a first class
+Revisions being resources under nested collection make revisions a first-class
 citizen.
 
 - Revisions can offer standard get, list, and delete methods.
 - It retains the flexibility of extending new fields to a revision in addition to
   the resource message.
+- It avoids the need for "standard custom" methods like `:listRevisions`.
 
-### Output only resource configuration
+### Output only-resource configuration
 
 Although it was an option to have the revision take in the resource
 configuration as part of the create method, doing so would have allowed users to
@@ -357,7 +358,7 @@ current point in time eliminates that issue.
 
 ### Switching from a collection extension to a subcollection
 
-In aip.dev prior to 2023-09, revisions were more like extension of an existing
+In aip.dev prior to 2023-09, revisions were more like extensions of an existing
 resource by using `@` symbol. List and delete revisions were custom methods on
 the resource collection. A single Get method was used to retrieve either the
 resource revision, or the resource.
@@ -367,14 +368,14 @@ a resource, or its revision.
 
 It also had several disadvantages:
 
--  List revisions is a custom method (:listRevisions) on the resource collection
--  Delete revision is a custom method on the resource collection
--  Not visible in API discovery doc
--  Resource ID cannot use `@`
+-  List revisions is a custom method (`:listRevisions`) on the resource.
+-  Delete revision is a custom method on the resource.
+-  Not visible in API discovery documenation.
+-  Resource IDs cannot use the `@` symbol.
 
 The guidance was modified ultimately to enable revisions to behave like a
-resource, which reduces the users cognitive load and allows resource-oriented
-clients to easily list, get, create, and update revisions.
+resource, which reduces users' cognitive load and allows resource-oriented
+clients to easily list, get, create, update, and delete revisions.
 
 ### Using resource ID instead of tag
 
