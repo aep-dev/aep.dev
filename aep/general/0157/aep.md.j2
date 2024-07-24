@@ -13,21 +13,20 @@ Field masks can be used for granting the user fine-grained control over what
 fields are returned. An API **should** support the mask as a request field
 named `read_mask`.
 
-- The field mask parameter **must** be optional:
+- The `read_mask` parameter **must** be optional:
   - An explicit value of `"*"` **should** be supported, and **must** return all
     fields.
-  - If the field mask parameter is omitted, it **must** default to `"*"`,
-    unless otherwise documented.
+  - If `read_mask` is omitted, it **must** default to `"*"`, unless otherwise
+    documented.
 - An API **may** allow read masks with non-terminal repeated fields (unlike
   update masks), but is not obligated to do so.
 
-**Note:** Changing the default value of the field mask parameter is a
+**Note:** Changing the default value of `read_mask` is a
 [breaking change](./backwards-compatibility#semantic-changes).
 
 {% tab proto %}
 
-- The value of the field mask parameter **must** be a
-  `google.protobuf.FieldMask`.
+- The value of `read_mask` **must** be a `google.protobuf.FieldMask`.
 
   **Warning:** There is a known conflict between the guidance about
   non-terminal repeated fields guidance and the documentation of `FieldMask`
