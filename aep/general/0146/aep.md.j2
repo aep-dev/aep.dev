@@ -18,7 +18,7 @@ the field needs to be; in general, APIs **should** attempt to introduce the
 For example, an API **should not** use a completely generic field (such as
 `google.protobuf.Struct` in protobuf APIs) when the value of the field must
 correspond to one of a known number of schemas. Instead, the API **should** use
-a `oneof` to represent the known schemas.
+a [`oneof`](./oneof) to represent the known schemas.
 
 ### Generic fields in protobuf APIs
 
