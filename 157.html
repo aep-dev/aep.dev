@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=73a717cf">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=73a717cf">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=af946633">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=af946633">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=73a717cf"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=af946633"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -575,23 +575,22 @@ needs to give the user control over which fields it sends back.</p>
 fields are returned. An API <strong>should</strong> support the mask as a request field
 named <code>read_mask</code>.</p>
 <ul>
-<li>The field mask parameter <strong>must</strong> be optional:<ul>
+<li>The <code>read_mask</code> parameter <strong>must</strong> be optional:<ul>
 <li>An explicit value of <code>"*"</code> <strong>should</strong> be supported, and <strong>must</strong> return all
   fields.</li>
-<li>If the field mask parameter is omitted, it <strong>must</strong> default to <code>"*"</code>,
-  unless otherwise documented.</li>
+<li>If <code>read_mask</code> is omitted, it <strong>must</strong> default to <code>"*"</code>, unless otherwise
+  documented.</li>
 </ul>
 </li>
 <li>An API <strong>may</strong> allow read masks with non-terminal repeated fields (unlike
   update masks), but is not obligated to do so.</li>
 </ul>
-<p><strong>Note:</strong> Changing the default value of the field mask parameter is a
+<p><strong>Note:</strong> Changing the default value of <code>read_mask</code> is a
 <a href="./backwards-compatibility#semantic-changes">breaking change</a>.</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
 <ul>
 <li>
-<p>The value of the field mask parameter <strong>must</strong> be a
-  <code>google.protobuf.FieldMask</code>.</p>
+<p>The value of <code>read_mask</code> <strong>must</strong> be a <code>google.protobuf.FieldMask</code>.</p>
 <p><strong>Warning:</strong> There is a known conflict between the guidance about
 non-terminal repeated fields guidance and the documentation of <code>FieldMask</code>
 itself:
@@ -615,9 +614,6 @@ enums are useful for situations where an API only wants to expose a small
 number of permutations to the user:</p>
 <ul>
 <li>The enum <strong>should</strong> be specified as a <code>view</code> field on the request message.</li>
-<li>The enum <strong>should</strong> be named something ending in <code>-View</code></li>
-<li>The enum <strong>should</strong> at minimum have values named <code>BASIC</code> and <code>FULL</code> (although
-  it <strong>may</strong> have values other than these).</li>
 <li>The <code>UNSPECIFIED</code> value <strong>must</strong> be valid (not an error), and the API
   <strong>must</strong> document what the unspecified value will do.<ul>
 <li>For List methods, the effective default value <strong>should</strong> be <code>BASIC</code>.</li>
@@ -652,9 +648,11 @@ the individual resource.</p>
 <span class="p">}</span>
 </code></pre></div>
 <ul>
-<li>The enum <strong>should</strong> be defined at the top level of the proto file (as it is
-  likely to be needed in multiple requests, e.g. both <code>Get</code> and <code>List</code>). See
-  <a href="./enumerations">enumerations</a> for more guidance on top-level enumerations.</li>
+<li>The enum <strong>should</strong> be defined within the resource; methods can reference it
+  as e.g. <code>Book.View</code>.</li>
+<li>The enum <strong>should</strong> be named something ending in <code>-View</code></li>
+<li>The enum <strong>should</strong> at minimum have values named <code>BASIC</code> and <code>FULL</code> (although
+  it <strong>may</strong> have values other than these).</li>
 </ul>
 </div>
 <input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
