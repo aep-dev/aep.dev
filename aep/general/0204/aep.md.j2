@@ -1,0 +1,67 @@
+# Oneofs
+
+Multiple IDLs have a concept called "oneof". For example, in protobuf, a
+`oneof` specifies that a set of fields within a message are mutually exclusive
+(i.e. at most one field can be set). In OAS 3, `oneOf` specifies that the value
+of a _single_ field must match _exactly one_ of a set of schemas.
+
+In order to smooth over such discrepancies, this AEP defines a generic `oneof`
+concept; when other AEPs refer to `oneof` in a generic context (i.e. outside
+IDL-specific sections or tabs), they are using this definition:
+
+- A `oneof` is a set of fields within a message that are mutually exclusive.
+  _At most one_ field can be set at a time.
+- If the `oneof` is required, that means that _exactly one_ field must be set.
+
+## protobuf
+
+Protobuf APIs **must** use the built-in `oneof` feature. In order to specify
+that a `oneof` is required, they **should** use the `aep.api.OneofBehavior`
+extension:
+
+```proto
+import "aep/api/oneof_behavior.proto";
+
+message Book {
+  // ...
+
+  // The author of the book.
+  oneof author {
+    // The individual author of a book.
+    string individual_author = 1 [(google.api.resource_reference) = {
+      type: "library.example.com/Author",
+    }];
+
+    // The organization that authored a book.
+    string organization_author = 2 [(google.api.resource_reference) = {
+      type: "library.example.com/Organization",
+    }];
+  } [(aep.api.oneof_behavior) = {required: true}];
+}
+```
+
+## OAS
+
+OAS 3's `oneOf` does not represent the same concept as a generic AEP `oneof`.
+Therefore, while APIs **may** use OAS `oneOf` when otherwise applicable, in
+order to specify an AEP `oneof`, they **should** use the [`x-aep-oneof`][]
+extension:
+
+```yaml
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        individual_author: { type: string }
+        organization_author: { type: string }
+        x-aep-oneof:
+          name: owner
+          properties: [individual_author, organization_author]
+          required: true
+```
+
+<!-- prettier-ignore-start -->
+[`aep.api.OneofBehavior`]: https://buf.build/aep/api/docs/main:aep.api#aep.api.OneofBehavior
+[`x-aep-oneof`]: https://github.com/aep-dev/aep/tree/main/json_schema/oneof.yaml
+<!-- prettier-ignore-end -->
