@@ -13,21 +13,20 @@ Field masks can be used for granting the user fine-grained control over what
 fields are returned. An API **should** support the mask as a request field
 named `read_mask`.
 
-- The field mask parameter **must** be optional:
+- The `read_mask` parameter **must** be optional:
   - An explicit value of `"*"` **should** be supported, and **must** return all
     fields.
-  - If the field mask parameter is omitted, it **must** default to `"*"`,
-    unless otherwise documented.
+  - If `read_mask` is omitted, it **must** default to `"*"`, unless otherwise
+    documented.
 - An API **may** allow read masks with non-terminal repeated fields (unlike
   update masks), but is not obligated to do so.
 
-**Note:** Changing the default value of the field mask parameter is a
+**Note:** Changing the default value of `read_mask` is a
 [breaking change](./backwards-compatibility#semantic-changes).
 
 {% tab proto %}
 
-- The value of the field mask parameter **must** be a
-  `google.protobuf.FieldMask`.
+- The value of `read_mask` **must** be a `google.protobuf.FieldMask`.
 
   **Warning:** There is a known conflict between the guidance about
   non-terminal repeated fields guidance and the documentation of `FieldMask`
@@ -53,9 +52,6 @@ enums are useful for situations where an API only wants to expose a small
 number of permutations to the user:
 
 - The enum **should** be specified as a `view` field on the request message.
-- The enum **should** be named something ending in `-View`
-- The enum **should** at minimum have values named `BASIC` and `FULL` (although
-  it **may** have values other than these).
 - The `UNSPECIFIED` value **must** be valid (not an error), and the API
   **must** document what the unspecified value will do.
   - For List methods, the effective default value **should** be `BASIC`.
@@ -90,9 +86,11 @@ enum BookView {
 }
 ```
 
-- The enum **should** be defined at the top level of the proto file (as it is
-  likely to be needed in multiple requests, e.g. both `Get` and `List`). See
-  [enumerations](./enumerations) for more guidance on top-level enumerations.
+- The enum **should** be defined within the resource; methods can reference it
+  as e.g. `Book.View`.
+- The enum **should** be named something ending in `-View`
+- The enum **should** at minimum have values named `BASIC` and `FULL` (although
+  it **may** have values other than these).
 
 {% tab oas %}
 
