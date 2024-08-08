@@ -134,7 +134,7 @@ for collisions when done correctly.
 
 ## Changelog
 
-- **2023-23-20**: Adopt AEP from from Google's AIP with the following changes:
+- **2023-12-20**: Adopt AEP from from Google's AIP with the following changes:
   - Rename field from `request_id` to `idempotency_key` (plus some minor
     releated rewording).
   - Add a common component [`aep.api.IdempotencyKey`][] and use this rather
