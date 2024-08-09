@@ -40,7 +40,7 @@ message BookRevision {
   string path = 1;
 
   // The snapshot of the book
-  Book snapshot = 2
+  Book resource = 2
     [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // The timestamp that the revision was created.
@@ -66,7 +66,7 @@ message BookRevision {
         "path": {
             "type": "string"
         },
-        "snapshot": {
+        "resource": {
             "$ref": "#/definitions/Book",
             "readOnly": true,
         },
@@ -90,8 +90,8 @@ message BookRevision {
 {% endtabs %}
 
 - The resource revision **must** contain a field with a message type of the
-  parent resource, with a field name of `snapshot`.
-    - The value of `snapshot` **must** be the original resource
+  parent resource, with a field name of `resource`.
+    - The value of `resource` **must** be the original resource
       at the point in time the revision was created.
 - The resource revision **must** contain a `create_time` field (see [AIP-142][]).
 - The resource revision **may** contain a repeated field `aliases`, which would
