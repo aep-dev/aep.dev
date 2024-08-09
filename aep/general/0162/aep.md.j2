@@ -25,12 +25,12 @@ useful include:
 - Other resources depend on or descend from different revisions of a resource.
 - There is a need to represent the change of a resource over time.
 
-APIs implementing resources with revisions **should** abstract resource
+APIs implementing resources with revisions **should** model resource
 revisions as a subresource of the resource. Sometimes, the revisions
-collection can be a top level collection. Exceptions include:
+collection can be sibling collection with the resource. it is a revision of.
 
-- If resource revisions are meant to have longer lifespan than the parent
-resource. In other words, resource revisions exist after resource deletion.
+For example, a resource revisions which may have a longer lifespan than the
+parent resource, such as a database snapshot.
 
 {% tab proto %}
 
@@ -94,7 +94,7 @@ message BookRevision {
     - The value of `snapshot` **must** be the original resource
       at the point in time the revision was created.
 - The resource revision **must** contain a `create_time` field (see [AIP-142][]).
-- The resource revision **may** contain a repeated field `alternate_ids`, which would
+- The resource revision **may** contain a repeated field `aliases`, which would
   contain a list of resource IDs that the revision is also known by (e.g. `latest`)
 
 ### Creating Revisions
@@ -213,8 +213,8 @@ message AliasBookRevisionRequest {
 {% endtabs %}
 
 - The request message **must** have a `path` field:
-  - The field **must** be [annotated as required][aip-203].
-  - The field **must** identify the [resource type][aip-123] that it
+  - The field **must** be [annotated as required](/field-behavior-documentation).
+  - The field **must** identify the [resource type](/resource-types) that it
     references.
 - The request message **must** have a `alias` field:
   - The field **must** be [annotated as required][aip-203].
