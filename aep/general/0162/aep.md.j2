@@ -113,7 +113,7 @@ document their revision creation strategy.
 
 When referring to specific revision of a resource, the subcollection name
 **must** be named `revisions`. Resource revisions have paths with the format
-`{resource_name}/revisions/{revision_id}`. For example:
+`{resource_path}/revisions/{resource_revision}`. For example:
 ```
 publishers/123/books/les-miserables/revisions/c7cfa2a8
 ```
@@ -128,8 +128,8 @@ GET /v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}
 ```
 
 - If a `latest` ID exists, it **must** represent the most recently created
-revision. The content of `publishers/{publisher_id}/books/{book_id}/revisions/latest`
-and `publishers/{publisher_id}/books/{book_id}` can differ, as the latest revision may
+revision. The content of `publishers/{publisher}/books/{book}/revisions/latest`
+and `publishers/{publisher}/books/{book}` can differ, as the latest revision may
 be different from the current state of the resource.
 
 ### User-specified aliases
@@ -157,7 +157,7 @@ message AliasBookRevisionRequest {
 
   // The ID of the revision to alias to, e.g. `CURRENT` or a semantic
   // version.
-  string alias_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string alias = 2 [(google.api.field_behavior) = REQUIRED];
 }
 ```
 
@@ -166,7 +166,7 @@ message AliasBookRevisionRequest {
 ```json
 {
   "paths": {
-    "/v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}:alias": {
+    "/v1/publishers/{publisher_id}/books/{book}/revisions/{revision}:alias": {
       "post": {
         "requestBody": {
           "content": {
@@ -203,7 +203,7 @@ message AliasBookRevisionRequest {
             "type": "string"
           }
         },
-        "required": ["path", "alias_id"]
+        "required": ["path", "alias"]
       }
     }
   }
@@ -218,7 +218,7 @@ message AliasBookRevisionRequest {
     references.
 - The request message **must** have a `alias` field:
   - The field **must** be [annotated as required][aip-203].
-- If the user calls the method with an existing `alias_id`, the request **must**
+- If the user calls the method with an existing `alias`, the request **must**
   succeed and the alias will be updated to refer to the provided revision. This
   allows users to write code against a specific alias (e.g. `published`) and the
   revision can change with no code change.
@@ -254,7 +254,7 @@ message RollbackBookRequest {
 ```json
 {
   "paths": {
-    "/v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}:rollback": {
+    "/v1/publishers/{publisher}/books/{book}/revisions/{revision}:rollback": {
       "post": {
         "requestBody": {
           "content": {
@@ -316,15 +316,12 @@ there are two potential variants:
 - Child resources where each child resource is a child of _a single revision
   of_ the parent resource.
 
-APIs **should not** include multiple levels of resources with revisions, as
-this quickly becomes difficult to reason about.
-
 ### Standard methods
 
 Any standard methods **must** implement the corresponding AIPs (AIP-131,
 AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:
 
-- List methods: By default, revisions in the list response **must** be ordered
+- List methods: By default, revisions in the list response **should** be ordered
   in reverse chronological order. APIs **may** support the [`order_by`](./list#ordering) field to override the
   default behavior.
 - If the revision supports aliasing, a delete method with the resource path
@@ -334,16 +331,6 @@ AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:
 As revisions are nested under the resource, also see [cascading delete][].
 
 ## Rationale
-
-### Revisions as nested collections
-
-Revisions being resources under nested collection make revisions a first-class
-citizen.
-
-- Revisions can offer standard get, list, and delete methods.
-- It retains the flexibility of extending new fields to a revision in addition to
-  the resource message.
-- It avoids the need for "standard custom" methods like `:listRevisions`.
 
 ### Output only-resource configuration
 
