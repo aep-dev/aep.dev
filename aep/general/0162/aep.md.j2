@@ -109,6 +109,8 @@ creating a new revision. Specifically examples of strategies include:
 APIs **may** use any of these strategies. APIs **must**
 document their revision creation strategy.
 
+APIs **should** have at least one revision for their resource at any time.
+
 ### Resource names for revisions
 
 When referring to specific revision of a resource, the subcollection name
@@ -226,8 +228,8 @@ message AliasBookRevisionRequest {
 ### Rollback
 
 A common use case for a resource with a revision history is the ability to roll
-back to a given revision. APIs **should** handle this with a `Rollback` custom
-method:
+back to a given revision. APIs that support thie behavior **should** do so with
+a `Rollback` custom method:
 
 {% tab proto %}
 
@@ -308,13 +310,10 @@ message RollbackBookRequest {
 
 ### Child resources
 
-Resources with a revision history **may** have child resources. If they do,
-there are two potential variants:
-
-- Child resources where each child resource is a child of the parent resource
-  as a whole.
-- Child resources where each child resource is a child of _a single revision
-  of_ the parent resource.
+Resources with a revision history **may** have child resources. If they do, they
+**should** be a subset of the descendants of the original resource, and a given
+revision's descendants must be a subset of the descendants of the resource at
+the time the revision was created.
 
 ### Standard methods
 
@@ -329,17 +328,6 @@ AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:
   deleting the resource.
 
 As revisions are nested under the resource, also see [cascading delete][].
-
-## Rationale
-
-### Output only-resource configuration
-
-Although it was an option to have the revision take in the resource
-configuration as part of the create method, doing so would have allowed users to
-submit resource configuration for a revision that the resource was never in.
-
-`OUTPUT_ONLY` and requiring that a created revision represents the resource at
-current point in time eliminates that issue.
 
 ## History
 
@@ -377,7 +365,7 @@ needs to be familiar with a second set of retrieval and identifier methods.
 
 ## Changelog
 
-- **2024-07-10**: Imported from aip.dev.
+- **2024-08-09**: Imported from aip.dev.
 
 [alias]: ./0122.md#resource-id-aliases
 [cascading delete]: ./0135.md#cascading-delete
