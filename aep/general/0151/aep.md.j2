@@ -28,15 +28,17 @@ amount of time" depending on what work is being done. A good rule of thumb is
 
 ### Operation representation
 
-The response to a long-running request **must** be an [`Operation`][].
+The response to a long-running request **must** be an [`Operation`][Operation].
 
 {% tab proto %}
 
-Protocol buffer APIs **must** use the common component [`aep.api.Operation`][].
+Protocol buffer APIs **must** use the common component
+[`aep.api.Operation`][aep.api.Operation].
 
 {% tab oas %}
 
-OpenAPI services **must** use this [`JSON Schema Operation`][] schema.
+OpenAPI services **must** use this [`JSON Schema Operation`]JSON Schema
+Operation] schema.
 
 {% endtabs %}
 
@@ -98,8 +100,8 @@ canonical error object.
 
 {% tab proto %}
 
-When using protocol buffers, the common component [`aep.api.Operation`][] is
-used.
+When using protocol buffers, the common component
+[`aep.api.Operation`][aep.api.Operation] is used.
 
 {% sample 'lro.proto', 'rpc WriteBook' %}
 
@@ -161,7 +163,7 @@ used.
 [lro]: https://github.com/aep-dev/aep/blob/main/proto/aep-api/aep/api/operations.proto
 [node.js promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
 [future]: https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future
-[`Operation`]: https://github.com/aep-dev/aep/blob/main/schemas/api/operation.md
-[`aep.api.Operation`]: https://buf.build/aep/api/docs/main:aep.api#aep.api.Operation
-[`JSON Schema Operation`]: https://github.com/aep-dev/aep/blob/main/json_schema/api/operation.yaml
+[Operation]: https://github.com/aep-dev/aep/blob/main/schemas/api/operation.md
+[aep.api.Operation]: https://buf.build/aep/api/docs/main:aep.api#aep.api.Operation
+[JSON Schema Operation]: https://github.com/aep-dev/aep/blob/main/json_schema/api/operation.yaml
 <!-- prettier-ignore-end -->
