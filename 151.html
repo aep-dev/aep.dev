@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=40a5ab36">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=40a5ab36">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=fccb1009">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=fccb1009">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=40a5ab36"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=fccb1009"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -592,12 +592,14 @@ burdens for clients.</p>
 amount of time" depending on what work is being done. A good rule of thumb is
 10 seconds.</p>
 <h3 id="operation-representation">Operation representation</h3>
-<p>The response to a long-running request <strong>must</strong> be an [<code>Operation</code>][].</p>
+<p>The response to a long-running request <strong>must</strong> be an <a href="https://github.com/aep-dev/aep/blob/main/schemas/api/operation.md"><code>Operation</code></a>.</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
-<p>Protocol buffer APIs <strong>must</strong> use the common component [<code>aep.api.Operation</code>][].</p>
+<p>Protocol buffer APIs <strong>must</strong> use the common component
+<a href="https://buf.build/aep/api/docs/main:aep.api#aep.api.Operation"><code>aep.api.Operation</code></a>.</p>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
-<p>OpenAPI services <strong>must</strong> use this [<code>JSON Schema Operation</code>][] schema.</p>
+<p>OpenAPI services <strong>must</strong> use this [<code>JSON Schema Operation</code>]JSON Schema
+Operation] schema.</p>
 </div>
 </div>
 <h3 id="querying-an-operation">Querying an operation</h3>
@@ -641,8 +643,8 @@ metadata message. The errors themselves <strong>must</strong> still be represent
 canonical error object.</p>
 <h2 id="interface-definitions">Interface Definitions</h2>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
-<p>When using protocol buffers, the common component [<code>aep.api.Operation</code>][] is
-used.</p>
+<p>When using protocol buffers, the common component
+<a href="https://buf.build/aep/api/docs/main:aep.api#aep.api.Operation"><code>aep.api.Operation</code></a> is used.</p>
 <div class="highlight language-proto"><pre><span></span><code><span class="c1">// Write a book.</span>
 <span class="k">rpc</span><span class="w"> </span><span class="n">WriteBook</span><span class="p">(</span><span class="n">WriteBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">aep.api.Operation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>

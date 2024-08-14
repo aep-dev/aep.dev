@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=40a5ab36">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=40a5ab36">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=fccb1009">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=fccb1009">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=40a5ab36"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=fccb1009"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -612,7 +612,8 @@ the same <code>idempotency_key</code> more than once.</p>
 </code></pre></div>
 <ul>
 <li>
-<p>[<code>aep.api.IdempotencyKey</code>][] has a <code>key</code> and a <code>first_sent</code> timestamp.</p>
+<p><a href="https://buf.build/aep/api/file/main:aep/api/idempotency_key.proto#L21"><code>aep.api.IdempotencyKey</code></a> has a <code>key</code> and a <code>first_sent</code>
+  timestamp.</p>
 <ul>
 <li><code>key</code> is simply a unique identifier.</li>
 </ul>
@@ -643,7 +644,7 @@ possible.</p>
 <ul>
 <li>When using protocol buffers, idempotency keys that are UUIDs <strong>must</strong> be
   annotated with a minimum lifetime using the extension
-  [<code>(aep.api.field_info).minimum_lifetime</code>][].</li>
+  <a href="https://buf.build/aep/api/file/main:aep/api/field_info.proto#L35"><code>(aep.api.field_info).minimum_lifetime</code></a>.</li>
 </ul>
 </li>
 </ul>
@@ -685,9 +686,6 @@ field; we define <code>idempotency_key</code> instead for two reasons:</p>
    API server, and might want to issue multiple requests with the same
    <code>idempotency_key</code> and trace the behavior of each request separately.</li>
 </ol>
-<!-- prettier-ignore-start -->
-<!-- prettier-ignore-end -->
-
 <h3 id="using-uuids-for-request-identification">Using UUIDs for request identification</h3>
 <p>When a value is required to be unique, leaving the format open-ended can lead
 to API consumers incorrectly providing a duplicate identifier. As such,
@@ -698,9 +696,9 @@ for collisions when done correctly.</p>
 <li><strong>2023-23-20</strong>: Adopt AEP from from Google's AIP with the following changes:<ul>
 <li>Rename field from <code>request_id</code> to <code>idempotency_key</code> (plus some minor
   releated rewording).</li>
-<li>Add a common component [<code>aep.api.IdempotencyKey</code>][] and use this rather
-  than <code>string</code> for the <code>idempotency_key</code> field; add related guidance about
-  <code>IdempotencyKey.first_seen</code>.</li>
+<li>Add a common component <a href="https://buf.build/aep/api/file/main:aep/api/idempotency_key.proto#L21"><code>aep.api.IdempotencyKey</code></a> and use
+  this rather than <code>string</code> for the <code>idempotency_key</code> field; add related
+  guidance about <code>IdempotencyKey.first_seen</code>.</li>
 <li>Remove guidance about annotating <code>idempotency_key</code> with
   <code>(google.api.field_info).format</code>.</li>
 <li>Add guidance about annotating <code>idempotency_key</code> with
@@ -716,6 +714,8 @@ for collisions when done correctly.</p>
 <li><strong>2019-08-01</strong>: Changed the examples from "shelves" to "publishers", to
   present a better example of resource ownership.</li>
 </ul>
+<!-- prettier-ignore-start -->
+<!-- prettier-ignore-end -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
