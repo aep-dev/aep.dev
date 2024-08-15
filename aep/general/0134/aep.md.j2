@@ -30,7 +30,7 @@ Update methods are specified using the following pattern:
 - The method **must** support partial resource update, and the HTTP verb
   **must** be `PATCH`.
 - If the resources take long than is reasonable for a regular API request, the
-  API **should** use a [long-runing-operation](/long-running-operations).
+  API **should** use a [long-running-operation](/long-running-operations).
 
 {% tab proto %}
 
@@ -64,11 +64,13 @@ paths:
   /v1/publishers/{publisher}/books:
     patch:
       summary: Update a book
-      operationId: publishers.book:create
       requestBody:
         required: true
         content:
           application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/merge-patch+json:
             schema:
               $ref: '#/components/schemas/Book'
       responses:
@@ -80,7 +82,8 @@ paths:
                 $ref: '#/components/schemas/Book'
 ```
 
-- The method **must** adhere to the behavior specified in [IETF 7396 - JSON Merge Patch](https://datatracker.ietf.org/doc/html/rfc7396).
+- The method **must** adhere to the behavior specified in [IETF RFC 7396 - JSON Merge Patch](https://datatracker.ietf.org/doc/html/rfc7396).
+- The method **must** support MIME types `application/merge-patch+json` to adhere to IETF RFC 7396, as well as `application/json` as a common generalization.
 
 {% endtabs %}
 
@@ -208,7 +211,6 @@ paths:
   /v1/publishers/{publisher}/books:
     patch:
       summary: Update a book
-      operationId: publishers.book:create
       parameters:
       - name: allow_missing
         in: query
