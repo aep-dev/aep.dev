@@ -75,7 +75,7 @@ message BookRevision {
             "format": "date-time",
             "readOnly": true,
         },
-        "alternate_ids": {
+        "aliases": {
             "type": "array",
             "items": {
                 "type": "string"
@@ -106,7 +106,7 @@ creating a new revision. Specifically examples of strategies include:
 - Creating a revision when important system state changes
 - Creating a revision when specifically requested
 
-APIs **may** use any of these strategies. APIs **must**
+APIs **may** use any of these strategies or any other strategy. APIs **must**
 document their revision creation strategy.
 
 APIs **should** have at least one revision for their resource at any time.
@@ -143,7 +143,7 @@ existing revision with a custom method "alias":
 
 ```proto
 
-rpc AliasBookRevision(TagBookRevisionRequest) returns (Book) {
+rpc AliasBookRevision(AliasBookRevisionRequest) returns (Book) {
   option (google.api.http) = {
     post: "/v1/{name=publishers/*/books/*/revisions/*}:alias"
     body: "*"
@@ -160,6 +160,10 @@ message AliasBookRevisionRequest {
   // The ID of the revision to alias to, e.g. `CURRENT` or a semantic
   // version.
   string alias = 2 [(google.api.field_behavior) = REQUIRED];
+
+  // If false, this request will fail when the alias already
+  // exists.
+  bool overwrite = 3 [(google.api.field_behavior) = OPTIONAL];
 }
 ```
 
@@ -201,8 +205,11 @@ message AliasBookRevisionRequest {
           "path": {
             "type": "string"
           },
-          "alias_id": {
+          "alias": {
             "type": "string"
+          },
+          "overwrite": {
+            "type": "boolean"
           }
         },
         "required": ["path", "alias"]
@@ -220,15 +227,15 @@ message AliasBookRevisionRequest {
     references.
 - The request message **must** have a `alias` field:
   - The field **must** be [annotated as required][aip-203].
-- If the user calls the method with an existing `alias`, the request **must**
-  succeed and the alias will be updated to refer to the provided revision. This
-  allows users to write code against a specific alias (e.g. `published`) and the
-  revision can change with no code change.
+- If the user calls the method with an existing `alias` with `overwrite` set to
+  true, the request **must** succeed and the alias will be updated to refer to the
+  provided revision. If `overwrite` is false, the request must fail with an error code
+  ALREADY_EXISTS (HTTP 409).
 
 ### Rollback
 
 A common use case for a resource with a revision history is the ability to roll
-back to a given revision. APIs that support thie behavior **should** do so with
+back to a given revision. APIs that support this behavior **should** do so with
 a `Rollback` custom method:
 
 {% tab proto %}
@@ -329,6 +336,28 @@ AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:
 
 As revisions are nested under the resource, also see [cascading delete][].
 
+## Rationale
+
+### For the name revision
+
+There was significant debate about what to call this pattern, with the following
+as proposed options:
+
+- snapshots
+- revisions
+- versions
+
+Among those, revision was chosen because:
+
+- The term "version" is often used in multiple different contexts (e.g. API
+  version), and using that noun here may result in confusion during
+  conversations where it could mean one or the other.
+- The term "snapshot" is also used for snapshots of datastores, which may not
+  follow this pattern.
+- The term "revision" does not have many conflicts with terms when describing an
+  API or resource.
+
+
 ## History
 
 ### Switching from a collection extension to a subcollection
@@ -351,17 +380,6 @@ It also had several disadvantages:
 The guidance was modified ultimately to enable revisions to behave like a
 resource, which reduces users' cognitive load and allows resource-oriented
 clients to easily list, get, create, update, and delete revisions.
-
-### Using resource ID instead of tag
-
-In the previous design, revisions had a separate identifer for a revision known
-as a `tag`, that would live in a revision.
-
-Tags were effectively a shadow resource ID, requiring methods to create, get and
-filter revisions based on the value of the tag.
-
-By consolidating the concept of a tag into the revision ID, the user no longer
-needs to be familiar with a second set of retrieval and identifier methods.
 
 ## Changelog
 
