@@ -1,0 +1,124 @@
+# Webhook payloads
+
+Webhooks are an event-based API style in which the API server calls the client,
+rather than the other way around. API consumers register callback URIs for
+specific events. When an event occurs, the server calls the consumer's
+registered callback URI with information related to the event.
+
+The AEPs in this section provide guidance for both the behavior of webhook APIs
+and the structure of the request made to a client when an event occurs.
+
+## Guidance
+
+Webhook APis **must** pass callback URIs an
+[`aep.api.webhooks.Notification`][webhook-proto]. Information specific to the
+event type **must** be represented in the `payload` field.
+
+### Payloads
+
+Every event type **must** have a registered payload. For event types that will
+_never_ contain any event type-specific information, `google.protobuf.Empty`
+**may** be used. However, event types which may add event type-specific
+information in the future **should** define an empty payload message to which
+fields can be added as needed.
+
+#### Events triggered by service API methods on resources
+
+If the event was triggered by a service API method on a resource, the name of
+the event type **should** be the resource name followed by the past participle
+of the method's verb. For example, the standard `CreateBook` method would
+trigger a `BookCreated` event; the custom `ArchiveBook` method would trigger a
+`BookArchived` event.
+
+**Note:** When this would result in an ungrammatical event type, which may
+occur with multi-word verbs, an equivalent grammatically correct form
+**should** be used. For example, for a `GenerateBookSynopsis` custom method
+with a verb form like `book:generateSynopsis`, the payload should be named
+`BookSynopsisGenerated`.
+
+The first field of the payload **must** be a
+[resource reference](./association) to the resource in question.
+
+{% tab proto %}
+
+```proto
+// Payload for the BookArchived event, which fires after the `ArchiveBook`
+// method is successfully executed.
+message BookArchived {
+  option (aep.api.webhook_payload) = {
+     event_type: "BookArchived"
+  }
+
+  // The path of the book.
+  // Format: publishers/{publisher}/books/{book}
+  string book = 1 [
+    (google.api.resource_reference) = {
+      type: "apis.example.com/library/Book"
+    }];
+}
+```
+
+- The payload message **must** be annotated with the
+  [`aep.api.webhook_payload`][webhook-proto] option, which **must** include the
+  `event_type` field with the name of the event type.
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
+
+The `book` field may be also be an
+[embedded resource reference](./association#embedded-resources):
+
+{% tab proto %}
+
+```proto
+// Payload for the BookArchived event, which fires after the `ArchiveBook`
+// method is successfully executed.
+message BookArchived {
+  option (aep.api.webhook_payload) = {
+     event_type: "BookArchived"
+  }
+
+  // The book.
+  Book book = 1 [
+    (google.api.resource_reference) = {
+      type: "apis.example.com/library/Book"
+    }];
+}
+```
+
+{% tab oas %}
+
+**Note:** OAS example not yet written.
+
+{% endtabs %}
+
+### Versioning
+
+Webhook payloads **must** be versioned, and API consumers **must** register
+callback URIs for a specific version of a payload.
+
+Webhook payloads with resource references **must** be versioned with the API
+containing those resources. Webhook payloads with resource references to
+resources in multiple APIs must be versioned with one of those APIs, and **must
+not** change which API is used to version the payload.
+
+Webhook payloads without resource references, and without any other
+relationship to a service API, **must** be versioned.
+
+Breaking changes to a webhook payload **must not** be made within a major
+version.
+
+### Additional metadata
+
+Payloads **must** include only information specific to the event that triggered
+the webhook callback. Any additional metadata not pertaining to the event
+should be sent in a side channel and **must not** be included in the payload.
+This includes standard headers such as "retry-count", "signature", and
+"request-origin".
+
+<!-- prettier-ignore-start -->
+[webhook-proto]: https://github.com/aep-dev/aep/blob/main/proto/aep-api/aep/api/webhook.proto
+<!-- prettier-ignore-end -->
