@@ -10,7 +10,7 @@ approval privileges to the aep-dev organization.
 | Alfred Fuller   | [@alfus](https://github.com/alfus)               | Buf          |
 | Alex Stephen    | [@rambleraptor](https://github.com/rambleraptor) | Google       |
 | Dan Hudlow      | [@hudlow](https://github.com/hudlow)             | IBM          |
-| Hong Zhang      | [@wora](https://github.com/wora)                 | DataBricks   |
+| Hong Zhang      | [@wora](https://github.com/wora)                 | Databricks   |
 | Mike Kistler    | [@mkistler](https://github.com/mkistler)         | Microsoft    |
 | Mak Ahmad       | [@makahmad](https://github.com/makahmad)         |              |
 | Marsh Gardiner  | [@earth2marsh](https://github.com/earth2marsh)   |              |
