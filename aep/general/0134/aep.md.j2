@@ -17,7 +17,7 @@ changes to the resources without causing side effects.
 Update methods are specified using the following pattern:
 
 - The method's name **must** begin with the word `Update`. The remainder of the
-  method name **should** be the singular form of the resource's name.
+  method name **must** be the singular form of the resource's name.
 - The request schema's name **must** exactly match the RPC name, with a
   `Request` suffix.
 - The response schema **must** be the resource itself.
@@ -27,8 +27,8 @@ Update methods are specified using the following pattern:
   - If the update RPC is [long-running](#long-running-update), the response
     **must** be an `Operation` for which the return type is the resource
     itself.
-- The method **should** support partial resource update, and the HTTP verb
-  **should** be `PATCH`.
+- The method **should** support partial resource update,
+- The HTTP verb **must** be `PATCH`.
 
 {% tab proto %}
 
@@ -89,7 +89,7 @@ message UpdateBookRequest {
 ```
 
 - A `path` field **must** be included.
-  - The field **should** be [annotated as required](/field-behavior-documentation).
+  - The field **must** be [annotated as required](/field-behavior-documentation).
   - The field **must** identify the [resource type](/resource-types) that it
     references.
 - The request message field for the resource **must** map to the `PATCH` body.
