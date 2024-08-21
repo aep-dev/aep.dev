@@ -35,25 +35,21 @@ Update methods are specified using the following pattern:
 ```proto
 rpc UpdateBook(UpdateBookRequest) returns (Book) {
   option (google.api.http) = {
-    patch: "/v1/{book.path=publishers/*/books/*}"
+    patch: "/v1/{path=publishers/*/books/*}"
     body: "book"
   };
   option (google.api.method_signature) = "book,update_mask";
 }
 ```
 
-- The resource's `path` field **should** map to the URI path.
-  - The `{resource}.path` field **should** be the only variable in the URI
+- The request's `path` field **must** map to the URI path.
+  - The `path` field **must** be the only variable in the URI
     path.
 - There **must** be a `body` key in the `google.api.http` annotation, and it
   **must** map to the resource field in the request message.
   - All remaining fields **should** map to URI query parameters.
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"{resource},update_mask"`.
-
-**Note:** Unlike the other four standard methods, the URI path here references
-a nested field (`book.path`) in the example. If the resource field has a word
-separator, `snake_case` is used.
 
 {% tab oas %}
 
@@ -65,6 +61,8 @@ separator, `snake_case` is used.
 
 Update methods implement a common request pattern:
 
+- The request **must** contain a
+  - The name of this field **must** be the singular form of the resource's
 - The request **must** contain a field for the resource.
   - The name of this field **must** be the singular form of the resource's
     name.
@@ -76,9 +74,14 @@ Update methods implement a common request pattern:
 
 ```proto
 message UpdateBookRequest {
-  // The book to update.
-  //
-  // The book's `path` field is used to identify the book to update.
+  // The path of the book to update.
+  string path = 1 [
+    (google.api.field_behavior) = REQUIRED,
+    (google.api.resource_reference) = {
+      type: "library.googleapis.com/Book"
+    }];
+
+  // The value to update the book to.
   // Format: publishers/{publisher}/books/{book}
   Book book = 1 [(google.api.field_behavior) = REQUIRED];
 
@@ -87,6 +90,10 @@ message UpdateBookRequest {
 }
 ```
 
+- A `path` field **must** be included.
+  - The field **should** be [annotated as required](/field-behavior-documentation).
+  - The field **must** identify the [resource type](/resource-types) that it
+    references.
 - The request message field for the resource **must** map to the `PATCH` body.
 - The request message field for the resource **should** be [annotated as
   required][aep-203].
@@ -194,14 +201,7 @@ will create the resource in the process):
 
 ```proto
 message UpdateBookRequest {
-  // The book to update.
-  //
-  // The book's `path` field is used to identify the book to be updated.
-  // Format: publishers/{publisher}/books/{book}
-  Book book = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The list of fields to be updated.
-  google.protobuf.FieldMask update_mask = 2;
+  ...
 
   // If set to true, and the book is not found, a new book will be created.
   // In this situation, `update_mask` is ignored.
