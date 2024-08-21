@@ -18,6 +18,12 @@ paths:
 components:
   schema:
     Book:
+      type: object
+      x-aep-resource:
+        singular: book
+        plural: books
+        patterns:
+          - "publishers/{publisher}/books/{book}"
       description: A representation of a single book.
       properties:
         name:
