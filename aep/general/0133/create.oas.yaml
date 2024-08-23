@@ -22,7 +22,7 @@ paths:
       operationId: createBook
       description: Create a Book
       requestBody:
-        description: The book that is being created. 
+        description: The book that is being created.
         content:
           application/json:
             schema:
