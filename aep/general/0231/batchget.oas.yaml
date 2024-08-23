@@ -37,11 +37,14 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Book'
+                      oneOf:
+                        - $ref: '#/components/schemas/Book'
+                        - $ref: '#/components/schemas/Error'
 components:
   schemas:
     Book:
       description: A representation of a single book.
+      type: object
       properties:
         name:
           type: string
@@ -64,3 +67,5 @@ components:
           type: number
           format: float
           description: The rating assigned to the book.
+    Error:
+      type: object

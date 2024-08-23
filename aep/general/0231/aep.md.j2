@@ -11,23 +11,37 @@ APIs **may** support batch get to retrieve a consistent set of resources.
 - The method's name **must** begin with `BatchGet`. The remainder of the method
   name **must** be the plural form of the resource being retrieved.
 - The HTTP verb **must** be `GET`.
-- The HTTP URI **must** end with `:batchGet`.
-- The URI path **must** represent the collection for the resource, matching
-  the collection used for simple CRUD operations. If the operation spans
-  parents, a [wilcard](./reading-across-collections) **may** be accepted.
+- The HTTP URI **must** end with `:BatchGet`.
+- The URI path **must** represent the collection for the resource, matching the
+  collection used for simple CRUD operations. If the operation spans parents, a
+  [wilcard](./reading-across-collections) **may** be accepted.
 - There **must not** be a request body.
   - If a GET request contains a body, the body **must** be ignored, and **must
     not** cause an error.
-- The operation **must** be atomic: it **must** fail for all resources or
-  succeed for all resources (no partial success). For situations requiring
-  partial failures, [`List`](./list) methods **should** be used.
-  - If the operation covers multiple locations and at least one location is
-    down, the operation **must** fail.
 
 ### Request
 
 The request for a batch get method **should** be specified with the following
 pattern:
+
+- The request **must** include an array parameter which accepts the resource
+  paths specifying the resources to retrieve. The parameter **should** be named
+  `paths`.
+  - If no resource paths are provided, the API **should** error with
+    `INVALID_ARGUMENT`.
+  - The parameter **should** be required.
+  - The parameter **should** identify the [resource type](./paths) that it
+    references.
+  - The parameter should define the pattern of the resource path values.
+  - The parameter should define the maximum number of paths allowed.
+- Other parameters besides `paths` **may** be "hoisted" from the [standard Get
+  request][get-request].
+- Batch get **should not** support pagination because transactionality across
+  API calls would be extremely difficult to implement or enforce, and the
+  request defines the exact scope of the response anyway.
+- The request **must not** contain any other required parameters, and **should
+  not** contain other optional parameters except those described in this or
+  another AEP.
 
 {% tab proto -%}
 
@@ -70,49 +84,22 @@ message BatchGetBooksRequest {
   - The field **should** identify the [resource type][aep-122-parent] that it
     references.
   - The comment for the field **should** document the resource pattern.
-- The request **must** include a repeated field which accepts the resource
-  paths specifying the resources to retrieve. The field **should** be named
-  `paths`.
-  - If no resource paths are provided, the API **should** error with
-    `INVALID_ARGUMENT`.
-  - The field **should** be required.
-  - The field **should** identify the [resource type](./paths) that it
-    references.
-  - The comment for the field **should** document the resource pattern.
-  - The comment for the field **should** document the maximum number of paths
-    allowed.
 - There **must not** be a body key in the `google.api.http` annotation.
 
 {% tab oas %}
 
 {% sample 'batchget.oas.yaml', 'paths' %}
 
-- The request **must** include a query parameter which accepts an array of
+- The `paths` parameter **must** be a query parameter which accepts an array of
   resource paths specifying the resources to retrieve. The parameter **should**
   be named `paths`.
   - If no resource paths are provided, the API **should** error with status
     code `400 Bad Request`.
   - If the collection in the path of any resource does not match the collection
     of the request URL, the request **must** fail.
-  - The parameter **should** be required.
-  - The parameter description **should** identify the [resource
-    type][aep-122-paths] that it references.
-  - The parameter `description` **should** document the pattern for path
-    values.
-  - The parameter `schema` **should** include a `maxItems` attribute to specify
-    the maximum number of paths allowed.
 - The method definition **must not** have a `requestBody` defined.
 
 {% endtabs %}
-
-- Other parameters besides `paths` **may** be "hoisted" from the [standard Get
-  request][get-request].
-- Batch get **should not** support pagination because transactionality across
-  API calls would be extremely difficult to implement or enforce, and the
-  request defines the exact scope of the response anyway.
-- The request **must not** contain any other required parameters, and **should
-  not** contain other optional parameters except those described in this or
-  another AEP.
 
 ### Response
 
@@ -128,8 +115,10 @@ message BatchGetBooksResponse {
 }
 ```
 
-- The response message **must** include one repeated field corresponding to the
-  resources being retrieved.
+- The response message **must** include one repeated field where its items may
+  either be a retrieved resource or an error structure describing an error that
+  occurred attempting to retrieve the resource. The error alternative would
+  only be present for non-transactional batch gets.
 
 {% tab oas %}
 
@@ -146,6 +135,10 @@ message BatchGetBooksResponse {
       "authors": ["Victor Hugo"],
       "rating": 9.6
     },
+    {
+      "code": "NotFound",
+      "message": "The resource is not available"
+    }
     {
       "name": "publishers/lacroix/books/hunchback-of-notre-dame",
       "isbn": "978-140-274575-1",
@@ -164,8 +157,15 @@ message BatchGetBooksResponse {
 
 {% endtabs %}
 
-- The order of resources in the response **must** be the same as the paths in
-  the request.
+- The order of resources/error objects in the response **must** be the same as
+  the paths in the request.
+
+### Support for transactional get
+
+The batch get method may support a transactional form of operation where the
+get either succeeds for all requested resources or fails. When supported, the
+method should define a boolean parameter `asTransaction` that the user must
+specify with the value `true` to request transactional operation.
 
 ## Changelog
 
@@ -173,6 +173,8 @@ message BatchGetBooksResponse {
   following changes:
   - Dropped the "nested requests" pattern.
   - Changed the response schema to an object with `results` array property.
+  - Made transactional operation optional and controlled by asTransaction
+    parameter.
 
 <!-- Links -->
 
