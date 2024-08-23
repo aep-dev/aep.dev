@@ -8,8 +8,7 @@ approval privileges to the aep-dev organization.
 | Name            | GitHub                                           | Organization |
 | --------------- | ------------------------------------------------ | ------------ |
 | Alfred Fuller   | [@alfus](https://github.com/alfus)               | Buf          |
-| Jeff Albert     | [@monkey-jeff](https://github.com/monkey-jeff)   | Salesforce   |
-| JJ Geewax       | [@jgeewax](https://github.com/jgeewax)           | Meta         |
+| Alex Stephen    | [@rambleraptor](https://github.com/rambleraptor) | Google       |
 | Dan Hudlow      | [@hudlow](https://github.com/hudlow)             | IBM          |
 | Mike Kistler    | [@mkistler](https://github.com/mkistler)         | Microsoft    |
 | Mak Ahmad       | [@makahmad](https://github.com/makahmad)         |              |
@@ -26,3 +25,5 @@ style guide from which aep.dev was forked.
 | Name            | GitHub                                               | Organization |
 | --------------- | ---------------------------------------------------- | ------------ |
 | Luke Sneeringer | [@lukesneeringer](https://github.com/lukesneeringer) |              |
+| Jeff Albert     | [@monkey-jeff](https://github.com/monkey-jeff)       | Salesforce   |
+| JJ Geewax       | [@jgeewax](https://github.com/jgeewax)               | Meta         |
