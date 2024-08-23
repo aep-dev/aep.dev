@@ -111,7 +111,19 @@ message CreateBookRequest {
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+{% sample 'create.oas.yaml', 'paths' %}
+
+- The `operationId` **must** begin with the word `create`. The remainder of the
+  `operationId` **should** be the singular form of the resource type's name.
+  `#/components/schemas/Book`. The response **must** reference a schema with a `x-aep-resource` extension.
+- The request and response content **must** be the resource itself. For example:
+  `#/components/schemas/Book`. The request and response **must** reference a schema with a `x-aep-resource` extension.
+- The URI **should** contain a variable for each individual ID in the resource
+  hierarchy.
+  - The path parameter for all resource IDs **must** be in the form
+    `{resourceName}Id` (such as `bookId`), and path parameters representing the
+    ID of parent resources **must** end with `Id`.
+
 
 {% endtabs %}
 
