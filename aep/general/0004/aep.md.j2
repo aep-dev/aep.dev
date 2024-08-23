@@ -64,19 +64,25 @@ message Topic {
 
 {% tab oas %}
 
-For OpenAPI 3.0, use the `x-aep-resource` extension:
+For OpenAPI 3.0, Resources must be defined in `#components/schemas` and use the `x-aep-resource` extension:
 
 ```json
 {
-  "type": "object",
-  "x-aep-resource": {
-    "singular": "user-event",
-    "plural": "user-events",
-    "patterns": [
-      "projects/{project}/user-events/{user-event}",
-      "folder/{folder}/user-events/{user-event}",
-      "users/{user}/events/{user-event}"
-    ]
+  "components": {
+    "schemas": {
+      "UserEvent": {
+        "type": "object",
+        "x-aep-resource": {
+          "singular": "user-event",
+          "plural": "user-events",
+          "patterns": [
+            "projects/{project}/user-events/{user-event}",
+            "folder/{folder}/user-events/{user-event}",
+            "users/{user}/events/{user-event}"
+          ]
+        }
+      }
+    }
   }
 }
 ```

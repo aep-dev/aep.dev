@@ -117,7 +117,7 @@ metadata:
 - The `operationId` **must** begin with the word `get`. The remainder of the
   `operationId` **should** be the singular form of the resource type's name.
 - The response content **must** be the resource itself. For example:
-  `#/components/schemas/Book`
+  `#/components/schemas/Book`. The response **must** reference a schema with a `x-aep-resource` extension.
 - The URI **should** contain a variable for each individual ID in the resource
   hierarchy.
   - The path parameter for all resource IDs **must** be in the form
