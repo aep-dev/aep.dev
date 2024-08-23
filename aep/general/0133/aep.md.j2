@@ -124,7 +124,6 @@ message CreateBookRequest {
     `{resourceName}Id` (such as `bookId`), and path parameters representing the
     ID of parent resources **must** end with `Id`.
 
-
 {% endtabs %}
 
 ### Long-running create
@@ -154,7 +153,9 @@ rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+{% sample 'create_operation.oas.yaml', 'paths' %}
+
+- The response must reference a OAS schema that follows [AEP-151](aep-151).
 
 {% endtabs %}
 
@@ -207,7 +208,7 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+- There should be a field on the request body called 'id'.
 
 {% endtabs %}
 
@@ -241,6 +242,7 @@ path and use it in references from other resources.
 [aep-121]: ./0121.md
 [aep-122]: ./0122.md
 [aep-123]: ./0123.md
+[aep-151]: ./0151.md
 [aep-155]: ./0155.md
 [aep-203]: ./0203.md
 [aep-210]: ./0210.md

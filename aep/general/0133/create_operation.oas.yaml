@@ -1,0 +1,101 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:
+    parameters:
+      - name: publisherId
+        in: path
+        description: The publisher to list books for.
+        required: true
+        schema:
+          type: string
+      - name: bookId
+        in: path
+        description: The name of the book.
+        required: true
+        schema:
+          type: string
+    post:
+      operationId: createBook
+      description: Create a Book
+      requestBody:
+        description: The book that is being created. 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+components:
+  schemas:
+    Operation:
+      description: The status of a long running operation.
+      properties:
+        path:
+          type: string
+          description:
+            The server-assigned path, which is only unique within the same
+            service that originally returns it.
+        done:
+          type: boolean
+          description: >-
+            If the value is false, it means the operation is still in progress.
+            If true, the operation is completed, and either response or error
+            is available.
+        error:
+          $ref: '#/components/schemas/Error'
+        metadata:
+          type: object
+          description: >-
+            Service-specific metadata associated with the operation. It
+            typically contains progress information and common metadata such as
+            create time. Some services might not provide such metadata. Any
+            method that returns a long-running operation should document the
+            metadata type, if any.
+        response:
+          type: object
+          description: >-
+            The normal response of the operation in case of success. Depending
+            on the method, this may be the empty object, the resource on which
+            the operation is performed, or a custom response.
+      required:
+        - path
+        - done
+
+    Book:
+      x-aep-resource:
+        singular: book
+        plural: books
+        patterns:
+          - 'publishers/{publisher}/books/{book}'
+      description: A representation of a single book.
+      type: object
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the book.
+            Format: publishers/{publisher}/books/{book}
+        isbn:
+          type: string
+          description: |
+            The ISBN (International Standard Book Number) for this book.
+        title:
+          type: string
+          description: The title of the book.
+        authors:
+          type: array
+          items:
+            type: string
+          description: The author or authors of the book.
+        rating:
+          type: number
+          description: The rating assigned to the book.
