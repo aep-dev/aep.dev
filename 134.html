@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a139b284">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=a139b284">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=afb6d807">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=afb6d807">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=a139b284"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=afb6d807"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -585,7 +585,7 @@ changes to the resources without causing side effects.</p>
 <p>Update methods are specified using the following pattern:</p>
 <ul>
 <li>The method's name <strong>must</strong> begin with the word <code>Update</code>. The remainder of the
-  method name <strong>should</strong> be the singular form of the resource's name.</li>
+  method name <strong>must</strong> be the singular form of the resource's name.</li>
 <li>The request schema's name <strong>must</strong> exactly match the RPC name, with a
   <code>Request</code> suffix.</li>
 <li>The response schema <strong>must</strong> be the resource itself.<ul>
@@ -603,15 +603,15 @@ changes to the resources without causing side effects.</p>
 <div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">UpdateBook</span><span class="p">(</span><span class="n">UpdateBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">patch</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{book.path=publishers/*/books/*}&quot;</span>
+<span class="w">    </span><span class="n">patch</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{path=publishers/*/books/*}&quot;</span>
 <span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;book&quot;</span>
 <span class="w">  </span><span class="p">};</span>
 <span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.method_signature</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;book,update_mask&quot;</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 <ul>
-<li>The resource's <code>path</code> field <strong>should</strong> map to the URI path.<ul>
-<li>The <code>{resource}.path</code> field <strong>should</strong> be the only variable in the URI
+<li>The request's <code>path</code> field <strong>must</strong> map to the URI path.<ul>
+<li>The <code>path</code> field <strong>must</strong> be the only variable in the URI
   path.</li>
 </ul>
 </li>
@@ -623,9 +623,6 @@ changes to the resources without causing side effects.</p>
 <li>There <strong>should</strong> be exactly one <code>google.api.method_signature</code> annotation,
   with a value of <code>"{resource},update_mask"</code>.</li>
 </ul>
-<p><strong>Note:</strong> Unlike the other four standard methods, the URI path here references
-a nested field (<code>book.path</code>) in the example. If the resource field has a word
-separator, <code>snake_case</code> is used.</p>
 </div>
 <input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
 <p><strong>Note:</strong> OAS example not yet written.</p>
@@ -645,9 +642,14 @@ separator, <code>snake_case</code> is used.</p>
 </ul>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">UpdateBookRequest</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="c1">// The book to update.</span>
-<span class="w">  </span><span class="c1">//</span>
-<span class="w">  </span><span class="c1">// The book&#39;s `path` field is used to identify the book to update.</span>
+<span class="w">  </span><span class="c1">// The path of the book to update.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// The value to update the book to.</span>
 <span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
 <span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
 
@@ -656,6 +658,12 @@ separator, <code>snake_case</code> is used.</p>
 <span class="p">}</span>
 </code></pre></div>
 <ul>
+<li>A <code>path</code> field <strong>must</strong> be included.<ul>
+<li>The field <strong>must</strong> be <a href="/field-behavior-documentation">annotated as required</a>.</li>
+<li>The field <strong>must</strong> identify the <a href="/resource-types">resource type</a> that it
+  references.</li>
+</ul>
+</li>
 <li>The request message field for the resource <strong>must</strong> map to the <code>PATCH</code> body.</li>
 <li>The request message field for the resource <strong>should</strong> be <a href="/203">annotated as
   required</a>.<ul>
@@ -747,14 +755,7 @@ the event that the user attempts to update a resource that is not present (and
 will create the resource in the process):</p>
 <div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">Protocol buffers</label><div class="tabbed-content">
 <div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">UpdateBookRequest</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="c1">// The book to update.</span>
-<span class="w">  </span><span class="c1">//</span>
-<span class="w">  </span><span class="c1">// The book&#39;s `path` field is used to identify the book to be updated.</span>
-<span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
-<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">book</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
-
-<span class="w">  </span><span class="c1">// The list of fields to be updated.</span>
-<span class="w">  </span><span class="n">google.protobuf.FieldMask</span><span class="w"> </span><span class="na">update_mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="o">...</span>
 
 <span class="w">  </span><span class="c1">// If set to true, and the book is not found, a new book will be created.</span>
 <span class="w">  </span><span class="c1">// In this situation, `update_mask` is ignored.</span>
