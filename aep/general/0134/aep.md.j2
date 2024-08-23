@@ -27,8 +27,8 @@ Update methods are specified using the following pattern:
   - If the update RPC is [long-running](#long-running-update), the response
     **must** be an `Operation` for which the return type is the resource
     itself.
-- The method **should** support partial resource update,
-- The HTTP verb **must** be `PATCH`.
+- The method **should** support partial resource update, and the HTTP verb
+  **should** be `PATCH`.
 
 {% tab proto %}
 
