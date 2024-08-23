@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=afb6d807">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=afb6d807">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a5d95ce8">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=a5d95ce8">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=afb6d807"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=a5d95ce8"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -701,7 +701,7 @@ metadata:</p>
 <li>The <code>operationId</code> <strong>must</strong> begin with the word <code>get</code>. The remainder of the
   <code>operationId</code> <strong>should</strong> be the singular form of the resource type's name.</li>
 <li>The response content <strong>must</strong> be the resource itself. For example:
-  <code>#/components/schemas/Book</code></li>
+  <code>#/components/schemas/Book</code>. The response <strong>must</strong> reference a schema with a <code>x-aep-resource</code> extension.</li>
 <li>The URI <strong>should</strong> contain a variable for each individual ID in the resource
   hierarchy.<ul>
 <li>The path parameter for all resource IDs <strong>must</strong> be in the form
