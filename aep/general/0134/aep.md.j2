@@ -29,7 +29,7 @@ Update methods are specified using the following pattern:
     itself.
 - The method **must** support partial resource update, and the HTTP verb
   **must** be `PATCH`.
-- If the resources take long than is reasonable for a regular API request, the
+- If the update may take longer than is reasonable for a regular API request, the
   API **should** use a [long-running-operation](/long-running-operations).
 
 {% tab proto %}
