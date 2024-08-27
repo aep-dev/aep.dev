@@ -1,0 +1,73 @@
+---
+openapi: 3.0.3
+info:
+  title: Library
+  version: 1.0.0
+paths:
+  /publishers/{publisherId}/books/{bookId}:
+    parameters:
+      - name: publisherId
+        in: path
+        description: The publisher to list books for.
+        required: true
+        schema:
+          type: string
+      - name: bookId
+        in: path
+        description: The name of the book.
+        required: true
+        schema:
+          type: string
+      - name: updateMask
+        in: query
+        description: The list of fields that should be updated.
+        required: false
+        schema:
+          type: string
+    patch:
+      operationId: updateBook
+      description: Update a Book
+      requestBody:
+        description: The book that is being updated.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schemas:
+    Book:
+      x-aep-resource:
+        singular: book
+        plural: books
+        patterns:
+          - 'publishers/{publisher}/books/{book}'
+      description: A representation of a single book.
+      type: object
+      properties:
+        name:
+          type: string
+          description: |
+            The name of the book.
+            Format: publishers/{publisher}/books/{book}
+        isbn:
+          type: string
+          description: |
+            The ISBN (International Standard Book Number) for this book.
+        title:
+          type: string
+          description: The title of the book.
+        authors:
+          type: array
+          items:
+            type: string
+          description: The author or authors of the book.
+        rating:
+          type: number
+          description: The rating assigned to the book.
