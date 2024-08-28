@@ -90,12 +90,12 @@ message UpdateBookRequest {
 
 - A `path` field **must** be included.
   - The field **must** be [annotated as required](/field-behavior-documentation).
-  - The field **must** identify the [resource type](/resource-types) that it
+  - The field **must** identify the [resource type][aep-4] that it
     references.
 - The request message field for the resource **must** map to the `PATCH` body.
 - The request message field for the resource **should** be [annotated as
   required][aep-203].
-  - The field **must** identify the [resource type][aep-123] of the resource
+  - The field **must** identify the [resource type][aep-4] of the resource
     being updated.
 - If partial resource update is supported, a field mask **must** be included.
   It **must** be of type `google.protobuf.FieldMask`, and it **must** be called
@@ -303,6 +303,7 @@ resource does not exist, the service **must** error with `NOT_FOUND` (HTTP 404)
 unless `allow_missing` is set to `true`.
 
 <!-- prettier-ignore-start -->
+[aep-4]: ./0004.md
 [aep-121]: ./0121.md
 [aep-128]: ./0128.md
 [aep-203]: ./0203.md
