@@ -3,7 +3,7 @@
 Within API, methods that operate on schemas containing arrays require
 consideration on the strategies for updating elements within the list.
 
-For larger arrays of resources, consider [pagination][/pagination].
+For larger arrays of resources, consider [pagination][aep-158].
 
 ## Guidance
 
@@ -62,7 +62,7 @@ array fields.
 ### Update strategies
 
 A resource **may** use one of two strategies to enable updating a array field:
-direct update using the [standard `Update`][aip-134] method, or custom `Add`
+direct update using the [standard `Update`][aep-134] method, or custom `Add`
 and `Remove` methods.
 
 A standard `Update` method has one key limitation: the user is only able to
@@ -70,9 +70,9 @@ update _the entire_ array. This means that the user is required to read the
 resource, make modifications to the array field value as needed, and send it
 back. This is fine for many situations, particularly when the array field is
 expected to have a small size (fewer than 10 or so) and race conditions are not
-an issue, or can be guarded against with [ETags][aip-154].
+an issue, or can be guarded against with [ETags][aep-154].
 
-**Note:** Declarative-friendly resources (AEP-128) **must** use the standard
+**Note:** Declarative-friendly resources **must** use the standard
 `Update` method, and not introduce `Add` and `Remove` methods. If declarative
 tools need to reason about particular relationships while ignoring others,
 consider using a subresource instead.
@@ -94,7 +94,7 @@ define custom methods using the verbs `Add` and `Remove`:
   of the RPC name **should** be the singular form of the field being added.
 - The response **should** be the resource itself, and **should** fully-populate
   the resource structure.
-- The HTTP method **must** be `POST`, as usual for [custom methods][aip-136].
+- The HTTP method **must** be `POST`, as usual for [custom methods][aep-136].
 - The HTTP URI **must** end with `:add*` or `:remove*`, where `*` is the
   camel-case singular name of the field being added or removed.
 - The request field receiving the resource name **should** map to the URI path.
@@ -122,7 +122,7 @@ define custom methods using the verbs `Add` and `Remove`:
   being added.
 - The response **should** be the resource itself, and **should** fully-populate
   the resource structure.
-- The HTTP method **must** be `POST`, as usual for [custom methods][aip-136].
+- The HTTP method **must** be `POST`, as usual for [custom methods][aep-136].
 - The HTTP URI **must** end with `:add*` or `:remove*`, where `*` is the
   camel-case singular name of the field being added or removed.
 - If the data being added in an `Add` operation is already present, the method
@@ -145,12 +145,12 @@ subresource instead.
 
 - A resource field **must** be included. It **should** be the name of the
   resource (such as `book`) rather than `name` or `parent`.
-  - The field **should** be [annotated as required][aip-203].
+  - The field **should** be [annotated as required][aep-203].
   - If the field represents the name of another resource, it **should**
     identify the [resource type][aep-4] that it references.
 - A field for the value being added or removed **must** be included. It
   **should** be the singular name of the field.
-  - The field **should** be [annotated as required][aip-203].
+  - The field **should** be [annotated as required][aep-203].
 - The request message **must not** contain any other required fields, and
   **should not** contain other optional fields except those described in this
   or another AEP.
@@ -165,4 +165,3 @@ subresource instead.
 
 {% endtabs %}
 
-[aep-4]: ./0004.md

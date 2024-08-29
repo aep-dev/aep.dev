@@ -58,15 +58,15 @@ The endpoint **must** return a `Operation` as described above.
 
 ### Standard methods
 
-APIs **may** return an `Operation` from the [`Create`][aip-133],
-[`Update`][aip-134], or [`Delete`][aip-135] standard methods if appropriate. In
+APIs **may** return an `Operation` from the [`Create`][aep-133],
+[`Update`][aep-134], or [`Delete`][aep-135] standard methods if appropriate. In
 this case, the `response` field **must** be the standard and expected response
 type for that standard method.
 
 When creating or deleting a resource with a long-running request, the resource
-**should** be included in [`List`][aip-132] and [`Get`][aip-131] calls;
+**should** be included in [`List`][aep-132] and [`Get`][aep-131] calls;
 however, the resource **should** indicate that it is not usable, generally with
-a [state enum][aip-216].
+a [state enum][aep-216].
 
 ### Parallel requests
 
@@ -90,7 +90,7 @@ has elapsed after the request completed.
 ### Errors
 
 Errors that prevent a long-running request from _starting_ **must** return an
-error response (AEP-193), similar to any other method.
+[error response][AEP-193], similar to any other method.
 
 Errors that occur over the course of a request **may** be placed in the
 metadata message. The errors themselves **must** still be represented with a
@@ -117,7 +117,7 @@ When using protocol buffers, the common component
   - If the response and metadata types are defined in another package, the
     fully-qualified message name **must** be used.
   - The response type **should not** be `google.protobuf.Empty` (except for
-    [`Delete`][aip-135] methods), unless it is certain that response data will
+    [`Delete`][aep-135] methods), unless it is certain that response data will
     _never_ be needed. If response data might be added in the future, define an
     empty message for the RPC response and use that.
   - The metadata type is used to provide information such as progress, partial

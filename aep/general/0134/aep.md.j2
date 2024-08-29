@@ -160,8 +160,8 @@ would wipe out data because the previous version did not know about it.
 ### Long-running update
 
 Some resources take longer to update a resource than is reasonable for a
-regular API request. In this situation, the API **should** use a long-running
-operation (AIP-151) instead:
+regular API request. In this situation, the API **should** use a [long-running
+operation][AEP-151] instead:
 
 - The response type **must** be set to the resource (what the return type would
   be if the method were not long-running).
@@ -306,6 +306,7 @@ unless `allow_missing` is set to `true`.
 [aep-4]: ./0004.md
 [aep-121]: ./0121.md
 [aep-128]: ./0128.md
+[aep-151]: ./0151.md
 [aep-203]: ./0203.md
 [create]: ./0133.md
 [errors]: ./0193.md
