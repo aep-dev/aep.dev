@@ -27,8 +27,10 @@ Update methods are specified using the following pattern:
   - If the update RPC is [long-running](#long-running-update), the response
     **must** be an `Operation` for which the return type is the resource
     itself.
-- The method **should** support partial resource update, and the HTTP verb
-  **should** be `PATCH`.
+- The method **must** support partial resource update, and the HTTP verb
+  **must** be `PATCH`.
+- If the update may take longer than is reasonable for a regular API request, the
+  API **should** use a [long-running-operation](/long-running-operations).
 
 {% tab proto %}
 
@@ -53,7 +55,31 @@ rpc UpdateBook(UpdateBookRequest) returns (Book) {
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+```yaml
+paths:
+  /v1/publishers/{publisher}/books:
+    patch:
+      summary: Update a book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+```
+
+- The method **must** adhere to the behavior specified in [IETF RFC 7396 - JSON Merge Patch](https://datatracker.ietf.org/doc/html/rfc7396).
+- The method **must** support MIME types `application/merge-patch+json` to adhere to IETF RFC 7396, as well as `application/json` as a common generalization.
 
 {% endtabs %}
 
@@ -111,7 +137,7 @@ message UpdateBookRequest {
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+The request body **must** be the resource.
 
 {% endtabs %}
 
@@ -157,37 +183,6 @@ If a rating were set on a book and the existing `PUT` request were executed, it
 would wipe out the book's rating. In essence, a `PUT` request unintentionally
 would wipe out data because the previous version did not know about it.
 
-### Long-running update
-
-Some resources take longer to update a resource than is reasonable for a
-regular API request. In this situation, the API **should** use a long-running
-operation (AIP-151) instead:
-
-- The response type **must** be set to the resource (what the return type would
-  be if the method were not long-running).
-
-{% tab proto %}
-
-```proto
-rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
-  option (google.api.http) = {
-    patch: "/v1/{book.name=publishers/*/books/*}"
-  };
-  option (aep.api.operation_info) = {
-    response_type: "Book"
-    metadata_type: "OperationMetadata"
-  };
-}
-```
-
-- Both the `response_type` and `metadata_type` fields **must** be specified.
-
-{% tab oas %}
-
-**Note:** OAS example not yet written.
-
-{% endtabs %}
-
 ### Create or update
 
 If the service uses client-assigned resource paths, `Update` methods **may**
@@ -208,6 +203,25 @@ message UpdateBookRequest {
 ```
 
 {% tab oas %}
+
+```yaml
+paths:
+  /v1/publishers/{publisher}/books:
+    patch:
+      summary: Update a book
+      parameters:
+      - name: allow_missing
+        in: query
+        description: If set to true, and the book is not found, a new book will be created.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/Book
+```
 
 **Note:** OAS example not yet written.
 
