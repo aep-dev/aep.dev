@@ -136,9 +136,11 @@ using `PUT`.
 
 To illustrate this, consider a `PUT` request to a `Book` resource:
 
+```
     PUT /v1/publishers/123/books/456
 
     {"title": "Mary Poppins", "author": "P.L. Travers"}
+```
 
 Next consider that the resource is later augmented with a new field (here we
 add `rating`, and use a protobuf example without loss of generality):
