@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=93ff7cfc">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=93ff7cfc">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6a509d65">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6a509d65">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=93ff7cfc"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=6a509d65"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -655,10 +655,7 @@ language.</p>
 <span class="w">  </span><span class="nt">&quot;instance&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;7934df3e-4b63-429b-b0f5-b8d350ec165e&quot;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">OpenAPI 3.0</label><div class="tabbed-content">
-<p>The media-type for an error response should be "application/problem+json".</p>
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Protocol buffers</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
 <p>Services <strong>must</strong> return a <a href="https://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto"><code>google.rpc.Status</code></a> message when an API
 error occurs, and <strong>must</strong> use the canonical error codes defined in
 <a href="https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto"><code>google.rpc.Code</code></a>. More information about the particular codes is
@@ -667,6 +664,9 @@ available in the <a href="https://github.com/grpc/grpc/blob/master/doc/statuscod
 <code>details</code> field of the Status message. Services <strong>should</strong> use the
 <a href="https://buf.build/aep/api/docs/main:aep.api#aep.api.ProblemDetails"><code>aep.api.ProblemDetails</code></a>
 to define this field.</p>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<p>The media-type for an error response should be "application/problem+json".</p>
 </div>
 </div>
 <h4 id="dynamic-variables">Dynamic variables</h4>
