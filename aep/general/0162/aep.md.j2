@@ -25,12 +25,8 @@ useful include:
 - Other resources depend on or descend from different revisions of a resource.
 - There is a need to represent the change of a resource over time.
 
-APIs implementing resources with revisions **should** model resource
-revisions as a subresource of the resource. Sometimes, the revisions
-collection can be a sibling collection of the resource it is a revision of.
-
-For example, a resource revisions which may have a longer lifespan than the
-parent resource, such as a database snapshot.
+APIs implementing resources with revisions **must** model resource
+revisions as a subresource of the resource.
 
 {% tab proto %}
 
@@ -48,7 +44,7 @@ message BookRevision {
     [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Other revision IDs that share the same snapshot.
-  repeated string alternate_ids = 4
+  repeated string aliases = 4
     [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 ```
@@ -128,6 +124,8 @@ Services **may** reserve specific IDs to be [aliases][alias] (e.g.
 ```
 GET /v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}
 ```
+
+If specific IDs are reserved, services **should** document those IDs.
 
 - If a `latest` ID exists, it **must** represent the most recently created
 revision. The content of `publishers/{publisher}/books/{book}/revisions/latest`
