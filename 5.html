@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=6a509d65">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=6a509d65">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=1d8eacca">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=1d8eacca">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=6a509d65"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=1d8eacca"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -624,9 +624,9 @@ API.</p>
 </ul>
 <p>See the following AEPs to learn more about resource-oriented design:</p>
 <ul>
-<li>[resource-oriented design][AEP-121]</li>
-<li>[resource paths][AEP-122]</li>
-<li>[resource types][AEP-123]</li>
+<li><a href="/121">resource-oriented design</a></li>
+<li><a href="/122">resource paths</a></li>
+<li><a href="/4">resource types</a></li>
 </ul>
 <h2 id="identify-standard-operations">Identify standard operations</h2>
 <p>Once the resources are defined, identify one or more standard methods for each
@@ -635,12 +635,16 @@ lifecycle: namely, they create, read, update, delete, and list resources.</p>
 <p>Ideally all five standard methods should be exposed for every resource.</p>
 <p>See the following AEPs to learn more about the standard methods:</p>
 <ul>
-<li>[AEP-131][]</li>
+<li><a href="/131">Get</a></li>
+<li><a href="/132">List</a></li>
+<li><a href="/133">Create</a></li>
+<li><a href="/134">Update</a></li>
+<li><a href="/135">Delete</a></li>
 </ul>
 <h2 id="identify-custom-operations">Identify custom operations</h2>
 <p>To accomplish some of the user journeys, resources may need to support
-operations other than [Create][AEP-133], [Update][AEP-134], [AEP-135][Delete],
-[AEP-131][Get], and [AEP-132][List] them. Some examples include:</p>
+operations other than <a href="/133">Create</a>, <a href="/134">Update</a>, <a href="/135">Delete</a>,
+<a href="/131">Get</a>, and <a href="/132">List</a> them. Some examples include:</p>
 <ul>
 <li>restarting a virtual machine</li>
 <li>triggering a CI build</li>
