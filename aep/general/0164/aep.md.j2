@@ -38,8 +38,8 @@ A resource that supports soft delete **should** provide an `Undelete` method:
     resource itself.
 - A `name` field **must** be included in the request message; it **should** be
   called `name`.
-  - The field **should** be [annotated as required][aip-203].
-  - The field **should** identify the [resource type][aip-123] that it
+  - The field **should** be [annotated as required][aep-203].
+  - The field **should** identify the [resource type][aep-4] that it
     references.
   - The comment for the field **should** document the resource pattern.
 - The request message **must not** contain any other required fields, and
@@ -127,3 +127,5 @@ resource is not deleted, the service **must** error with `409 Conflict`.
 - For long-running operations, see AEP-151.
 - For resource freshness validation (`etag`), see AEP-154.
 - For change validation (`validate_only`), see AEP-163.
+
+[aep-4]: ./0004.md

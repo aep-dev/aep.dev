@@ -178,7 +178,7 @@ and the full resource path does not change between these.
 When defining a resource, the first field **should** be the resource path,
 which **must** be of type `string` and **must** be called `path` for the
 resource path. The message **should** include a `google.api.resource`
-annotation declaring the type (see [AEP-123][] for more on this).
+annotation declaring the type (see [AEP-4][] for more on this).
 
 ```proto
 // A representation of a book in the library.
@@ -201,7 +201,7 @@ When defining a method that retrieves or acts on an already-existing resource
 **should** be the resource path, which **must** be of type `string` and
 **must** be called `path` for the resource path. The field **should** also be
 annotated with the `google.api.resource_reference` annotation, referencing the
-resource type ([AEP-123][]).
+resource type ([AEP-4][]).
 
 ```proto
 // Request message for ArchiveBook
@@ -222,7 +222,7 @@ string path = 1 [
 other use cases, either use a different term or prepend an adjective (for
 example: `file_path`).
 
-[aep-123]: ./0123.md
+[aep-4]: ./0004.md
 
 ### Fields representing a resource's parent
 
@@ -231,7 +231,7 @@ resource to a collection (such as `ListBooks` or `CreateBook`), the first field
 of the request message **should** be of type `string` and **should** be called
 `parent` for the resource path of the collection. The `parent` field **should**
 also be annotated with the `google.api.resource_reference` annotation,
-referencing the parent's resource type ([AEP-123][]).
+referencing the parent's resource type ([AEP-4][]).
 
 ```proto
 // Request message for ListBooks.
@@ -316,7 +316,7 @@ alone is strictly necessary, the field **should** use an `_id` suffix (e.g.
 
 - For evolving resource paths over time, see
   [AEP-180](./0180.md#changing-resource-paths).
-- For resource types, see [AEP-123][].
+- For resource types, see AEP-4.
 
 <!-- prettier-ignore-start -->
 [protovalidate]: https://github.com/bufbuild/protovalidate

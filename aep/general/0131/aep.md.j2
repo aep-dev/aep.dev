@@ -95,7 +95,7 @@ Get operations also implement a common request message pattern:
 
 - A resource path field **must** be included. It **should** be called `path`.
   - The field **should** be annotated as `REQUIRED`.
-  - The field **should** identify the [resource type][aep-123] that it
+  - The field **should** identify the [resource type][aep-4] that it
     references.
 - The comment for the `path` field **should** document the resource pattern.
 - The request message **must not** contain any other required fields, and
@@ -106,6 +106,8 @@ Get operations also implement a common request message pattern:
 variable in the `google.api.http` annotation on the RPC. This causes the `path`
 field in the request to be populated based on the value in the URL when the
 REST/JSON interface is used.
+
+[aep-4]: ./0004.md
 
 {% tab oas %}
 
@@ -125,7 +127,3 @@ metadata:
     ID of parent resources **must** end with `Id`.
 
 {% endtabs %}
-
-<!-- prettier-ignore-start -->
-[aep-123]: ./0123.md
-<!-- prettier-ignore-end -->

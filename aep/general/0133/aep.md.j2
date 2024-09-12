@@ -106,7 +106,7 @@ message CreateBookRequest {
 - A `parent` field **must** be included unless the resource being created is a
   top-level resource. It **should** be called `parent`.
   - The field **should** be [annotated as `REQUIRED`][aep-203].
-  - The field **must** identify the [resource type][aep-123] of the resource
+  - The field **must** identify the [resource type][aep-4] of the resource
     being created.
 
 {% tab oas %}
@@ -228,7 +228,7 @@ path and use it in references from other resources.
 
 [aep-121]: ./0121.md
 [aep-122]: ./0122.md
-[aep-123]: ./0123.md
+[aep-4]: ./0004.md
 [aep-155]: ./0155.md
 [aep-203]: ./0203.md
 [aep-210]: ./0210.md
@@ -236,6 +236,6 @@ path and use it in references from other resources.
 [management plane]: ./0111.md#management-plane
 [errors]: ./0193.md
 [field_behavior]: ./203.md
-[Declarative clients]: ./0009.md#declarative-clients
+[Declarative clients]: ./0003.md#declarative-clients
 [permission-denied]: ./0193.md#permission-denied
 [strong consistency]: ./0121.md#strong-consistency
