@@ -57,10 +57,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
   resource ID is not required.
-- If the API is operating on the [management plane][], the operation should have
-  [strong consistency][]: the completion of a create operation **must** mean
-  that all user-settable values and the existence of the resource have reached a
-  steady-state and reading resource state returns a consistent response.
+- The operation **must** have [strong consistency][].
 
 {% tab oas %}
 
@@ -72,8 +69,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 
 Create methods implement a common request message pattern:
 
-- An `id` field **must** be included for management plane resources, and
-  **should** be included for data plane resources.
+- An `id` field **should** be supported.
 - The resource field **must** be included and **must** map to the POST body.
 - The request message **must not** contain any other required fields and
   **should not** contain other optional fields except those described in this
@@ -148,16 +144,15 @@ rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
 
 ### User-specified IDs
 
-An API **must** allow a user to specify the ID component of a resource (the
-last segment of the resource path) on creation if the API is operating on the
-[management plane][].
+An API **should** allow a user to specify the ID component of a resource: not
+doing so introduces a non-idempotent request in the API, as sending the same
+payload results in creating a new resource each time.
 
-On the [data plane][], an API **should** allow a user to specify the ID.
 Exceptional cases should have the following behavior:
 
-- The data plane resource allows identical records without a need to
-  disambiguate between the two (e.g. rows in a table with no primary key).
-- The data plane resource will not be exposed in [Declarative clients][].
+- The resource allows identical records without a need to disambiguate between
+  the two (e.g. rows in a table with no primary key).
+- The resource will not be exposed in [Declarative clients][].
 
 An API **may** allow the `id` field to be optional, and give the resource a
 system-generated ID if one is not specified.
@@ -233,7 +228,6 @@ path and use it in references from other resources.
 [aep-203]: ./0203.md
 [aep-210]: ./0210.md
 [data plane]: ./0111.md#data-plane
-[management plane]: ./0111.md#management-plane
 [errors]: ./0193.md
 [field_behavior]: ./203.md
 [Declarative clients]: ./0003.md#declarative-clients
