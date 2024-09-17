@@ -1,0 +1,54 @@
+# Fields
+
+In many cases, a field's particular value can be represented in many different ways. 
+String representations of dates are an excellent example, where a date can be represented in multiple ways
+and an API cannot necessarily normalize the data without additional information about its format.
+
+The allowed formats for a field's value must be properly documented and enforced so that the API
+can ensure that it receives data in a way that it can properly handle and send it back in a way 
+that consumers expect.
+
+The [`buf.validate.FieldConstraints`][protovalidate] type, through its accompanying
+extension `buf.validate.field`, enriches a field's schema beyond the basic
+name and type information by specifying constraints or validation rules.
+
+## Guidance
+
+If a field follows a set pattern, it **should** be annotated with a `buf.validate.field` annotation.
+
+If a field has a `buf.validate.field` annotation, that annotation **must** be included on all requests and responses.
+
+If a field has a `buf.validate.field`, any values that do not follow the `buf.validate.field` annotation must return an error.
+
+If a field has a `buf.validate.field`, an API **must** return an error if it attempts to return a value that does not follow the annotation.
+
+
+#### Backwards compatibility
+
+Adding a validation rule to an existing, unspecified field **is not** backwards
+compatible, *unless* the field in question has always been documented as conforming to the format
+being specified.
+
+Changing an existing validation rule to a different one in all cases **is not**
+backwards compatible.
+
+## Rationale
+
+#### Why add a format specifier?
+
+The format of a primitive-typed field can be critical to its usability. Some
+programming languages may convey a specific type format as a standalone type,
+as Java does with [UUID][java uuid]. Most have specific structural requirements
+that are validated by the service, so conveying the format to the user ahead of
+time is critical to their experience.
+
+#### Why document value normalizations?
+
+In many cases, the API will be responsible for parsing the user input and normalizing it
+into a value that the API expects. 
+
+While primitive comparison is not recommended for any of the supported formats,
+uniform normalization of values is important to set consumer expectations, and
+create a user-friendly surface. 
+
+[protovalidate]: https://github.com/bufbuild/protovalidate/tree/main/proto/protovalidate
