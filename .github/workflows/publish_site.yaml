@@ -1,0 +1,17 @@
+---
+name: publish_site
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container: node:20
+    steps:
+      - name: Trigger site generator repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: publish-event
+          repository: aep-dev/site-generator-beta
+          token: ${{ secrets.GH_PAT }}
