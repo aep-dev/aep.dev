@@ -190,45 +190,6 @@ rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
 
 {% endtabs %}
 
-### Create or update
-
-If the service uses client-assigned resource paths, `Update` methods **may**
-expose a `bool allow_missing` field, which will cause the method to succeed in
-the event that the user attempts to update a resource that is not present (and
-will create the resource in the process):
-
-{% tab proto %}
-
-```proto
-message UpdateBookRequest {
-  ...
-
-  // If set to true, and the book is not found, a new book will be created.
-  // In this situation, `update_mask` is ignored.
-  bool allow_missing = 3;
-}
-```
-
-{% tab oas %}
-
-**Note:** OAS example not yet written.
-
-{% endtabs %}
-
-More specifically, the `allow_missing` flag triggers the following behavior:
-
-- If the method call is on a resource that does not exist, the resource is
-  created. All fields are applied regardless of any provided field mask.
-  - However, if any required fields are missing or fields have invalid values,
-    an `INVALID_ARGUMENT` error is returned.
-- If the method call is on a resource that already exists, and all fields
-  match, the existing resource is returned unchanged.
-- If the method call is on a resource that already exists, only fields declared
-  in the field mask are updated.
-
-The user **must** have the update permissions to call `Update` even with
-`allow_missing` set to `true`.
-
 ### Etags
 
 An API may sometimes need to allow users to send update requests which are
