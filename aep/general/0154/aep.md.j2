@@ -51,7 +51,7 @@ current ETag. If the `If-Match` header value does not match the ETag, the
 service **must** reply with an HTTP 412 error.
 
 If the user omits the `If-Match` header, the service **should** permit the
-request. However, services with strong consistency or parallelism requirements
+request. However, services with [strong consistency][] or parallelism requirements
 **may** require users to send ETags all the time and reject the request with an
 HTTP 400 error if it does not contain an ETag.
 
@@ -113,3 +113,4 @@ not equivalent to the old one).
 - **2019-09-23**: Changed the title to "resource freshness validation".
 
 [rfc 7232]: https://tools.ietf.org/html/rfc7232#section-2.3
+[strong consistency]: ./0121.md#strong-consistency
