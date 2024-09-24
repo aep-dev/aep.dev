@@ -116,6 +116,8 @@ When referring to the revisions of a resource, the subcollection name
 publishers/123/books/les-miserables/revisions/c7cfa2a8
 ```
 
+The resource **must** be named `{resource_singular}Revision`.
+
 ### Server-specified aliases
 
 Services **may** reserve specific IDs to be [aliases][alias] (e.g.
@@ -125,7 +127,7 @@ Services **may** reserve specific IDs to be [aliases][alias] (e.g.
 GET /v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}
 ```
 
-If specific IDs are reserved, services **should** document those IDs.
+If specific IDs are reserved, services **must** document those IDs.
 
 - If a `latest` ID exists, it **must** represent the most recently created
 revision. The content of `publishers/{publisher}/books/{book}/revisions/latest`
