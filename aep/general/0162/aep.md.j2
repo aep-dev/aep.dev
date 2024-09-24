@@ -105,12 +105,12 @@ creating a new revision. Specifically examples of strategies include:
 APIs **may** use any of these strategies or any other strategy. APIs **must**
 document their revision creation strategy.
 
-APIs **should** have at least one revision for their resource at any time.
+Resources that support revisions **should** always have at least one revision.
 
 ### Resource names for revisions
 
-When referring to specific revision of a resource, the subcollection name
-**must** be named `revisions`. Resource revisions have paths with the format
+When referring to the revisions of a resource, the subcollection name
+**must** be `revisions`. Resource revisions have paths with the format
 `{resource_path}/revisions/{resource_revision}`. For example:
 ```
 publishers/123/books/les-miserables/revisions/c7cfa2a8
@@ -336,7 +336,7 @@ As revisions are nested under the resource, also see [cascading delete][].
 
 ## Rationale
 
-### For the name revision
+### For the name "revision"
 
 There was significant debate about what to call this pattern, with the following
 as proposed options:
