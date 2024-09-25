@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=e612e9cf">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=e612e9cf">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=2fd8f930">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=2fd8f930">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=e612e9cf"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=2fd8f930"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,13 +512,33 @@
     <tr><td>Slug</td><td>revisions</td></tr>
     <tr><td>Number</td><td>162</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/162">aep.dev/162</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-07-10</td></tr>
+    <tr><td>Updated</td><td>2024-07-10</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#creating-revisions">Creating Revisions</a></li>
+<li><a href="#resource-names-for-revisions">Resource names for revisions</a></li>
+<li><a href="#server-specified-aliases">Server-specified aliases</a></li>
+<li><a href="#user-specified-aliases">User-specified aliases</a></li>
+<li><a href="#rollback">Rollback</a></li>
+<li><a href="#child-resources">Child resources</a></li>
+<li><a href="#standard-methods">Standard methods</a></li>
+</ul>
+</li>
+<li><a href="#rationale">Rationale</a><ul>
+<li><a href="#for-the-name-revision">For the name "revision"</a></li>
+</ul>
+</li>
+<li><a href="#history">History</a><ul>
+<li><a href="#switching-from-a-collection-extension-to-a-subcollection">Switching from a collection extension to a subcollection</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -557,17 +577,358 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">revisions (AEP-162)</h4>
   <h1 id="resource-revisions">Resource Revisions</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/16">this GitHub issue</a> for more
-information.</p>
+<p>Some APIs need to have resources with a revision history, where users can
+reason about the state of the resource over time. There are several reasons for
+this:</p>
+<ul>
+<li>Users may want to be able to roll back to a previous revision, or diff
+  against a previous revision.</li>
+<li>An API may create data which is derived in some way from a resource at a
+  given point in time. In these cases, it may be desirable to snapshot the
+  resource for reference later.</li>
+</ul>
+<p><strong>Note:</strong> We use the word <em>revision</em> to refer to a historical reference for a
+particular resource, and intentionally avoid the term <em>version</em>, which refers
+to the version of an API as a whole.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>may</strong> expose a revision history for a resource. Examples of when it is
+useful include:</p>
+<ul>
+<li>When it is valuable to expose older revisions of a resource via an API. This
+  can avoid the overhead of the customers having to write their own API to store
+  and enable retrieval of revisions.</li>
+<li>Other resources depend on or descend from different revisions of a resource.</li>
+<li>There is a need to represent the change of a resource over time.</li>
+</ul>
+<p>APIs implementing resources with revisions <strong>must</strong> model resource
+revisions as a subresource of the resource.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">BookRevision</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The path of the book revision.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// The snapshot of the book</span>
+<span class="w">  </span><span class="n">Book</span><span class="w"> </span><span class="na">resource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OUTPUT_ONLY</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// The timestamp that the revision was created.</span>
+<span class="w">  </span><span class="n">google.protobuf.Timestamp</span><span class="w"> </span><span class="na">create_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OUTPUT_ONLY</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// Other revision IDs that share the same snapshot.</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">aliases</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<span class="w">    </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OUTPUT_ONLY</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The <code>message</code> <strong>must</strong> be annotated as a resource (AIP-123).</li>
+<li>The <code>message</code> name <strong>must</strong> be named <code>{ResourceType}Revision</code>.</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-07/schema#&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;resource&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/definitions/Book&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;readOnly&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;create_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date-time&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;readOnly&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;aliases&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="p">},</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;readOnly&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+<ul>
+<li>The resource revision <strong>must</strong> contain a field with a message type of the
+  parent resource, with a field name of <code>resource</code>.
+    - The value of <code>resource</code> <strong>must</strong> be the original resource
+      at the point in time the revision was created.</li>
+<li>The resource revision <strong>must</strong> contain a <code>create_time</code> field (see [AIP-142][]).</li>
+<li>The resource revision <strong>may</strong> contain a repeated field <code>aliases</code>, which would
+  contain a list of resource IDs that the revision is also known by (e.g. <code>latest</code>)</li>
+</ul>
+<h3 id="creating-revisions">Creating Revisions</h3>
+<p>Depending on the resource, different APIs may have different strategies for
+creating a new revision. Specifically examples of strategies include:</p>
+<ul>
+<li>Creating a revision when there is a change to the resource</li>
+<li>Creating a revision when important system state changes</li>
+<li>Creating a revision when specifically requested</li>
+</ul>
+<p>APIs <strong>may</strong> use any of these strategies or any other strategy. APIs <strong>must</strong>
+document their revision creation strategy.</p>
+<p>Resources that support revisions <strong>should</strong> always have at least one revision.</p>
+<h3 id="resource-names-for-revisions">Resource names for revisions</h3>
+<p>When referring to the revisions of a resource, the subcollection name
+<strong>must</strong> be <code>revisions</code>. Resource revisions have paths with the format
+<code>{resource_path}/revisions/{resource_revision}</code>. For example:
+<div class="highlight language-None"><pre><span></span><code>publishers/123/books/les-miserables/revisions/c7cfa2a8
+</code></pre></div></p>
+<p>The resource <strong>must</strong> be named <code>{resource_singular}Revision</code> (for example, <code>BookRevision</code>).</p>
+<h3 id="server-specified-aliases">Server-specified aliases</h3>
+<p>Services <strong>may</strong> reserve specific IDs to be <a href="/122#resource-id-aliases">aliases</a> (e.g.
+<code>latest</code>). These are read-only and managed by the service.</p>
+<div class="highlight language-None"><pre><span></span><code>GET /v1/publishers/{publisher_id}/books/{book_id}/revisions/{revision_id}
+</code></pre></div>
+<p>If specific IDs are reserved, services <strong>must</strong> document those IDs.</p>
+<ul>
+<li>If a <code>latest</code> ID exists, it <strong>must</strong> represent the most recently created
+revision. The content of <code>publishers/{publisher}/books/{book}/revisions/latest</code>
+and <code>publishers/{publisher}/books/{book}</code> can differ, as the latest revision may
+be different from the current state of the resource.</li>
+</ul>
+<h3 id="user-specified-aliases">User-specified aliases</h3>
+<p>APIs <strong>may</strong> provide a mechanism for users to assign an <a href="/122#resource-id-aliases">alias</a> ID to an
+existing revision with a custom method "alias":</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">AliasBookRevision</span><span class="p">(</span><span class="n">AliasBookRevisionRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">Book</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{name=publishers/*/books/*/revisions/*}:alias&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">AliasBookRevisionRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/BookRevision&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// The ID of the revision to alias to, e.g. `CURRENT` or a semantic</span>
+<span class="w">  </span><span class="c1">// version.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// If false, this request will fail when the alias already</span>
+<span class="w">  </span><span class="c1">// exists.</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">overwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">[(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OPTIONAL</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;/v1/publishers/{publisher_id}/books/{book}/revisions/{revision}:alias&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;post&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;requestBody&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;application/json&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/components/schemas/AliasBookRevisionRequest&quot;</span><span class="w"></span>
+<span class="w">              </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;responses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;200&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="nt">&quot;application/json&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                  </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/components/schemas/Book&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">              </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;components&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;schemas&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;AliasBookRevisionRequest&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;alias&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">},</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;overwrite&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;alias&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+<ul>
+<li>The request message <strong>must</strong> have a <code>path</code> field:<ul>
+<li>The field <strong>must</strong> be <a href="/field-behavior-documentation">annotated as required</a>.</li>
+<li>The field <strong>must</strong> identify the <a href="/resource-types">resource type</a> that it
+  references.</li>
+</ul>
+</li>
+<li>The request message <strong>must</strong> have a <code>alias</code> field:<ul>
+<li>The field <strong>must</strong> be [annotated as required][aip-203].</li>
+</ul>
+</li>
+<li>If the user calls the method with an existing <code>alias</code> with <code>overwrite</code> set to
+  true, the request <strong>must</strong> succeed and the alias will be updated to refer to the
+  provided revision. If <code>overwrite</code> is false, the request must fail with an error code
+  ALREADY_EXISTS (HTTP 409).</li>
+</ul>
+<h3 id="rollback">Rollback</h3>
+<p>A common use case for a resource with a revision history is the ability to roll
+back to a given revision. APIs that support this behavior <strong>should</strong> do so with
+a <code>Rollback</code> custom method:</p>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">RollbackBook</span><span class="p">(</span><span class="n">RollbackBookRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">BookRevision</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">post</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{name=publishers/*/books/*/revisions/*}:rollback&quot;</span>
+<span class="w">    </span><span class="n">body</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;*&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">RollbackBookRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The revision that the book should be rolled back to.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.googleapis.com/BookRevision&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;/v1/publishers/{publisher}/books/{book}/revisions/{revision}:rollback&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;post&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;requestBody&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;application/json&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/components/schemas/RollbackBookRequest&quot;</span><span class="w"></span>
+<span class="w">              </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;responses&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;200&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successful rollback&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">              </span><span class="nt">&quot;application/json&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                  </span><span class="nt">&quot;$ref&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;#/components/schemas/BookRevision&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+<span class="w">              </span><span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="p">}</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;components&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;schemas&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;RollbackBookRequest&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="nt">&quot;path&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+<ul>
+<li>The method <strong>must</strong> use the <code>POST</code> HTTP verb.</li>
+<li>The method <strong>should</strong> return a resource revision.</li>
+<li>The request message <strong>must</strong> have a <code>path</code> field, referring to the resource
+  revision whose configuration the resource should be rolled back to.<ul>
+<li>The field <strong>must</strong> be [annotated as required][aip-203].</li>
+<li>The field <strong>must</strong> identify the [resource type][aip-123] that it
+  references.</li>
+</ul>
+</li>
+</ul>
+<h3 id="child-resources">Child resources</h3>
+<p>Resources with a revision history <strong>may</strong> have child resources. If they do, they
+<strong>should</strong> be a subset of the descendants of the original resource, and a given
+revision's descendants must be a subset of the descendants of the resource at
+the time the revision was created.</p>
+<h3 id="standard-methods">Standard methods</h3>
+<p>Any standard methods <strong>must</strong> implement the corresponding AIPs (AIP-131,
+AIP-132, AIP-133, AIP-134, AIP-135), with the following additional behaviors:</p>
+<ul>
+<li>List methods: By default, revisions in the list response <strong>should</strong> be ordered
+  in reverse chronological order. APIs <strong>may</strong> support the <a href="./list#ordering"><code>order_by</code></a> field to override the
+  default behavior.</li>
+<li>If the revision supports aliasing, a delete method with the resource path
+  of the alias (e.g. <code>revisions/1.0.2</code>) <strong>must</strong> remove the alias instead of
+  deleting the resource.</li>
+</ul>
+<p>As revisions are nested under the resource, also see <a href="/135#cascading-delete">cascading delete</a>.</p>
+<h2 id="rationale">Rationale</h2>
+<h3 id="for-the-name-revision">For the name "revision"</h3>
+<p>There was significant debate about what to call this pattern, with the following
+as proposed options:</p>
+<ul>
+<li>snapshots</li>
+<li>revisions</li>
+<li>versions</li>
+</ul>
+<p>Among those, revision was chosen because:</p>
+<ul>
+<li>The term "version" is often used in multiple different contexts (e.g. API
+  version), and using that noun here may result in confusion during
+  conversations where it could mean one or the other.</li>
+<li>The term "snapshot" is also used for snapshots of datastores, which may not
+  follow this pattern.</li>
+<li>The term "revision" does not have many conflicts with terms when describing an
+  API or resource.</li>
+</ul>
+<h2 id="history">History</h2>
+<h3 id="switching-from-a-collection-extension-to-a-subcollection">Switching from a collection extension to a subcollection</h3>
+<p>In aip.dev prior to 2023-09, revisions were more like extensions of an existing
+resource by using <code>@</code> symbol. List and delete revisions were custom methods on
+the resource collection. A single Get method was used to retrieve either the
+resource revision, or the resource.</p>
+<p>Its primary advantage was allowing a resource reference to seamlessly refer to
+a resource, or its revision.</p>
+<p>It also had several disadvantages:</p>
+<ul>
+<li>List revisions is a custom method (<code>:listRevisions</code>) on the resource.</li>
+<li>Delete revision is a custom method on the resource.</li>
+<li>Not visible in API discovery documenation.</li>
+<li>Resource IDs cannot use the <code>@</code> symbol.</li>
+</ul>
+<p>The guidance was modified ultimately to enable revisions to behave like a
+resource, which reduces users' cognitive load and allows resource-oriented
+clients to easily list, get, create, update, and delete revisions.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-08-09</strong>: Imported from aip.dev.</li>
+</ul>
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
