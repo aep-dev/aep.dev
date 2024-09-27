@@ -11,7 +11,7 @@ APIs **may** support batch get to retrieve a consistent set of resources.
 - The method's name **must** begin with `BatchGet`. The remainder of the method
   name **must** be the plural form of the resource being retrieved.
 - The HTTP verb **must** be `GET`.
-- The HTTP URI **must** end with `:BatchGet`.
+- The HTTP URI **must** end with `:batchGet`.
 - The URI path **must** represent the collection for the resource, matching the
   collection used for simple CRUD operations. If the operation spans parents, a
   [wilcard](./reading-across-collections) **may** be accepted.
@@ -24,19 +24,18 @@ APIs **may** support batch get to retrieve a consistent set of resources.
 The request for a batch get method **should** be specified with the following
 pattern:
 
-- The request **must** include an array parameter which accepts the resource
-  paths specifying the resources to retrieve. The parameter **should** be named
-  `paths`.
+- The request **must** include an array field which accepts the resource paths
+  specifying the resources to retrieve. The field **should** be named `paths`.
   - If no resource paths are provided, the API **should** error with
     `INVALID_ARGUMENT`.
-  - The parameter **should** be required.
+  - The parameter **must** be required.
   - The parameter **should** identify the [resource type](./paths) that it
     references.
   - The parameter should define the pattern of the resource path values.
   - The parameter should define the maximum number of paths allowed.
 - Other parameters besides `paths` **may** be "hoisted" from the [standard Get
   request][get-request].
-- Batch get **should not** support pagination because transactionality across
+- Batch Get **should not** support pagination because transactionality across
   API calls would be extremely difficult to implement or enforce, and the
   request defines the exact scope of the response anyway.
 - The request **must not** contain any other required parameters, and **should
@@ -73,8 +72,7 @@ message BatchGetBooksRequest {
 }
 ```
 
-- The request and response schemas **must** match the method name, with
-  `Request` and `Response` suffixes.
+- The request schema **must** match the method name, with `Request` suffix.
 - A `parent` field **should** be included, unless the resource being retrieved
   is a top-level resource, to facilitate inclusion in the URI as well to permit
   a single permissions check. If a caller sets this field, and the parent
@@ -106,6 +104,18 @@ message BatchGetBooksRequest {
 The response for a batch get method **should** be specified with the following
 pattern:
 
+- The response schema **must** match the method name, with `Response` suffix.
+- The response schema **must** have a single array property where each item is
+  either a retrieved resource or an error structure describing an error that
+  occurred attempting to retrieve the resource. The error alternative would
+  only be present for non-transactional batch gets.
+- The order of resources/error objects in the response **must** be the same as
+  the paths in the request.
+- The array of resources **must** be named `results` and contain resources with
+  no additional wrapping.
+- There must not be a `nextPageToken` field as batch get operations are not
+  pageable.
+
 {% tab proto -%}
 
 ```proto
@@ -115,15 +125,11 @@ message BatchGetBooksResponse {
 }
 ```
 
-- The response message **must** include one repeated field where its items may
-  either be a retrieved resource or an error structure describing an error that
-  occurred attempting to retrieve the resource. The error alternative would
-  only be present for non-transactional batch gets.
-
 {% tab oas %}
 
-- The response schema **must** be `type: object` with a single array property
-  with each item containing one of the requested resources.
+{% sample 'batchget.oas.yaml', 'paths./publishers/{publisherId}/books:BatchGet.get.responses.200.content.application/json' %}
+
+Example response body:
 
 ```json
 {
@@ -136,8 +142,8 @@ message BatchGetBooksResponse {
       "rating": 9.6
     },
     {
-      "code": "NotFound",
-      "message": "The resource is not available"
+      "type": "https://datatracker.ietf.org/doc/html/rfc9110#name-404-not-found",
+      "title": "The resource is not available"
     }
     {
       "name": "publishers/lacroix/books/hunchback-of-notre-dame",
@@ -150,22 +156,14 @@ message BatchGetBooksResponse {
 }
 ```
 
-- The array of resources **must** be named `results` and contain resources with
-  no additional wrapping.
-- There must not be a `nextPageToken` field as batch get operations are not
-  pageable.
-
 {% endtabs %}
-
-- The order of resources/error objects in the response **must** be the same as
-  the paths in the request.
 
 ### Support for transactional get
 
 The batch get method may support a transactional form of operation where the
 get either succeeds for all requested resources or fails. When supported, the
-method should define a boolean parameter `asTransaction` that the user must
-specify with the value `true` to request transactional operation.
+method should define a boolean parameter `transactional` that the user must
+specify with the value `true` to request a transactional operation.
 
 ## Changelog
 
