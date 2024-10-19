@@ -7,96 +7,21 @@ return some kind of promise to the user, and allow the user to check back in
 later.
 
 The long-running request pattern is roughly analogous to a [Future][] in Python
-or Java, or a [Node.js Promise][]. Essentially, the user is given a token that
-can be used to track progress and retrieve the result.
+or Java, or a [Node.js Promise][]: the user is given a token that can be used to
+track progress and retrieve the result.
 
 ## Guidance
 
 Operations that might take a significant amount of time to complete **should**
-return a `202 Accepted` response along with an `Operation` resource that can be
-used to track the status of the request and ultimately retrieve the result.
+return an `Operation` resource that can be used to track the status of the
+request and ultimately retrieve the result.
 
-Any single operation defined in an API surface **must** either _always_ return
-`202 Accepted` along with an `Operation`, or _never_ do so. A service **must
-not** return a `200 OK` response with the result if it is "fast enough", and
-`202 Accepted` if it is not fast enough, because such behavior adds significant
-burdens for clients.
+A single method defined in an API surface **must** either _always_ return an
+`Operation`, or _never_ do so. As an example, a long-running operation **must
+not** return a response with the result of the operation if the operation
+completes quickly.
 
-**Note:** User expectations can vary on what is considered "a significant
-amount of time" depending on what work is being done. A good rule of thumb is
-10 seconds.
-
-### Operation representation
-
-The response to a long-running request **must** be an [`Operation`][Operation].
-
-{% tab proto %}
-
-Protocol buffer APIs **must** use the common component
-[`aep.api.Operation`][aep.api.Operation].
-
-{% tab oas %}
-
-OpenAPI services **must** use this [`JSON Schema Operation`][JSON Schema
-Operation] schema.
-
-{% endtabs %}
-
-### Querying an operation
-
-The service **must** provide an endpoint to query the status of the operation,
-which **must** accept the operation path and **should not** include other
-parameters:
-
-```http
-GET /v1/operations/{operation} HTTP/2
-Host: library.example.com
-Accept: application/json
-```
-
-The endpoint **must** return a `Operation` as described above.
-
-### Standard methods
-
-APIs **may** return an `Operation` from the [`Create`][aep-133],
-[`Update`][aep-134], or [`Delete`][aep-135] standard methods if appropriate. In
-this case, the `response` field **must** be the standard and expected response
-type for that standard method.
-
-When creating or deleting a resource with a long-running request, the resource
-**should** be included in [`List`][aep-132] and [`Get`][aep-131] calls;
-however, the resource **should** indicate that it is not usable, generally with
-a [state enum][aep-216].
-
-### Parallel requests
-
-A resource **may** accept multiple requests that will work on it in parallel,
-but is not obligated to do so:
-
-- Resources that accept multiple parallel requests **may** place them in a
-  queue rather than work on the requests simultaneously.
-- Resource that does not permit multiple requests in parallel (denying any new
-  request until the one that is in progress finishes) **must** return
-  `409 Conflict` if a user attempts a parallel request, and include an error
-  message explaining the situation.
-
-### Expiration
-
-APIs **may** allow their operation resources to expire after sufficient time
-has elapsed after the request completed.
-
-**Note:** A good rule of thumb for operation expiry is 30 days.
-
-### Errors
-
-Errors that prevent a long-running request from _starting_ **must** return an
-[error response][AEP-193], similar to any other method.
-
-Errors that occur over the course of a request **may** be placed in the
-metadata message. The errors themselves **must** still be represented with a
-canonical error object.
-
-## Interface Definitions
+### Interface Definitions
 
 {% tab proto %}
 
@@ -157,6 +82,67 @@ When using protocol buffers, the common component
   operation by its `path`.
 
 {% endtabs %}
+
+### When to use an long-running operation
+
+User expectations can vary on what is considered a significant amount of time
+depending on what work is being done. Generally, a request **should** complete
+10 seconds, as the longer period of time may block clients or by perceived by a
+user as a hung request.
+
+### Querying an operation
+
+The service **must** provide an endpoint to query the status of the operation,
+which **must** accept the operation path and **should not** include other
+parameters:
+
+```http
+GET /v1/operations/{operation} HTTP/2
+Host: library.example.com
+Accept: application/json
+```
+
+The endpoint **must** return a `Operation` as described above.
+
+### Standard methods
+
+APIs **may** return an `Operation` from the [`Create`][aep-133],
+[`Update`][aep-134], or [`Delete`][aep-135] standard methods if appropriate. In
+this case, the `response` field **must** be the standard and expected response
+type for that standard method.
+
+When creating or deleting a resource with a long-running request, the resource
+**should** be included in [`List`][aep-132] and [`Get`][aep-131] calls;
+however, the resource **should** indicate that it is not usable, generally with
+a [state enum][aep-216].
+
+### Parallel requests
+
+A resource **may** accept multiple requests that will work on it in parallel,
+but is not obligated to do so:
+
+- Resources that accept multiple parallel requests **may** place them in a
+  queue rather than work on the requests simultaneously.
+- Resource that does not permit multiple requests in parallel (denying any new
+  request until the one that is in progress finishes) **must** return
+  `409 Conflict` if a user attempts a parallel request, and include an error
+  message explaining the situation.
+
+### Expiration
+
+APIs **may** allow their operation resources to expire after sufficient time
+has elapsed after the request completed.
+
+**Note:** A good rule of thumb for operation expiry is 30 days.
+
+### Errors
+
+Errors that prevent a long-running request from _starting_ **must** return an
+[error response][AEP-193], similar to any other method.
+
+Errors that occur over the course of a request **may** be placed in the
+metadata message. The errors themselves **must** still be represented with a
+canonical error object.
 
 <!-- prettier-ignore-start -->
 [google.rpc.Status]: https://github.com/googleapis/api-common-protos/blob/master/google/rpc/S.proto
