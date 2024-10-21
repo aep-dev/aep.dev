@@ -78,20 +78,15 @@ but is not obligated to do so:
 
 {% tab proto %}
 
-- A Resource that does not permit multiple requests in parallel (denying any new
-  request until the one that is in progress finishes) **must** return `ABORTED`
-  if a user attempts a parallel request, and include an error message explaining
-  the situation.
+- A resource that does not support concurrent mutation requests **must** return an
+  `ABORTED` error if the resource has an outstanding mutation.
 
 {% tab oas %}
 
-- A Resource that does not permit multiple requests in parallel (denying any new
-  request until the one that is in progress finishes) **must** return a `409
-  Conflict` if a user attempts a parallel request, and include an error message
-  explaining the situation.
+- A resource that does not support concurrent mutation requests **must** respond
+  with a `409 Conflict` status code if the resource has an outstanding mutation.
 
 {% endtabs %}
-
 
 ### Expiration
 
