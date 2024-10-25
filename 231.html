@@ -8,8 +8,8 @@
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500|Product+Sans:400&amp;lang=en" rel="stylesheet"></link>
     <link rel="shortcut icon" href="/assets/favicon.ico">
     <link rel="stylesheet" type="text/css" media="screen" href="//www.gstatic.com/glue/v22_1/glue.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=903b4932">
-    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=903b4932">
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=c548c16e">
+    <link rel="stylesheet" type="text/css" media="print" href="/assets/css/print.css?v=c548c16e">
     <script type="text/javascript" src="//code.jquery.com/jquery-3.4.0.min.js"></script>
     <script type="text/javascript" src="//www.gstatic.com/glue/latest/glue-detect.min.js"></script>
     <script type="text/javascript">
@@ -18,7 +18,7 @@
         $('html').css('visibility', 'visible');
       });
     </script>
-    <script type="text/javascript" src="/assets/js/global.js?v=903b4932"></script>
+    <script type="text/javascript" src="/assets/js/global.js?v=c548c16e"></script>
     
 <script type="text/javascript" src="/assets/js/syntax.js"></script>
 
@@ -512,13 +512,21 @@
     <tr><td>Slug</td><td>batch-get</td></tr>
     <tr><td>Number</td><td>231</td></tr>
     <tr><td>Permalink</td><td><a href="https://aep.dev/231">aep.dev/231</a></td></tr>
-    <tr><td>State</td><td>Reviewing</td></tr>
-    <tr><td>Created</td><td>2023-01-22</td></tr>
-    <tr><td>Updated</td><td>2023-01-22</td></tr>
+    <tr><td>State</td><td>Approved</td></tr>
+    <tr><td>Created</td><td>2024-04-22</td></tr>
+    <tr><td>Updated</td><td>2024-04-22</td></tr>
   </table>
 
   <section id="aep-toc" class="docs-component-sidebar-toc">
-    <div class="toc"><span class="toctitle">Contents</span><ul></ul>
+    <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#guidance">Guidance</a><ul>
+<li><a href="#request">Request</a></li>
+<li><a href="#response">Response</a></li>
+<li><a href="#support-for-transactional-get">Support for transactional get</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a></li>
+</ul>
 </div>
 
   </section>
@@ -557,17 +565,251 @@
     </ol>
   </nav>
 </section>
-  <p id="aep-state-banner" class="callout note">
-  This AEP is currently under review. This means that the editors have read it
-  and are in high-level concurrence, and while it is not yet fully approved, we
-  have a good faith expectation that the AEP will be approved in something
-  close to its current state.
-</p>
+  
   <h4 class="aep-id">batch-get (AEP-231)</h4>
   <h1 id="batch-methods-get">Batch methods: Get</h1>
-<p><strong>Note:</strong> This AEP has not yet been adopted. See
-<a href="https://github.com/aep-dev/aep.dev/issues/42">this GitHub issue</a> for more
-information.</p>
+<p>Some APIs need to allow users to get a specific set of resources at a
+consistent time point (e.g. using a read transaction). A batch get method
+provides this functionality.</p>
+<h2 id="guidance">Guidance</h2>
+<p>APIs <strong>may</strong> support batch get to retrieve a consistent set of resources.</p>
+<ul>
+<li>The method's name <strong>must</strong> begin with <code>BatchGet</code>. The remainder of the method
+  name <strong>must</strong> be the plural form of the resource being retrieved.</li>
+<li>The HTTP verb <strong>must</strong> be <code>GET</code>.</li>
+<li>The HTTP URI <strong>must</strong> end with <code>:batchGet</code>.</li>
+<li>The URI path <strong>must</strong> represent the collection for the resource, matching the
+  collection used for simple CRUD operations. If the operation spans parents, a
+  <a href="./reading-across-collections">wilcard</a> <strong>may</strong> be accepted.</li>
+<li>There <strong>must not</strong> be a request body.<ul>
+<li>If a GET request contains a body, the body <strong>must</strong> be ignored, and <strong>must
+  not</strong> cause an error.</li>
+</ul>
+</li>
+</ul>
+<h3 id="request">Request</h3>
+<p>The request for a batch get method <strong>should</strong> be specified with the following
+pattern:</p>
+<ul>
+<li>The request <strong>must</strong> include an array field which accepts the resource paths
+  specifying the resources to retrieve. The field <strong>must</strong> be named <code>paths</code>.<ul>
+<li>If no resource paths are provided, the API <strong>should</strong> error with
+  <code>INVALID_ARGUMENT</code>.</li>
+<li>The parameter <strong>must</strong> be required.</li>
+<li>The documentation for the parameter <strong>should</strong> include the
+  <a href="./paths">resource type</a> that it references.</li>
+<li>The parameter should define the pattern of the resource path values.</li>
+<li>The parameter should define the maximum number of paths allowed.</li>
+</ul>
+</li>
+<li>Batch Get <strong>should not</strong> support pagination because transactionality across
+  API calls would be extremely difficult to implement or enforce, and the
+  request defines the exact scope of the response anyway.</li>
+<li>The request <strong>must not</strong> contain any other required parameters, and <strong>should
+  not</strong> contain other optional parameters except those described in this or
+  another AEP.</li>
+</ul>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="k">rpc</span><span class="w"> </span><span class="n">BatchGetBooks</span><span class="p">(</span><span class="n">BatchGetBooksRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">BatchGetBooksResponse</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">option</span><span class="w"> </span><span class="p">(</span><span class="n">google.api.http</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">get</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;/v1/{parent=publishers/*}/books:batchGet&quot;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">BatchGetBooksRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The parent resource shared by all books being retrieved.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}</span>
+<span class="w">  </span><span class="c1">// If this is set, the parent of all of the books specified in `paths`</span>
+<span class="w">  </span><span class="c1">// must match this field.</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">child_type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+
+<span class="w">  </span><span class="c1">// The paths of the books to retrieve.</span>
+<span class="w">  </span><span class="c1">// A maximum of 1000 books can be retrieved in a batch.</span>
+<span class="w">  </span><span class="c1">// Format: publishers/{publisher}/books/{book}</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">paths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.field_behavior</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">REQUIRED</span><span class="p">,</span>
+<span class="w">    </span><span class="p">(</span><span class="n">google.api.resource_reference</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;library.com/Book&quot;</span>
+<span class="w">    </span><span class="p">}];</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>The request schema <strong>must</strong> match the method name, with <code>Request</code> suffix.</li>
+<li>A <code>parent</code> field <strong>should</strong> be included, unless the resource being retrieved
+  is a top-level resource, to facilitate inclusion in the URI as well to permit
+  a single permissions check. If a caller sets this field, and the parent
+  collection in the path of any resource being retrieved does not match, the
+  request <strong>must</strong> fail.<ul>
+<li>This field <strong>should</strong> be required if only 1 parent per request is allowed.</li>
+<li>The field <strong>should</strong> identify the <a href="/122#fields-representing-a-resources-parent">resource type</a> that it
+  references.</li>
+<li>The comment for the field <strong>should</strong> document the resource pattern.</li>
+</ul>
+</li>
+<li>There <strong>must not</strong> be a body key in the <code>google.api.http</code> annotation.</li>
+</ul>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-yaml"><pre><span></span><code><span class="nt">paths</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books:BatchGet</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">publisherId</span><span class="w"></span>
+<span class="w">        </span><span class="nt">in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="w"></span>
+<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">    </span><span class="nt">get</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BatchGetBooks</span><span class="w"></span>
+<span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get multiple books in a batch.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paths</span><span class="w"></span>
+<span class="w">          </span><span class="nt">in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span><span class="w"></span>
+<span class="w">          </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">          </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span><span class="w"></span>
+<span class="w">            </span><span class="no">The paths of the books to retrieve. Format:</span><span class="w"></span>
+<span class="w">            </span><span class="no">publishers/{publisherId}/books/{book}</span><span class="w"></span>
+<span class="w">          </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">            </span><span class="nt">minItems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">            </span><span class="nt">maxItems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"></span>
+<span class="w">            </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">      </span><span class="nt">responses</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OK</span><span class="w"></span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span><span class="w"></span>
+<span class="w">                </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">                  </span><span class="nt">results</span><span class="p">:</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">                      </span><span class="nt">oneOf</span><span class="p">:</span><span class="w"></span>
+<span class="w">                        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Book&#39;</span><span class="w"></span>
+<span class="w">                        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Error&#39;</span><span class="w"></span>
+</code></pre></div>
+<ul>
+<li>The <code>paths</code> parameter <strong>must</strong> be a query parameter which accepts an array of
+  resource paths specifying the resources to retrieve.<ul>
+<li>If no resource paths are provided, the API <strong>should</strong> error with status
+  code <code>400 Bad Request</code>.</li>
+<li>If the collection in the path of any resource does not match the collection
+  of the request URL, the request <strong>must</strong> fail.</li>
+</ul>
+</li>
+<li>The method definition <strong>must not</strong> have a <code>requestBody</code> defined.</li>
+</ul>
+</div>
+</div>
+<h3 id="response">Response</h3>
+<p>The response for a batch get method <strong>must</strong> be specified with the following
+pattern:</p>
+<ul>
+<li>The response schema <strong>must</strong> match the method name, with <code>Response</code> suffix.</li>
+<li>The response schema <strong>must</strong> have a single array property where each item is
+  either a retrieved resource or an error structure describing an error that
+  occurred attempting to retrieve the resource. The error alternative would
+  only be present for non-transactional batch gets.</li>
+<li>The order of resources/error objects in the response <strong>must</strong> be the same as
+  the paths in the request.</li>
+<li>The array of resources <strong>must</strong> be named <code>results</code> and contain resources with
+  no additional wrapping.</li>
+<li>There <strong>must not</strong> be a <code>nextPageToken</code> field as batch get operations are not
+  pageable.</li>
+</ul>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Protocol buffers</label><div class="tabbed-content">
+<div class="highlight language-proto"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">BatchGetBooksResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Books requested.</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Book</span><span class="w"> </span><span class="na">books</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">OpenAPI 3.0</label><div class="tabbed-content">
+<div class="highlight language-yaml"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">/publishers/{publisherId}/books:BatchGet</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">publisherId</span><span class="w"></span>
+<span class="w">      </span><span class="nt">in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path</span><span class="w"></span>
+<span class="w">      </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">  </span><span class="nt">get</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operationId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BatchGetBooks</span><span class="w"></span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get multiple books in a batch.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">paths</span><span class="w"></span>
+<span class="w">        </span><span class="nt">in</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">query</span><span class="w"></span>
+<span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span><span class="w"></span>
+<span class="w">          </span><span class="no">The paths of the books to retrieve. Format:</span><span class="w"></span>
+<span class="w">          </span><span class="no">publishers/{publisherId}/books/{book}</span><span class="w"></span>
+<span class="w">        </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">          </span><span class="nt">minItems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">          </span><span class="nt">maxItems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"></span>
+<span class="w">          </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">    </span><span class="nt">responses</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="s">&#39;200&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OK</span><span class="w"></span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">application/json</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">schema</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span><span class="w"></span>
+<span class="w">              </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="nt">results</span><span class="p">:</span><span class="w"></span>
+<span class="w">                  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span><span class="w"></span>
+<span class="w">                  </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
+<span class="w">                    </span><span class="nt">oneOf</span><span class="p">:</span><span class="w"></span>
+<span class="w">                      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Book&#39;</span><span class="w"></span>
+<span class="w">                      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Error&#39;</span><span class="w"></span>
+</code></pre></div>
+<p>Example response body:</p>
+<div class="highlight language-json"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;results&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;publishers/lacroix/books/les-mis&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;isbn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-037-540317-0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Les Misérables&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Victor Hugo&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">9.6</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://datatracker.ietf.org/doc/html/rfc9110#name-404-not-found&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The resource is not available&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;publishers/lacroix/books/hunchback-of-notre-dame&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;isbn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;978-140-274575-1&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;The Hunchback of Notre Dame&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;authors&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Victor Hugo&quot;</span><span class="p">],</span><span class="w"></span>
+<span class="w">      </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">9.3</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</div>
+</div>
+<h3 id="support-for-transactional-get">Support for transactional get</h3>
+<p>The batch get method may support a transactional form of operation where the
+get either succeeds for all requested resources or fails. When supported, the
+method must define a boolean parameter <code>transactional</code> that the user must
+specify with the value <code>true</code> to request a transactional operation.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+<li><strong>2024-04-22:</strong> Adopt from Google AIP https://google.aip.dev/231 with the
+  following changes:<ul>
+<li>Dropped the "nested requests" pattern.</li>
+<li>Changed the response schema to an object with <code>results</code> array property.</li>
+<li>Made transactional operation optional and controlled by asTransaction
+  parameter.</li>
+</ul>
+</li>
+</ul>
+<!-- Links -->
   <footer>
   Except as otherwise noted, the content of this page is licensed under the
   <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
