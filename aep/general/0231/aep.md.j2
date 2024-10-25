@@ -25,16 +25,14 @@ The request for a batch get method **should** be specified with the following
 pattern:
 
 - The request **must** include an array field which accepts the resource paths
-  specifying the resources to retrieve. The field **should** be named `paths`.
+  specifying the resources to retrieve. The field **must** be named `paths`.
   - If no resource paths are provided, the API **should** error with
     `INVALID_ARGUMENT`.
   - The parameter **must** be required.
-  - The parameter **should** identify the [resource type](./paths) that it
+  - The documentation for the parameter **should**  include the [resource type](./paths) that it
     references.
   - The parameter should define the pattern of the resource path values.
   - The parameter should define the maximum number of paths allowed.
-- Other parameters besides `paths` **may** be "hoisted" from the [standard Get
-  request][get-request].
 - Batch Get **should not** support pagination because transactionality across
   API calls would be extremely difficult to implement or enforce, and the
   request defines the exact scope of the response anyway.
@@ -89,8 +87,7 @@ message BatchGetBooksRequest {
 {% sample 'batchget.oas.yaml', 'paths' %}
 
 - The `paths` parameter **must** be a query parameter which accepts an array of
-  resource paths specifying the resources to retrieve. The parameter **should**
-  be named `paths`.
+  resource paths specifying the resources to retrieve.
   - If no resource paths are provided, the API **should** error with status
     code `400 Bad Request`.
   - If the collection in the path of any resource does not match the collection
@@ -101,7 +98,7 @@ message BatchGetBooksRequest {
 
 ### Response
 
-The response for a batch get method **should** be specified with the following
+The response for a batch get method **must** be specified with the following
 pattern:
 
 - The response schema **must** match the method name, with `Response` suffix.
@@ -113,7 +110,7 @@ pattern:
   the paths in the request.
 - The array of resources **must** be named `results` and contain resources with
   no additional wrapping.
-- There must not be a `nextPageToken` field as batch get operations are not
+- There **must not** be a `nextPageToken` field as batch get operations are not
   pageable.
 
 {% tab proto -%}
@@ -127,7 +124,7 @@ message BatchGetBooksResponse {
 
 {% tab oas %}
 
-{% sample 'batchget.oas.yaml', 'paths./publishers/{publisherId}/books:BatchGet.get.responses.200.content.application/json' %}
+{% sample 'batchget.oas.yaml', 'paths./publishers/{publisherId}/books:BatchGet' %}
 
 Example response body:
 
