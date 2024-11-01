@@ -111,7 +111,7 @@ define custom methods using the verbs `Add` and `Remove`:
 
 {% tab oas %}
 
-{% sample 'add_remove.oas.yaml', 'paths' %}
+{% sample 'add_remove.oas.yaml', '$.paths' %}
 
 - The data being added or removed **should** be a primitive (usually a
   `string`).
@@ -157,7 +157,7 @@ subresource instead.
 
 {% tab oas %}
 
-{% sample 'add_remove.oas.yaml', 'requestBody' %}
+{% sample 'add_remove.oas.yaml', '$./publishers/{publisherId}/books/{bookId}:addAuthor.requestBody' %}
 
 - A field for the value being added or removed **must** be included. It
   **should** be the singular name of the field.

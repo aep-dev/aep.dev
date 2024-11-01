@@ -22,7 +22,8 @@ associated with other resources through other fields on the resource.
 
 {% tab oas %}
 
-{% sample 'multiple_many_to_one.oas.yaml', 'Book' %}
+{% sample 'multiple_many_to_one.oas.yaml', '$.components.schema.Book' %}
+
 
 {% endtabs %}
 
@@ -51,7 +52,7 @@ described for repeated fields in [arrays][/arrays].
 
 {% tab oas %}
 
-{% sample 'many_to_many_repeated.oas.yaml', 'Book' %}
+{% sample 'many_to_many_repeated.oas.yaml', '$.components.schema.Book' %}
 
 {% endtabs %}
 
@@ -68,7 +69,7 @@ relationship using a sub-resource with two one-to-many associations.
 
 {% tab oas %}
 
-{% sample 'many_to_many_subresource.oas.yaml', 'BookAuthor' %}
+{% sample 'many_to_many_subresource.oas.yaml', '$.components.schema.BookAuthor' %}
 
 {% endtabs %}
 
@@ -133,7 +134,7 @@ to define a view enum simply because another resource references it.
 
 {% tab oas %}
 
-{% sample 'embedded_resource.oas.yaml', 'Book' %}
+{% sample 'embedded_resource.oas.yaml', '$.components.schema.Book' %}
 
 {% endtabs %}
 

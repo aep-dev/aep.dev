@@ -45,7 +45,7 @@ apply consistently:
 
 {% tab oas %}
 
-{% sample 'library.oas.yaml', '/publishers/{publisherId}/books/{bookId}:archive' %}
+{% sample 'library.oas.yaml', '$.paths./publishers/{publisherId}/books/{bookId}:archive' %}
 
 - The name of the RPC **should** be a verb followed by a noun.
   - The name of the RPC **must not** contain prepositions ("for", "with",
@@ -86,7 +86,7 @@ While most custom methods operate on a single resource, some custom methods
 
 {% tab oas %}
 
-{% sample 'library.oas.yaml', '/publishers/{publisherId}/books:sort' %}
+{% sample 'library.oas.yaml', '$.paths./publishers/{publisherId}/books:sort' %}
 
 {% endtabs %}
 
@@ -106,7 +106,7 @@ permanent effect on data within the API.
 
 {% tab oas %}
 
-{% sample 'translate.oas.yaml', '/projects/{projectId}:translateText' %}
+{% sample 'translate.oas.yaml', '$.paths./projects/{projectId}:translateText' %}
 
 {% endtabs %}
 
