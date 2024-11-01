@@ -16,3 +16,4 @@ mkdir -p src/content/docs/tooling/linter/rules
 mkdir -p src/content/docs/tooling/website
 npm install
 npm run generate
+npm run build
