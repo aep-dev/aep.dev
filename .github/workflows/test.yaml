@@ -7,10 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: python:3.8
+    container: node:20
     steps:
       - uses: actions/checkout@v3
-      - name: Install the site-generator
-        run: pip install -r requirements.txt
-      - name: Build the site.
-        run: aep-site-gen . /out
+      - name: Generate all static pages, and build site.
+        run: ./scripts/build.sh
