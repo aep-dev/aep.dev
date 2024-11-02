@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -x
 export AEP_LOCATION="${PWD}"
-export SG_DIRECTORY="/tmp/site-generator-beta"
+export SG_DIRECTORY="/tmp/site-generator"
 export AEP_LINTER_LOC="${SG_DIRECTORY}/api-linter"
 if [ ! -d "${SG_DIRECTORY}" ]; then
-    git clone https://github.com/aep-dev/site-generator-beta.git "${SG_DIRECTORY}"
+    git clone https://github.com/aep-dev/site-generator.git "${SG_DIRECTORY}"
 fi
 
 if [ ! -d "${AEP_LINTER_LOC}" ]; then
