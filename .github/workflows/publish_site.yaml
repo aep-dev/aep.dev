@@ -13,5 +13,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           event-type: publish-event
-          repository: aep-dev/site-generator-beta
+          repository: aep-dev/site-generator
           token: ${{ secrets.GH_PAT }}
