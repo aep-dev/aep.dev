@@ -64,7 +64,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 
 {% tab oas %}
 
-{% sample '../oas.yaml', '/publishers/{publisher_id}/books:' %}
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post' %}
 
 {% endtabs %}
 
@@ -110,9 +110,9 @@ message CreateBookRequest {
 
 {% tab oas %}
 
-- The request body **must** be the resource being created.
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post.requestBody' %}
 
-{% sample '../oas.yaml', 'book:' %}
+- The request body **must** be the resource being created.
 
 {% endtabs %}
 
@@ -164,7 +164,9 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
 
 {% tab oas %}
 
-- The `id` is a query parameter on the request URI.
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post.requestBody' %}
+
+- The `id` field **must** be a query parameter on the request.
 
 {% endtabs %}
 

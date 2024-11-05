@@ -100,7 +100,6 @@ paths:
         - in: query
           name: id
           required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -121,7 +120,6 @@ paths:
         - in: path
           name: isbn
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -136,12 +134,10 @@ paths:
         - in: query
           name: max_page_size
           required: true
-          schema: {}
           type: integer
         - in: query
           name: page_token
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -160,7 +156,6 @@ paths:
         - in: query
           name: id
           required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -181,7 +176,6 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -192,7 +186,6 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -206,27 +199,6 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/publisher'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/publisher'
-          description: Successful response
-    put:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -247,17 +219,14 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: query
           name: max_page_size
           required: true
-          schema: {}
           type: integer
         - in: query
           name: page_token
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -280,12 +249,10 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: query
           name: id
           required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -306,12 +273,10 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -322,12 +287,10 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -341,37 +304,10 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book'
-          description: Successful response
-    put:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          schema: {}
-          type: string
-        - in: path
-          name: book
-          required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -392,22 +328,18 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
         - in: query
           name: max_page_size
           required: true
-          schema: {}
           type: integer
         - in: query
           name: page_token
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -426,17 +358,14 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
         - in: query
           name: id
           required: true
-          schema: {}
           type: string
       requestBody:
         content:
@@ -457,17 +386,14 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
         - in: path
           name: book-edition
           required: true
-          schema: {}
           type: string
       responses:
         '200':
@@ -478,17 +404,14 @@ paths:
         - in: path
           name: publisher
           required: true
-          schema: {}
           type: string
         - in: path
           name: book
           required: true
-          schema: {}
           type: string
         - in: path
           name: book-edition
           required: true
-          schema: {}
           type: string
       responses:
         '200':
