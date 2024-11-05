@@ -310,17 +310,19 @@ message Book {
 }
 ```
 
+- The `update_mask` field in the request does not affect the behavior of the
+  `etag` field, as it is not a field _being_ updated.
+
 {% tab oas %}
 
 **Note:** OAS example not yet written.
 
 {% endtabs %}
 
-The `etag` field **may** be either [required][] or [optional][]. If it is set,
-then the request **must** succeed if and only if the provided etag matches the
-server-computed value, and **must** fail with an `ABORTED` error otherwise. The
-`update_mask` field in the request does not affect the behavior of the `etag`
-field, as it is not a field _being_ updated.
+- The `etag` field **must** be [optional][].
+- If `etag` is set, then the request **must** succeed if and only if the
+provided etag matches the server-computed value, and **must** fail with an
+`ABORTED` / `409 Conflict` error otherwise.
 
 ### Expensive fields
 
