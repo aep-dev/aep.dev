@@ -31,6 +31,9 @@ Create methods are specified using the following pattern:
     **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
+- Some resources take longer to be created than is reasonable for a regular API
+  request. In this situation, the API **should** use a [long-running
+  operation](/long-running-operations).
 
 {% tab proto %}
 
@@ -61,7 +64,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post' %}
 
 {% endtabs %}
 
@@ -107,38 +110,9 @@ message CreateBookRequest {
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post.requestBody' %}
 
-{% endtabs %}
-
-### Long-running create
-
-Some resources take longer to create a resource than is reasonable for a
-regular API request. In this situation, the API **should** use a long-running
-operation (AEP-151) instead:
-
-- The response type **must** be set to the resource (what the return type would
-  be if the RPC was not long-running).
-
-{% tab proto %}
-
-```proto
-rpc CreateBook(CreateBookRequest) returns (aep.api.Operation) {
-  option (google.api.http) = {
-    post: "/v1/{parent=publishers/*}/books"
-  };
-  option (aep.api.operation_info) = {
-    response_type: "Book"
-    metadata_type: "OperationMetadata"
-  };
-}
-```
-
-- Both the `response_type` and `metadata_type` fields **must** be specified.
-
-{% tab oas %}
-
-**Note:** OAS guidance not yet written
+- The request body **must** be the resource being created.
 
 {% endtabs %}
 
@@ -167,10 +141,6 @@ publishers/lacroix/books/les-miserables
 publishers/012345678-abcd-cdef/books/12341234-5678-abcd
 ```
 
-- The `id` field **must** exist on the request message, not the resource
-  itself.
-  - The field **may** be required or optional. If it is required, it **should**
-    include the corresponding annotation.
 - The `path` field on the resource **must** be ignored.
 - The documentation **should** explain what the acceptable format is, and the
   format **should** follow the guidance for resource path formatting in
@@ -187,15 +157,18 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
   the RPC, with a value of `"parent,{resource},id"` if the resource being
   created is not a top-level resource, or with a value of `"{resource},id"` if
   the resource being created is a top-level resource.
+- The `id` field **must** exist on the request message, not the resource
+  itself.
+  - The field **may** be required or optional. If it is required, it **should**
+    include the corresponding annotation.
 
 {% tab oas %}
 
-**Note:** OAS guidance not yet written
+{% sample '../oas.yaml', '$.paths./publishers/{publisher}/books.post.requestBody' %}
+
+- The `id` field **must** be a query parameter on the request.
 
 {% endtabs %}
-
-**Note:** For REST APIs, the user-specified ID field, `id`, is provided as a
-query parameters on the request URI.
 
 ### Errors
 

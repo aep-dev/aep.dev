@@ -24,12 +24,12 @@ Update methods are specified using the following pattern:
   - The response **should** include the fully-populated resource, and **must**
     include any fields that were sent and included in the update mask unless
     they are input only (see AEP-203).
-  - If the update RPC is [long-running](#long-running-update), the response
-    **must** be an `Operation` for which the return type is the resource
-    itself.
 - The method **should** support partial resource update, and the HTTP verb
   **should** be `PATCH`.
 - The operation **must** have [strong consistency][].
+- Some resources take longer to be created than is reasonable for a regular API
+  request. In this situation, the API should use a [long-running
+  operation](/long-running-operations).
 
 {% tab proto %}
 
@@ -54,7 +54,7 @@ rpc UpdateBook(UpdateBookRequest) returns (Book) {
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+{% sample '../oas.yaml', '$.paths./publishers.post' %}
 
 {% endtabs %}
 
@@ -112,7 +112,7 @@ message UpdateBookRequest {
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+{% sample '../oas.yaml', '$.paths./publishers.post.parameters' %}
 
 {% endtabs %}
 
@@ -160,79 +160,12 @@ If a rating were set on a book and the existing `PUT` request were executed, it
 would wipe out the book's rating. In essence, a `PUT` request unintentionally
 would wipe out data because the previous version did not know about it.
 
-### Long-running update
-
-Some resources take longer to update a resource than is reasonable for a
-regular API request. In this situation, the API **should** use a [long-running
-operation][AEP-151] instead:
-
-- The response type **must** be set to the resource (what the return type would
-  be if the method were not long-running).
-
-{% tab proto %}
-
-```proto
-rpc UpdateBook(UpdateBookRequest) returns (aep.api.Operation) {
-  option (google.api.http) = {
-    patch: "/v1/{book.name=publishers/*/books/*}"
-  };
-  option (aep.api.operation_info) = {
-    response_type: "Book"
-    metadata_type: "OperationMetadata"
-  };
-}
-```
-
-- Both the `response_type` and `metadata_type` fields **must** be specified.
-
-{% tab oas %}
-
-**Note:** OAS example not yet written.
-
-{% endtabs %}
-
+### Create or Update
 
 If the service uses client-assigned resource paths, `Update` methods **may**
 expose a `bool allow_missing` field, which will cause the method to succeed in
 the event that the user attempts to update a resource that is not present (and
-will create the resource in the process):
-
-{% tab proto %}
-
-```proto
-message UpdateBookRequest {
-  ...
-
-  // If set to true, and the book is not found, a new book will be created.
-  // In this situation, `update_mask` is ignored.
-  bool allow_missing = 3;
-}
-```
-
-{% tab oas %}
-
-**Note:** OAS example not yet written.
-
-{% endtabs %}
-
-More specifically, the `allow_missing` flag triggers the following behavior:
-
-- If the method call is on a resource that does not exist, the resource is
-  created. All fields are applied regardless of any provided field mask.
-  - However, if any required fields are missing or fields have invalid values,
-    an `INVALID_ARGUMENT` error is returned.
-- If the method call is on a resource that already exists, and all fields
-  match, the existing resource is returned unchanged.
-- If the method call is on a resource that already exists, only fields declared
-  in the field mask are updated.
-
-The user **must** have the update permissions to call `Update` even with
-`allow_missing` set to `true`.
-
-If the service uses client-assigned resource paths, `Update` methods **may**
-expose a `bool allow_missing` field, which will cause the method to succeed in
-the event that the user attempts to update a resource that is not present (and
-will create the resource in the process):
+will create the resource in the process).
 
 {% tab proto %}
 
@@ -312,7 +245,7 @@ message Book {
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+{% sample '../oas.yaml', '$.components.schemas.publisher' %}
 
 {% endtabs %}
 
