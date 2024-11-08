@@ -14,35 +14,29 @@ APIs **should** provide an update method for resources unless it is not
 valuable for users to do so. The purpose of the update method is to make
 changes to the resources without causing side effects.
 
-Update methods are specified using the following pattern:
+### Operation
 
-- The method's name **must** begin with the word `Update`. The remainder of the
-  method name **must** be the singular form of the resource's name.
-- The request schema's name **must** exactly match the RPC name, with a
-  `Request` suffix.
-- The response schema **must** be the resource itself.
-  - The response **should** include the fully-populated resource, and **must**
-    include any fields that were sent and included in the update mask unless
-    they are input only (see AEP-203).
 - The method **should** support partial resource update, and the HTTP verb
   **should** be `PATCH`.
 - The operation **must** have [strong consistency][].
 - Some resources take longer to be created than is reasonable for a regular API
   request. In this situation, the API should use a [long-running
   operation](/long-running-operations).
+- The response schema **must** be the resource itself.
+  - The response **should** include the fully-populated resource, and **must**
+    include any fields that were sent and included in the update mask unless
+    they are input only (see AEP-203).
 
 {% tab proto %}
 
-```proto
-rpc UpdateBook(UpdateBookRequest) returns (Book) {
-  option (google.api.http) = {
-    patch: "/v1/{path=publishers/*/books/*}"
-    body: "book"
-  };
-  option (google.api.method_signature) = "book,update_mask";
-}
-```
+{% sample '../example.proto', 'rpc UpdateBook' %}
 
+Update methods are specified using the following pattern:
+
+- The method's name **must** begin with the word `Update`. The remainder of the
+  method name **must** be the singular form of the resource's name.
+- The request schema's name **must** exactly match the RPC name, with a
+  `Request` suffix.
 - The request's `path` field **must** map to the URI path.
   - The `path` field **must** be the only variable in the URI
     path.
@@ -54,11 +48,19 @@ rpc UpdateBook(UpdateBookRequest) returns (Book) {
 
 {% tab oas %}
 
-{% sample '../oas.yaml', '$.paths./publishers.post' %}
+```http
+PATCH /v1/publishers/{publisher}/book/{book} HTTP/2
+Host: bookstore.example.com
+Accept: application/json
+{
+  "title": "Pride and Prejudice",
+  "author": "Jane Austen"
+}
+```
 
 {% endtabs %}
 
-### Request schema
+### Requests
 
 Update methods implement a common request pattern:
 
@@ -71,23 +73,7 @@ Update methods implement a common request pattern:
 
 {% tab proto %}
 
-```proto
-message UpdateBookRequest {
-  // The path of the book to update.
-  string path = 1 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = {
-      type: "library.googleapis.com/Book"
-    }];
-
-  // The value to update the book to.
-  // Format: publishers/{publisher}/books/{book}
-  Book book = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The list of fields to update.
-  google.protobuf.FieldMask update_mask = 2;
-}
-```
+{% sample '../example.proto', 'message UpdateBookRequest' %}
 
 - A `path` field **must** be included.
   - The field **must** be [annotated as required](/field-behavior-documentation).
@@ -112,9 +98,30 @@ message UpdateBookRequest {
 
 {% tab oas %}
 
-{% sample '../oas.yaml', '$.paths./publishers.post.parameters' %}
+{% sample '../example.oas.yaml', '$.paths./publishers.post.requestBody' %}
 
 {% endtabs %}
+
+### Responses
+
+{% tab proto %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers.post.responses.200' %}
+
+{% endtabs %}
+
+### Errors
+
+See [errors][], in particular [when to use PERMISSION_DENIED and NOT_FOUND
+errors][permission-denied].
+
+In addition, if the user does have proper permission, but the requested
+resource does not exist, the service **must** error with `NOT_FOUND` (HTTP 404)
+unless `allow_missing` is set to `true`.
 
 ### Side effects
 
@@ -245,7 +252,7 @@ message Book {
 
 {% tab oas %}
 
-{% sample '../oas.yaml', '$.components.schemas.publisher' %}
+{% sample '../example.oas.yaml', '$.components.schemas.publisher' %}
 
 {% endtabs %}
 
@@ -272,14 +279,23 @@ This can happen in a few situations:
 In this situation, an API **may** return back only the fields that were updated
 and omit the rest. APIs that do this **must** document this behavior.
 
-### Errors
+## Interface Definitions
 
-See [errors][], in particular [when to use PERMISSION_DENIED and NOT_FOUND
-errors][permission-denied].
+{% tab proto %}
 
-In addition, if the user does have proper permission, but the requested
-resource does not exist, the service **must** error with `NOT_FOUND` (HTTP 404)
-unless `allow_missing` is set to `true`.
+{% sample '../example.proto', 'rpc UpdateBook' %}
+
+{% sample '../example.proto', 'message UpdateBookRequest' %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.patch' %}
+
+{% endtabs %}
+
+
 
 <!-- prettier-ignore-start -->
 [aep-4]: ./0004.md
