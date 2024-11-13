@@ -5,3 +5,4 @@ slug: delete
 created: 2024-02-11
 placement:
   category: standard-methods
+  order: 60
