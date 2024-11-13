@@ -14,64 +14,11 @@ resource.
 is to return data from a single resource.
  - Some resources take longer to be retrieved than is reasonable for a regular API request. In this situation, the API should use a [long-running operation](/long-running-operations).
 
-### Requests
+### Operation
 
-`Get` operations **must** be made by sending a `GET` request to the resource's
-URI:
+{% tab proto %}
 
-```http
-GET /v1/publishers/{publisher}/books/{book} HTTP/2
-Host: library.example.com
-Accept: application/json
-```
-
-- The HTTP method **must** be `GET`.
-  - The request **must** be safe and **must not** have side effects.
-- There **must not** be a request body.
-  - If a `GET` request contains a body, the body **must** be ignored, and
-    **must not** cause an error.
-- The request **must not** require any fields in the query string. The request
-  **should not** include optional fields in the query string unless described
-  in another AEP.
-
-### Responses
-
-Single-resource `GET` operations **must** return the resource itself, without
-any additional wrapping:
-
-```json
-{
-  "name": "publishers/lacroix/books/les-mis",
-  "isbn": "978-037-540317-0",
-  "title": "Les Misérables",
-  "authors": ["Victor Hugo"],
-  "rating": 9.6
-}
-```
-
-The response **should** usually include the fully-populated resource unless
-there is a reason to return a partial response (see AEP-157).
-
-### Errors
-
-If the user does not have sufficient permission to know that the resource
-exists, the service **should** reply with an HTTP 404 error, regardless of
-whether or not the resource exists. Permission **must** be checked prior to
-checking if the resource exists.
-
-If the user has sufficient permission to know that the resource exists, but is
-unable to access it, the service **should** reply with an HTTP 403 error.
-
-If the user does have proper permission, but the requested resource does not
-exist, the service **must** reply with an HTTP 404 error.
-
-## Interface Definitions
-
-{% tab proto -%}
-
-Get operations are specified using the following pattern:
-
-{% sample 'get.proto', 'rpc GetBook' %}
+{% sample '../example.proto', 'rpc GetBook' %}
 
 - The RPC's name **must** begin with the word `Get`. The remainder of the RPC
   name **should** be the singular form of the resource's message name.
@@ -89,9 +36,29 @@ Get operations are specified using the following pattern:
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"path"`.
 
-Get operations also implement a common request message pattern:
+{% tab oas %}
 
-{% sample 'get.proto', 'message GetBookRequest' %}
+`Get` operations **must** be made by sending a `GET` request to the resource's
+URI:
+
+```http
+GET /v1/publishers/{publisher}/books/{book} HTTP/2
+Host: bookstore.example.com
+Accept: application/json
+```
+
+- The URI **should** contain a variable for each resource in the resource
+  hierarchy.
+  - The path parameter for all resource IDs **must** be in the form
+    `{resource-singular}` (such as `book`).
+
+{% endtabs %}
+
+### Requests
+
+{% tab proto %}
+
+{% sample '../example.proto', 'message GetBookRequest' %}
 
 - A resource path field **must** be included. It **should** be called `path`.
   - The field **should** be annotated as `REQUIRED`.
@@ -111,19 +78,62 @@ REST/JSON interface is used.
 
 {% tab oas %}
 
-Single-resource `GET` operations **must** be specified with consistent OpenAPI
-metadata:
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.get.parameters' %}
 
-{% sample 'get.oas.yaml', 'paths' %}
+- The HTTP method **must** be `GET`.
+  - The request **must** be safe and **must not** have side effects.
+- There **must not** be a request body.
+  - If a `GET` request contains a body, the body **must** be ignored, and
+    **must not** cause an error.
+- The request **must not** require any fields in the query string. The request
+  **should not** include optional fields in the query string unless described
+  in another AEP.
 
-- The `operationId` **must** begin with the word `get`. The remainder of the
-  `operationId` **should** be the singular form of the resource type's name.
+{% endtabs %}
+
+### Responses
+
+The response **should** usually include the fully-populated resource unless
+there is a reason to return a partial response (see AEP-157).
+
+{% tab proto %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.get.responses.200.content' %}
+
 - The response content **must** be the resource itself. For example:
   `#/components/schemas/Book`. The response **must** reference a schema with a `x-aep-resource` extension.
-- The URI **should** contain a variable for each individual ID in the resource
-  hierarchy.
-  - The path parameter for all resource IDs **must** be in the form
-    `{resourceName}Id` (such as `bookId`), and path parameters representing the
-    ID of parent resources **must** end with `Id`.
+
+{% endtabs %}
+
+### Errors
+
+If the user does not have sufficient permission to know that the resource
+exists, the service **should** reply with an HTTP 404 error, regardless of
+whether or not the resource exists. Permission **must** be checked prior to
+checking if the resource exists.
+
+If the user has sufficient permission to know that the resource exists, but is
+unable to access it, the service **should** reply with an HTTP 403 error.
+
+If the user does have proper permission, but the requested resource does not
+exist, the service **must** reply with an HTTP 404 error.
+
+## Interface Definitions
+
+{% tab proto -%}
+
+{% sample '../example.proto', 'rpc GetBook' %}
+
+{% sample '../example.proto', 'message GetBookRequest' %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.get' %}
 
 {% endtabs %}
