@@ -1,424 +1,852 @@
-components:
-  schemas:
-    book:
-      properties:
-        author:
-          items:
-            type: object
-          type: array
-        edition:
-          format: int32
-          type: integer
-        etag:
-          type: string
-        id:
-          readOnly: true
-          type: string
-          x-terraform-id: true
-        path:
-          readOnly: true
-          type: string
-        price:
-          format: float
-          type: number
-        published:
-          type: boolean
-      required:
-        - price
-        - published
-      type: object
-      x-aep-resource:
-        parents:
-          - publisher
-        patterns:
-          - /publishers/{publisher}/books/{book}
-        plural: books
-        singular: book
-    book-edition:
-      properties:
-        displayname:
-          type: string
-        id:
-          readOnly: true
-          type: string
-          x-terraform-id: true
-        path:
-          readOnly: true
-          type: string
-      required:
-        - displayname
-      type: object
-      x-aep-resource:
-        parents:
-          - book
-        patterns:
-          - /publishers/{publisher}/books/{book}/editions/{book-edition}
-        plural: book-editions
-        singular: book-edition
-    isbn:
-      properties:
-        id:
-          readOnly: true
-          type: string
-          x-terraform-id: true
-        path:
-          readOnly: true
-          type: string
-      type: object
-      x-aep-resource:
-        patterns:
-          - /isbns/{isbn}
-        plural: isbns
-        singular: isbn
-    publisher:
-      properties:
-        description:
-          type: string
-        etag:
-          type: string
-        id:
-          readOnly: true
-          type: string
-          x-terraform-id: true
-        path:
-          readOnly: true
-          type: string
-      type: object
-      x-aep-resource:
-        patterns:
-          - /publishers/{publisher}
-        plural: publishers
-        singular: publisher
-info:
-  title: bookstore.example.com
-  version: version not set
-openapi: 3.1.0
-paths:
-  /isbns:
-    post:
-      parameters:
-        - in: query
-          name: id
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/isbn'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/isbn'
-          description: Successful response
-  /isbns/{isbn}:
-    get:
-      parameters:
-        - in: path
-          name: isbn
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/isbn'
-          description: Successful response
-  /publishers:
-    get:
-      parameters:
-        - in: query
-          name: max_page_size
-          required: true
-          type: integer
-        - in: query
-          name: page_token
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  results:
-                    items:
-                      $ref: '#/components/schemas/publisher'
-                    type: array
-                type: object
-          description: Successful response
-    post:
-      parameters:
-        - in: query
-          name: id
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/publisher'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/publisher'
-          description: Successful response
-  /publishers/{publisher}:
-    delete:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-      responses:
-        '200':
-          content: null
-          description: ''
-    get:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/publisher'
-          description: Successful response
-    patch:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/publisher'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/publisher'
-          description: Successful response
-  /publishers/{publisher}/books:
-    get:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: query
-          name: max_page_size
-          required: true
-          type: integer
-        - in: query
-          name: page_token
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  results:
-                    items:
-                      $ref: '#/components/schemas/book'
-                    type: array
-                  unreachable:
-                    items:
-                      type: string
-                    type: array
-                type: object
-          description: Successful response
-    post:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: query
-          name: id
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book'
-          description: Successful response
-  /publishers/{publisher}/books/{book}:
-    delete:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-      responses:
-        '200':
-          content: null
-          description: ''
-    get:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book'
-          description: Successful response
-    patch:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book'
-          description: Successful response
-  /publishers/{publisher}/books/{book}/editions:
-    get:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-        - in: query
-          name: max_page_size
-          required: true
-          type: integer
-        - in: query
-          name: page_token
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  results:
-                    items:
-                      $ref: '#/components/schemas/book-edition'
-                    type: array
-                type: object
-          description: Successful response
-    post:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-        - in: query
-          name: id
-          required: true
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/book-edition'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book-edition'
-          description: Successful response
-  /publishers/{publisher}/books/{book}/editions/{book-edition}:
-    delete:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-        - in: path
-          name: book-edition
-          required: true
-          type: string
-      responses:
-        '200':
-          content: null
-          description: ''
-    get:
-      parameters:
-        - in: path
-          name: publisher
-          required: true
-          type: string
-        - in: path
-          name: book
-          required: true
-          type: string
-        - in: path
-          name: book-edition
-          required: true
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/book-edition'
-          description: Successful response
-servers:
-  - url: http://localhost:8081
+{
+  'openapi': '3.1.0',
+  'servers': [{ 'url': 'http://localhost:8081' }],
+  'info': { 'title': 'bookstore.example.com', 'version': 'version not set' },
+  'paths':
+    {
+      '/isbns':
+        {
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'object',
+                                  'properties':
+                                    {
+                                      'results':
+                                        {
+                                          'type': 'array',
+                                          'items':
+                                            {
+                                              '$ref': '#/components/schemas/isbn',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'query',
+                    'name': 'max_page_size',
+                    'required': true,
+                    'type': 'integer',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'page_token',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'post':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/isbn' },
+                            },
+                        },
+                    },
+                },
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        { 'schema': { '$ref': '#/components/schemas/isbn' } },
+                    },
+                },
+            },
+        },
+      '/isbns/{isbn}':
+        {
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/isbn' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'isbn',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+        },
+      '/publishers':
+        {
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'object',
+                                  'properties':
+                                    {
+                                      'results':
+                                        {
+                                          'type': 'array',
+                                          'items':
+                                            {
+                                              '$ref': '#/components/schemas/publisher',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'query',
+                    'name': 'max_page_size',
+                    'required': true,
+                    'type': 'integer',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'page_token',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'post':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/publisher' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'query',
+                    'name': 'id',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/publisher' },
+                        },
+                    },
+                },
+            },
+        },
+      '/publishers/{publisher}':
+        {
+          'delete':
+            {
+              'responses': { '200': { 'description': '', 'content': null } },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  { 'in': 'query', 'name': 'force', 'type': 'boolean' },
+                ],
+            },
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/publisher' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'patch':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/publisher' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/publisher' },
+                        },
+                    },
+                },
+            },
+          'put':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/publisher' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/publisher' },
+                        },
+                    },
+                },
+            },
+        },
+      '/publishers/{publisher}/books':
+        {
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'object',
+                                  'properties':
+                                    {
+                                      'results':
+                                        {
+                                          'type': 'array',
+                                          'items':
+                                            {
+                                              '$ref': '#/components/schemas/book',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'max_page_size',
+                    'required': true,
+                    'type': 'integer',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'page_token',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'post':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/book' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'id',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        { 'schema': { '$ref': '#/components/schemas/book' } },
+                    },
+                },
+            },
+        },
+      '/publishers/{publisher}/books/{book}':
+        {
+          'delete':
+            {
+              'responses': { '200': { 'description': '', 'content': null } },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  { 'in': 'query', 'name': 'force', 'type': 'boolean' },
+                ],
+            },
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/book' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'patch':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/book' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        { 'schema': { '$ref': '#/components/schemas/book' } },
+                    },
+                },
+            },
+          'put':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/book' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        { 'schema': { '$ref': '#/components/schemas/book' } },
+                    },
+                },
+            },
+        },
+      '/publishers/{publisher}/books/{book}/editions':
+        {
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  'type': 'object',
+                                  'properties':
+                                    {
+                                      'results':
+                                        {
+                                          'type': 'array',
+                                          'items':
+                                            {
+                                              '$ref': '#/components/schemas/book-edition',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'max_page_size',
+                    'required': true,
+                    'type': 'integer',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'page_token',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'post':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  '$ref': '#/components/schemas/book-edition',
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'query',
+                    'name': 'id',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content':
+                    {
+                      'application/json':
+                        {
+                          'schema':
+                            { '$ref': '#/components/schemas/book-edition' },
+                        },
+                    },
+                },
+            },
+        },
+      '/publishers/{publisher}/books/{book}/editions/{book-edition}':
+        {
+          'delete':
+            {
+              'responses': { '200': { 'description': '', 'content': null } },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book-edition',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+          'get':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                {
+                                  '$ref': '#/components/schemas/book-edition',
+                                },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book',
+                    'required': true,
+                    'type': 'string',
+                  },
+                  {
+                    'in': 'path',
+                    'name': 'book-edition',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+            },
+        },
+      '/publishers/{publisher}:archive':
+        {
+          'post':
+            {
+              'responses':
+                {
+                  '200':
+                    {
+                      'description': 'Successful response',
+                      'content':
+                        {
+                          'application/json':
+                            {
+                              'schema':
+                                { '$ref': '#/components/schemas/publisher' },
+                            },
+                        },
+                    },
+                },
+              'parameters':
+                [
+                  {
+                    'in': 'path',
+                    'name': 'publisher',
+                    'required': true,
+                    'type': 'string',
+                  },
+                ],
+              'requestBody':
+                {
+                  'required': true,
+                  'content': { 'application/json': { 'schema': {} } },
+                },
+            },
+        },
+    },
+  'components':
+    {
+      'schemas':
+        {
+          'book':
+            {
+              'type': 'object',
+              'required': ['isbn', 'price', 'published'],
+              'properties':
+                {
+                  'author': { 'type': 'array', 'items': { 'type': 'object' } },
+                  'edition': { 'type': 'integer', 'format': 'int32' },
+                  'isbn': { 'type': 'array', 'items': { 'type': 'string' } },
+                  'path': { 'type': 'string', 'readOnly': true },
+                  'price': { 'type': 'number', 'format': 'float' },
+                  'published': { 'type': 'boolean' },
+                },
+              'x-aep-resource':
+                {
+                  'singular': 'book',
+                  'plural': 'books',
+                  'patterns': ['/publishers/{publisher}/books/{book}'],
+                  'parents': ['publisher'],
+                },
+            },
+          'book-edition':
+            {
+              'type': 'object',
+              'required': ['displayname'],
+              'properties':
+                {
+                  'displayname': { 'type': 'string' },
+                  'path': { 'type': 'string', 'readOnly': true },
+                },
+              'x-aep-resource':
+                {
+                  'singular': 'book-edition',
+                  'plural': 'book-editions',
+                  'patterns':
+                    [
+                      '/publishers/{publisher}/books/{book}/editions/{book-edition}',
+                    ],
+                  'parents': ['book'],
+                },
+            },
+          'isbn':
+            {
+              'type': 'object',
+              'properties': { 'path': { 'type': 'string', 'readOnly': true } },
+              'x-aep-resource':
+                {
+                  'singular': 'isbn',
+                  'plural': 'isbns',
+                  'patterns': ['/isbns/{isbn}'],
+                },
+            },
+          'publisher':
+            {
+              'type': 'object',
+              'properties':
+                {
+                  'description': { 'type': 'string' },
+                  'path': { 'type': 'string', 'readOnly': true },
+                },
+              'x-aep-resource':
+                {
+                  'singular': 'publisher',
+                  'plural': 'publishers',
+                  'patterns': ['/publishers/{publisher}'],
+                },
+            },
+        },
+    },
+}
