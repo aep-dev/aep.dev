@@ -119,16 +119,15 @@ permanent effect on data within the API.
   collection). For example, `:translateText` is preferable to `text:translate`.
 - Stateless methods **must** use `POST` if they involve billing.
 
-### Declarative-friendly resources
+### Usage in declarative clients
 
-Declarative-friendly resources usually **should not** employ custom methods
-(except specific declarative-friendly custom methods discussed in other AEPs),
-because declarative-friendly tools are unable to automatically determine what
-to do with them.
+APIs **should not** employ custom methods for functionality that is intended to
+be used in a [declarative client](/3#declarative-clients). Declarative clients
+use create,read,update,and delete operations to apply desired state, and
+integration of custom methods is manual and results in client-side complexity
+around state management to determine when the custom method should be invoked.
 
-An exception to this is for rarely-used, fundamentally imperative operations,
-such as a `Move`, `Rename`, or `Restart` operation, for which there would not
-be an expectation of declarative support.
+AEP's supported declarative clients cannot support custom methods.
 
 <!-- prettier-ignore-start -->
 [rfc 5789]: https://datatracker.ietf.org/doc/html/rfc5789
