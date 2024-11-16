@@ -1,16 +1,16 @@
 # Apply
 
-In REST APIs, it is customary to make a `PUT` request to a collection's URI (for
-example, `/v1/publishers/{publisher}/books`) in order to create or replace a new
-resource within that collection.
+In REST APIs, it is customary to make a `PUT` request to a resource's URI (for
+example, `/v1/publishers/{publisher}/books/{book}`) in order to create or
+replace a resource.
 
-Resource-oriented design (AEP-121) honors this pattern through the `Apply`
-method. These RPCs accept the parent collection and the resource to create or
-replace, and then return, the final resource.
+[Resource-oriented design](/resources) honors this pattern through the `Apply`
+method. These operations accept the resource and it's path, which it uses to
+create or replace the resource. The operation returns the final resource.
 
 ## Guidance
 
-APIs **should** provide an apply method for resources unless it is not valuable
+APIs **should** provide an apply method for a resource unless it is not valuable
 for users to do so.
 
 ### Operation
@@ -21,14 +21,8 @@ Apply methods are specified using the following pattern:
 - Some resources take longer to be applied than is reasonable for a regular API
   request. In this situation, the API **should** use a [long-running
   operation](/long-running-operations).
-
-- The method's name **must** begin with the word `Apply`. The remainder of the
-  method name **should** be the singular form of the resource being applied.
-- The collection's parent resource **must** be called `parent`, and
-  **should** be the only variable in the URI path.
-  - The collection identifier (`books` in the above example) **must** be a
-    literal string.
-- The operation **must** have [strong consistency][].
+- The operation **must** have [strong consistency](/resources#strong-consistency).
+- The HTTP URI path of the `PUT` method **must** be the resource path.
 
 {% tab proto %}
 
@@ -41,6 +35,10 @@ Apply methods are specified using the following pattern:
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
   resource ID is not required.
+- The method's name **must** begin with the word `Apply`. The remainder of the
+  method name **should** be the singular form of the resource being applied.
+- The request's `path` field **must** map to the URI path.
+ - The `path` field **must** be the only variable in the URI path.
 
 {% tab oas %}
 
@@ -60,8 +58,7 @@ Accept: application/json
 
 Apply methods implement a common request message pattern:
 
-- A `path` field **must** be supported, and map to the URI path.
-- The resource **must** be included and **must** map to the POST body.
+- The resource **must** be included and **must** map to the HTTP request body.
 - The request schema **must not** contain any other required fields and
   **should not** contain other optional fields except those described in this
   or another AEP.
@@ -71,12 +68,9 @@ Apply methods implement a common request message pattern:
 {% sample '../example.proto', 'message ApplyBookRequest' %}
 
 - A `path` field specifying the path of the resource **must** be included.
-  - The field **must** be [annotated as `REQUIRED`][aep-203].
-  - The field **must** identify the [resource type][aep-4] of the resource
+  - The field **must** be [annotated as `REQUIRED`](/field-behavior-documentation).
+  - The field **must** identify the [resource type](/resource-types) of the resource
     being applied.
-- The request message **must not** contain any other required fields and
-  **should not** contain other optional fields except those described in this
-  or another AEP.
 
 {% tab oas %}
 
@@ -92,7 +86,7 @@ Apply methods implement a common request message pattern:
   schema.
   - The response **should** include the fully-populated resource, and **must**
     include any fields that were provided unless they are input only (see
-    AEP-203).
+    [field behavior](/field-behavior-documentation)).
 
 {% tab proto %}
 
@@ -106,8 +100,8 @@ Apply methods implement a common request message pattern:
 
 ### Errors
 
-See [errors][], in particular [when to use PERMISSION_DENIED and NOT_FOUND
-errors][permission-denied].
+See [errors](/errors), in particular [when to use PERMISSION_DENIED and NOT_FOUND
+errors](/errors#permission-denied).
 
 ## Interface Definitions
 
@@ -127,18 +121,7 @@ errors][permission-denied].
 
 ## Further reading
 
-- For ensuring idempotency in `Apply` methods, see AEP-155.
-- For naming resources involving Unicode, see AEP-210.
+- For ensuring idempotency in `Apply` methods, see [idempotency](/idempotency).
+- For naming resources involving Unicode, see [unicode](/unicode).
 
-[aep-121]: ./0121.md
-[aep-122]: ./0122.md
-[aep-4]: ./0004.md
-[aep-155]: ./0155.md
-[aep-203]: ./0203.md
-[aep-210]: ./0210.md
-[data plane]: ./0111.md#data-plane
-[errors]: ./0193.md
-[field_behavior]: ./203.md
-[Declarative clients]: ./0003.md#declarative-clients
-[permission-denied]: ./0193.md#permission-denied
 [strong consistency]: ./0121.md#strong-consistency
