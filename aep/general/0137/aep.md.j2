@@ -1,12 +1,12 @@
 # Apply
 
 In REST APIs, it is customary to make a `PUT` request to a collection's URI (for
-example, `/v1/publishers/{publisher}/books`) in order to create or update a new
+example, `/v1/publishers/{publisher}/books`) in order to create or replace a new
 resource within that collection.
 
 Resource-oriented design (AEP-121) honors this pattern through the `Apply`
 method. These RPCs accept the parent collection and the resource to create or
-update, and return the final resource.
+replace, and then return, the final resource.
 
 ## Guidance
 
@@ -22,24 +22,25 @@ Apply methods are specified using the following pattern:
   request. In this situation, the API **should** use a [long-running
   operation](/long-running-operations).
 
-{% tab proto %}
-
-{% sample '../example.proto', 'rpc ApplyBook' %}
-
-- The RPC's name **must** begin with the word `Apply`. The remainder of the
-  RPC name **should** be the singular form of the resource being applied.
-  - The request message **must** match the RPC name, with a `Request` suffix.
+- The method's name **must** begin with the word `Apply`. The remainder of the
+  method name **should** be the singular form of the resource being applied.
 - The collection's parent resource **must** be called `parent`, and
   **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
+- The operation **must** have [strong consistency][].
+
+{% tab proto %}
+
+{% sample '../example.proto', 'rpc ApplyBook' %}
+
+- The request message **must** match the method name, with a `Request` suffix.
 - There **must** be a `body` key in the `google.api.http` annotation, and it
   **must** map to the resource field in the request message.
   - All remaining fields **should** map to URI query parameters.
 - There **should** be exactly one `google.api.method_signature` annotation,
   with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
   resource ID is not required.
-- The operation **must** have [strong consistency][].
 
 {% tab oas %}
 
@@ -59,9 +60,9 @@ Accept: application/json
 
 Apply methods implement a common request message pattern:
 
-- A `path` **must** be supported, and map to the URI path.
+- A `path` field **must** be supported, and map to the URI path.
 - The resource **must** be included and **must** map to the POST body.
-- The request message **must not** contain any other required fields and
+- The request schema **must not** contain any other required fields and
   **should not** contain other optional fields except those described in this
   or another AEP.
 
@@ -69,7 +70,7 @@ Apply methods implement a common request message pattern:
 
 {% sample '../example.proto', 'message ApplyBookRequest' %}
 
-- A `path` field **must** be included, that is the path of the resource to apply.
+- A `path` field specifying the path of the resource **must** be included.
   - The field **must** be [annotated as `REQUIRED`][aep-203].
   - The field **must** identify the [resource type][aep-4] of the resource
     being applied.
