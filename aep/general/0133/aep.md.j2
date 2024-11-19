@@ -25,15 +25,7 @@ Create methods are specified using the following pattern:
 
 {% tab proto %}
 
-```proto
-rpc CreateBook(CreateBookRequest) returns (Book) {
-  option (google.api.http) = {
-    post: "/v1/{parent=publishers/*}/books"
-    body: "book"
-  };
-  option (google.api.method_signature) = "parent,book";
-}
-```
+{% sample '../example.proto', 'rpc CreateBook' %}
 
 - The RPC's name **must** begin with the word `Create`. The remainder of the
   RPC name **should** be the singular form of the resource being created.
@@ -53,7 +45,7 @@ rpc CreateBook(CreateBookRequest) returns (Book) {
 {% tab oas %}
 
 ```http
-POST /v1/publishers/{publisher}/books?id=foo HTTP/2
+POST /v1/publishers/{publisher}/books?id={book} HTTP/2
 Host: bookstore.example.com
 Accept: application/json
 {
