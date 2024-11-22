@@ -93,7 +93,7 @@ which mutates the resource is completed.
 also return the same value on each subsequent request until another request
 which mutates the resource is completed.
 
-- An output-only field that takes so long to reach a steady-state that it would
+- An [output only][] field that takes so long to reach a steady-state that it would
   negatively impact the user experience of the request (e.g. an hour-long instantiation
   of a VM cluster).
 
@@ -109,12 +109,12 @@ Examples of strong consistency include:
   the `DELETED` state value in the case of [soft delete][])
 
 Clients of resource-oriented APIs often need to orchestrate multiple operations
-in sequence (e.g. create resource A, create resource B which depends on A), and
+in sequence (e.g., create resource A, create resource B which depends on A), and
 ensuring that resources immediately reflect steady user state after an
 operation is complete ensures clients can rely on method completion as a signal
 to begin the next operation.
 
-[output only][] fields ideally would follow the same guidelines, but as these
+[Output only][output only] fields ideally would follow the same guidelines, but as these
 fields can often represent a resources live state, it's sometimes necessary for
 these values to change after a successful mutation operation to reflect a state
 change.
@@ -139,22 +139,22 @@ This requirement does not apply to relationships that are expressed via [output
 only][] fields, as they do not require the user to specify the values and in
 turn do not increase resource management complexity.
 
-[create]: ./0133.md
-[custom methods]: ./0136.md
-[delete]: ./0135.md
+[create]: ./0133
+[custom methods]: ./0136
+[delete]: ./0135
 [directed acyclic graph]: https://en.wikipedia.org/wiki/Directed_acyclic_graph
-[get]: ./0131.md
-[list]: ./0132.md
-[long-running-requests]: ./0151.md
-[output only]: ./0203.md#output-only
+[get]: ./0131
+[list]: ./0132
+[long-running-requests]: ./0151
+[output only]: ./0203#output-only
 [rest]: https://en.wikipedia.org/wiki/Representational_state_transfer
-[resource references]: ./0122.md#fields-representing-another-resource
+[resource references]: ./0122#fields-representing-another-resource
 [rpc]: https://en.wikipedia.org/wiki/Remote_procedure_call
-[singleton resources]: ./0156.md
-[soft delete]: ./0164.md
-[state]: ./0216.md
+[singleton resources]: ./0156
+[soft delete]: ./0164
+[state]: ./0216
 [stateless protocol]: https://en.wikipedia.org/wiki/Stateless_protocol
-[update]: ./0134.md
+[update]: ./0134
 
 ## Changelog
 
