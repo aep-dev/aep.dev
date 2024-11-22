@@ -100,47 +100,6 @@ service Bookstore {
     option (google.api.method_signature) = "parent";
   }
 
-  // An aep-compliant Create method for hil-device.
-  rpc CreateHilDevice ( CreateHilDeviceRequest ) returns ( HilDevice ) {
-    option (google.api.http) = {
-      post: "/{parent=hil-devices}",
-      body: "hil_device"
-    };
-
-    option (google.api.method_signature) = "hil_device";
-  }
-
-  // An aep-compliant Get method for hil-device.
-  rpc GetHilDevice ( GetHilDeviceRequest ) returns ( HilDevice ) {
-    option (google.api.http) = { get: "/{path=hil-devices/*}" };
-
-    option (google.api.method_signature) = "path";
-  }
-
-  // An aep-compliant Update method for hil-device.
-  rpc UpdateHilDevice ( UpdateHilDeviceRequest ) returns ( HilDevice ) {
-    option (google.api.http) = {
-      patch: "/{path=hil-devices/*}",
-      body: "hil_device"
-    };
-
-    option (google.api.method_signature) = "hil_device,update_mask";
-  }
-
-  // An aep-compliant Delete method for hil-device.
-  rpc DeleteHilDevice ( DeleteHilDeviceRequest ) returns ( google.protobuf.Empty ) {
-    option (google.api.http) = { delete: "/{path=hil-devices/*}" };
-
-    option (google.api.method_signature) = "path";
-  }
-
-  // An aep-compliant List method for hil-devices.
-  rpc ListHilDevices ( ListHilDevicesRequest ) returns ( ListHilDevicesResponse ) {
-    option (google.api.http) = { get: "/{parent=hil-devices}" };
-
-    option (google.api.method_signature) = "parent";
-  }
-
   // An aep-compliant Create method for isbn.
   rpc CreateIsbn ( CreateIsbnRequest ) returns ( Isbn ) {
     option (google.api.http) = { post: "/{parent=isbns}", body: "isbn" };
@@ -249,9 +208,6 @@ message Book {
 
   // Field for path.
   string path = 10000;
-
-  // Field for id.
-  string id = 10001;
 }
 
 // A Create request for a  book resource.
@@ -357,9 +313,6 @@ message BookEdition {
 
   // Field for path.
   string path = 10000;
-
-  // Field for id.
-  string id = 10001;
 }
 
 // A Create request for a  book-edition resource.
@@ -419,97 +372,6 @@ message ListBookEditionsResponse {
   string next_page_token = 10011;
 }
 
-// A HilDevice.
-message HilDevice {
-  option (google.api.resource) = {
-    type: "bookstore.example.com/hil-device",
-    pattern: [ "hil-devices/{hil-device}" ],
-    plural: "hil-devices",
-    singular: "hil-device"
-  };
-
-  // Field for name.
-  string name = 1;
-
-  // Field for path.
-  string path = 10000;
-
-  // Field for id.
-  string id = 10001;
-}
-
-// A Create request for a  hil-device resource.
-message CreateHilDeviceRequest {
-  // A field for the parent of hil-device
-  string parent = 10013 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { }
-  ];
-
-  // An id that uniquely identifies the resource within the collection
-  string id = 10014;
-
-  // The resource to perform the operation on.
-  HilDevice hil_device = 10015 [(google.api.field_behavior) = REQUIRED];
-}
-
-// Request message for the Gethil-device method
-message GetHilDeviceRequest {
-  // The globally unique identifier for the resource
-  string path = 10018 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "bookstore.example.com/hil-device" }
-  ];
-}
-
-// Request message for the UpdateHilDevice method
-message UpdateHilDeviceRequest {
-  // The globally unique identifier for the resource
-  string path = 10018 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "bookstore.example.com/hil-device" }
-  ];
-
-  // The resource to perform the operation on.
-  HilDevice hil_device = 10015 [(google.api.field_behavior) = REQUIRED];
-
-  // The update mask for the resource
-  google.protobuf.FieldMask update_mask = 10012;
-}
-
-// Request message for the DeleteHilDevice method
-message DeleteHilDeviceRequest {
-  // The globally unique identifier for the resource
-  string path = 10018 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { type: "bookstore.example.com/hil-device" }
-  ];
-}
-
-// Request message for the Listhil-device method
-message ListHilDevicesRequest {
-  // A field for the parent of hil-device
-  string parent = 10013 [
-    (google.api.field_behavior) = REQUIRED,
-    (google.api.resource_reference) = { }
-  ];
-
-  // The page token indicating the starting point of the page
-  string page_token = 10010;
-
-  // The maximum number of resources to return in a single page.
-  int32 max_page_size = 10017;
-}
-
-// Response message for the Listhil-device method
-message ListHilDevicesResponse {
-  // A list of hil-devices
-  repeated HilDevice results = 10016;
-
-  // The page token indicating the ending point of this response.
-  string next_page_token = 10011;
-}
-
 // A Isbn.
 message Isbn {
   option (google.api.resource) = {
@@ -521,9 +383,6 @@ message Isbn {
 
   // Field for path.
   string path = 10000;
-
-  // Field for id.
-  string id = 10001;
 }
 
 // A Create request for a  isbn resource.
@@ -533,9 +392,6 @@ message CreateIsbnRequest {
     (google.api.field_behavior) = REQUIRED,
     (google.api.resource_reference) = { }
   ];
-
-  // An id that uniquely identifies the resource within the collection
-  string id = 10014;
 
   // The resource to perform the operation on.
   Isbn isbn = 10015 [(google.api.field_behavior) = REQUIRED];
@@ -588,9 +444,6 @@ message Publisher {
 
   // Field for path.
   string path = 10000;
-
-  // Field for id.
-  string id = 10001;
 }
 
 // A Create request for a  publisher resource.

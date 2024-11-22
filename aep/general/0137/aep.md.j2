@@ -1,0 +1,140 @@
+# Apply
+
+In REST APIs, it is customary to make a `PUT` request to a resource's URI (for
+example, `/v1/publishers/{publisher}/books/{book}`) in order to create or
+replace a resource.
+
+[Resource-oriented design](/resources) honors this pattern through the `Apply`
+method. These operations accept the resource and its path, which it uses to
+create or replace the resource. The operation returns the final resource.
+
+Also see the [update](/update) method, with guidance on how to implement `PATCH`
+requests.
+
+## Guidance
+
+APIs **should** provide an apply method for a resource unless it is not valuable
+for users to do so. Clients should also consider using [update](/update) methods
+instead to ensure forwards compatible requests (see [PATCH and
+PUT](#patch-and-put)).
+
+### Operation
+
+Apply methods are specified using the following pattern:
+
+- The HTTP verb **must** be `PUT`.
+- Some resources take longer to be applied than is reasonable for a regular API
+  request. In this situation, the API **should** use a [long-running
+  operation](/long-running-operations).
+- The operation **must** have [strong consistency](/resources#strong-consistency).
+- The HTTP URI path of the `PUT` method **must** be the resource path.
+
+{% tab proto %}
+
+{% sample '../example.proto', 'rpc ApplyBook' %}
+
+- The request message **must** match the method name, with a `Request` suffix.
+- There **must** be a `body` key in the `google.api.http` annotation, and it
+  **must** map to the resource field in the request message.
+  - All remaining fields **should** map to URI query parameters.
+- There **should** be exactly one `google.api.method_signature` annotation,
+  with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
+  resource ID is not required.
+- The method's name **must** begin with the word `Apply`. The remainder of the
+  method name **should** be the singular form of the resource being applied.
+- The request's `path` field **must** map to the URI path.
+ - The `path` field **must** be the only variable in the URI path.
+
+{% tab oas %}
+
+```http
+PUT /v1/publishers/{publisher}/books/{book} HTTP/2
+Host: bookstore.example.com
+Accept: application/json
+{
+  "title": "Pride and Prejudice",
+  "author": "Jane Austen"
+}
+```
+
+{% endtabs %}
+
+### Requests
+
+Apply methods implement a common request message pattern:
+
+- The resource **must** be included and **must** map to the HTTP request body.
+- The request schema **must not** contain any other required fields and
+  **should not** contain other optional fields except those described in this
+  or another AEP.
+
+{% tab proto %}
+
+{% sample '../example.proto', 'message ApplyBookRequest' %}
+
+- A `path` field specifying the path of the resource **must** be included.
+  - The field **must** be [annotated as `REQUIRED`](/field-behavior-documentation).
+  - The field **must** identify the [resource type](/resource-types) of the resource
+    being applied.
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.put.requestBody' %}
+
+- The request body **must** be the resource being applied.
+
+{% endtabs %}
+
+### Responses
+
+- The response **must** be the resource itself. There is no separate response
+  schema.
+  - The response **should** include the fully-populated resource, and **must**
+    include any fields that were provided unless they are input only (see
+    [field behavior](/field-behavior-documentation)).
+
+{% tab proto %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.put.responses.200' %}
+
+{% endtabs %}
+
+### Errors
+
+See [errors](/errors), in particular [when to use PERMISSION_DENIED and NOT_FOUND
+errors](/errors#permission-denied).
+
+### PATCH and PUT
+
+Note that `PUT` requests with fields missing in the resource may result in
+overwriting values in the resource with existing values. For that reason,
+AEP-compliant APIs generally use the `PATCH` HTTP verb.
+
+See [AEP-134's patch and put](/134#patch-and-put) for more information.
+
+## Interface Definitions
+
+{% tab proto %}
+
+{% sample '../example.proto', 'rpc ApplyBook' %}
+
+{% sample '../example.proto', 'message ApplyBookRequest' %}
+
+{% sample '../example.proto', 'message Book' %}
+
+{% tab oas %}
+
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.put' %}
+
+{% endtabs %}
+
+## Further reading
+
+- For ensuring idempotency in `Apply` methods, see [idempotency](/idempotency).
+- For naming resources involving Unicode, see [unicode](/unicode).
+
+[strong consistency]: ./0121.md#strong-consistency
