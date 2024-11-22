@@ -8,10 +8,15 @@ replace a resource.
 method. These operations accept the resource and its path, which it uses to
 create or replace the resource. The operation returns the final resource.
 
+Also see the [update](/update) method, with guidance on how to implement `PATCH`
+requests.
+
 ## Guidance
 
 APIs **should** provide an apply method for a resource unless it is not valuable
-for users to do so.
+for users to do so. Clients should also consider using [update](/update) methods
+instead to ensure forwards compatible requests (see [PATCH and
+PUT](#patch-and-put)).
 
 ### Operation
 
@@ -102,6 +107,14 @@ Apply methods implement a common request message pattern:
 
 See [errors](/errors), in particular [when to use PERMISSION_DENIED and NOT_FOUND
 errors](/errors#permission-denied).
+
+### PATCH and PUT
+
+Note that `PUT` requests with fields missing in the resource may result in
+overwriting values in the resource with existing values. For that reason,
+AEP-compliant APIs generally use the `PATCH` HTTP verb.
+
+See [AEP-134's patch and put](/134#patch-and-put) for more information.
 
 ## Interface Definitions
 
