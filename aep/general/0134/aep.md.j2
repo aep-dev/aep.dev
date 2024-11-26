@@ -54,12 +54,17 @@ Update methods are specified using the following pattern:
 ```http
 PATCH /v1/publishers/{publisher}/book/{book} HTTP/2
 Host: bookstore.example.com
-Accept: application/json
+Accept: application/merge-patch+json
 {
   "title": "Pride and Prejudice",
   "author": "Jane Austen"
 }
 ```
+
+- The method **must** adhere to the behavior specified in [IETF RFC 7396 - Json
+  Merge Patch][].
+- The method **must** support MIME types `application/merge-patch+json` to
+  adhere to IETF RFC 7396.
 
 {% endtabs %}
 
@@ -170,6 +175,36 @@ If a rating were set on a book and the existing `PUT` request were executed, it
 would wipe out the book's rating. In essence, a `PUT` request unintentionally
 would wipe out data because the previous version did not know about it.
 
+### FieldMasks in proto and json merge-patch in HTTP
+
+AEP recommends a specific diverence in behavior between the proto and the HTTP
+interfaces. Specifically:
+
+- The inclusion of the `update_mask` in the proto variant, requiring the user to
+  explicitly specify fields to be updated.
+- The usage of [IETF RFC 7396 - Json Merge Patch][IETF RFC 7396] for HTTP APIs.
+
+This divergence in behavior is intentional, and exists for the following reasons:
+
+1. The update mask is a proto-specific concept, due to the lack of ability
+   across all proto versions to differentiate if the user has explicitly
+   populated a field or not. JSON has the ability to express whether a field is
+   present (by omitting it from the JSON payload). Ultimately, this allows the
+   field mask + proto pair and json to be translatable.
+2. RFC 7396 is a popular and well-understood standard for HTTP. Introducing a
+   new standard for HTTP would have made the AEP HTTP variant less idiomatic.
+3. For HTTP-proto bindings, there is a way to generate the proto field mask from
+   the fields present in the JSON request. This is what is recommended in the
+   [API Design Patterns book, section 8.2
+   ](https://www.oreilly.com/library/view/api-design-patterns/9781617295850/),
+   describing the Google AIPs from which AEP-134 is forked. Implementations of
+   gateway-grpc proto bindings such as
+   [gateway-grpc](https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/patch_feature/)
+   support this translation.
+
+Therefore, given the ability of these two different patch mechanisms to
+interoperate while maintaining idiomatic practices, this divergence was
+concluded to be the least worst option.
 
 ### Etags
 
@@ -268,4 +303,5 @@ and omit the rest. APIs that do this **must** document this behavior.
 [strong consistency]: ./0121.md#strong-consistency
 [required]: ./0203.md#required
 [optional]: ./0203.md#optional
+[IETF RFC 7396]: https://datatracker.ietf.org/doc/html/rfc7396
 <!-- prettier-ignore-end -->

@@ -250,7 +250,7 @@
                       'description': 'Successful response',
                       'content':
                         {
-                          'application/json':
+                          'application/merge-patch+json':
                             {
                               'schema':
                                 { '$ref': '#/components/schemas/publisher' },
@@ -272,7 +272,7 @@
                   'required': true,
                   'content':
                     {
-                      'application/json':
+                      'application/merge-patch+json':
                         {
                           'schema':
                             { '$ref': '#/components/schemas/publisher' },
@@ -481,7 +481,7 @@
                       'description': 'Successful response',
                       'content':
                         {
-                          'application/json':
+                          'application/merge-patch+json':
                             {
                               'schema':
                                 { '$ref': '#/components/schemas/book' },
@@ -509,7 +509,7 @@
                   'required': true,
                   'content':
                     {
-                      'application/json':
+                      'application/merge-patch+json':
                         { 'schema': { '$ref': '#/components/schemas/book' } },
                     },
                 },
