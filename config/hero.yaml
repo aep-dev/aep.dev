@@ -7,9 +7,7 @@ buttons:
 shortcuts:
   - title: Curious about the basics?
     description: |
-      AEPs are a combination of design guidance and a system we use to manage
-      and track that guidance. Learn more about how the AEP program works in
-      the first AEP!
+      AEPs are a collection of API design specifications, design patterns, and guidance. In addition, the AEP project includes tools to help produce AEP-compliant APIs, as well a clients (command-lines, UIs, Declarative plugins) that consume them. Learn more about how the AEP program works in the first AEP!
     button:
       href: /1
       text: Read AEP-1
@@ -21,10 +19,11 @@ shortcuts:
     button:
       href: /contributing
       text: Contribute to the project
-  - title: Want to use AEPs for your organization?
+  - title: Want to adopt AEPs in your organization?
     description: |
-      AEPs are designed to be useful outside of Google. Take a look at how you
-      might choose which AEPs are best suited to your API design needs.
+      AEPs were adapted from [Google's AIP project](https://google.aip.dev/), but also extend it with
+      tooling to easily generate and validate that result in better designed APIs, as well as provide clients to 
+      consume them.
     button:
       href: /adopting
       text: Learn more

@@ -1,22 +1,22 @@
 # Frequently Asked Questions
 
-## What is the difference between aep.dev and google.aip.dev?
+## What are the differences between AEPs and AIPs?
 
-As aep.dev is derived from [google.aip.dev](https://google.aip.dev), a lot of
-content will be familiar.
+If you are familiar with Google's API Improvement Proposals 
+[google.aip.dev](https://google.aip.dev), then much of the 
+[API Enhancement Proposals](https://aep.dev) content will be familiar.
 
-However, aep.dev has significant philosophical differences:
+However, AEPs have notable philosophical differences, including:
 
-- aep.dev prioritizes broadly applicable design guidance, while google.aip.dev
-  prioritizes design guidance this best for Google, such as guidance that is
-  backwards-compatible with existing decisions at the company.
-- aep.dev is protocol-agonistic, and considers gRPC and HTTP + JSON as
-  first-class protocols for which examples and other content will be authored.
-- google.aip.dev encourages forking the guidance, while aep.dev focuses on a
-  set of core specification that should not be forked, paired with a method to
-  add organization-specific guidance that does not contradict the
-  specification.
+- AEPs prioritize broadly applicable design guidance for any company, while AIPs
+  prioritized design guidance specifically for Google (e.g., providing
+  backwards-compatibility with prior decisions to meet Google-specific needs).
+- AEPs are protocol-agonistic and consider both gRPC and HTTP+JSON as
+  first-class protocols for which examples and other content are necessary.
+- AEPs focuses on a core specification that is not intended to be forked, paired with a 
+  mechanism for optional organization-specific guidance to extend the
+  specification. AIPs encourage forking its guidance outright.
 
-aep.dev also has the advantage of hindsight, which makes it possible in some
-cases to provide better guidance than google.aip.dev. (One small example:
+AEPs also have the advantage of hindsight, which makes it possible in some
+cases to provide better guidance. (One small example:
 renaming `page_size` to `max_page_size` for requests to paginated API methods.)
