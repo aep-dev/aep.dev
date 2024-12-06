@@ -10,9 +10,11 @@ resource.
 
 ## Guidance
 
- - APIs **must** provide a get method for resources. The purpose of the get method
-is to return data from a single resource.
- - Some resources take longer to be retrieved than is reasonable for a regular API request. In this situation, the API should use a [long-running operation](/long-running-operations).
+- APIs **must** provide a get method for resources. The purpose of the get
+  method is to return data from a single resource.
+- Some resources take longer to be retrieved than is reasonable for a regular
+  API request. In this situation, the API should use a
+  [long-running operation](/long-running-operations).
 
 ### Operation
 
@@ -105,7 +107,10 @@ there is a reason to return a partial response (see AEP-157).
 {% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}.get.responses.200.content' %}
 
 - The response content **must** be the resource itself. For example:
-  `#/components/schemas/Book`. The response **must** reference a schema with a `x-aep-resource` extension.
+  `#/components/schemas/Book`. The response **must** reference a schema with a
+  [`x-aep-resource` extension].
+
+[`x-aep-resource` extension]: ./0004.md#annotating-resource-types
 
 {% endtabs %}
 
