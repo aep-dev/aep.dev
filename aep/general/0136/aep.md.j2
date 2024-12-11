@@ -26,14 +26,15 @@ apply consistently:
 - The HTTP URI **must** use a `:` character followed by the custom verb
   (`:archive` in the above example), and the verb in the URI **must** match the
   verb in the name of the RPC.
-  - If word separation is required, `camelCase` **must** be used.
+  - If word separation is required, `kebab-case` **must** be used.
+- The name of the RPC **should** be a verb followed by a noun.
+  - The name of the RPC **must not** contain prepositions ("for", "with",
+    etc.).
 
 {% tab proto %}
 
 {% sample 'library.proto', 'rpc ArchiveBook' %}
 
-- The name of the RPC **should** be a verb followed by a noun.
-  - The name **must not** contain prepositions ("for", "with", etc.).
 - The `body` clause in the `google.api.http` annotation **should** be `"*"`.
   - However, if using `GET` or `DELETE`, the `body` clause **must** be absent.
 - Custom methods **must** take a request message exactly matching the RPC name,
@@ -45,11 +46,11 @@ apply consistently:
 
 {% tab oas %}
 
-{% sample 'library.oas.yaml', '$.paths./publishers/{publisherId}/books/{bookId}:archive' %}
-
-- The name of the RPC **should** be a verb followed by a noun.
-  - The name of the RPC **must not** contain prepositions ("for", "with",
-    etc.).
+```http
+POST /v1/publishers/{publisher}/book/{book}:archive HTTP/2
+Host: bookstore.example.com
+Accept: application/json
+```
 
 {% endtabs %}
 
@@ -64,14 +65,14 @@ such:
 
 {% tab proto %}
 
-{% sample 'library.proto', 'rpc ArchiveBook' %}
+{% sample '../example.proto', 'rpc ArchivePublisher' %}
 
 - The parameter for the resource's path **must** be called `path`, and **must**
   be the only variable in the URI path.
 
 {% tab oas %}
 
-**Note:** OAS example not yet written.
+{% sample '../example.oas.yaml', '$.paths./publishers/{publisher}/books/{book}:archive' %}
 
 {% endtabs %}
 
