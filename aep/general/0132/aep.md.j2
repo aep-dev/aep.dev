@@ -5,8 +5,8 @@ collection's URI (for example, `/publishers/{publisher}/books`) in order to
 retrieve a list of the resources within that collection.
 
 Resource-oriented design (AEP-121) honors this pattern through the `List`
-method. These RPCs accept the parent collection (and potentially some other
-parameters), and return a list of responses matching that input.
+method. These RPCs accept the a parent collection (if one exists), and and
+return a list of responses matching that input.
 
 ## Guidance
 
@@ -30,15 +30,15 @@ result **must** be a list of resources.
   - The response **should** usually include fully-populated resources unless
     there is a reason to return a partial response (see AEP-157).
 - The HTTP verb **must** be `GET`.
-- The URI **should** contain a single variable field corresponding to the
-  collection parent's name.
+- If the collection has a parent resource, The URI **should** contain a single
+  variable field corresponding to the collection parent's name.
   - This field **should** be called `parent`.
   - The URI **should** have a variable corresponding to this field.
   - The `parent` field **should** be the only variable in the URI path. All
     remaining parameters **should** map to URI query parameters.
 - There **must not** be a `body` key in the `google.api.http` annotation.
-- There **should** be exactly one `google.api.method_signature` annotation,
-  with a value of `"parent"`.
+- There **should** be exactly one `google.api.method_signature` annotation with
+  a value of `"parent"` if a parent exists, and an empty string otherwise.
 
 {% tab oas %}
 

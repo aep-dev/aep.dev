@@ -5,8 +5,9 @@ In REST APIs, it is customary to make a `POST` request to a collection's URI
 resource within that collection.
 
 Resource-oriented design (AEP-121) honors this pattern through the `Create`
-method. These RPCs accept the parent collection and the resource to create (and
-potentially some other parameters), and return the created resource.
+method. These RPCs accept the parent collection if one exists, and the resource
+to create (and potentially some other parameters), and return the created
+resource.
 
 ## Guidance
 
@@ -30,16 +31,13 @@ Create methods are specified using the following pattern:
 - The RPC's name **must** begin with the word `Create`. The remainder of the
   RPC name **should** be the singular form of the resource being created.
   - The request message **must** match the RPC name, with a `Request` suffix.
-- The collection's parent resource **must** be called `parent`, and
-  **should** be the only variable in the URI path.
+- If the collection has a parent, the collection's parent resource **must** be
+  called `parent`, and **should** be the only variable in the URI path.
   - The collection identifier (`books` in the above example) **must** be a
     literal string.
 - There **must** be a `body` key in the `google.api.http` annotation, and it
   **must** map to the resource field in the request message.
   - All remaining fields **should** map to URI query parameters.
-- There **should** be exactly one `google.api.method_signature` annotation,
-  with a value of `"parent,{resource},id"`, or "`"parent,{resource}"` if the
-  resource ID is not required.
 - The operation **must** have [strong consistency][].
 
 {% tab oas %}
@@ -144,10 +142,11 @@ publishers/012345678-abcd-cdef/books/12341234-5678-abcd
 
 {% tab proto %}
 
-- There **should** be exactly one `google.api.method_signature` annotation on
-  the RPC, with a value of `"parent,{resource},id"` if the resource being
-  created is not a top-level resource, or with a value of `"{resource},id"` if
-  the resource being created is a top-level resource.
+- There **should** be exactly one `google.api.method_signature` annotation, with
+  a comma-delimited list of values, including the field representing the
+  resource.
+  - If the collection has a parent, the list must include `parent`.
+  - If the resource supports user-settable ids, the list must include `id`.
 - The `id` field **must** exist on the request message, not the resource
   itself.
   - The field **may** be required or optional. If it is required, it **should**
